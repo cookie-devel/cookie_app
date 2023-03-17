@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main(){
-  runApp(const FriendsScreen());
-}
-
 class FriendsScreen extends StatelessWidget{
   const FriendsScreen({Key? key}) : super(key:key);
   @override
@@ -19,7 +15,7 @@ class FriendsScreen extends StatelessWidget{
         ],
         )
       );
-  } 
+  }
 }
 
 Widget returnProfile({required Color color, required double width, required double height}){
@@ -47,7 +43,7 @@ class MyApp extends StatelessWidget{
   Widget build(BuildContext context){
     return Scaffold(
         appBar: AppBar(title:Text('안녕하세요 플러터 초보입니다')),
-        body: 
+        body:
           Center(
             child:ElevatedButton(
               child:const Text('화면 이동'),
@@ -60,5 +56,5 @@ class MyApp extends StatelessWidget{
           ),
         bottomNavigationBar: BottomAppBar(child:Text('하단바입니다')),
       );
-  } 
+  }
 }*/
