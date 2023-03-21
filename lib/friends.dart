@@ -2,59 +2,112 @@ import 'package:flutter/material.dart';
 
 class FriendsScreen extends StatelessWidget{
   const FriendsScreen({Key? key}) : super(key:key);
+
+  final double iconWidth = 100;
+  final double iconHeight = 100;
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      body:
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      backgroundColor: Colors.white,
+      body: ListView(
           children: [
-          returnProfile(color: Colors.red, width: 100, height: 100),
-          returnProfile(color: Colors.red, width: 100, height: 100),
-          returnProfile(color: Colors.red, width: 100, height: 100),
-        ],
+            Column(
+              children: [
+
+                createSpace(width: 0, height: 50),
+
+                Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                returnProfile(width: iconWidth, height: iconHeight),
+                returnProfile(width: iconWidth, height: iconHeight),
+                returnProfile(width: iconWidth, height: iconHeight),
+                ],
+                ),
+
+                createSpace(width: 0, height: 50),
+                Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                returnProfile(width: iconWidth, height: iconHeight),
+                returnProfile(width: iconWidth, height: iconHeight),
+                returnProfile(width: iconWidth, height: iconHeight),
+                ],
+                ),
+
+                createSpace(width: 0, height: 50),
+                Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                returnProfile(width: iconWidth, height: iconHeight),
+                returnProfile(width: iconWidth, height: iconHeight),
+                returnProfile(width: iconWidth, height: iconHeight),
+                ],
+                ),
+
+                createSpace(width: 0, height: 50),
+                Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                returnProfile(width: iconWidth, height: iconHeight),
+                returnProfile(width: iconWidth, height: iconHeight),
+                returnProfile(width: iconWidth, height: iconHeight),
+                ],
+                ),
+
+                createSpace(width: 0, height: 50),
+                Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                returnProfile(width: iconWidth, height: iconHeight),
+                returnProfile(width: iconWidth, height: iconHeight),
+                returnProfile(width: iconWidth, height: iconHeight),
+                ],
+                ),
+
+                createSpace(width: 0, height: 50),
+                Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                returnProfile(width: iconWidth, height: iconHeight),
+                returnProfile(width: iconWidth, height: iconHeight),
+                returnProfile(width: iconWidth, height: iconHeight),
+                ],
+                )
+
+              ],
+            )
+          ]
         )
       );
   }
 }
 
-Widget returnProfile({required Color color, required double width, required double height}){
-  return Container(
-    color: color,
-    width: width,
-    height: height,
-    padding: const EdgeInsets.all(0.0),
-    margin: const EdgeInsets.all(0.0),
+Widget returnProfile({required double width, required double height}){
+  return InkWell(
+    onTap: (){
+    },
+    child: Container(
+      width: width,
+      height: height,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        image: DecorationImage(
+          image: AssetImage('assets/newjeans.jpg'),
+          fit: BoxFit.contain       
+          ),
+      ),
+      
+    )
   );
 }
 
-
-/*
-import 'package:cookie_app/friends.dart';
-import 'package:flutter/material.dart';
-
-void main(){
-  runApp(const MyApp());
+Widget createSpace({required double width, required double height}){
+  return Container(
+    width: 1,
+    height: height,
+  );
 }
 
-class MyApp extends StatelessWidget{
-  const MyApp({Key? key}) : super(key:key);
-  @override
-  Widget build(BuildContext context){
-    return Scaffold(
-        appBar: AppBar(title:Text('안녕하세요 플러터 초보입니다')),
-        body:
-          Center(
-            child:ElevatedButton(
-              child:const Text('화면 이동'),
-              onPressed:(){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const FriendsScreen()));
-              }
-            )
-          ),
-        bottomNavigationBar: BottomAppBar(child:Text('하단바입니다')),
-      );
-  }
-}*/
+//https://memostack.tistory.com/329
