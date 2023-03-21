@@ -10,13 +10,17 @@ class FriendsScreen extends StatelessWidget{
   Widget build(BuildContext context){
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        titleSpacing: 100.0,
+        backgroundColor: Colors.brown,
+        title: const Text('friends'),
+      ),
       body: ListView(
           children: [
             Column(
               children: [
 
                 createSpace(width: 0, height: 50),
-
                 Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -84,9 +88,11 @@ class FriendsScreen extends StatelessWidget{
   }
 }
 
+
 Widget returnProfile({required double width, required double height}){
   return InkWell(
     onTap: (){
+      print("Clicked!!!");
     },
     child: Container(
       width: width,
