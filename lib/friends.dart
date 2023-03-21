@@ -5,13 +5,14 @@ class FriendsScreen extends StatelessWidget{
 
   final double iconWidth = 100;
   final double iconHeight = 100;
+  final double spaceHeight = 70;
 
   @override
   Widget build(BuildContext context){
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        titleSpacing: 100.0,
+        // titleSpacing: 100.0,
         backgroundColor: Colors.brown,
         title: const Text('friends'),
       ),
@@ -20,7 +21,7 @@ class FriendsScreen extends StatelessWidget{
             Column(
               children: [
 
-                createSpace(width: 0, height: 50),
+                createSpace(width: 0, height: spaceHeight),
                 Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -30,7 +31,7 @@ class FriendsScreen extends StatelessWidget{
                 ],
                 ),
 
-                createSpace(width: 0, height: 50),
+                createSpace(width: 0, height: spaceHeight),
                 Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -40,7 +41,7 @@ class FriendsScreen extends StatelessWidget{
                 ],
                 ),
 
-                createSpace(width: 0, height: 50),
+                createSpace(width: 0, height: spaceHeight),
                 Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -50,7 +51,7 @@ class FriendsScreen extends StatelessWidget{
                 ],
                 ),
 
-                createSpace(width: 0, height: 50),
+                createSpace(width: 0, height: spaceHeight),
                 Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -60,7 +61,7 @@ class FriendsScreen extends StatelessWidget{
                 ],
                 ),
 
-                createSpace(width: 0, height: 50),
+                createSpace(width: 0, height: spaceHeight),
                 Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -70,7 +71,7 @@ class FriendsScreen extends StatelessWidget{
                 ],
                 ),
 
-                createSpace(width: 0, height: 50),
+                createSpace(width: 0, height: spaceHeight),
                 Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -78,8 +79,9 @@ class FriendsScreen extends StatelessWidget{
                 returnProfile(width: iconWidth, height: iconHeight),
                 returnProfile(width: iconWidth, height: iconHeight),
                 ],
-                )
+                ),
 
+                createSpace(width: 0, height: spaceHeight)
               ],
             )
           ]
