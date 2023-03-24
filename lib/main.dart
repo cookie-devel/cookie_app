@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'friends.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+const double appBarHeight = 56;
+const double bottomNavigationBarHeight = 54;
 void main() {
   runApp(const MyApp());
 }
@@ -29,6 +31,7 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -60,16 +63,22 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
-        title: const Text('C🍪🍪KIE'),
+        //The default height of AppBar is 56.
+        title: const Text('C🍪🍪KIE'),        
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: SizedBox(
+        // Resize bottomNavigationBar height
+        height: bottomNavigationBarHeight,
+        child: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
@@ -96,6 +105,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         selectedItemColor: Colors.black,
         onTap: _onItemTapped,
       ),
+      )
     );
   }
 }
