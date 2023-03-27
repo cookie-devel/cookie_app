@@ -1,172 +1,100 @@
 import 'package:flutter/material.dart';
-import 'main.dart' as main;
 
 const double iconWidth = 85;
 const double iconHeight = 85;
 
-const double iconWidthRatio = 0.1344;
-const double iconHeightRatio = 0.1344;
+final friendItems = {
+  'user1': {
+    'name': 'user1',
+    'profile': 'assets/profile1.png',
+    'status': 'online',
+  },
+  'user2': {
+    'name': 'user2',
+    'profile': 'assets/profile2.png',
+    'status': 'offline',
+  },
+  'user3': {
+    'name': 'user3',
+    'profile': 'assets/profile3.png',
+    'status': 'offline',
+  },
+  'user4': {
+    'name': 'user4',
+    'profile': 'assets/profile4.png',
+    'status': 'offline',
+  },
+  'user5': {
+    'name': 'user5',
+    'profile': 'assets/profile5.png',
+    'status': 'offline',
+  },
+  'user6': {
+    'name': 'user6',
+    'profile': 'assets/profile6.png',
+    'status': 'offline',
+  },
+};
 
-const double spaceWidth = 70;
-const double spaceHeight = 70;
+// FriendList? friendList;
+class FriendsGrid extends StatefulWidget {
+  const FriendsGrid({Key? key}) : super(key: key);
 
-const double spaceBetweenContainerText = 8;
-
-const int cnt = 0;
-class FriendsScreen extends StatelessWidget{
-  const FriendsScreen({Key? key}) : super(key:key);
-  
-  final int friendCount = 31;
-  
   @override
-  Widget build(BuildContext context){
+  _FriendsGridState createState() => _FriendsGridState();
+}
 
-    print(MediaQuery.of(context).size.height);
-
-    final int rowCount = ((friendCount/3).ceil());
-    final int ext = friendCount%3;
-
-    return Scaffold(
-
-      backgroundColor: Colors.white,
-
-      body: ListView.builder(
-
-        itemCount: rowCount,
-        itemBuilder:(context, index) {
-
-        if ((rowCount==index+1)&&(ext==1)){
-          return Column(
-            children:[
-              createSpace(context: context, width: 0, height: spaceHeight),
-              rowBlock1(context: context, iconWidth: iconWidth, iconHeigth: iconHeight),
-              createSpace(context: context, width: 0, height: spaceHeight),
-            ]
-          );
-          }
-        
-        if ((rowCount==index+1)&&(ext==2)){
-          return Column(
-            children:[
-              createSpace(context: context, width: 0, height: spaceHeight),
-              rowBlock2(context: context, iconWidth: iconWidth, iconHeigth: iconHeight),
-              createSpace(context: context, width: 0, height: spaceHeight),
-            ]
-          );
-          }
-
-        else{
-          return Column(
-            children:[
-              createSpace(context: context, width: 0, height: spaceHeight),
-              rowBlock3(context: context, iconWidth: iconWidth, iconHeigth: iconHeight),
-              createSpace(context: context, width: 0, height: spaceHeight),
-            ]
-          );
-          }
-
+class _FriendsGridState extends State<FriendsGrid> {
+  @override
+  Widget build(BuildContext context) {
+    // friendList = friendItems.
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+      child: GridView.builder(
+        itemCount: 30,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          childAspectRatio: 1.0,
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 10.0,
+        ),
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+              child: returnProfile(width: iconWidth, height: iconHeight));
         },
-      )
+      ),
     );
   }
 }
 
-
-Widget returnProfile({required double width, required double height}){
-  
+Widget returnProfile({required double width, required double height}) {
   return InkWell(
-    onTap: (){
+    onTap: () {
       print("Clicked!!!");
     },
-    child: Column(
-
-      children: [
-        Container(
+    child: Column(children: [
+      Container(
         width: width,
         height: height,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           image: const DecorationImage(
-            image: AssetImage('assets/newjeans.jpg'),
-            fit: BoxFit.contain       
-            ),
+              image: AssetImage('assets/newjeans.jpg'), fit: BoxFit.contain),
           border: Border.all(
             color: const Color.fromARGB(255, 255, 99, 159),
-            width: width*0.04,
           ),
         ),
-        ),
-
-        const SizedBox(
-          height: spaceBetweenContainerText,),
-          
-        const Text(
-          'name',
-          style: TextStyle(
+      ),
+      const Text(
+        'name',
+        style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w200,
-            color:Color.fromARGB(221, 70, 70, 70)
-          )
-        )
-      ]
-    )
+            color: Color.fromARGB(221, 70, 70, 70)),
+      )
+    ]),
   );
 }
 
-Widget returnSpaceProfile({required double width, required double height}){
-
-  return InkWell(
-    child: Container(
-      width: width,
-      height: height,
-    )
-  );
-}
-
-Widget rowBlock3({required BuildContext context, required double iconWidth,
-                required double iconHeigth}){
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children:[
-      returnProfile(width: iconWidth, height: iconHeight),
-      returnProfile(width: iconWidth, height: iconHeight),
-      returnProfile(width: iconWidth, height: iconHeight),
-    ]
-  );
-}
-
-Widget rowBlock2({required BuildContext context, required double iconWidth,
-                required double iconHeigth}){
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children:[
-      returnProfile(width: iconWidth, height: iconHeight),
-      returnProfile(width: iconWidth, height: iconHeight),
-      returnSpaceProfile(width: iconWidth, height: iconHeight),
-    ]
-  );
-}
-
-Widget rowBlock1({required BuildContext context, required double iconWidth,
-                required double iconHeigth}){
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children:[
-      returnProfile(width: iconWidth, height: iconHeight),
-      returnSpaceProfile(width: iconWidth, height: iconHeight),
-      returnSpaceProfile(width: iconWidth, height: iconHeight),
-    ]
-  );
-}
-
-Widget createSpace({required BuildContext context, required double width, required double height}){
-  final double realHeight = MediaQuery.of(context).size.height;
-  final int numberOfRow = 3;
-  return SizedBox(
-    width: 1,
-    height: (realHeight-numberOfRow*(iconHeight+spaceBetweenContainerText+16)
-              -main.bottomNavigationBarHeight-main.appBarHeight)/(numberOfRow*2),
-  );
-}
-
-//https://memostack.tistory.com/329
+// https://memostack.tistory.com/329
+// Reference: https://eunoia3jy.tistory.com/106

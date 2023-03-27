@@ -1,10 +1,8 @@
 import 'package:cookie_app/maps.dart';
 import 'package:flutter/material.dart';
 import 'friends.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'chat.dart';
 
-const double appBarHeight = 56;
-const double bottomNavigationBarHeight = 54;
 void main() {
   runApp(const MyApp());
 }
@@ -31,21 +29,15 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
-  late GoogleMapController mapController;
-
-  final LatLng _center = const LatLng(45.521563, -122.677433);
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
   static const List<Widget> _widgetOptions = <Widget>[
-    FriendsScreen(),
+    Padding(
+      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+      child: FriendsGrid(),
+    ),
     MapsWidget(),
     Text(
       'Index 2: Club',
@@ -63,49 +55,43 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
-      appBar: AppBar(
-        //The default height of AppBar is 56.
-        title: const Text('C🍪🍪KIE'),        
-      ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: SizedBox(
-        // Resize bottomNavigationBar height
-        height: bottomNavigationBarHeight,
-        child: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: 'Friends',
-            backgroundColor: Colors.orange,
+        appBar: AppBar(
+          title: const Text('C🍪🍪KIE'),
+        ),
+        body: Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: SizedBox(
+          child: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.people),
+                label: 'Friends',
+                backgroundColor: Colors.orange,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.location_searching),
+                label: 'Location',
+                backgroundColor: Colors.blue,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.sports_basketball),
+                label: 'Club',
+                backgroundColor: Colors.deepOrange,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.settings),
+                label: 'Settings',
+                backgroundColor: Colors.purple,
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.black,
+            onTap: _onItemTapped,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.location_searching),
-            label: 'Location',
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.sports_basketball),
-            label: 'Club',
-            backgroundColor: Colors.deepOrange,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-            backgroundColor: Colors.purple,
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.black,
-        onTap: _onItemTapped,
-      ),
-      )
-    );
+        ));
   }
 }
