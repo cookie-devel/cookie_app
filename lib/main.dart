@@ -1,3 +1,4 @@
+import 'package:cookie_app/chat.dart';
 import 'package:cookie_app/maps.dart';
 import 'package:flutter/material.dart';
 import 'friends.dart';
@@ -38,6 +39,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
       child: FriendsGrid(),
     ),
+    ChatWidget(),
     MapsWidget(),
     Text(
       'Index 2: Club',
@@ -71,6 +73,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 icon: Icon(Icons.people),
                 label: 'Friends',
                 backgroundColor: Colors.orange,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.chat_bubble),
+                label: 'Chat',
+                backgroundColor: Colors.green,
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.location_searching),
