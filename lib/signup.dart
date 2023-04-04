@@ -1,30 +1,35 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 void main() {
-  runApp(SignUp());
+  runApp(const SignUp());
 }
 
 class SignUp extends StatelessWidget {
+  const SignUp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: [
-        const Locale('en', 'US'),
-        const Locale('ko', 'KR'),
+        Locale('en', 'US'),
+        Locale('ko', 'KR'),
       ],
       home: SignUpWidget(),
     );
   }
 }
-
 
 class SignUpWidget extends StatefulWidget {
   const SignUpWidget({Key? key}) : super(key: key);
@@ -33,26 +38,37 @@ class SignUpWidget extends StatefulWidget {
   State<StatefulWidget> createState() => _SignUpWidgetState();
 }
 
-
 class _SignUpWidgetState extends State<SignUpWidget> {
 
   final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _IDController = TextEditingController();
-  final TextEditingController _PWController = TextEditingController();
-  final TextEditingController _NameController = TextEditingController();
-  final TextEditingController _PhoneNumberController = TextEditingController();
+  final TextEditingController _idController = TextEditingController();
+  final TextEditingController _pwController = TextEditingController();
+  final TextEditingController _pwCheckController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _phonenumberController = TextEditingController();
 
+  // Check
+  bool _pwCheckErrorText = true;
+  bool _idlengthCheck = false;
+  bool _pwlengthCheck = false;
+  bool _namelengthCheck = false;
 
-  String _selectedDate = '2023-04-02';
-  String _selectedID = 'ID';
-  String _selectedPW = 'password';
-  String _selectedName = 'cookie';
-  String _selectedPhoneNumber = '01000000000';
-
+  // password visible check
   bool _obscureText = true;
-
+  bool _obscureText1 = true;
+  
+  // signup input data
+  String _selectedDate = '';              //2023-04-02
+  final String _selectedID = '';          //ID
+  final String _selectedPW = '';          //password
+  final String _selectedCheckPW = '';     //check password
+  final String _selectedName = '';        //cookie
+  final String _selectedPhoneNumber = ''; //01000000000
+  
+  // initialize image file
   File? _imageFile;
 
+  // image picker
   void _getImage(BuildContext context, ImageSource source) async {
     
     final picker = ImagePicker();
@@ -65,7 +81,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
         print('Image deselected');
       }
     });
-
+    
     Navigator.pop(context);
   }
 
@@ -74,19 +90,19 @@ class _SignUpWidgetState extends State<SignUpWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Upload Image'),
+          title: const Text('새로운 프로필사진'),
           content: SingleChildScrollView(
             child: ListBody(
               children: [
                 GestureDetector(
-                  child: Text('Upload from Gallery'),
+                  child: const Text('갤러리에서 가져오기'),
                   onTap: () {
                     _getImage(context, ImageSource.gallery);
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 GestureDetector(
-                  child: Text('Upload from Camera'),
+                  child: const Text('카메라로 촬영하기'),
                   onTap: () {
                     _getImage(context, ImageSource.camera);
                   },
@@ -99,83 +115,90 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     );
   }
 
+  // jsondata to server
+  void sendDataToServer(String data, String emitName, String address) async {
+    try {
+      IO.Socket socket = IO.io(address, <String, dynamic>{
+        'transports': ['websocket'],
+        'autoConnect': false,
+      });
+
+      await socket.connect();
+      print('Connected!');
+      socket.emit(emitName, data);
+      print('Complete! ($address)');
+
+      socket.disconnect();
+    } catch (e) {
+      print('Error sending data to server: $e');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _dateController.text = _selectedDate;
-    _IDController.text = _selectedID;
-    _PWController.text = _selectedPW;
-    _NameController.text = _selectedName;
-    _PhoneNumberController.text = _selectedPhoneNumber;
+    _idController.text = _selectedID;
+    _pwController.text = _selectedPW;
+    _pwCheckController.text = _selectedCheckPW;
+    _nameController.text = _selectedName;
+    _phonenumberController.text = _selectedPhoneNumber;
   }
 
   @override
   void dispose() {
     // Dispose the TextEditingController
     _dateController.dispose();
-    _IDController.dispose();
-    _PWController.dispose();
-    _NameController.dispose();
-    _PhoneNumberController.dispose();
+    _idController.dispose();
+    _pwController.dispose();
+    _pwCheckController.dispose();
+    _nameController.dispose();
+    _phonenumberController.dispose();
     super.dispose();
   }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    
-    print(_dateController.text);
-    print(_IDController.text);
-    print(_PWController.text);
-    print(_NameController.text);
-    print(_PhoneNumberController.text);
+
+    final RegExp _regex = RegExp(r'^[a-zA-Z0-9!@#\$&*~-]+$');
 
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
         home: Scaffold(
-            appBar: AppBar(
-              title: Text('Sign Up'),
-            ),
-            body: Center(
+            resizeToAvoidBottomInset: true,
+            // appBar: AppBar(
+            //   title: Text('Sign Up'),
+            // ),
+            
+            body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  
+                  const SizedBox(height: 45),
 
                   // Profile Image
                   Container(
-
-                    width: 50,
-                    height: 50,
+                    width: 110,
+                    height: 110,
                     decoration: BoxDecoration(
                       border: Border.all(
                       color: Colors.grey,
-                      width: 1,
+                      width: 2,
                       ),
                     ),
-                    child: _imageFile == null
-                        ? Center(
-                            child: Text('이미지가 없습니다.'),
-                          )
-                        : Image.file(_imageFile!),
-                    
-                    // padding: const EdgeInsets.fromLTRB(20, 20, 20, 70),
-                    // decoration: BoxDecoration(
-                    //   shape: BoxShape.circle,
-                    //   image: const DecorationImage(
-                    //       image: AssetImage('assets/images/newjeans.jpg'), fit: BoxFit.contain),
-                    //   border: Border.all(
-                    //     color: const Color.fromARGB(255, 255, 99, 159),
-                    //   ),
-                    // ),
+                    child: _imageFile == null ? const Center(child: Text('No Images')):Image.file(_imageFile!),
                   ),
-                  
-                  SizedBox(height: 20),
+
+                  const SizedBox(height: 10),
                   ElevatedButton(
-                    child: Text('이미지 추가'),
+                    child: const Text('Select Image'),
                     onPressed: () {
                       _showSelectionDialog(context);
                     },
@@ -184,14 +207,31 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   // ID
                   Container(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                    child: TextField(
-                      controller: _IDController,
+                    child: TextFormField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(_regex),
+                      ],
+                      onChanged: (text) {
+                        setState(() {
+                          if (text.length <6) {
+                            _idlengthCheck = false;
+                          } 
+                          else {
+                            _idlengthCheck = true;
+                          }
+                        });
+                      },  
+                      controller: _idController,
                       obscureText: false,
+                      maxLength: 30,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(90.0),
                         ),
-                        labelText: 'ID',
+                        labelText: '아이디',
+                        helperText: '최소 6자 이상 입력해주세요.',
+                        helperStyle: TextStyle(
+                          color: !_idlengthCheck ? Colors.red : Colors.green),
                       ),
                     ),
                   ),
@@ -199,11 +239,34 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   // Password
                   Container(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                    child: TextField(        
-                      controller: _PWController,   
+                    child: TextField(    
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(_regex),
+                      ],
+                      onChanged: (text) {
+                        setState(() {
+                          if (text.length <10) {
+                            _pwlengthCheck = false;
+                          } 
+                          else {
+                            _pwlengthCheck = true;
+                          }
+                          if (text != _pwCheckController.text) {
+                            _pwCheckErrorText = false;
+                          } 
+                          else {
+                            _pwCheckErrorText = true;
+                          }
+                        });
+                      },    
+                      controller: _pwController,   
                       obscureText: _obscureText,
+                      maxLength: 30,
                       decoration: InputDecoration(
-                        labelText: 'Password',
+                        labelText: '비밀번호',
+                        helperText: '최소 10자 이상 입력해주세요.',
+                        helperStyle: TextStyle(
+                          color: !_pwlengthCheck ? Colors.red : Colors.green),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscureText ? Icons.visibility : Icons.visibility_off,
@@ -211,7 +274,50 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           ),
                           onPressed: () {
                             setState(() {
-                              _obscureText = !_obscureText; // 값 반전
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(90.0),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // check Password
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                    child: TextField(    
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(_regex),
+                      ],    
+                      controller: _pwCheckController,   
+                      obscureText: _obscureText1,
+                      maxLength: 30,
+                      onChanged: (text) {
+                        setState(() {
+                          if (text != _pwController.text) {
+                            _pwCheckErrorText = false;
+                          } 
+                          else {
+                            _pwCheckErrorText = true;
+                          }
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: '비밀번호 확인',
+                        helperText: _pwCheckErrorText ? '비밀번호가 일치합니다.':'비밀번호가 일치하지 않습니다.',
+                        helperStyle: TextStyle(
+                          color: _pwCheckErrorText?Colors.green:Colors.red),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscureText1 ? Icons.visibility : Icons.visibility_off,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscureText1 = !_obscureText1;
                             });
                           },
                         ),
@@ -226,13 +332,27 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                     child: TextField(
-                      controller: _NameController,
+                      controller: _nameController,
                       obscureText: false,
+                      maxLength: 10,
+                      onChanged: (text) {
+                        setState(() {
+                          if (text.isEmpty) {
+                            _namelengthCheck = false;
+                          } 
+                          else {
+                            _namelengthCheck = true;
+                          }
+                        });
+                      },  
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(90.0),
                         ),
-                        labelText: 'Name',
+                        helperText: '최소 1자 이상 입력해주세요.',
+                        helperStyle: TextStyle(
+                          color: !_namelengthCheck ? Colors.red : Colors.green),
+                        labelText: '이름',
                       ),
                     ),
                   ),
@@ -247,24 +367,29 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(90.0),
                         ),
-                        labelText: 'Birth date',
-                        suffixIcon: Icon(Icons.calendar_today),
+                        labelText: '생년월일',
+                        suffixIcon: const Icon(Icons.calendar_today),
                       ),
                       onTap: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         DatePicker.showDatePicker(
                           context,
                           showTitleActions: true,
-                          minTime: DateTime(1900),
-                          maxTime: DateTime(2100),
+                          minTime: DateTime(1900,1,1),
+                          maxTime: DateTime(2100,12,31),
                           onConfirm: (date) {
                             setState(() {
+                              int daysInMonth = DateTime(date.year, date.month + 1, 0).day;
+                              if (date.day > daysInMonth) {
+                                date = DateTime(date.year, date.month, daysInMonth);
+                              }
                               String month = date.month.toString().padLeft(2, '0');
                               String day = date.day.toString().padLeft(2, '0');
-                              _selectedDate = '${date.year}-${month}-${day}';
+                              _selectedDate = '${date.year}-$month-$day';
                               _dateController.text = _selectedDate;
                             });
                           },
-                          currentTime: DateTime.now(),
+                          currentTime: DateTime(2000, 7, 15),
                           // locale: LocaleType.ko,
                         );
                       },
@@ -275,15 +400,17 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                     child: TextField(
-                      controller: _PhoneNumberController,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      controller: _phonenumberController,
                       obscureText: false,
                       maxLength: 11,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(90.0),
                         ),
-                        labelText: 'Phone number ( \'-\' 없이 입력)',
+                        labelText: '전화번호 ( \'-\' 없이 입력 )',
                       ),
+                      keyboardType: TextInputType.phone,
                     ),
                   ),
 
@@ -297,7 +424,54 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         ),
                         child: const Text('Sign up'),
                         onPressed: () {
+
+                          final Map<String, dynamic> data = {
+                            "userid": {
+                              "id": _idController.text,
+                              "type": "String",
+                              "required": true,
+                              "unique": true
+                            },
+                            "password": {
+                              "password": _pwController.text,
+                              "type": "String",
+                              "required": true
+                            },
+                            "username": {
+                              "name": _nameController.text,
+                              "type": "String",
+                              "required": true,
+                              "unique": false
+                            },
+                            "birthday": {
+                              "date": _dateController.text,
+                              "type": "Date",
+                              "required": true,
+                            },
+                            "phone": {
+                              "number": _phonenumberController.text,
+                              "type": "String",
+                              "required": true,
+                              "unique": true
+                            },
+                            "profile": {
+                              "type" : "Object",
+                              "required": true,
+                              "default": {
+                                "image": "https://i.imgur.com/1Q9ZQ9r.png",
+                                "message": "Hello, I'm new here!"
+                              }
+                            }
+                          };
+
+                          String jsonData = const JsonEncoder.withIndent('\t').convert(data);
+
+                          print(jsonData);
                           
+                          String emitName = 'signup';
+                          String url = 'http://localhost:3000';
+                          sendDataToServer(jsonData, emitName, url);
+
                         },
                       ) 
                   ),
