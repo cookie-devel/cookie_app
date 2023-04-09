@@ -134,6 +134,64 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     }
   }
 
+  // creadte json structure
+  String createJsonData(String id, String pw, String name, String date, String phoneNumber) {
+    Map<String, dynamic> data = {
+      "userid": {
+        "id": id,
+        "type": "String",
+        "required": true,
+        "unique": true
+      },
+      "password": {
+        "password": pw,
+        "type": "String",
+        "required": true
+      },
+      "username": {
+        "name": name,
+        "type": "String",
+        "required": true,
+        "unique": false
+      },
+      "birthday": {
+        "date": date,
+        "type": "Date",
+        "required": true,
+      },
+      "phone": {
+        "number": phoneNumber,
+        "type": "String",
+        "required": true,
+        "unique": true
+      },
+      "profile": {
+        "type" : "Object",
+        "required": true,
+        "default": {
+          "image": "https://i.imgur.com/1Q9ZQ9r.png",
+          "message": "Hello, I'm new here!"
+        }
+      }
+    };
+
+    String jsonData = const JsonEncoder.withIndent('\t').convert(data);
+
+    return jsonData;
+  }
+
+
+  bool allCheck(idlengthCheck,pwlengthCheck,pwCheckErrorText,namelengthCheck){
+    if(idlengthCheck == true && pwlengthCheck == true && 
+    pwCheckErrorText == true && namelengthCheck == true){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -425,52 +483,55 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         child: const Text('Sign up'),
                         onPressed: () {
 
-                          final Map<String, dynamic> data = {
-                            "userid": {
-                              "id": _idController.text,
-                              "type": "String",
-                              "required": true,
-                              "unique": true
-                            },
-                            "password": {
-                              "password": _pwController.text,
-                              "type": "String",
-                              "required": true
-                            },
-                            "username": {
-                              "name": _nameController.text,
-                              "type": "String",
-                              "required": true,
-                              "unique": false
-                            },
-                            "birthday": {
-                              "date": _dateController.text,
-                              "type": "Date",
-                              "required": true,
-                            },
-                            "phone": {
-                              "number": _phonenumberController.text,
-                              "type": "String",
-                              "required": true,
-                              "unique": true
-                            },
-                            "profile": {
-                              "type" : "Object",
-                              "required": true,
-                              "default": {
-                                "image": "https://i.imgur.com/1Q9ZQ9r.png",
-                                "message": "Hello, I'm new here!"
-                              }
-                            }
-                          };
-
-                          String jsonData = const JsonEncoder.withIndent('\t').convert(data);
+                          String jsonData = createJsonData(_idController.text, _pwController.text
+                          , _nameController.text, _dateController.text, _phonenumberController.text);
 
                           print(jsonData);
                           
                           String emitName = 'signup';
                           String url = 'http://localhost:3000';
                           sendDataToServer(jsonData, emitName, url);
+                          
+                          if (allCheck(_idlengthCheck, _pwlengthCheck, _pwCheckErrorText, _namelengthCheck)){
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('알림'),
+                                  content: const Text('회원가입이 완료되었습니다.'),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('확인'),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+
+                          }
+                          else{
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('알림'),
+                                  content: const Text('회원가입에 실패하였습니다.'),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('확인'),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+
 
                         },
                       ) 
@@ -479,6 +540,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               ),
             )
           )
-        );
+    );
   }
 }
