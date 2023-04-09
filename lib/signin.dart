@@ -122,19 +122,19 @@ class _SignInWidgetState extends State<SignInWidget> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   
-                  const SizedBox(height: 45),
+                  const SizedBox(height: 100),
 
                   // Logo
                   Container(
                     width: 110,
                     height: 110,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      image: const DecorationImage(
-                          image: AssetImage('assets/images/newjeans.jpg'), fit: BoxFit.contain),
-                      border: Border.all(
-                        color: const Color.fromARGB(255, 255, 99, 159),
-                      ),
+                      image: DecorationImage(
+                          image: AssetImage('assets/images/cookie_logo.png'), fit: BoxFit.contain),
+                      // border: Border.all(
+                      //   // color: const Color.fromARGB(255, 255, 99, 159),
+                      // ),
                     ),
                   ),
 
@@ -236,7 +236,6 @@ class _SignInWidgetState extends State<SignInWidget> {
                                                             _pwController.text);
                           
                           Map<String, dynamic> jsonMap = await sendDataToServer(SigninData);
-                          print(jsonMap);
                           bool success = jsonMap['success'];
                           bool valid = allCheck(_idlengthCheck, _pwlengthCheck);
                           bool successCheck = valid && success;
@@ -276,7 +275,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                       ) 
                   ),
 
-                  // sing up
+                  // sign up
                   Container(
                       width: 330,
                       height: 80,

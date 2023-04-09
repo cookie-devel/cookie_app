@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -32,41 +33,45 @@ const double iconHeight = 85;
 
 const JsonDecoder decoder = JsonDecoder();
 
-const String jsonString = '''{
-    "user1": {
-      "name": "user1",
-      "profile": "assets/images/profile1.png",
-      "status": "online"
-    },
-    "user2": {
-      "name": "user2",
-      "profile": "assets/images/profile2.png",
-      "status": "offline"
-    },
-    "user3": {
-      "name": "user3",
-      "profile": "assets/images/profile3.png",
-      "status": "offline"
-    },
-    "user4": {
-      "name": "user4",
-      "profile": "assets/images/profile4.png",
-      "status": "offline"
-    },
-    "user5": {
-      "name": "user5",
-      "profile": "assets/images/profile5.png",
-      "status": "offline"
-    },
-    "user6": {
-      "name": "user6",
-      "profile": "assets/images/profile6.png",
-      "status": "offline"
-    }
+const String jsonString = '''[
+  {
+    "name": "박종범",
+    "image": "assets/images/user2.jpg"
+  },
+  {
+    "name": "백승헌",
+    "image": "assets/images/user.jpg"
+  },  
+  {
+    "name": "Jane",
+    "image": "assets/images/cookies.jpg"
+  },
+  {
+    "name": "JB",
+    "image": "assets/images/cookie_logo.png"
+  },
+  {
+    "name": "Jane",
+    "image": "assets/images/newjeans.jpg"
+  },  
+  {
+    "name": "Jane",
+    "image": "assets/images/newjeans.jpg"
+  },
+  {
+    "name": "JB",
+    "image": "assets/images/newjeans.jpg"
+  },
+  {
+    "name": "Jane",
+    "image": "assets/images/newjeans.jpg"
+  },  
+  {
+    "name": "Jane",
+    "image": "assets/images/newjeans.jpg"
   }
+]
 ''';
-
-
 
 // FriendList? friendList;
 class FriendsGrid extends StatefulWidget {
@@ -78,26 +83,23 @@ class FriendsGrid extends StatefulWidget {
 
 class _FriendsGridState extends State<FriendsGrid> {
 
-  
+
   @override
   Widget build(BuildContext context) {
-    // friendList = friendItems.
-  
-    final Map<String, dynamic> object = decoder.convert(jsonString);
 
-    final item = object['user1'];
-    print(item['name']);
-    print(item['profile']);
-    print(item['status']);
+    // JSON 데이터를 파싱하여 List<Map<String, dynamic>> 형태로 변환합니다.
+    final List<dynamic> profiles = jsonDecode(jsonString);
+    final int listLength = profiles.length;
+
 
     return Scaffold(
       // appBar: AppBar(
-      //   title: Text('My App'),
+      //   title: const Text('친구'),
       // ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(8, kToolbarHeight-16, 8, 8),
         child: GridView.builder(
-          itemCount: 30,
+          itemCount: listLength,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
             childAspectRatio: 1.0,
@@ -105,8 +107,14 @@ class _FriendsGridState extends State<FriendsGrid> {
             crossAxisSpacing: 10.0,
           ),
           itemBuilder: (BuildContext context, int index) {
+            final Map<String, dynamic> profile = profiles[index];
+
             return Container(
-              child: returnProfile(width: iconWidth, height: iconHeight),
+              child: returnProfile(context: context,
+                                  width: iconWidth, 
+                                  height: iconHeight,
+                                  image: profile['image'] as String,
+                                  name: profile['name'] as String),
             );
           },
         ),
@@ -115,11 +123,21 @@ class _FriendsGridState extends State<FriendsGrid> {
   }
 }
 
-Widget returnProfile({required double width, required double height}) {
+Widget returnProfile({required context, required double width, required double height,  
+                      required String image, required String name,}) {
+
   return InkWell(
+
     onTap: () {
-      print("Clicked!!!");
+      print("="*30);
+      print("${name} Clicked!!!");
+      print("${image}");
+      Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ChatWidget()),
+      );
     },
+    
     child: Column(
       children: [
 
@@ -128,10 +146,11 @@ Widget returnProfile({required double width, required double height}) {
             width: width,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              image: const DecorationImage(
-                  image: AssetImage('assets/images/newjeans.jpg'), fit: BoxFit.contain),
+              image: DecorationImage(
+                  image: AssetImage(image), fit: BoxFit.contain),
               border: Border.all(
                 color: const Color.fromARGB(255, 255, 99, 159),
+                width: 1.5
               ),
             ),
           ),
@@ -139,13 +158,15 @@ Widget returnProfile({required double width, required double height}) {
 
         const SizedBox(height: 5),
 
-        const Text(
-          'name',
-          style: TextStyle(
+        Text(
+          name,
+          style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w200,
-              color: Color.fromARGB(221, 70, 70, 70)),
+              color: Color.fromARGB(221, 60, 60, 60)
+          ),
         )
+
       ]
     ),
   );

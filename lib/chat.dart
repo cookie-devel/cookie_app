@@ -20,7 +20,7 @@ class _ChatWidgetState extends State<ChatWidget> {
   void initState() {
     super.initState();
 
-    socket = IO.io('http://localhost:3000', <String, dynamic>{
+    socket = IO.io('http://test.parkjb.com', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': true,
     });
