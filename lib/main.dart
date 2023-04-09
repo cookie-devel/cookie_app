@@ -2,6 +2,8 @@ import 'package:cookie_app/chat.dart';
 import 'package:cookie_app/maps.dart';
 import 'package:flutter/material.dart';
 import 'friends.dart';
+import 'signup.dart';
+import 'signin.dart';
 // import 'chat.dart';
 
 void main() {
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: _title,
-      home: MyStatefulWidget(),
+      home: SignInWidget(),
     );
   }
 }
@@ -35,10 +37,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   static const List<Widget> _widgetOptions = <Widget>[
-    Padding(
-      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-      child: FriendsGrid(),
-    ),
+    // Padding(
+    //   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+    //   child: FriendsGrid(),
+    // ),
+    FriendsGrid(),
     ChatWidget(),
     MapsWidget(),
     Text(

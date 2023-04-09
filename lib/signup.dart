@@ -1,12 +1,12 @@
 import 'dart:io';
+import 'signin.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'signin.dart';
 
 void main() {
   runApp(const SignUp());
@@ -116,7 +116,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   // jsondata to server
   Future<Map<String, dynamic>> sendDataToServer(String data) async {
     try {
-      String address = "http://localhost:3000/account/signup";
+      String address = "http://test.parkjb.com/account/signup";
       http.Response res = await http.post(Uri.parse(address),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -458,7 +458,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           minimumSize: const Size.fromHeight(50),
                         ),
                         child: const Text('Sign up'),
-                        onPressed: () async {
+                        onPressed:() async{
 
                           BuildContext context = this.context;
 

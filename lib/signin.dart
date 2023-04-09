@@ -1,16 +1,12 @@
 import 'dart:io';
+import 'signup.dart';
 import 'dart:convert';
 import 'package:cookie_app/main.dart';
-import 'package:cookie_app/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-//import 'package:image_cropper/image_cropper.dart';
+import 'package:cookie_app/signup.dart';
 import 'package:http/http.dart' as http;
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'signup.dart';
 
 void main() {
   runApp(const SignIn());
@@ -93,7 +89,7 @@ class _SignInWidgetState extends State<SignInWidget> {
 
   Future<Map<String, dynamic>> sendDataToServer(String data) async {
     try {
-      String address = "http://localhost:3000/account/signin";
+      String address = "http://test.parkjb.com/account/signin";
       http.Response res = await http.post(Uri.parse(address),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -240,8 +236,8 @@ class _SignInWidgetState extends State<SignInWidget> {
                                                             _pwController.text);
                           
                           Map<String, dynamic> jsonMap = await sendDataToServer(SigninData);
+                          print(jsonMap);
                           bool success = jsonMap['success'];
-
                           bool valid = allCheck(_idlengthCheck, _pwlengthCheck);
                           bool successCheck = valid && success;
 
