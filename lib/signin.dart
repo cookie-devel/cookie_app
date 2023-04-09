@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'signup.dart';
 
 void main() {
   runApp(const SignIn());

@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'signin.dart';
 
 void main() {
   runApp(const SignUp());
@@ -468,7 +469,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                               _dateController.text,
                               _phonenumberController.text);
                           
-                          
+
                           Map<String, dynamic> jsonMap = await sendDataToServer(jsonData);
                           bool success = jsonMap['success'];
                           
@@ -482,7 +483,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           else{
                             int errorCode = jsonMap['error_code'];
                             String errorMessage = jsonMap['message'];
-
                           }
 
                           bool valid = allCheck(_idlengthCheck, _pwlengthCheck,
@@ -502,7 +502,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                     TextButton(
                                       child: const Text('확인'),
                                       onPressed: () {
-                                        Navigator.pop(context);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => const SignInWidget()),
+                                        );
                                       },
                                     ),
                                   ],
@@ -533,6 +536,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ),
                 ],
               ),
-            )));
+            )
+          )
+        );
   }
 }
