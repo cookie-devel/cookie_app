@@ -121,9 +121,13 @@ class _SignUpWidgetState extends State<SignUpWidget> {
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: data);
+
       return json.decode(res.body);
-    } catch (e) {
+    } 
+    
+    catch (e) {
       print('Error sending data to server: $e');
+      return {'error': 'Error sending data to server'};
     }
   }
 
@@ -186,7 +190,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   @override
   Widget build(BuildContext context) {
     final RegExp _regex = RegExp(r'^[a-zA-Z0-9!@#\$&*~-]+$');
-
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
@@ -455,19 +458,40 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         ),
                         child: const Text('Sign up'),
                         onPressed: () async {
+
+                          BuildContext context = this.context;
+
                           String jsonData = createJsonData(
                               _idController.text,
                               _pwController.text,
                               _nameController.text,
                               _dateController.text,
                               _phonenumberController.text);
+                          
+                          
+                          Map<String, dynamic> jsonMap = await sendDataToServer(jsonData);
+                          bool success = jsonMap['success'];
+                          
+                          Map<String, dynamic> account = {};
+                          int errorCode = 0;
+                          String errorMessage = '';
+
+                          if (success){
+                            Map<String, dynamic> account = jsonMap['account'];
+                          }
+                          else{
+                            int errorCode = jsonMap['error_code'];
+                            String errorMessage = jsonMap['message'];
+
+                          }
 
                           bool valid = allCheck(_idlengthCheck, _pwlengthCheck,
                               _pwCheckErrorText, _namelengthCheck);
-                          bool success =
-                              valid && await sendDataToServer(jsonData);
+                          bool successCheck = valid && success;
 
-                          if (success == true) {
+                          if (!mounted) return;
+
+                          if (successCheck == true) {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -491,7 +515,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: const Text('알림'),
-                                  content: const Text('회원가입에 실패하였습니다.'),
+                                  content: Text('회원가입에 실패하였습니다.\n$errorMessage'),
                                   actions: [
                                     TextButton(
                                       child: const Text('확인'),
@@ -505,7 +529,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                             );
                           }
                         },
-                      )),
+                      )
+                    ),
                 ],
               ),
             )));
