@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-void main() {
-  runApp(const Chat());
-}
+import 'package:cookie_app/handler/socket.dart';
 
 class Chat extends StatelessWidget {
   const Chat({Key? key}) : super(key: key);
@@ -34,68 +29,44 @@ class ChatWidget extends StatefulWidget {
 }
 
 class _ChatWidgetState extends State<ChatWidget> {
-  late IO.Socket socket;
-  late List messages = [];
+  List messages = [];
 
   final chatFieldController = TextEditingController();
-
-  bool _connected = false;
 
   @override
   void initState() {
     super.initState();
 
-    socket = IO.io(dotenv.env['BASE_URI'], <String, dynamic>{
-      'transports': ['websocket'],
-      'autoConnect': true,
-    });
-    socket.connect();
-
-    socket.onConnect((_) {
-      print('connected');
-      setState(() {
-        _connected = true;
-      });
-    });
-
     socket.on('chat message', (data) {
-      setState(() {
-        messages.add(data);
-      });
-    });
-
-    socket.on('disconnect', (_) {
-      setState(() {
-        _connected = false;
-      });
-      print('disconnected');
+      if (mounted) {
+        setState(() {
+          messages.add(data);
+        });
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: Column(
         children: [
-
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(_connected ? Icons.check_circle:Icons.warning,
-                  color: _connected ?Colors.green:Colors.red,
+              Icon(socket.connected ? Icons.check_circle : Icons.warning,
+                  color: socket.connected ? Colors.green : Colors.red,
                   size: 16.0),
-              SizedBox(width: 4.0),
-              Text(_connected ? 'Connected':'Disconnected',
-                  style: TextStyle(fontSize: 16.0)),
+              const SizedBox(width: 4.0),
+              Text(socket.connected ? 'Connected' : 'Disconnected',
+                  style: const TextStyle(fontSize: 16.0)),
             ],
           ),
-
           Expanded(
-            child:SingleChildScrollView(
+            child: SingleChildScrollView(
               reverse: true,
-              child:Column(
+              child: Column(
                 children: [
                   ListView.builder(
                     shrinkWrap: true,
@@ -108,10 +79,9 @@ class _ChatWidgetState extends State<ChatWidget> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-
                               Material(
                                 elevation: 5,
-                                shape: CircleBorder(
+                                shape: const CircleBorder(
                                   side: BorderSide(
                                     color: Color.fromARGB(255, 255, 99, 159),
                                     width: 1.5,
@@ -127,13 +97,14 @@ class _ChatWidgetState extends State<ChatWidget> {
                                   ),
                                 ),
                               ),
-
                               SizedBox(width: 10),
-
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("김채원", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                                  Text("김채원",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold)),
                                   SizedBox(height: 5),
                                   Container(
                                     constraints: BoxConstraints(
@@ -143,12 +114,12 @@ class _ChatWidgetState extends State<ChatWidget> {
                                       color: Color.fromARGB(255, 189, 252, 138),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
                                     child: Text(messages[index]),
                                   ),
                                 ],
                               ),
-
                             ],
                           ),
                           SizedBox(height: 15), // 수직 간격 조정
@@ -157,12 +128,10 @@ class _ChatWidgetState extends State<ChatWidget> {
                     },
                   ),
                 ],
-                ),
+              ),
             ),
           ),
-
           Container(
-
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Colors.white,
@@ -174,7 +143,6 @@ class _ChatWidgetState extends State<ChatWidget> {
                 ),
               ],
             ),
-
             child: Row(
               children: [
                 Expanded(
@@ -192,9 +160,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                 ),
                 IconButton(
                   onPressed: () {
-                    if (chatFieldController.text.trim().isNotEmpty){
-                      print("IconButton pressed");
-                      print("connect: ${_connected}");
+                    if (chatFieldController.text.trim().isNotEmpty) {
                       socket.emit("chat message", chatFieldController.text);
                       chatFieldController.text = '';
                     }
@@ -206,9 +172,9 @@ class _ChatWidgetState extends State<ChatWidget> {
               ],
             ),
           ),
-
-          SizedBox(height: 10,),
-
+          SizedBox(
+            height: 10,
+          ),
         ],
       ),
     );
@@ -216,7 +182,6 @@ class _ChatWidgetState extends State<ChatWidget> {
 
   @override
   void dispose() {
-    socket.dispose();
     chatFieldController.dispose();
     super.dispose();
   }

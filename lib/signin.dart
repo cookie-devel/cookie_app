@@ -1,19 +1,12 @@
-import 'dart:io';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-import 'signup.dart';
 import 'dart:convert';
+
 import 'package:cookie_app/main.dart';
+import 'package:cookie_app/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:cookie_app/signup.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-void main() {
-  runApp(const SignIn());
-}
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:http/http.dart' as http;
 
 class SignIn extends StatelessWidget {
   const SignIn({Key? key}) : super(key: key);

@@ -1,15 +1,16 @@
 import 'package:cookie_app/chat.dart';
+import 'package:cookie_app/friends.dart';
 import 'package:cookie_app/maps.dart';
+import 'package:cookie_app/signin.dart';
 import 'package:flutter/material.dart';
-import 'friends.dart';
-import 'signup.dart';
-import 'signin.dart';
-// import 'chat.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
+import 'package:cookie_app/handler/socket.dart';
 
 void main() async {
   await dotenv.load();
+  socket.connect();
+  socket.onConnect((data) => print('socket connected'));
+  socket.onDisconnect((data) => print('socket disconnected: ${data}'));
   runApp(const MyApp());
 }
 
@@ -67,7 +68,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(50.0),
+          preferredSize: const Size.fromHeight(50.0),
           child: AppBar(
             title: const Text('C🍪🍪KIE'),
             backgroundColor: Colors.orangeAccent,
@@ -81,7 +82,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               ),
             ],
             flexibleSpace: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
