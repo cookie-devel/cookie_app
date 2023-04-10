@@ -8,8 +8,10 @@ import 'package:cookie_app/handler/socket.dart';
 
 void main() async {
   await dotenv.load();
-  socket.connect();
-  socket.onConnect((data) => print('socket connected'));
+  socket.onConnect((data) {
+    print('socket connected');
+    print(socket.id);
+  });
   socket.onDisconnect((data) => print('socket disconnected: ${data}'));
   runApp(const MyApp());
 }
@@ -36,6 +38,12 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  @override
+  void initState() {
+    super.initState();
+    socket.connect();
+  }
+
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
