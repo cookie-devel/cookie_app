@@ -51,24 +51,24 @@ const String jsonString = '''[
     "image": "assets/images/cookie_logo.png"
   },
   {
-    "name": "Jane",
-    "image": "assets/images/newjeans.jpg"
+    "name": "cw1",
+    "image": "assets/images/cw1.png"
   },  
   {
-    "name": "Jane",
-    "image": "assets/images/newjeans.jpg"
+    "name": "cw2",
+    "image": "assets/images/cw2.png"
   },
   {
-    "name": "JB",
-    "image": "assets/images/newjeans.jpg"
+    "name": "cw3",
+    "image": "assets/images/cw3.png"
   },
   {
-    "name": "Jane",
-    "image": "assets/images/newjeans.jpg"
+    "name": "cw4",
+    "image": "assets/images/cw4.png"
   },  
   {
-    "name": "Jane",
-    "image": "assets/images/newjeans.jpg"
+    "name": "cw5",
+    "image": "assets/images/cw5.png"
   }
 ]
 ''';
@@ -83,40 +83,37 @@ class FriendsGrid extends StatefulWidget {
 
 class _FriendsGridState extends State<FriendsGrid> {
 
-
   @override
   Widget build(BuildContext context) {
-
-    // JSON 데이터를 파싱하여 List<Map<String, dynamic>> 형태로 변환합니다.
     final List<dynamic> profiles = jsonDecode(jsonString);
     final int listLength = profiles.length;
 
+    return MaterialApp(
+      home: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.fromLTRB(8, kToolbarHeight-16, 8, 8),
+          child: GridView.builder(
+            itemCount: listLength,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 1.0,
+              mainAxisSpacing: 40.0,
+              crossAxisSpacing: 10.0,
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              final Map<String, dynamic> profile = profiles[index];
 
-    return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('친구'),
-      // ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(8, kToolbarHeight-16, 8, 8),
-        child: GridView.builder(
-          itemCount: listLength,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            childAspectRatio: 1.0,
-            mainAxisSpacing: 40.0,
-            crossAxisSpacing: 10.0,
+              return Container(
+                child: returnProfile(
+                  context: context,
+                  width: iconWidth, 
+                  height: iconHeight,
+                  image: profile['image'] as String,
+                  name: profile['name'] as String
+                ),
+              );
+            },
           ),
-          itemBuilder: (BuildContext context, int index) {
-            final Map<String, dynamic> profile = profiles[index];
-
-            return Container(
-              child: returnProfile(context: context,
-                                  width: iconWidth, 
-                                  height: iconHeight,
-                                  image: profile['image'] as String,
-                                  name: profile['name'] as String),
-            );
-          },
         ),
       ),
     );
@@ -128,13 +125,16 @@ Widget returnProfile({required context, required double width, required double h
 
   return InkWell(
 
-    onTap: () {
+    onTap:(){
       print("="*30);
       print("${name} Clicked!!!");
       print("${image}");
+      
       Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const ChatWidget()),
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatWidget(),
+        ),
       );
     },
     
@@ -176,3 +176,5 @@ Widget returnProfile({required context, required double width, required double h
 
 // https://memostack.tistory.com/329
 // Reference: https://eunoia3jy.tistory.com/106
+
+

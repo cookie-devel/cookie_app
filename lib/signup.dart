@@ -481,7 +481,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                             Map<String, dynamic> account = jsonMap['account'];
                           }
                           else{
-                            int errorCode = jsonMap['error_code'];
+                            int errorCode = jsonMap['err_code'];
                             String errorMessage = jsonMap['message'];
                           }
 

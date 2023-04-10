@@ -45,6 +45,8 @@ class _SignInWidgetState extends State<SignInWidget> {
 
   bool _idlengthCheck = false;
   bool _pwlengthCheck = false;
+  bool _idCheck = true;
+  bool _pwCheck = true;
   bool _obscureText = true;
 
   final String _selectedID = '';          //ID
@@ -79,7 +81,6 @@ class _SignInWidgetState extends State<SignInWidget> {
     Map<String, dynamic> data = {
       "userid": id,
       "password": pw
-
     };
 
     String jsonData = const JsonEncoder.withIndent('\t').convert(data);
@@ -111,7 +112,7 @@ class _SignInWidgetState extends State<SignInWidget> {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.lightBlue,
         ),
         home: Scaffold(
             resizeToAvoidBottomInset: true,
@@ -142,7 +143,6 @@ class _SignInWidgetState extends State<SignInWidget> {
 
                   // ID
                   Container(
-
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                     child: TextFormField(
                       inputFormatters: [
@@ -166,7 +166,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                           borderRadius: BorderRadius.circular(90.0),
                         ),
                         labelText: '아이디',
-                        helperText: '최소 6자 이상 입력해주세요.',
+                        helperText: (_idlengthCheck && _idCheck) ? null : '최소 6자 이상 입력해주세요.',
                         helperStyle: TextStyle(
                           color: !_idlengthCheck ? Colors.red : Colors.green),
                       ),
@@ -194,8 +194,11 @@ class _SignInWidgetState extends State<SignInWidget> {
                       obscureText: _obscureText,
                       maxLength: 30,
                       decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(90.0),
+                        ),
                         labelText: '비밀번호',
-                        helperText: '최소 10자 이상 입력해주세요.',
+                        helperText: (_pwlengthCheck && _pwCheck) ? null : '최소 10자 이상 입력해주세요.',
                         helperStyle: TextStyle(
                           color: !_pwlengthCheck ? Colors.red : Colors.green),
                         suffixIcon: IconButton(
@@ -208,9 +211,6 @@ class _SignInWidgetState extends State<SignInWidget> {
                               _obscureText = !_obscureText;
                             });
                           },
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(90.0),
                         ),
                       ),
                     ),
@@ -228,7 +228,11 @@ class _SignInWidgetState extends State<SignInWidget> {
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size.fromHeight(50),
                         ),
-                        child: const Text('로그인'),
+                        child: const Text('로그인',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                          )),       
                         onPressed: () async {
                           
                           // id, pw를 json 형식으로 반환
@@ -236,9 +240,26 @@ class _SignInWidgetState extends State<SignInWidget> {
                                                             _pwController.text);
                           
                           Map<String, dynamic> jsonMap = await sendDataToServer(SigninData);
+
+                          // 로그인 실패했을 경우도 success 여부 반환해야함!
                           bool success = jsonMap['success'];
+
                           bool valid = allCheck(_idlengthCheck, _pwlengthCheck);
                           bool successCheck = valid && success;
+
+
+                          if (!_pwlengthCheck){
+                            _pwCheck = false;
+                          }
+                          else{
+                            _pwCheck = true;
+                          }
+                          if (!_idlengthCheck){
+                            _idCheck = false;
+                          }
+                          else{
+                            _idCheck = true;
+                          }
 
                           if (!mounted) return;
 
@@ -284,7 +305,11 @@ class _SignInWidgetState extends State<SignInWidget> {
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size.fromHeight(50),
                         ),
-                        child: const Text('회원가입'),
+                        child: const Text('회원가입',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                          )),
                         onPressed: () {
                           Navigator.push(
                             context,

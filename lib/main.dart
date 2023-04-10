@@ -63,8 +63,33 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('C🍪🍪KIE'),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(50.0),
+          child: AppBar(
+            title: const Text('C🍪🍪KIE'),
+            backgroundColor: Colors.orangeAccent,
+            elevation: 0,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.settings),
+                onPressed: () {
+                  // Do something
+                },
+              ),
+            ],
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[
+                    Colors.orangeAccent,
+                    Colors.deepOrangeAccent,
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
