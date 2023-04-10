@@ -5,8 +5,11 @@ import 'friends.dart';
 import 'signup.dart';
 import 'signin.dart';
 // import 'chat.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+
+void main() async {
+  await dotenv.load();
   runApp(const MyApp());
 }
 

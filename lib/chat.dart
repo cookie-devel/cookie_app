@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() {
   runApp(const Chat());
@@ -44,7 +45,7 @@ class _ChatWidgetState extends State<ChatWidget> {
   void initState() {
     super.initState();
 
-    socket = IO.io('http://test.parkjb.com', <String, dynamic>{
+    socket = IO.io(dotenv.env['BASE_URI'], <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': true,
     });
@@ -78,15 +79,15 @@ class _ChatWidgetState extends State<ChatWidget> {
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: Column(
         children: [
-          
+
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(_connected ? Icons.check_circle:Icons.warning, 
-                  color: _connected ?Colors.green:Colors.red, 
+              Icon(_connected ? Icons.check_circle:Icons.warning,
+                  color: _connected ?Colors.green:Colors.red,
                   size: 16.0),
               SizedBox(width: 4.0),
-              Text(_connected ? 'Connected':'Disconnected', 
+              Text(_connected ? 'Connected':'Disconnected',
                   style: TextStyle(fontSize: 16.0)),
             ],
           ),

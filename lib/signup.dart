@@ -7,8 +7,10 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const SignUp());
 }
 
@@ -116,7 +118,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   // jsondata to server
   Future<Map<String, dynamic>> sendDataToServer(String data) async {
     try {
-      String address = "http://test.parkjb.com/account/signup";
+      String address = '${dotenv.env['BASE_URI']}/account/signup';
       http.Response res = await http.post(Uri.parse(address),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -124,9 +126,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
           body: data);
 
       return json.decode(res.body);
-    } 
-    
-    catch (e) {
+    } catch (e) {
       print('Error sending data to server: $e');
       return {'error': 'Error sending data to server'};
     }
@@ -458,8 +458,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           minimumSize: const Size.fromHeight(50),
                         ),
                         child: const Text('Sign up'),
-                        onPressed:() async{
-
+                        onPressed: () async {
                           BuildContext context = this.context;
 
                           String jsonData = createJsonData(
@@ -468,19 +467,18 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                               _nameController.text,
                               _dateController.text,
                               _phonenumberController.text);
-                          
 
-                          Map<String, dynamic> jsonMap = await sendDataToServer(jsonData);
+                          Map<String, dynamic> jsonMap =
+                              await sendDataToServer(jsonData);
                           bool success = jsonMap['success'];
-                          
+
                           Map<String, dynamic> account = {};
                           int errorCode = 0;
                           String errorMessage = '';
 
-                          if (success){
+                          if (success) {
                             Map<String, dynamic> account = jsonMap['account'];
-                          }
-                          else{
+                          } else {
                             int errorCode = jsonMap['err_code'];
                             String errorMessage = jsonMap['message'];
                           }
@@ -504,7 +502,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                       onPressed: () {
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (context) => const SignInWidget()),
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const SignInWidget()),
                                         );
                                       },
                                     ),
@@ -518,7 +518,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: const Text('알림'),
-                                  content: Text('회원가입에 실패하였습니다.\n$errorMessage'),
+                                  content:
+                                      Text('회원가입에 실패하였습니다.\n$errorMessage'),
                                   actions: [
                                     TextButton(
                                       child: const Text('확인'),
@@ -532,12 +533,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                             );
                           }
                         },
-                      )
-                    ),
+                      )),
                 ],
               ),
-            )
-          )
-        );
+            )));
   }
 }

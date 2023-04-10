@@ -18,11 +18,25 @@ class _MapsWidgetState extends State<MapsWidget> {
   @override
   void initState() {
     super.initState();
-    markers.add(Marker(
+    markers.add(
+      Marker(
         markerId: MarkerId("1"),
         draggable: true,
-        onTap: () => print("Marker!"),
-        position: LatLng(38.4537251, 126.7960716)));
+        onTap: () {
+          print("Marker2!");
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("title"),
+                content: Text("content"),
+              );
+            },
+          );
+        },
+        position: LatLng(38.4537251, 126.7960716),
+      ),
+    );
 
     markers.add(
       Marker(
@@ -31,13 +45,14 @@ class _MapsWidgetState extends State<MapsWidget> {
         onTap: () {
           print("Marker2!");
           showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text("title"),
-                  content: Text("content"),
-                );
-              });
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("title"),
+                content: Text("content"),
+              );
+            },
+          );
         },
         position: LatLng(37.4537251, 126.7960716),
       ),
