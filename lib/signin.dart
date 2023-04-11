@@ -96,21 +96,51 @@ class _SignInWidgetState extends State<SignInWidget> {
 
   @override
   Widget build(BuildContext context) {
+
     final RegExp _regex = RegExp(r'^[a-zA-Z0-9!@#\$&*~-]+$');
 
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.lightBlue,
-      ),
+      // debugShowCheckedModeBanner: false,
+      // title: 'Flutter Demo',
+      // theme: ThemeData(
+      //   primarySwatch: Colors.lightBlue,
+      // ),
       home: Scaffold(
         resizeToAvoidBottomInset: true,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(50.0),
+          child: AppBar(
+            title: const Text('C🍪🍪KIE'),
+            backgroundColor: Colors.orangeAccent,
+            elevation: 0,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.settings),
+                onPressed: () {
+                  // Do something
+                },
+              ),
+            ],
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[
+                    Colors.orangeAccent,
+                    Colors.deepOrangeAccent,
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+
               const SizedBox(height: 100),
 
               // Logo
@@ -302,6 +332,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                       );
                     },
                   )),
+            
             ],
           ),
         ),

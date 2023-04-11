@@ -22,13 +22,17 @@ class Chat extends StatelessWidget {
 }
 
 class ChatWidget extends StatefulWidget {
-  const ChatWidget({Key? key}) : super(key: key);
+
+  final String? name;
+
+  const ChatWidget({Key? key, this.name}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _ChatWidgetState();
 }
 
 class _ChatWidgetState extends State<ChatWidget> {
+
   List messages = [];
 
   final chatFieldController = TextEditingController();
@@ -55,34 +59,43 @@ class _ChatWidgetState extends State<ChatWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      child: Column(
-        children: [
-          connectionInfo(),
-          Expanded(
-            child: SingleChildScrollView(
-              reverse: true,
-              child: Column(
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: messages.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return chatBubble(
-                          "assets/images/cw5.png", "김채원", messages[index]);
-                    },
-                  ),
-                ],
+    return MaterialApp(
+      home: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(50.0),
+          child: AppBar(
+            title: Text(widget.name??''),
+            backgroundColor: Colors.orangeAccent,
+            elevation: 0,
+            actions: [
+              connectionInfo()
+            ],
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[
+                    Colors.orangeAccent,
+                    Colors.deepOrangeAccent,
+                  ],
+                ),
               ),
             ),
           ),
-          chatField(),
-          const SizedBox(
-            height: 10,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+          child: Column(
+            children: [
+              // connectionInfo(),
+              chat("assets/images/cw5.png", widget.name??'', messages),
+              chatField(),
+              const SizedBox(height: 10,),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -106,6 +119,7 @@ class _ChatWidgetState extends State<ChatWidget> {
             socket.connected ? 'Connected' : 'Disconnected',
             style: const TextStyle(fontSize: 16.0),
           ),
+          SizedBox(width: 5,),
         ],
       );
 
@@ -171,7 +185,7 @@ class _ChatWidgetState extends State<ChatWidget> {
       );
 
   Widget chatField() => Container(
-        decoration: BoxDecoration(
+    decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Colors.white,
           boxShadow: [
@@ -206,4 +220,24 @@ class _ChatWidgetState extends State<ChatWidget> {
           ],
         ),
       );
+
+  Widget chat(image, String name, messages) => Expanded(
+    child: SingleChildScrollView(
+      reverse: true,
+      child: Column(
+        children: [
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: messages.length,
+            itemBuilder: (BuildContext context, int index) {
+              return chatBubble(
+                  image, name, messages[index]);
+            },
+          ),
+        ],
+      ),
+    ),
+  );
+
 }

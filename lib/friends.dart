@@ -64,6 +64,22 @@ const String jsonString = '''[
   {
     "name": "cw5",
     "image": "assets/images/cw5.png"
+  },
+  {
+    "name": "cw4",
+    "image": "assets/images/cw4.png"
+  },
+  {
+    "name": "cw5",
+    "image": "assets/images/cw5.png"
+  },
+  {
+    "name": "cw4",
+    "image": "assets/images/cw4.png"
+  },
+  {
+    "name": "cw5",
+    "image": "assets/images/cw5.png"
   }
 ]
 ''';
@@ -82,31 +98,29 @@ class _FriendsGridState extends State<FriendsGrid> {
     final List<dynamic> profiles = jsonDecode(jsonString);
     final int listLength = profiles.length;
 
-    return MaterialApp(
-      home: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(8, kToolbarHeight - 16, 8, 8),
-          child: GridView.builder(
-            itemCount: listLength,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 1.0,
-              mainAxisSpacing: 40.0,
-              crossAxisSpacing: 10.0,
-            ),
-            itemBuilder: (BuildContext context, int index) {
-              final Map<String, dynamic> profile = profiles[index];
-
-              return Container(
-                child: returnProfile(
-                    context: context,
-                    width: iconWidth,
-                    height: iconHeight,
-                    image: profile['image'] as String,
-                    name: profile['name'] as String),
-              );
-            },
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(8, kToolbarHeight - 32, 8, 8),
+        child: GridView.builder(
+          itemCount: listLength,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            childAspectRatio: 1.0,
+            mainAxisSpacing: 40.0,
+            crossAxisSpacing: 10.0,
           ),
+          itemBuilder: (BuildContext context, int index) {
+            final Map<String, dynamic> profile = profiles[index];
+
+            return Container(
+              child: returnProfile(
+                  context: context,
+                  width: iconWidth,
+                  height: iconHeight,
+                  image: profile['image'] as String,
+                  name: profile['name'] as String),
+            );
+          },
         ),
       ),
     );
@@ -114,7 +128,7 @@ class _FriendsGridState extends State<FriendsGrid> {
 }
 
 Widget returnProfile({
-  required context,
+  required BuildContext context,
   required double width,
   required double height,
   required String image,
@@ -129,7 +143,7 @@ Widget returnProfile({
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ChatWidget(),
+          builder: (context) => ChatWidget(name:name),
         ),
       );
     },
@@ -142,7 +156,7 @@ Widget returnProfile({
             image:
                 DecorationImage(image: AssetImage(image), fit: BoxFit.contain),
             border: Border.all(
-                color: const Color.fromARGB(255, 255, 99, 159), width: 1.5),
+                color: const Color.fromARGB(255, 255, 99, 159), width: 1.8),
           ),
         ),
       ),
@@ -160,7 +174,7 @@ Widget returnProfile({
 
 
 
-// https://memostack.tistory.com/329
 // Reference: https://eunoia3jy.tistory.com/106
+//            https://memostack.tistory.com/329
 
 

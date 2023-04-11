@@ -55,6 +55,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   bool _pwlengthCheck = false;
   bool _namelengthCheck = false;
 
+  bool _idCheck = true;
+  bool _pwCheck = true;
+  bool _nameCheck = true;
+
   // password visible check
   bool _obscureText = true;
   bool _obscureText1 = true;
@@ -191,24 +195,52 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    
     final RegExp _regex = RegExp(r'^[a-zA-Z0-9!@#\$&*~-]+$');
+
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+        // debugShowCheckedModeBanner: false,
+        // title: 'Flutter Demo',
+        // theme: ThemeData(
+        //   primarySwatch: Colors.blue,
+        // ),
         home: Scaffold(
             resizeToAvoidBottomInset: true,
-            // appBar: AppBar(
-            //   title: Text('Sign Up'),
-            // ),
-
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(50.0),
+              child: AppBar(
+                title: const Text('회원가입'),
+                backgroundColor: Colors.orangeAccent,
+                elevation: 0,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.settings),
+                    onPressed: () {
+                      // Do something
+                    },
+                  ),
+                ],
+                flexibleSpace: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: <Color>[
+                        Colors.orangeAccent,
+                        Colors.deepOrangeAccent,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            
             body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+
                   const SizedBox(height: 45),
 
                   // Profile Image
@@ -227,6 +259,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   ),
 
                   const SizedBox(height: 10),
+
+                  // select image button
                   ElevatedButton(
                     child: const Text('Select Image'),
                     onPressed: () {
@@ -258,7 +292,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           borderRadius: BorderRadius.circular(90.0),
                         ),
                         labelText: '아이디',
-                        helperText: '최소 6자 이상 입력해주세요.',
+                        helperText: (_idlengthCheck && _idCheck)
+                        ? null
+                        : '최소 6자 이상 입력해주세요.',
                         helperStyle: TextStyle(
                             color: !_idlengthCheck ? Colors.red : Colors.green),
                       ),
@@ -291,7 +327,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       maxLength: 30,
                       decoration: InputDecoration(
                         labelText: '비밀번호',
-                        helperText: '최소 10자 이상 입력해주세요.',
+                        helperText: (_pwlengthCheck && _pwCheck)
+                        ? null
+                        : '최소 10자 이상 입력해주세요.',
                         helperStyle: TextStyle(
                             color: !_pwlengthCheck ? Colors.red : Colors.green),
                         suffixIcon: IconButton(
@@ -381,7 +419,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(90.0),
                         ),
-                        helperText: '최소 1자 이상 입력해주세요.',
+                        helperText: (_namelengthCheck && _nameCheck)
+                        ? null
+                        : '최소 1자 이상 입력해주세요.',
                         helperStyle: TextStyle(
                             color:
                                 !_namelengthCheck ? Colors.red : Colors.green),
@@ -488,6 +528,22 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                               _pwCheckErrorText, _namelengthCheck);
                           bool successCheck = valid && success;
 
+                          if (!_idlengthCheck) {
+                            _idCheck = false;
+                          } else {
+                            _idCheck = true;
+                          }
+                          if (!_pwlengthCheck) {
+                            _pwCheck = false;
+                          } else {
+                            _pwCheck = true;
+                          }
+                          if (!_namelengthCheck) {
+                            _nameCheck = false;
+                          } else {
+                            _nameCheck = true;
+                          }
+
                           if (!mounted) return;
 
                           if (successCheck == true) {
@@ -534,9 +590,13 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                             );
                           }
                         },
-                      )),
+                      )
+                    ),
+                
                 ],
               ),
-            )));
+            )
+          )
+        );
   }
 }
