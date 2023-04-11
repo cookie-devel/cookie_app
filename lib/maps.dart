@@ -18,6 +18,7 @@ class _MapsWidgetState extends State<MapsWidget> {
   @override
   void initState() {
     super.initState();
+
     markers.add(
       Marker(
         markerId: MarkerId("1"),
@@ -64,6 +65,7 @@ class _MapsWidgetState extends State<MapsWidget> {
 
     _locationPermission();
     _getUserLocation();
+
   }
 
   // https://kanoos-stu.tistory.com/64
