@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cookie_app/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -22,11 +21,6 @@ class Friends extends StatelessWidget {
     );
   }
 }
-
-const double iconWidth = 85;
-const double iconHeight = 85;
-
-const JsonDecoder decoder = JsonDecoder();
 
 const String jsonString = '''[
   {
@@ -115,10 +109,8 @@ class _FriendsGridState extends State<FriendsGrid> {
             return Container(
               child: returnProfile(
                   context: context,
-                  width: iconWidth,
-                  height: iconHeight,
-                  image: profile['image'] as String,
-                  name: profile['name'] as String),
+                  user: returnUserInfo(profile)
+              ),
             );
           },
         ),
@@ -129,50 +121,73 @@ class _FriendsGridState extends State<FriendsGrid> {
 
 Widget returnProfile({
   required BuildContext context,
-  required double width,
-  required double height,
-  required String image,
-  required String name,
-}) {
+  required FriendInfo user
+  }) {
   return InkWell(
+
     onTap: () {
-      print("=" * 30);
-      print("${name} Clicked!!!");
-      print("${image}");
 
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ChatWidget(name:name),
+          builder: (context) => ChatWidget(name:user.name,image:user.image),
         ),
       );
+      // print("=" * 30);
+      // print("${user.name} Clicked!!!");
+      // print("${user.image}");
+
     },
-    child: Column(children: [
-      Expanded(
-        child: Container(
-          width: width,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image:
-                DecorationImage(image: AssetImage(image), fit: BoxFit.contain),
-            border: Border.all(
-                color: const Color.fromARGB(255, 255, 99, 159), width: 1.8),
+
+    child: Column(
+      
+      children: [
+
+        Expanded(
+          child: Container(
+            width: 85,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image:
+                  DecorationImage(image: AssetImage(user.image), fit: BoxFit.contain),
+              border: Border.all(
+                  color: const Color.fromARGB(255, 255, 99, 159), width: 1.8),
+            ),
           ),
         ),
-      ),
-      const SizedBox(height: 5),
-      Text(
-        name,
-        style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w200,
-            color: Color.fromARGB(221, 60, 60, 60)),
-      )
-    ]),
+
+        const SizedBox(height: 5),
+
+        Text(
+          user.name,
+          style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w200,
+              color: Color.fromARGB(221, 60, 60, 60)),
+        )
+      ]
+    ),
   );
 }
 
+class FriendInfo {
 
+  final String name;
+  final String image;
+
+  FriendInfo({required this.name, required this.image});
+
+}
+
+FriendInfo returnUserInfo(Map<String, dynamic> profile) {
+
+  String name = profile['name'] as String;
+  String image = profile['image'] as String;
+
+  return FriendInfo(name: name, 
+                    image: image);
+
+}
 
 // Reference: https://eunoia3jy.tistory.com/106
 //            https://memostack.tistory.com/329
