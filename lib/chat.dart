@@ -24,8 +24,9 @@ class Chat extends StatelessWidget {
 class ChatWidget extends StatefulWidget {
 
   final String? name;
+  final String? image;
 
-  const ChatWidget({Key? key, this.name}) : super(key: key);
+  const ChatWidget({Key? key, this.name, this.image}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _ChatWidgetState();
@@ -36,10 +37,13 @@ class _ChatWidgetState extends State<ChatWidget> {
   List messages = [];
 
   final chatFieldController = TextEditingController();
+  ScrollController? _scrollController;
 
   @override
   void initState() {
     super.initState();
+
+    _scrollController = ScrollController();
 
     socket.on('chat message', (data) {
       if (mounted) {
@@ -61,11 +65,38 @@ class _ChatWidgetState extends State<ChatWidget> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        
         resizeToAvoidBottomInset: true,
+
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50.0),
           child: AppBar(
-            title: Text(widget.name??''),
+            title: Row(
+              children: [
+                InkWell(
+                  onTap: () {                    
+                    profileWindow();
+                  },
+                  child: Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: AssetImage(widget.image ?? 'assets/images/cookie_logo.png'),
+                        fit: BoxFit.contain,
+                      ),
+                      border: Border.all(
+                        color: const Color.fromARGB(255, 189, 252, 138),
+                        width: 1.8,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 7),
+                Text(widget.name??'nonamed'),
+              ],
+            ),
             backgroundColor: Colors.orangeAccent,
             elevation: 0,
             actions: [
@@ -85,23 +116,26 @@ class _ChatWidgetState extends State<ChatWidget> {
             ),
           ),
         ),
+        
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           child: Column(
             children: [
               // connectionInfo(),
-              chat("assets/images/cw5.png", widget.name??'', messages),
+              chat(widget.image??'assets/images/cookie_logo.png', widget.name??'', messages),
               chatField(),
               const SizedBox(height: 10,),
             ],
           ),
         ),
+      
       ),
     );
   }
 
   @override
   void dispose() {
+    _scrollController?.dispose();
     chatFieldController.dispose();
     super.dispose();
   }
@@ -130,24 +164,30 @@ class _ChatWidgetState extends State<ChatWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Profile Image
-              Material(
-                elevation: 5,
-                shape: const CircleBorder(
-                  side: BorderSide(
-                    color: Color.fromARGB(255, 255, 99, 159),
-                    width: 1.5,
+              InkWell(
+                onTap: () {
+                  profileWindow();
+                },
+                child: Material(
+                  elevation: 5,
+                  shape: const CircleBorder(
+                    side: BorderSide(
+                      color: Color.fromARGB(255, 255, 99, 159),
+                      width: 1.5,
+                    ),
                   ),
-                ),
-                child: CircleAvatar(
-                  backgroundColor: Colors.grey[300],
-                  child: ClipOval(
-                    child: Image.asset(
-                      image,
-                      fit: BoxFit.cover,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.grey[300],
+                    child: ClipOval(
+                      child: Image.asset(
+                        image,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
               ),
+
               // Margin between profile image and chat bubble
               const SizedBox(width: 10),
               // Chat bubble
@@ -240,4 +280,91 @@ class _ChatWidgetState extends State<ChatWidget> {
     ),
   );
 
+  Future profileWindow(){
+    return showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Container( 
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 120,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20.0),
+                              topRight: Radius.circular(20.0),
+                            ),
+                            image: DecorationImage(
+                              image: AssetImage(widget.image??'assets/images/cookie_logo.png'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Expanded(
+                          child: Scrollbar(
+                            controller: _scrollController,
+                            child: SingleChildScrollView(
+                              controller: _scrollController,
+                              scrollDirection: Axis.vertical,
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    title: Text(
+                                      '아 술마시고 싶다',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18.0,
+                                      ),
+                                    ),
+                                  ),
+                                  ListTile(
+                                    title: Text("이름"),
+                                    subtitle: Text(widget.name??'nonamed'),
+                                  ),
+                                  ListTile(
+                                    title: Text("생일"),
+                                    subtitle: Text('2000-01-01'),
+                                  ),
+                                  ListTile(
+                                    title: Text("거주지"),
+                                    subtitle: Text('수원'),
+                                  ),
+                                  ListTile(
+                                    title: Text("나이"),
+                                    subtitle: Text('22'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text("확인"),
+                        ),
+                        SizedBox(height: 15),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+  }
+  
 }
+
