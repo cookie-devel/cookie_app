@@ -1,12 +1,12 @@
 import 'dart:convert';
-
 import 'package:cookie_app/main.dart';
-import 'package:cookie_app/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:cookie_app/signup.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -35,6 +35,10 @@ class SignInWidget extends StatefulWidget {
 }
 
 class _SignInWidgetState extends State<SignInWidget> {
+
+  bool _isStorageExist = false;
+  bool _isLoading = true;
+
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _pwController = TextEditingController();
 
@@ -52,6 +56,28 @@ class _SignInWidgetState extends State<SignInWidget> {
     super.initState();
     _idController.text = _selectedID;
     _pwController.text = _selectedPW;
+    checkStorage();
+  }
+
+  Future<void> checkStorage() async {
+    final storage = FlutterSecureStorage();
+    final id = await storage.read(key: 'id');
+    final pw = await storage.read(key: 'pw');
+
+    await Future.delayed(Duration(seconds: 1));
+
+    if (id != null && pw != null) {
+      setState(() {
+        _isStorageExist = true;
+        _isLoading = false;
+      });
+    } 
+    else {
+      setState(() {
+        _isStorageExist = false;
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -96,7 +122,29 @@ class _SignInWidgetState extends State<SignInWidget> {
 
   @override
   Widget build(BuildContext context) {
+    
+    if (_isLoading) {
+      return Container(
+        color: Colors.white,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.deepOrangeAccent),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    else {
+      if( _isStorageExist){
+        return MyStatefulWidget();
+      }
+    }
 
+    final storage = FlutterSecureStorage();
     final RegExp _regex = RegExp(r'^[a-zA-Z0-9!@#\$&*~-]+$');
 
     return MaterialApp(
@@ -281,6 +329,11 @@ class _SignInWidgetState extends State<SignInWidget> {
                       if (!mounted) return;
 
                       if (successCheck) {
+
+                        // 사용자 정보를 저장합니다.
+                        await storage.write(key: 'id', value: _idController.text);
+                        await storage.write(key: 'pw', value: _pwController.text);
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
