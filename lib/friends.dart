@@ -124,7 +124,7 @@ class _FriendsGridState extends State<FriendsGrid> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+        padding: const EdgeInsets.fromLTRB(10, 24, 10, 8),
         child: GridView.builder(
           itemCount: listLength,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -194,61 +194,6 @@ Widget returnProfile({required BuildContext context, required FriendInfo user}){
               color: Color.fromARGB(221, 60, 60, 60)),
         )
       ]
-    ),
-  );
-}
-
-Widget returnProfileStructure({required context, required listLength, required profiles}){
-  return Scaffold(
-    appBar: PreferredSize(
-      preferredSize: const Size.fromHeight(50.0),
-      child: AppBar(
-        title: const Text('친구'),
-        backgroundColor: Colors.orangeAccent,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              // Do something
-            },
-          ),
-        ],
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: <Color>[
-                Colors.orangeAccent,
-                Colors.deepOrangeAccent,
-              ],
-            ),
-          ),
-        ),
-      ),
-    ),
-    body: Padding(
-      padding: const EdgeInsets.fromLTRB(8, kToolbarHeight - 32, 8, 8),
-      child: GridView.builder(
-        itemCount: listLength,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          childAspectRatio: 1.0,
-          mainAxisSpacing: 40.0,
-          crossAxisSpacing: 10.0,
-        ),
-        itemBuilder: (BuildContext context, int index) {
-          final Map<String, dynamic> profile = profiles[index];
-
-          return Container(
-            child: returnProfile(
-                context: context,
-                user: returnUserInfo(profile)
-            ),
-          );
-        },
-      ),
     ),
   );
 }
