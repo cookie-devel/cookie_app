@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:cookie_app/friends.dart';
 import 'package:cookie_app/handler/socket.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -90,6 +91,7 @@ class _ChatWidgetState extends State<ChatWidget> {
       ],
     );
 
+  
   Widget chatBubble(FriendInfo user, text) => Column(
     children: [
       Row(
@@ -147,10 +149,10 @@ class _ChatWidgetState extends State<ChatWidget> {
                 horizontal: 10,
                 vertical: 5,
               ),
-              child: Text(
-                text,
-                style: const TextStyle(fontSize: 16), // 폰트 크기 조정
-              ),
+              child: LongPressCopyableText(
+                  text: text,
+                  style: const TextStyle(fontSize: 16),
+                ),
             ),
           ],
         ),
@@ -319,6 +321,7 @@ class _ChatWidgetState extends State<ChatWidget> {
   
   Widget chatStructure(){
     return MaterialApp(
+      
       home: Scaffold(
         
         resizeToAvoidBottomInset: true,
@@ -354,7 +357,7 @@ class _ChatWidgetState extends State<ChatWidget> {
         ),
         
         body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
           child: Column(
             children: [
               // connectionInfo(),
@@ -365,6 +368,32 @@ class _ChatWidgetState extends State<ChatWidget> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class LongPressCopyableText extends StatelessWidget {
+  final String text;
+  final TextStyle? style;
+
+  const LongPressCopyableText({
+    Key? key,
+    required this.text,
+    this.style,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onLongPress: () {
+        Clipboard.setData(ClipboardData(text: text));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('클립보드에 복사'),
+          duration: const Duration(seconds: 1),
+          ),
+        );
+      },
+      child: Text(text, style: style),
     );
   }
 }
