@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cookie_app/chat.dart';
+import 'package:cookie_app/handler/design.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -95,34 +96,7 @@ class _FriendsGridState extends State<FriendsGrid> {
 
     // return returnProfileStructure(context:context, listLength: listLength, profiles: profiles);
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50.0),
-        child: AppBar(
-          title: const Text('친구'),
-          backgroundColor: Colors.orangeAccent,
-          elevation: 0,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                // Do something
-              },
-            ),
-          ],
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-                  Colors.orangeAccent,
-                  Colors.deepOrangeAccent,
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+      appBar: cookieAppbar('친구'),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(10, 24, 10, 8),
         child: GridView.builder(
