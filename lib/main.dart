@@ -3,6 +3,7 @@ import 'package:cookie_app/maps.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/signin.dart';
 import 'package:cookie_app/friends.dart';
+import 'package:cookie_app/settings.dart';
 import 'package:cookie_app/handler/socket.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -49,10 +50,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   static const List<Widget> _widgetOptions = <Widget>[
-    // Padding(
-    //   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-    //   child: FriendsGrid(),
-    // ),
     FriendsGrid(),
     ChatWidget(),
     MapsWidget(),
@@ -60,10 +57,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       'Index 2: Club',
       style: optionStyle,
     ),
-    Text(
-      'Index 3: Settings',
-      style: optionStyle,
-    ),
+    SettingsWidget(),
   ];
 
   void _onItemTapped(int index) {

@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cookie_app/signup.dart';
 import 'package:http/http.dart' as http;
+import 'package:cookie_app/handler/design.dart';
+import 'package:cookie_app/handler/storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -35,18 +36,18 @@ class SignInWidget extends StatefulWidget {
 }
 
 class _SignInWidgetState extends State<SignInWidget> {
-
+  
   bool _isStorageExist = false;
   bool _isLoading = true;
-
-  final TextEditingController _idController = TextEditingController();
-  final TextEditingController _pwController = TextEditingController();
 
   bool _idlengthCheck = false;
   bool _pwlengthCheck = false;
   bool _idCheck = true;
   bool _pwCheck = true;
   bool _obscureText = true;
+  
+  final TextEditingController _idController = TextEditingController();
+  final TextEditingController _pwController = TextEditingController();
 
   final String _selectedID = ''; //ID
   final String _selectedPW = ''; //password
@@ -60,11 +61,13 @@ class _SignInWidgetState extends State<SignInWidget> {
   }
 
   Future<void> checkStorage() async {
-    final storage = FlutterSecureStorage();
+
     final id = await storage.read(key: 'id');
     final pw = await storage.read(key: 'pw');
-
-    await Future.delayed(Duration(seconds: 1));
+    print(id);
+    print(pw);
+    print("===========");
+    await Future.delayed(Duration(milliseconds:860));
 
     if (id != null && pw != null) {
       setState(() {
@@ -124,72 +127,72 @@ class _SignInWidgetState extends State<SignInWidget> {
   Widget build(BuildContext context) {
     
     if (_isLoading) {
-      return Container(
-        color: Colors.white,
-        child: Center(
+      return Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.deepOrangeAccent),
               ),
+              SizedBox(height: 16.0),
+              Text(
+                "       Loading...",
+                style: TextStyle(
+                  color: Colors.deepOrangeAccent,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
+          ),
+        ),
+        bottomNavigationBar: Container(
+          height: 72.0,
+          child: Center(
+            child: Text(
+              "C🍪🍪KIE",
+              style: TextStyle(
+                color: Colors.deepOrangeAccent,
+                fontSize: 22.0,
+                fontWeight: FontWeight.bold,
+                shadows: [
+                  Shadow(
+                    blurRadius: 2.0,
+                    color: Colors.grey,
+                    offset: Offset(2.0, 2.0),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       );
     }
     else {
-      if( _isStorageExist){
+      if(_isStorageExist){
         return MyStatefulWidget();
       }
     }
 
-    final storage = FlutterSecureStorage();
     final RegExp _regex = RegExp(r'^[a-zA-Z0-9!@#\$&*~-]+$');
 
     return MaterialApp(
-      // debugShowCheckedModeBanner: false,
-      // title: 'Flutter Demo',
-      // theme: ThemeData(
-      //   primarySwatch: Colors.lightBlue,
-      // ),
+
       home: Scaffold(
+
         resizeToAvoidBottomInset: true,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(50.0),
-          child: AppBar(
-            title: const Text('C🍪🍪KIE'),
-            backgroundColor: Colors.orangeAccent,
-            elevation: 0,
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.settings),
-                onPressed: () {
-                  // Do something
-                },
-              ),
-            ],
-            flexibleSpace: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: <Color>[
-                    Colors.orangeAccent,
-                    Colors.deepOrangeAccent,
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+
+        appBar: cookieAppbar('C🍪🍪KIE'),
+
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
 
-              const SizedBox(height: 100),
+              const SizedBox(height: 50),
 
               // Logo
               Container(
@@ -289,79 +292,82 @@ class _SignInWidgetState extends State<SignInWidget> {
 
               // Log In
               Container(
-                  width: 330,
-                  height: 80,
-                  padding: const EdgeInsets.all(20),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
-                    ),
-                    child: const Text('로그인',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        )),
-                    onPressed: () async {
-                      // id, pw를 json 형식으로 반환
-                      String SigninData = createJsonData(
-                          _idController.text, _pwController.text);
+                width: 330,
+                height: 80,
+                padding: const EdgeInsets.all(20),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(50),
+                  ),
+                  child: const Text('로그인',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      )),
+                  onPressed: () async {
+                    // id, pw를 json 형식으로 반환
+                    String SigninData = createJsonData(
+                        _idController.text, _pwController.text);
 
-                      Map<String, dynamic> jsonMap =
-                          await sendDataToServer(SigninData);
+                    Map<String, dynamic> jsonMap =
+                        await sendDataToServer(SigninData);
 
-                      // 로그인 실패했을 경우도 success 여부 반환해야함!
-                      bool success = jsonMap['success'];
+                    // 로그인 실패했을 경우도 success 여부 반환해야함!
+                    bool success = jsonMap['success'];
 
-                      bool valid = allCheck(_idlengthCheck, _pwlengthCheck);
-                      bool successCheck = valid && success;
+                    bool valid = allCheck(_idlengthCheck, _pwlengthCheck);
+                    bool successCheck = valid && success;
 
-                      if (!_pwlengthCheck) {
-                        _pwCheck = false;
-                      } else {
-                        _pwCheck = true;
-                      }
-                      if (!_idlengthCheck) {
-                        _idCheck = false;
-                      } else {
-                        _idCheck = true;
-                      }
+                    if (!_pwlengthCheck) {
+                      _pwCheck = false;
+                    } else {
+                      _pwCheck = true;
+                    }
+                    if (!_idlengthCheck) {
+                      _idCheck = false;
+                    } else {
+                      _idCheck = true;
+                    }
 
-                      if (!mounted) return;
+                    if (!mounted) return;
 
-                      if (successCheck) {
+                    if (successCheck){
 
-                        // 사용자 정보를 저장합니다.
-                        await storage.write(key: 'id', value: _idController.text);
-                        await storage.write(key: 'pw', value: _pwController.text);
+                      // 사용자 정보를 저장합니다.
+                      await storage.write(key: 'id', value: _idController.text);
+                      await storage.write(key: 'pw', value: _pwController.text);
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MyStatefulWidget()),
-                        );
-                      } else {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('알림'),
-                              content: Text('로그인에 실패하였습니다.'),
-                              actions: [
-                                TextButton(
-                                  child: const Text('확인'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MyStatefulWidget()),
+                      );
+                    } 
+                    
+                    else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('알림'),
+                            content: Text('로그인에 실패하였습니다.'),
+                            actions: [
+                              TextButton(
+                                child: const Text('확인'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
 
-                      print("LogIn button pressed");
-                    },
-                  )),
+                    print("LogIn button pressed");
+                  },
+                )
+              ),
 
               // sign up
               Container(
