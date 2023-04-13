@@ -1,10 +1,10 @@
 import 'package:cookie_app/chat.dart';
-import 'package:cookie_app/friends.dart';
 import 'package:cookie_app/maps.dart';
-import 'package:cookie_app/signin.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:cookie_app/signin.dart';
+import 'package:cookie_app/friends.dart';
 import 'package:cookie_app/handler/socket.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   await dotenv.load();
@@ -13,20 +13,20 @@ void main() async {
     print(socket.id);
   });
   socket.onDisconnect((data) => print('socket disconnected: ${data}'));
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
   static const String _title = 'Flutter Code Sample';
-
+  
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: _title,
-      home: SignInWidget(),
-    );
+    return MaterialApp(
+          title: _title,
+          home: SignInWidget(),
+        );
   }
 }
 
@@ -75,70 +75,43 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(50.0),
-          child: AppBar(
-            title: const Text('C🍪🍪KIE'),
-            backgroundColor: Colors.orangeAccent,
-            elevation: 0,
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.settings),
-                onPressed: () {
-                  // Do something
-                },
-              ),
-            ],
-            flexibleSpace: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: <Color>[
-                    Colors.orangeAccent,
-                    Colors.deepOrangeAccent,
-                  ],
-                ),
-              ),
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: SizedBox(
+        child: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.people),
+              label: 'Friends',
+              backgroundColor: Colors.orange,
             ),
-          ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.chat_bubble),
+              label: 'Chat',
+              backgroundColor: Colors.green,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.location_searching),
+              label: 'Location',
+              backgroundColor: Colors.blue,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.sports_basketball),
+              label: 'Club',
+              backgroundColor: Colors.deepOrange,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
+              backgroundColor: Colors.purple,
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.black,
+          onTap: _onItemTapped,
         ),
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: SizedBox(
-          child: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.people),
-                label: 'Friends',
-                backgroundColor: Colors.orange,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.chat_bubble),
-                label: 'Chat',
-                backgroundColor: Colors.green,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.location_searching),
-                label: 'Location',
-                backgroundColor: Colors.blue,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.sports_basketball),
-                label: 'Club',
-                backgroundColor: Colors.deepOrange,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: 'Settings',
-                backgroundColor: Colors.purple,
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: Colors.black,
-            onTap: _onItemTapped,
-          ),
-        ));
+      ),
+    );
   }
 }
