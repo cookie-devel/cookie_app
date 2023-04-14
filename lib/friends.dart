@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:cookie_app/chat.dart';
-import 'package:cookie_app/handler/design.dart';
 import 'package:flutter/material.dart';
+import 'package:vibration/vibration.dart';
+import 'package:cookie_app/handler/design.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 const String jsonString = '''[
@@ -60,25 +61,6 @@ const String jsonString = '''[
 ]
 ''';
 
-class Friends extends StatelessWidget {
-  const Friends({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        Locale('en', 'US'),
-        Locale('ko', 'KR'),
-      ],
-      home: FriendsGrid(),
-    );
-  }
-}
-
 // FriendList? friendList;
 class FriendsGrid extends StatefulWidget {
   const FriendsGrid({Key? key}) : super(key: key);
@@ -96,7 +78,7 @@ class _FriendsGridState extends State<FriendsGrid> {
 
     // return returnProfileStructure(context:context, listLength: listLength, profiles: profiles);
     return Scaffold(
-      appBar: cookieAppbar('친구'),
+      appBar: friendsAppbar(context),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(10, 24, 10, 8),
         child: GridView.builder(
@@ -125,20 +107,21 @@ class _FriendsGridState extends State<FriendsGrid> {
 
 // 각각의 프로필 객체 생성
 Widget returnProfile({required BuildContext context, required FriendInfo user}){
-  return InkWell(
+  
+  return InkResponse(
 
     onTap: () {
-
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ChatWidget(user:user),
         ),
       );
-      // print("=" * 30);
-      // print("${user.name} Clicked!!!");
-      // print("${user.image}");
+    },
 
+    onLongPress: () {
+      Vibration.vibrate(duration: 40);
+      profileWindow(context,user);
     },
 
     child: Column(
@@ -172,28 +155,7 @@ Widget returnProfile({required BuildContext context, required FriendInfo user}){
   );
 }
 
-// 친구 정보 class
-class FriendInfo {
 
-  final String? name;
-  final String? image;
-
-  FriendInfo({this.name = "Unknown", 
-              this.image = "assets/images/user.jpg"});
-
-}
-
-// dictionary -> FriendInfo
-FriendInfo returnUserInfo(Map<String, dynamic> profile) {
-
-  String name = profile['name'] as String;
-  String image = profile['image'] as String;
-
-  return FriendInfo(name: name, 
-                    image: image);
-
-}
-
-
-// Reference: https://eunoia3jy.tistory.com/106
-//            https://memostack.tistory.com/329
+// Reference: 
+// https://eunoia3jy.tistory.com/106
+// https://memostack.tistory.com/329
