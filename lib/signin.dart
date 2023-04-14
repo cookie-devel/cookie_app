@@ -138,7 +138,7 @@ class _SignInWidgetState extends State<SignInWidget> {
               ),
               SizedBox(height: 16.0),
               Text(
-                "       Loading...",
+                "Loading...",
                 style: TextStyle(
                   color: Colors.deepOrangeAccent,
                   fontSize: 18.0,
@@ -184,7 +184,7 @@ class _SignInWidgetState extends State<SignInWidget> {
 
         resizeToAvoidBottomInset: true,
 
-        appBar: cookieAppbar('C🍪🍪KIE'),
+        appBar: cookieAppbar(context),
 
         body: SingleChildScrollView(
           child: Column(
