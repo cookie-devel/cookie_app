@@ -3,7 +3,6 @@ import 'package:cookie_app/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
 import 'package:cookie_app/handler/design.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 const String jsonString = '''[
   {
@@ -23,11 +22,11 @@ const String jsonString = '''[
     "image": "assets/images/cookie_logo.png"
   },
   {
-    "name": "cw1",
+    "name": "채워니",
     "image": "assets/images/cw1.png"
   },
   {
-    "name": "cw2",
+    "name": "김채원",
     "image": "assets/images/cw2.png"
   },
   {

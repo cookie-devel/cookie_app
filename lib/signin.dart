@@ -7,26 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:cookie_app/handler/design.dart';
 import 'package:cookie_app/handler/storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-
-class SignIn extends StatelessWidget {
-  const SignIn({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        Locale('en', 'US'),
-        Locale('ko', 'KR'),
-      ],
-      home: SignInWidget(),
-    );
-  }
-}
+import 'package:cookie_app/handler/handler_signin.dart';
 
 class SignInWidget extends StatefulWidget {
   const SignInWidget({Key? key}) : super(key: key);
@@ -52,6 +33,8 @@ class _SignInWidgetState extends State<SignInWidget> {
   final String _selectedID = ''; //ID
   final String _selectedPW = ''; //password
 
+  final RegExp _regex = RegExp(r'^[a-zA-Z0-9!@#\$&*~-]+$');
+
   @override
   void initState() {
     super.initState();
@@ -64,9 +47,9 @@ class _SignInWidgetState extends State<SignInWidget> {
 
     final id = await storage.read(key: 'id');
     final pw = await storage.read(key: 'pw');
-    print(id);
-    print(pw);
-    print("===========");
+    // print(id);
+    // print(pw);
+    // print("===========");
     await Future.delayed(Duration(milliseconds:860));
 
     if (id != null && pw != null) {
@@ -91,84 +74,12 @@ class _SignInWidgetState extends State<SignInWidget> {
     super.dispose();
   }
 
-  bool allCheck(idlengthCheck, pwlengthCheck) {
-    if (idlengthCheck == true && pwlengthCheck == true) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // creadte json structure
-  String createJsonData(String id, String pw) {
-    Map<String, dynamic> data = {"userid": id, "password": pw};
-
-    String jsonData = const JsonEncoder.withIndent('\t').convert(data);
-
-    return jsonData;
-  }
-
-  Future<Map<String, dynamic>> sendDataToServer(String data) async {
-    try {
-      String address = '${dotenv.env['BASE_URI']}/account/signin';
-      http.Response res = await http.post(Uri.parse(address),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: data);
-      return json.decode(res.body);
-    } catch (e) {
-      print('Error sending data to server: $e');
-      return {};
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     
     if (_isLoading) {
-      return Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.deepOrangeAccent),
-              ),
-              SizedBox(height: 16.0),
-              Text(
-                "Loading...",
-                style: TextStyle(
-                  color: Colors.deepOrangeAccent,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: Container(
-          height: 72.0,
-          child: Center(
-            child: Text(
-              "C🍪🍪KIE",
-              style: TextStyle(
-                color: Colors.deepOrangeAccent,
-                fontSize: 22.0,
-                fontWeight: FontWeight.bold,
-                shadows: [
-                  Shadow(
-                    blurRadius: 2.0,
-                    color: Colors.grey,
-                    offset: Offset(2.0, 2.0),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
+      return isLoadingScreen();
     }
     else {
       if(_isStorageExist){
@@ -176,15 +87,13 @@ class _SignInWidgetState extends State<SignInWidget> {
       }
     }
 
-    final RegExp _regex = RegExp(r'^[a-zA-Z0-9!@#\$&*~-]+$');
-
     return MaterialApp(
 
       home: Scaffold(
 
         resizeToAvoidBottomInset: true,
 
-        appBar: cookieAppbar(context),
+        appBar: cookieAppbar(context,'c🍪🍪kie'),
 
         body: SingleChildScrollView(
           child: Column(
