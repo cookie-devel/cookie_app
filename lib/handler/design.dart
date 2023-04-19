@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:cookie_app/friends.dart';
+import 'package:cookie_app/handler/socket.dart';
 
 // reference:
 // https://fonts.google.com/icons
 
 
 // cookie앱의 기본 Appbar
-PreferredSize? cookieAppbar(BuildContext context){
+PreferredSize? cookieAppbar(BuildContext context,String title){
 
   return PreferredSize(
     preferredSize: const Size.fromHeight(50.0),
     child: AppBar(
-      title: Text('설정'),
+      title: Text(title),
       backgroundColor: Colors.orangeAccent,
       elevation: 0,
       actions: [
@@ -94,43 +94,61 @@ IconButton friendsPageIcon(BuildContext context){
     icon: const Icon(Icons.people),
     onPressed: () {
       showModalBottomSheet<void>(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
         context: context,
         builder: (BuildContext context) {
           return Container(
-            child: ListView(
-              shrinkWrap: true,
+            
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
               children: [
-                ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text('친구관리'),
-                  onTap: () {
-                    // TODO: Implement settings page
+                IconButton(
+                  icon: const Icon(Icons.keyboard_arrow_down),
+                  onPressed: () {
                     Navigator.pop(context);
                   },
                 ),
-                ListTile(
-                  leading: Icon(Icons.notifications),
-                  title: Text('알림'),
-                  onTap: () {
-                    // TODO: Implement notifications page
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.privacy_tip),
-                  title: Text('개인정보'),
-                  onTap: () {
-                    // TODO: Implement privacy page
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.help),
-                  title: Text('도움말'),
-                  onTap: () {
-                    // TODO: Implement help and feedback page
-                    Navigator.pop(context);
-                  },
+                const Divider(height: 2),
+                Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      ListTile(
+                        leading: Icon(Icons.person),
+                        title: Text('친구관리'),
+                        onTap: () {
+                          // TODO: Implement settings page
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.notifications),
+                        title: Text('알림'),
+                        onTap: () {
+                          // TODO: Implement notifications page
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.privacy_tip),
+                        title: Text('개인정보'),
+                        onTap: () {
+                          // TODO: Implement privacy page
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.help),
+                        title: Text('도움말'),
+                        onTap: () {
+                          // TODO: Implement help and feedback page
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -290,3 +308,21 @@ class LongPressCopyableText extends StatelessWidget {
     );
   }
 }
+
+// socket 연결 상태 확인
+Widget connectionInfo() => Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Icon(
+        socket.connected ? Icons.check_circle : Icons.warning,
+        color: socket.connected ? Colors.green : Colors.red,
+        size: 16.0,
+      ),
+      const SizedBox(width: 4.0),
+      Text(
+        socket.connected ? 'Connected' : 'Disconnected',
+        style: const TextStyle(fontSize: 16.0),
+      ),
+      SizedBox(width: 5,),
+    ],
+);

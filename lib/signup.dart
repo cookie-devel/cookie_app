@@ -1,38 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:cookie_app/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:cookie_app/signin.dart';
+import 'package:cookie_app/handler/design.dart';
+import 'package:cookie_app/handler/handler_signup.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-
-
-void main() async {
-  await dotenv.load(fileName: ".env");
-  runApp(const SignUp());
-}
-
-class SignUp extends StatelessWidget {
-  const SignUp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        Locale('en', 'US'),
-        Locale('ko', 'KR'),
-      ],
-      home: SignUpWidget(),
-    );
-  }
-}
 
 class SignUpWidget extends StatefulWidget {
   const SignUpWidget({Key? key}) : super(key: key);
@@ -72,103 +44,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   final String _selectedName = ''; //cookie
   final String _selectedPhoneNumber = ''; //01000000000
 
-  // initialize image file
   File? _imageFile;
 
-  // image picker
-  void _getImage(BuildContext context, ImageSource source) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: source);
+  final RegExp _regex = RegExp(r'^[a-zA-Z0-9!@#\$&*~-]+$');
 
-    setState(() {
-      if (pickedFile != null) {
-        _imageFile = File(pickedFile.path);
-      } else {
-        print('Image deselected');
-      }
-    });
-
-    Navigator.pop(context);
-  }
-
-  void _showSelectionDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('새로운 프로필사진'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: [
-                GestureDetector(
-                  child: const Text('갤러리에서 가져오기'),
-                  onTap: () {
-                    _getImage(context, ImageSource.gallery);
-                  },
-                ),
-                const SizedBox(height: 20),
-                GestureDetector(
-                  child: const Text('카메라로 촬영하기'),
-                  onTap: () {
-                    _getImage(context, ImageSource.camera);
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  // jsondata to server
-  Future<Map<String, dynamic>> sendDataToServer(String data) async {
-    try {
-      String address = '${dotenv.env['BASE_URI']}/account/signup';
-      http.Response res = await http.post(Uri.parse(address),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: data);
-
-      return json.decode(res.body);
-    } catch (e) {
-      print('Error sending data to server: $e');
-      return {'error': 'Error sending data to server'};
-    }
-  }
-
-  // creadte json structure
-  String createJsonData(
-      String id, String pw, String name, String date, String phoneNumber) {
-    Map<String, dynamic> data = {
-      "userid": id,
-      "password": pw,
-      "username": name,
-      "birthday": date,
-      "phone": phoneNumber,
-      "profile": {
-        "image": "https://i.imgur.com/1Q9ZQ9r.png",
-        "message": "Hello, I'm new here!"
-      }
-    };
-
-    String jsonData = const JsonEncoder.withIndent('\t').convert(data);
-
-    return jsonData;
-  }
-
-  bool allCheck(
-      idlengthCheck, pwlengthCheck, pwCheckErrorText, namelengthCheck) {
-    if (idlengthCheck == true &&
-        pwlengthCheck == true &&
-        pwCheckErrorText == true &&
-        namelengthCheck == true) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   @override
   void initState() {
@@ -193,48 +72,14 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     super.dispose();
   }
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     
-    final RegExp _regex = RegExp(r'^[a-zA-Z0-9!@#\$&*~-]+$');
-
     return MaterialApp(
-        // debugShowCheckedModeBanner: false,
-        // title: 'Flutter Demo',
-        // theme: ThemeData(
-        //   primarySwatch: Colors.blue,
-        // ),
+
         home: Scaffold(
             resizeToAvoidBottomInset: true,
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(50.0),
-              child: AppBar(
-                title: const Text('회원가입'),
-                backgroundColor: Colors.orangeAccent,
-                elevation: 0,
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.settings),
-                    onPressed: () {
-                      // Do something
-                    },
-                  ),
-                ],
-                flexibleSpace: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: <Color>[
-                        Colors.orangeAccent,
-                        Colors.deepOrangeAccent,
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            appBar: cookieAppbar(context, '회원가입'),
             
             body: SingleChildScrollView(
               child: Column(
@@ -255,8 +100,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       ),
                     ),
                     child: _imageFile == null
-                        ? const Center(child: Text('No Images'))
-                        : Image.file(_imageFile!),
+                        ? const Center(child: Text('No Images')): Image.file(_imageFile!),
                   ),
 
                   const SizedBox(height: 10),
@@ -264,8 +108,15 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   // select image button
                   ElevatedButton(
                     child: const Text('Select Image'),
-                    onPressed: () {
-                      _showSelectionDialog(context);
+                    onPressed: () async{
+                      // _showSelectionDialog(context);
+                      final imageSelectionDialog = ImageSelectionDialog();
+                      final imageFile = await imageSelectionDialog.show(context);
+                      setState(() {
+                        if (imageFile != null) {
+                          _imageFile = File(imageFile.path);
+                        }
+                      });
                     },
                   ),
 
@@ -597,7 +448,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 ],
               ),
             )
-          )
-        );
+        )
+    );
   }
+
 }
