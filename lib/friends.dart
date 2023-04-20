@@ -14,32 +14,32 @@ const String jsonString = '''[
     "image": "assets/images/user.jpg"
   },
   {
+    "name": "김채원",
+    "image": "assets/images/cw1.png"
+  },
+  {
+    "name": "홍은채",
+    "image": "assets/images/ec1.png"
+  },
+  {
+    "name": "사쿠라",
+    "image": "assets/images/sk1.png"
+  },
+  {
+    "name": "허윤진",
+    "image": "assets/images/yj1.png"
+  },
+  {
+    "name": "카즈하",
+    "image": "assets/images/kz1.png"
+  },
+  {
     "name": "Jane",
     "image": "assets/images/cookies.jpg"
   },
   {
     "name": "JB",
     "image": "assets/images/cookie_logo.png"
-  },
-  {
-    "name": "채워니",
-    "image": "assets/images/cw1.png"
-  },
-  {
-    "name": "김채원",
-    "image": "assets/images/cw2.png"
-  },
-  {
-    "name": "cw3",
-    "image": "assets/images/cw3.png"
-  },
-  {
-    "name": "채원",
-    "image": "assets/images/cw4.png"
-  },
-  {
-    "name": "cw5",
-    "image": "assets/images/cw5.png"
   },
   {
     "name": "cw4",
