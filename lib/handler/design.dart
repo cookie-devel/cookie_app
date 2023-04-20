@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:cookie_app/friends.dart';
 import 'package:cookie_app/handler/socket.dart';
 
 // reference:
@@ -100,9 +101,8 @@ IconButton friendsPageIcon(BuildContext context){
         context: context,
         builder: (BuildContext context) {
           return Container(
-            
             child: Column(
-              mainAxisSize: MainAxisSize.max,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
                   icon: const Icon(Icons.keyboard_arrow_down),
@@ -136,6 +136,22 @@ IconButton friendsPageIcon(BuildContext context){
                         title: Text('개인정보'),
                         onTap: () {
                           // TODO: Implement privacy page
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.help),
+                        title: Text('도움말'),
+                        onTap: () {
+                          // TODO: Implement help and feedback page
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.help),
+                        title: Text('도움말'),
+                        onTap: () {
+                          // TODO: Implement help and feedback page
                           Navigator.pop(context);
                         },
                       ),
@@ -268,9 +284,11 @@ class FriendInfo {
 
   final String? name;
   final String? image;
+  final Map? log;
 
   FriendInfo({this.name = "Unknown", 
-              this.image = "assets/images/user.jpg"});
+              this.image = "assets/images/user.jpg",
+              this.log = const {}});
 
 }
 
@@ -278,8 +296,17 @@ class FriendInfo {
 FriendInfo returnUserInfo(Map<String, dynamic> profile) {
   String name = profile['name'] as String;
   String image = profile['image'] as String;
+  
+  Map log = {};
+  if (profile['log'] != null) {
+    Map log = profile['log'] as Map;
+  } 
+  else {
+    Map log = {};
+  }
   return FriendInfo(name: name, 
-                    image: image);
+                    image: image,
+                    log: log);
 }
 
 // text 클립보드에 복사
