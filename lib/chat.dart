@@ -1,8 +1,7 @@
-import 'package:cookie_app/friends.dart';
-import 'package:cookie_app/handler/handler_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/handler/design.dart';
 import 'package:cookie_app/handler/socket.dart';
+import 'package:cookie_app/handler/handler_chat.dart';
 
 class ChatWidget extends StatefulWidget {
 
@@ -11,7 +10,7 @@ class ChatWidget extends StatefulWidget {
   const ChatWidget({Key? key, this.user}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ChatWidgetState();
+  State<ChatWidget> createState() => _ChatWidgetState();
 }
 
 class _ChatWidgetState extends State<ChatWidget> {
