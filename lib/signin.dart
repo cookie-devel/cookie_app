@@ -1,19 +1,16 @@
-import 'dart:convert';
 import 'package:cookie_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cookie_app/signup.dart';
-import 'package:http/http.dart' as http;
 import 'package:cookie_app/handler/design.dart';
 import 'package:cookie_app/handler/storage.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:cookie_app/handler/handler_signin.dart';
 
 class SignInWidget extends StatefulWidget {
   const SignInWidget({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _SignInWidgetState();
+  State<SignInWidget> createState() => _SignInWidgetState();
 }
 
 class _SignInWidgetState extends State<SignInWidget> {

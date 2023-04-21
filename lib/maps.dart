@@ -7,7 +7,7 @@ class MapsWidget extends StatefulWidget {
   const MapsWidget({Key? key}) : super(key: key);
 
   @override
-  _MapsWidgetState createState() => _MapsWidgetState();
+  State<MapsWidget> createState() => _MapsWidgetState();
 }
 
 class _MapsWidgetState extends State<MapsWidget> {

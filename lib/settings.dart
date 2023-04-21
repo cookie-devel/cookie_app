@@ -1,7 +1,4 @@
-import 'package:cookie_app/main.dart';
 import 'package:cookie_app/signin.dart';
-import 'package:cookie_app/chat.dart';
-import 'package:cookie_app/friends.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/handler/design.dart';
 import 'package:cookie_app/handler/storage.dart';
@@ -10,7 +7,7 @@ class SettingsWidget extends StatefulWidget {
   const SettingsWidget({Key? key}) : super(key: key);
 
   @override
-  _SettingsWidgetState createState() => _SettingsWidgetState();
+  State<SettingsWidget> createState() => _SettingsWidgetState();
 }
 
 class _SettingsWidgetState extends State<SettingsWidget> {

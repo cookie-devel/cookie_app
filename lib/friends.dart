@@ -1,71 +1,14 @@
 import 'dart:convert';
-import 'package:cookie_app/chat.dart';
 import 'package:flutter/material.dart';
-import 'package:vibration/vibration.dart';
 import 'package:cookie_app/handler/design.dart';
+import 'package:cookie_app/handler/handler_friends.dart';
+import 'package:cookie_app/ect/test_data.dart';
 
-const String jsonString = '''[
-  {
-    "name": "박종범",
-    "image": "assets/images/user2.jpg"
-  },
-  {
-    "name": "백승헌",
-    "image": "assets/images/user.jpg"
-  },
-  {
-    "name": "김채원",
-    "image": "assets/images/cw1.png"
-  },
-  {
-    "name": "홍은채",
-    "image": "assets/images/ec1.png"
-  },
-  {
-    "name": "사쿠라",
-    "image": "assets/images/sk1.png"
-  },
-  {
-    "name": "허윤진",
-    "image": "assets/images/yj1.png"
-  },
-  {
-    "name": "카즈하",
-    "image": "assets/images/kz1.png"
-  },
-  {
-    "name": "Jane",
-    "image": "assets/images/cookies.jpg"
-  },
-  {
-    "name": "JB",
-    "image": "assets/images/cookie_logo.png"
-  },
-  {
-    "name": "cw4",
-    "image": "assets/images/cw4.png"
-  },
-  {
-    "name": "cw5",
-    "image": "assets/images/cw5.png"
-  },
-  {
-    "name": "cw4",
-    "image": "assets/images/cw4.png"
-  },
-  {
-    "name": "김채원",
-    "image": "assets/images/cw5.png"
-  }
-]
-''';
-
-// FriendList? friendList;
 class FriendsGrid extends StatefulWidget {
   const FriendsGrid({Key? key}) : super(key: key);
 
   @override
-  _FriendsGridState createState() => _FriendsGridState();
+  State<FriendsGrid> createState() => _FriendsGridState();
 }
 
 class _FriendsGridState extends State<FriendsGrid> {
@@ -75,7 +18,6 @@ class _FriendsGridState extends State<FriendsGrid> {
     final List<dynamic> profiles = jsonDecode(jsonString);
     final int listLength = profiles.length;
 
-    // return returnProfileStructure(context:context, listLength: listLength, profiles: profiles);
     return Scaffold(
       appBar: friendsAppbar(context),
       body: Padding(
@@ -91,67 +33,14 @@ class _FriendsGridState extends State<FriendsGrid> {
           itemBuilder: (BuildContext context, int index) {
             final Map<String, dynamic> profile = profiles[index];
 
-            return Container(
-              child: returnProfile(
-                  context: context,
-                  user: returnUserInfo(profile)
-              ),
+            return FriendProfileWidget(
+                user: returnUserInfo(profile),
             );
           },
         ),
       ),
     );
   }
-}
-
-// 각각의 프로필 객체 생성
-Widget returnProfile({required BuildContext context, required FriendInfo user}){
-  
-  return InkResponse(
-
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ChatWidget(user:user),
-        ),
-      );
-    },
-
-    onLongPress: () {
-      Vibration.vibrate(duration: 40);
-      profileWindow(context,user);
-    },
-
-    child: Column(
-      
-      children: [
-
-        Expanded(
-          child: Container(
-            width: 85,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image:
-                  DecorationImage(image: AssetImage(user.image??'assets/images/user.jpg'), fit: BoxFit.contain),
-              border: Border.all(
-                  color: const Color.fromARGB(255, 255, 99, 159), width: 1.8),
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 5),
-
-        Text(
-          user.name??'Unknown',
-          style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w200,
-              color: Color.fromARGB(221, 60, 60, 60)),
-        )
-      ]
-    ),
-  );
 }
 
 
