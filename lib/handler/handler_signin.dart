@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -44,10 +45,12 @@ Scaffold isLoadingScreen(){
     body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: const[
           SizedBox(height: 24.0),
-          CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          CupertinoActivityIndicator(
+            animating: true,
+            color: Colors.white,
+            radius: 35,
           ),
           SizedBox(height: 16.0),
           Text(
