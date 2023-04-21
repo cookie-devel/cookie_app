@@ -62,6 +62,44 @@ PreferredSize? friendsAppbar(BuildContext context){
   );
 }
 
+// cookie앱의 chat page Appbar
+PreferredSize? chatAppbar(BuildContext context, String name){
+  return PreferredSize(
+    preferredSize: const Size.fromHeight(50.0),
+    child: AppBar(
+  automaticallyImplyLeading: false,
+  titleSpacing: 2,
+  title: Row(
+    children: [
+      IconButton(
+        padding: const EdgeInsets.only(left: 8),
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () => Navigator.pop(context),
+      ),
+      Text(name),
+    ],
+  ),
+      backgroundColor: Colors.orangeAccent,
+      elevation: 0,
+      actions: [
+        connectionInfo()
+      ],
+      flexibleSpace: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: <Color>[
+              Colors.orangeAccent,
+              Colors.deepOrangeAccent,
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
 // cookie앱의 settings page Appbar
 PreferredSize? settingsAppbar(BuildContext context){
 
@@ -353,3 +391,5 @@ Widget connectionInfo() => Row(
       SizedBox(width: 5,),
     ],
 );
+
+

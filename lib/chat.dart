@@ -1,3 +1,5 @@
+import 'package:cookie_app/friends.dart';
+import 'package:cookie_app/handler/handler_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/handler/design.dart';
 import 'package:cookie_app/handler/socket.dart';
@@ -14,7 +16,7 @@ class ChatWidget extends StatefulWidget {
 
 class _ChatWidgetState extends State<ChatWidget> {
 
-  List messages = [];
+  List messages = ['안녕하세요','채팅 페이지 테스트입니다','대화를 원할 경우 마침표로 대화를 마무리하세요'];
 
   final chatFieldController = TextEditingController();
   ScrollController? _scrollController;
@@ -43,7 +45,29 @@ class _ChatWidgetState extends State<ChatWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return chatStructure();
+    
+    return MaterialApp(
+      
+      home: Scaffold(
+        
+        resizeToAvoidBottomInset: true,
+        backgroundColor: Color.fromARGB(255, 240, 240, 240),
+        
+        appBar: chatAppbar(context, widget.user?.name??'Unknown'),
+        
+        body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+          child: Column(
+            children: [
+              // connectionInfo(),
+              chat(context, widget.user??FriendInfo(), messages),
+              chatField(),
+              const SizedBox(height: 10,),
+            ],
+          ),
+        ),
+      ),
+    ); 
   }
 
   @override
@@ -52,76 +76,6 @@ class _ChatWidgetState extends State<ChatWidget> {
     chatFieldController.dispose();
     super.dispose();
   }
-
-  Widget chatBubble(BuildContext context, FriendInfo user, text) => Column(
-    children: [
-      Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Profile Image
-        InkWell(
-          onTap: () {
-            profileWindow(context,user);
-          },
-          child: Material(
-            elevation: 5,
-            shape: const CircleBorder(
-              side: BorderSide(
-                color: Color.fromARGB(255, 255, 99, 159),
-                width: 1.5,
-              ),
-            ),
-            child: CircleAvatar(
-              backgroundColor: Colors.grey[300],
-              child: ClipOval(
-                child: Image.asset(
-                  widget.user?.image??'assets/images/user.jpg',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-        ),
-
-        // Margin between profile image and chat bubble
-        const SizedBox(width: 10),
-        // Chat bubble
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.user?.name??'Unknown',
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 5),
-            Container(
-              constraints: const BoxConstraints(
-                maxWidth: 200,
-              ),
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 189, 252, 138),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 5,
-              ),
-              child: LongPressCopyableText(
-                  text: text,
-                  style: const TextStyle(fontSize: 16),
-                ),
-            ),
-          ],
-        ),
-      ],
-    ),
-      const SizedBox(height: 15), // 수직 간격 조정
-    ],
-  );
 
   Widget chatField() => Container(
     decoration: BoxDecoration(
@@ -148,6 +102,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: ' Type your message...',
+                  hintStyle: TextStyle(fontSize: 14,color: Colors.grey),
                   prefixIcon: Padding(
                     padding: EdgeInsets.only(left: 8.0),
                     child: Icon(Icons.message),
@@ -170,73 +125,4 @@ class _ChatWidgetState extends State<ChatWidget> {
           ],
         ),
       );
-
-  Widget chat(FriendInfo user, messages) => Expanded(
-    child: SingleChildScrollView(
-      reverse: true,
-      child: Column(
-        children: [
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: messages.length,
-            itemBuilder: (BuildContext context, int index) {
-              return chatBubble(context, user, messages[index]);
-            },
-          ),
-        ],
-      ),
-    ),
-  );
-
-  Widget chatStructure() => MaterialApp(
-      
-    home: Scaffold(
-      
-      resizeToAvoidBottomInset: true,
-
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50.0),
-        child: AppBar(
-          leading: IconButton(
-            padding: EdgeInsets.only(left: 8),
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
-          ),
-
-          title: Text(widget.user?.name??'Unknown'),
-          backgroundColor: Colors.orangeAccent,
-          elevation: 0,
-          actions: [
-            connectionInfo()
-          ],
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-                  Colors.orangeAccent,
-                  Colors.deepOrangeAccent,
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-      
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-        child: Column(
-          children: [
-            // connectionInfo(),
-            chat(widget.user??FriendInfo(), messages),
-            chatField(),
-            const SizedBox(height: 10,),
-          ],
-        ),
-      ),
-    ),
-  );
-  
 }
