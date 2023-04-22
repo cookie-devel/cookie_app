@@ -1,10 +1,11 @@
 import 'package:cookie_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:cookie_app/signup.dart';
-import 'package:cookie_app/design.dart';
+import 'package:cookie_app/pages/signup.dart';
+import 'package:cookie_app/cookie.appbar.dart';
 import 'package:cookie_app/handler/storage.dart';
-import 'package:cookie_app/components/signin/handler_signin.dart';
+import 'package:cookie_app/components/signin/signin.dart';
+import 'package:cookie_app/handler/signin.handler.dart';
 
 class SignInWidget extends StatefulWidget {
   const SignInWidget({Key? key}) : super(key: key);
@@ -212,7 +213,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                     );
 
                     Map<String, dynamic> jsonMap =
-                        await sendDataToServer(SigninData);
+                        await signinHandler(SigninData);
 
                     // 로그인 실패했을 경우도 success 여부 반환해야함!
                     bool success = jsonMap['success'];

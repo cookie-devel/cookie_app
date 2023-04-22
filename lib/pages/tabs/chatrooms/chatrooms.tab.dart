@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/data/test_data.dart';
-import 'package:cookie_app/design.dart';
-import 'package:cookie_app/components/chat/handler_chattab.dart';
+import 'package:cookie_app/cookie.appbar.dart';
+import 'package:cookie_app/components/chat/chatTabWidget.dart';
+import 'package:cookie_app/schema/FriendInfo.dart';
+import 'package:flutter/services.dart';
 
 class ChatTabWidget extends StatefulWidget {
   const ChatTabWidget({super.key});
@@ -11,19 +12,25 @@ class ChatTabWidget extends StatefulWidget {
 }
 
 class _ChatTabWidgetState extends State<ChatTabWidget> {
-  // late List<dynamic> chatLog;
-  // late int chatLength;
+  @override
+  void initState() {
+    super.initState();
+    getSampleData();
+  }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   chatLog = jsonDecode(jsonChatLog);
-  //   chatLength = chatLog.length;
-  // }
+  List<dynamic> chatLog = [];
+
+  void getSampleData() async {
+    final String res = await rootBundle.loadString('assets/data/chat.json');
+    final data = await json.decode(res);
+
+    setState(() {
+      chatLog = data;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final List<dynamic> chatLog = jsonDecode(jsonChatLog);
     final int chatLength = chatLog.length;
 
     return Scaffold(
@@ -36,7 +43,7 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
             final Map<String, dynamic> log = chatLog[index];
 
             return Container(
-              child: returnChatTabWidget(
+              child: chatTabWidget(
                 context: context,
                 user: returnUserInfo(log),
               ),

@@ -1,9 +1,9 @@
-import 'package:cookie_app/maps.dart';
+import 'package:cookie_app/pages/tabs/maps/maps.tab.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/signin.dart';
-import 'package:cookie_app/chattab.dart';
-import 'package:cookie_app/friends.dart';
-import 'package:cookie_app/settings.dart';
+import 'package:cookie_app/pages/signin.dart';
+import 'package:cookie_app/pages/tabs/chatrooms/chatrooms.tab.dart';
+import 'package:cookie_app/pages/tabs/friends/friends.tab.dart';
+import 'package:cookie_app/pages/tabs/settings/settings.tab.dart';
 import 'package:cookie_app/handler/socket.io/socket.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
