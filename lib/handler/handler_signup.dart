@@ -2,13 +2,11 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';  
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 
 // 사진 촬영 및 갤러리 접근 class
 class ImageSelectionDialog {
-
   File? _imageFile;
 
   Future<File?> show(BuildContext context) async {
@@ -24,7 +22,8 @@ class ImageSelectionDialog {
                   child: const Text('갤러리에서 가져오기'),
                   onTap: () async {
                     final picker = ImagePicker();
-                    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+                    final pickedFile =
+                        await picker.pickImage(source: ImageSource.gallery);
                     if (pickedFile != null) {
                       _imageFile = File(pickedFile.path);
                       Navigator.pop(context);
@@ -36,7 +35,8 @@ class ImageSelectionDialog {
                   child: const Text('카메라로 촬영하기'),
                   onTap: () async {
                     final picker = ImagePicker();
-                    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+                    final pickedFile =
+                        await picker.pickImage(source: ImageSource.camera);
                     if (pickedFile != null) {
                       _imageFile = File(pickedFile.path);
                       Navigator.pop(context);
@@ -54,8 +54,6 @@ class ImageSelectionDialog {
   }
 }
 
-
-
 // jsondata to server
 Future<Map<String, dynamic>> sendDataToServer(String data) async {
   try {
@@ -72,8 +70,6 @@ Future<Map<String, dynamic>> sendDataToServer(String data) async {
     return {'error': 'Error sending data to server'};
   }
 }
-
-
 
 // creadte json structure
 String createJsonData(
@@ -95,10 +91,7 @@ String createJsonData(
   return jsonData;
 }
 
-
-
-bool allCheck(
-    idlengthCheck, pwlengthCheck, pwCheckErrorText, namelengthCheck) {
+bool allCheck(idlengthCheck, pwlengthCheck, pwCheckErrorText, namelengthCheck) {
   if (idlengthCheck == true &&
       pwlengthCheck == true &&
       pwCheckErrorText == true &&

@@ -57,7 +57,7 @@ class _MapsWidgetState extends State<MapsWidget> {
             },
           );
         },
-        position: LatLng(37.2822374,127.0455223),
+        position: LatLng(37.2822374, 127.0455223),
       ),
     );
   }

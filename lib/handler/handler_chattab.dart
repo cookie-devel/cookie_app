@@ -2,15 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/chat.dart';
 import 'package:cookie_app/handler/design.dart';
-import 'package:cookie_app/handler/socket.dart';
-
-
+import 'package:cookie_app/handler/socket.io/socket.dart';
 
 // 각각의 프로필 객체 생성
-Widget returnChatTabWidget({required BuildContext context, required FriendInfo user}){
-  
+Widget returnChatTabWidget(
+    {required BuildContext context, required FriendInfo user}) {
   return InkWell(
-
     onTap: () {
       Navigator.push(
         context,
@@ -19,9 +16,7 @@ Widget returnChatTabWidget({required BuildContext context, required FriendInfo u
         ),
       );
     },
-    
     child: Container(
-      
       height: 82,
       child: Row(
         children: [
@@ -36,7 +31,7 @@ Widget returnChatTabWidget({required BuildContext context, required FriendInfo u
                 fit: BoxFit.cover,
               ),
               border: Border.all(
-                color : Colors.white,
+                color: Colors.white,
                 // color: const Color.fromARGB(255, 255, 99, 159),
                 width: 0,
               ),
@@ -72,9 +67,7 @@ Widget returnChatTabWidget({required BuildContext context, required FriendInfo u
           const SizedBox(width: 10),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
-
             children: [
-              
               Container(
                 alignment: Alignment.centerRight,
                 child: Text(
@@ -86,40 +79,37 @@ Widget returnChatTabWidget({required BuildContext context, required FriendInfo u
                   ),
                 ),
               ),
-              
               const SizedBox(height: 5),
-              
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children:[       
-                  SizedBox(width: 27,),     
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 255, 99, 159),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 0,
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "48".length > 3 ? "999+" : "48",
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+              Row(mainAxisSize: MainAxisSize.min, children: [
+                SizedBox(
+                  width: 27,
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 255, 99, 159),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 0,
                     ),
                   ),
-                ]
-              ),
-              
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "48".length > 3 ? "999+" : "48",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ]),
             ],
           ),
         ],
