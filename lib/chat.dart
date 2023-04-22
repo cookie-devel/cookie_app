@@ -1,41 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:cookie_app/handler/design.dart';
 import 'package:cookie_app/handler/socket.dart';
-
-class Chat extends StatelessWidget {
-  const Chat({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        Locale('en', 'US'),
-        Locale('ko', 'KR'),
-      ],
-      home: ChatWidget(),
-    );
-  }
-}
+import 'package:cookie_app/handler/handler_chat.dart';
 
 class ChatWidget extends StatefulWidget {
-  const ChatWidget({Key? key}) : super(key: key);
+
+  final FriendInfo? user;
+
+  const ChatWidget({Key? key, this.user}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ChatWidgetState();
+  State<ChatWidget> createState() => _ChatWidgetState();
 }
 
 class _ChatWidgetState extends State<ChatWidget> {
-  List messages = [];
+
+  List messages = ['안녕하세요','채팅 페이지 테스트입니다','대화를 원할 경우 마침표로 대화를 마무리하세요'];
 
   final chatFieldController = TextEditingController();
+  ScrollController? _scrollController;
 
   @override
   void initState() {
     super.initState();
+
+    _scrollController = ScrollController();
 
     socket.on('chat message', (data) {
       if (mounted) {
@@ -55,123 +44,40 @@ class _ChatWidgetState extends State<ChatWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      child: Column(
-        children: [
-          connectionInfo(),
-          Expanded(
-            child: SingleChildScrollView(
-              reverse: true,
-              child: Column(
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: messages.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return chatBubble(
-                          "assets/images/cw5.png", "김채원", messages[index]);
-                    },
-                  ),
-                ],
-              ),
-            ),
+    
+    return MaterialApp(
+      
+      home: Scaffold(
+        
+        resizeToAvoidBottomInset: true,
+        backgroundColor: Color.fromARGB(255, 240, 240, 240),
+        
+        appBar: chatAppbar(context, widget.user?.name??'Unknown'),
+        
+        body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+          child: Column(
+            children: [
+              // connectionInfo(),
+              chat(context, widget.user??FriendInfo(), messages),
+              chatField(),
+              const SizedBox(height: 10,),
+            ],
           ),
-          chatField(),
-          const SizedBox(
-            height: 10,
-          ),
-        ],
+        ),
       ),
-    );
+    ); 
   }
 
   @override
   void dispose() {
+    _scrollController?.dispose();
     chatFieldController.dispose();
     super.dispose();
   }
 
-  Widget connectionInfo() => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            socket.connected ? Icons.check_circle : Icons.warning,
-            color: socket.connected ? Colors.green : Colors.red,
-            size: 16.0,
-          ),
-          const SizedBox(width: 4.0),
-          Text(
-            socket.connected ? 'Connected' : 'Disconnected',
-            style: const TextStyle(fontSize: 16.0),
-          ),
-        ],
-      );
-
-  Widget chatBubble(image, String name, text) => Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Profile Image
-              Material(
-                elevation: 5,
-                shape: const CircleBorder(
-                  side: BorderSide(
-                    color: Color.fromARGB(255, 255, 99, 159),
-                    width: 1.5,
-                  ),
-                ),
-                child: CircleAvatar(
-                  backgroundColor: Colors.grey[300],
-                  child: ClipOval(
-                    child: Image.asset(
-                      image,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-              // Margin between profile image and chat bubble
-              const SizedBox(width: 10),
-              // Chat bubble
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Container(
-                    constraints: const BoxConstraints(
-                      maxWidth: 200,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 189, 252, 138),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 5,
-                    ),
-                    child: Text(text),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 15), // 수직 간격 조정
-        ],
-      );
-
   Widget chatField() => Container(
-        decoration: BoxDecoration(
+    decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Colors.white,
           boxShadow: [
@@ -187,9 +93,15 @@ class _ChatWidgetState extends State<ChatWidget> {
             Expanded(
               child: TextField(
                 controller: chatFieldController,
+                onSubmitted: (text) {
+                  if (text.isNotEmpty) {
+                    send();
+                  }
+                },
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: ' Type your message...',
+                  hintStyle: TextStyle(fontSize: 14,color: Colors.grey),
                   prefixIcon: Padding(
                     padding: EdgeInsets.only(left: 8.0),
                     child: Icon(Icons.message),
@@ -198,11 +110,17 @@ class _ChatWidgetState extends State<ChatWidget> {
               ),
             ),
             IconButton(
+              iconSize: 0,
               onPressed: send,
-              icon: const Icon(Icons.send),
+              icon: Stack(
+                children: [
+                  const Icon(Icons.send),
+                  Image.asset('assets/images/cookie_logo.png', width: 24, height: 24),
+                ],
+              ),
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
-            ),
+            )
           ],
         ),
       );
