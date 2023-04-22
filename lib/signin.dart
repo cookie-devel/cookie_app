@@ -2,9 +2,9 @@ import 'package:cookie_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cookie_app/signup.dart';
-import 'package:cookie_app/handler/design.dart';
+import 'package:cookie_app/design.dart';
 import 'package:cookie_app/handler/storage.dart';
-import 'package:cookie_app/handler/handler_signin.dart';
+import 'package:cookie_app/components/signin/handler_signin.dart';
 
 class SignInWidget extends StatefulWidget {
   const SignInWidget({Key? key}) : super(key: key);
@@ -14,7 +14,6 @@ class SignInWidget extends StatefulWidget {
 }
 
 class _SignInWidgetState extends State<SignInWidget> {
-  
   bool _isStorageExist = false;
   bool _isLoading = true;
 
@@ -23,7 +22,7 @@ class _SignInWidgetState extends State<SignInWidget> {
   bool _idCheck = true;
   bool _pwCheck = true;
   bool _obscureText = true;
-  
+
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _pwController = TextEditingController();
 
@@ -41,21 +40,19 @@ class _SignInWidgetState extends State<SignInWidget> {
   }
 
   Future<void> checkStorage() async {
-
     final id = await storage.read(key: 'id');
     final pw = await storage.read(key: 'pw');
     // print(id);
     // print(pw);
     // print("===========");
-    await Future.delayed(Duration(milliseconds:860));
+    await Future.delayed(const Duration(milliseconds: 860));
 
     if (id != null && pw != null) {
       setState(() {
         _isStorageExist = true;
         _isLoading = false;
       });
-    } 
-    else {
+    } else {
       setState(() {
         _isStorageExist = false;
         _isLoading = false;
@@ -71,33 +68,25 @@ class _SignInWidgetState extends State<SignInWidget> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    
     if (_isLoading) {
       return isLoadingScreen();
-    }
-    else {
-      if(_isStorageExist){
-        return MyStatefulWidget();
+    } else {
+      if (_isStorageExist) {
+        return const MyStatefulWidget();
       }
     }
 
     return MaterialApp(
-
       home: Scaffold(
-
         resizeToAvoidBottomInset: true,
-
-        appBar: cookieAppbar(context,'c🍪🍪kie'),
-
+        appBar: cookieAppbar(context, 'c🍪🍪kie'),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-
               const SizedBox(height: 50),
 
               // Logo
@@ -107,8 +96,9 @@ class _SignInWidgetState extends State<SignInWidget> {
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                      image: AssetImage('assets/images/cookie_logo.png'),
-                      fit: BoxFit.contain),
+                    image: AssetImage('assets/images/cookie_logo.png'),
+                    fit: BoxFit.contain,
+                  ),
                   // border: Border.all(
                   //   // color: const Color.fromARGB(255, 255, 99, 159),
                   // ),
@@ -145,7 +135,8 @@ class _SignInWidgetState extends State<SignInWidget> {
                         ? null
                         : '최소 6자 이상 입력해주세요.',
                     helperStyle: TextStyle(
-                        color: !_idlengthCheck ? Colors.red : Colors.green),
+                      color: !_idlengthCheck ? Colors.red : Colors.green,
+                    ),
                   ),
                 ),
               ),
@@ -178,7 +169,8 @@ class _SignInWidgetState extends State<SignInWidget> {
                         ? null
                         : '최소 10자 이상 입력해주세요.',
                     helperStyle: TextStyle(
-                        color: !_pwlengthCheck ? Colors.red : Colors.green),
+                      color: !_pwlengthCheck ? Colors.red : Colors.green,
+                    ),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscureText ? Icons.visibility : Icons.visibility_off,
@@ -205,15 +197,19 @@ class _SignInWidgetState extends State<SignInWidget> {
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(50),
                   ),
-                  child: const Text('로그인',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      )),
+                  child: const Text(
+                    '로그인',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
                   onPressed: () async {
                     // id, pw를 json 형식으로 반환
                     String SigninData = createJsonData(
-                        _idController.text, _pwController.text);
+                      _idController.text,
+                      _pwController.text,
+                    );
 
                     Map<String, dynamic> jsonMap =
                         await sendDataToServer(SigninData);
@@ -237,8 +233,7 @@ class _SignInWidgetState extends State<SignInWidget> {
 
                     if (!mounted) return;
 
-                    if (successCheck){
-
+                    if (successCheck) {
                       // 사용자 정보를 저장합니다.
                       await storage.write(key: 'id', value: _idController.text);
                       await storage.write(key: 'pw', value: _pwController.text);
@@ -246,17 +241,16 @@ class _SignInWidgetState extends State<SignInWidget> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const MyStatefulWidget()),
+                          builder: (context) => const MyStatefulWidget(),
+                        ),
                       );
-                    } 
-                    
-                    else {
+                    } else {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: const Text('알림'),
-                            content: Text('로그인에 실패하였습니다.'),
+                            content: const Text('로그인에 실패하였습니다.'),
                             actions: [
                               TextButton(
                                 child: const Text('확인'),
@@ -272,32 +266,35 @@ class _SignInWidgetState extends State<SignInWidget> {
 
                     print("LogIn button pressed");
                   },
-                )
+                ),
               ),
 
               // sign up
               Container(
-                  width: 330,
-                  height: 80,
-                  padding: const EdgeInsets.all(20),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
+                width: 330,
+                height: 80,
+                padding: const EdgeInsets.all(20),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(50),
+                  ),
+                  child: const Text(
+                    '회원가입',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
                     ),
-                    child: const Text('회원가입',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        )),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SignUpWidget()),
-                      );
-                    },
-                  )),
-            
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignUpWidget(),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),

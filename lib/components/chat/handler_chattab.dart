@@ -1,12 +1,13 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/chat.dart';
-import 'package:cookie_app/handler/design.dart';
-import 'package:cookie_app/handler/socket.io/socket.dart';
+// import 'package:cookie_app/design.dart';
+import 'package:cookie_app/design.dart';
 
 // 각각의 프로필 객체 생성
-Widget returnChatTabWidget(
-    {required BuildContext context, required FriendInfo user}) {
+Widget returnChatTabWidget({
+  required BuildContext context,
+  required FriendInfo user,
+}) {
   return InkWell(
     onTap: () {
       Navigator.push(
@@ -16,7 +17,7 @@ Widget returnChatTabWidget(
         ),
       );
     },
-    child: Container(
+    child: SizedBox(
       height: 82,
       child: Row(
         children: [
@@ -52,9 +53,9 @@ Widget returnChatTabWidget(
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
+                const Text(
                   "채팅탭에서 보이는 메시지입니다.",
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                     color: Color.fromARGB(221, 100, 100, 100),
@@ -70,9 +71,9 @@ Widget returnChatTabWidget(
             children: [
               Container(
                 alignment: Alignment.centerRight,
-                child: Text(
+                child: const Text(
                   "19:23 PM",
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w300,
                     color: Color.fromARGB(221, 150, 150, 150),
@@ -80,36 +81,39 @@ Widget returnChatTabWidget(
                 ),
               ),
               const SizedBox(height: 5),
-              Row(mainAxisSize: MainAxisSize.min, children: [
-                SizedBox(
-                  width: 27,
-                ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 99, 159),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 0,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    width: 27,
+                  ),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 255, 99, 159),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 0,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Text(
+                          "48".length > 3 ? "999+" : "48",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "48".length > 3 ? "999+" : "48",
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ]),
+                ],
+              ),
             ],
           ),
         ],

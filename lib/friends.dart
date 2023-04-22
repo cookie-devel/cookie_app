@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/handler/design.dart';
-import 'package:cookie_app/handler/handler_friends.dart';
-import 'package:cookie_app/ect/test_data.dart';
+import 'package:cookie_app/design.dart';
+import 'package:cookie_app/components/friends/handler_friends.dart';
+import 'package:cookie_app/data/test_data.dart';
 
 class FriendsGrid extends StatefulWidget {
   const FriendsGrid({Key? key}) : super(key: key);
@@ -12,7 +12,6 @@ class FriendsGrid extends StatefulWidget {
 }
 
 class _FriendsGridState extends State<FriendsGrid> {
-
   @override
   Widget build(BuildContext context) {
     final List<dynamic> profiles = jsonDecode(jsonString);
@@ -34,7 +33,7 @@ class _FriendsGridState extends State<FriendsGrid> {
             final Map<String, dynamic> profile = profiles[index];
 
             return FriendProfileWidget(
-                user: returnUserInfo(profile),
+              user: returnUserInfo(profile),
             );
           },
         ),
@@ -43,7 +42,6 @@ class _FriendsGridState extends State<FriendsGrid> {
   }
 }
 
-
-// Reference: 
+// Reference:
 // https://eunoia3jy.tistory.com/106
 // https://memostack.tistory.com/329

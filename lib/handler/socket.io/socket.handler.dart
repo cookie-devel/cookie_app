@@ -10,12 +10,13 @@ class SocketHandler {
   }
 
   static IO.Socket socket = IO.io(
-      dotenv.env['BASE_URI'],
-      IO.OptionBuilder()
-          .setTransports(['websocket'])
-          .disableAutoConnect()
-          .enableReconnection()
-          .build());
+    dotenv.env['BASE_URI'],
+    IO.OptionBuilder()
+        .setTransports(['websocket'])
+        .disableAutoConnect()
+        .enableReconnection()
+        .build(),
+  );
 
   get() {
     return socket;
@@ -30,10 +31,10 @@ class SocketHandler {
       print('socket connected');
       print(socket.id);
     });
-    socket.onDisconnect((data) => print('socket disconnected: ${data}'));
+    socket.onDisconnect((data) => print('socket disconnected: $data'));
   }
 
-  static var __sendMessageCallbacks = [];
+  static final __sendMessageCallbacks = [];
   registerSendMessageEvent(next) {
     __sendMessageCallbacks.add(next);
     socket.on("chat message", (data) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cookie_app/handler/design.dart';
+import 'package:cookie_app/design.dart';
 
 Widget otherBubble(BuildContext context, FriendInfo user, String text) {
   return Column(

@@ -24,11 +24,13 @@ String createJsonData(String id, String pw) {
 Future<Map<String, dynamic>> sendDataToServer(String data) async {
   try {
     String address = '${dotenv.env['BASE_URI']}/account/signin';
-    http.Response res = await http.post(Uri.parse(address),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: data);
+    http.Response res = await http.post(
+      Uri.parse(address),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: data,
+    );
     return json.decode(res.body);
   } catch (e) {
     print('Error sending data to server: $e');
@@ -61,7 +63,7 @@ Scaffold isLoadingScreen() {
         ],
       ),
     ),
-    bottomNavigationBar: Container(
+    bottomNavigationBar: const SizedBox(
       height: 72.0,
       child: Center(
         child: Text(

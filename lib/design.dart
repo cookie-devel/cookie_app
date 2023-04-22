@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:cookie_app/friends.dart';
 import 'package:cookie_app/handler/socket.io/socket.dart';
 
 // reference:
@@ -14,7 +13,7 @@ PreferredSize? cookieAppbar(BuildContext context, String title) {
       title: Text(title),
       backgroundColor: Colors.orangeAccent,
       elevation: 0,
-      actions: [],
+      actions: const [],
       flexibleSpace: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -36,7 +35,7 @@ PreferredSize? friendsAppbar(BuildContext context) {
   return PreferredSize(
     preferredSize: const Size.fromHeight(50.0),
     child: AppBar(
-      title: Text('친구'),
+      title: const Text('친구'),
       backgroundColor: Colors.orangeAccent,
       elevation: 0,
       actions: [
@@ -99,10 +98,10 @@ PreferredSize? settingsAppbar(BuildContext context) {
   return PreferredSize(
     preferredSize: const Size.fromHeight(50.0),
     child: AppBar(
-      title: Text('설정'),
+      title: const Text('설정'),
       backgroundColor: Colors.orangeAccent,
       elevation: 0,
-      actions: [],
+      actions: const [],
       flexibleSpace: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -146,48 +145,48 @@ IconButton friendsPageIcon(BuildContext context) {
                     shrinkWrap: true,
                     children: [
                       ListTile(
-                        leading: Icon(Icons.person),
-                        title: Text('친구관리'),
+                        leading: const Icon(Icons.person),
+                        title: const Text('친구관리'),
                         onTap: () {
                           // TODO: Implement settings page
                           Navigator.pop(context);
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.notifications),
-                        title: Text('알림'),
+                        leading: const Icon(Icons.notifications),
+                        title: const Text('알림'),
                         onTap: () {
                           // TODO: Implement notifications page
                           Navigator.pop(context);
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.privacy_tip),
-                        title: Text('개인정보'),
+                        leading: const Icon(Icons.privacy_tip),
+                        title: const Text('개인정보'),
                         onTap: () {
                           // TODO: Implement privacy page
                           Navigator.pop(context);
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.help),
-                        title: Text('도움말'),
+                        leading: const Icon(Icons.help),
+                        title: const Text('도움말'),
                         onTap: () {
                           // TODO: Implement help and feedback page
                           Navigator.pop(context);
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.help),
-                        title: Text('도움말'),
+                        leading: const Icon(Icons.help),
+                        title: const Text('도움말'),
                         onTap: () {
                           // TODO: Implement help and feedback page
                           Navigator.pop(context);
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.help),
-                        title: Text('도움말'),
+                        leading: const Icon(Icons.help),
+                        title: const Text('도움말'),
                         onTap: () {
                           // TODO: Implement help and feedback page
                           Navigator.pop(context);
@@ -208,7 +207,7 @@ IconButton friendsPageIcon(BuildContext context) {
 // 프로필 창 class
 class ProfileWindow extends StatelessWidget {
   final FriendInfo user;
-  ProfileWindow({required this.user});
+  ProfileWindow({super.key, required this.user});
 
   final ScrollController _scrollController = ScrollController();
 
@@ -222,7 +221,7 @@ class ProfileWindow extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
-        child: Container(
+        child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.height * 0.6,
           child: Column(
@@ -230,18 +229,19 @@ class ProfileWindow extends StatelessWidget {
               Container(
                 height: 120,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(20.0),
                     topRight: Radius.circular(20.0),
                   ),
                   image: DecorationImage(
                     image: AssetImage(
-                        user.image ?? 'assets/images/cookie_logo.png'),
+                      user.image ?? 'assets/images/cookie_logo.png',
+                    ),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Expanded(
                 child: Scrollbar(
                   controller: _scrollController,
@@ -250,7 +250,7 @@ class ProfileWindow extends StatelessWidget {
                     scrollDirection: Axis.vertical,
                     child: Column(
                       children: [
-                        ListTile(
+                        const ListTile(
                           title: Text(
                             'user.status_message',
                             style: TextStyle(
@@ -262,21 +262,21 @@ class ProfileWindow extends StatelessWidget {
                         const SizedBox(height: 7),
                         const Divider(height: 1),
                         ListTile(
-                          title: Text("이름"),
+                          title: const Text("이름"),
                           subtitle: Text(user.name ?? 'Unknown'),
                         ),
                         const Divider(height: 1),
-                        ListTile(
+                        const ListTile(
                           title: Text("생일"),
                           subtitle: Text('user.birthday'),
                         ),
                         const Divider(height: 1),
-                        ListTile(
+                        const ListTile(
                           title: Text("거주지"),
                           subtitle: Text('user.address'),
                         ),
                         const Divider(height: 1),
-                        ListTile(
+                        const ListTile(
                           title: Text("나이"),
                           subtitle: Text('user.age'),
                         ),
@@ -286,14 +286,14 @@ class ProfileWindow extends StatelessWidget {
                 ),
               ),
               const Divider(height: 1),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text("확인"),
+                child: const Text("확인"),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
             ],
           ),
         ),
@@ -315,10 +315,11 @@ class FriendInfo {
   final String? image;
   final Map? log;
 
-  FriendInfo(
-      {this.name = "Unknown",
-      this.image = "assets/images/user.jpg",
-      this.log = const {}});
+  FriendInfo({
+    this.name = "Unknown",
+    this.image = "assets/images/user.jpg",
+    this.log = const {},
+  });
 }
 
 // dictionary -> FriendInfo
@@ -377,7 +378,7 @@ Widget connectionInfo() => Row(
           socket.connected ? 'Connected' : 'Disconnected',
           style: const TextStyle(fontSize: 16.0),
         ),
-        SizedBox(
+        const SizedBox(
           width: 5,
         ),
       ],
