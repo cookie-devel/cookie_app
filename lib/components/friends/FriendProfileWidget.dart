@@ -35,9 +35,12 @@ class FriendProfileWidget extends StatelessWidget {
                 image: AssetImage(user.image ?? 'assets/images/user.jpg'),
                 fit: BoxFit.cover,
               ),
-              border: Border.all(
-                color: Colors.deepOrangeAccent,
-                width: 1.8,
+              border: const Border.fromBorderSide(
+                BorderSide(
+                  style: BorderStyle.solid,
+                  color: Colors.deepOrangeAccent,
+                  width: 2,
+                ),
               ),
             ),
           ),
@@ -49,7 +52,7 @@ class FriendProfileWidget extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 14,
-                fontWeight: FontWeight.w200,
+                fontWeight: FontWeight.w300,
                 color: Color.fromARGB(221, 60, 60, 60),
               ),
             ),
