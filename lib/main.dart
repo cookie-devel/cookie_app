@@ -1,5 +1,4 @@
 import 'package:cookie_app/maps.dart';
-import 'package:cookie_app/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/signin.dart';
 import 'package:cookie_app/chattab.dart';
@@ -10,7 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   await dotenv.load();
-  runApp(Cookie());
+  runApp(const Cookie());
 }
 
 class Cookie extends StatelessWidget {
@@ -21,23 +20,24 @@ class Cookie extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: _title,
-        home: const SignInWidget(),
-        theme: ThemeData(
-          appBarTheme: const AppBarTheme(
-            color: Colors.transparent,
-            elevation: 0,
-            iconTheme: IconThemeData(color: Colors.white),
-          ),
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            backgroundColor: Colors.white,
-            selectedItemColor: Colors.indigo,
-            unselectedItemColor: Colors.grey,
-            showSelectedLabels: true,
-            showUnselectedLabels: false,
-            type: BottomNavigationBarType.fixed,
-          ),
-        ));
+      title: _title,
+      home: const SignInWidget(),
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          color: Colors.transparent,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.white),
+        ),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Colors.white,
+          selectedItemColor: Colors.indigo,
+          unselectedItemColor: Colors.grey,
+          showSelectedLabels: true,
+          showUnselectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+        ),
+      ),
+    );
   }
 }
 
@@ -79,60 +79,60 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: SizedBox(
-          height: kBottomNavigationBarHeight +
-              MediaQuery.of(context).padding.bottom,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        blurRadius: 15,
-                        spreadRadius: 5,
-                        offset: const Offset(0, -3),
-                      ),
-                    ],
-                  ),
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: SizedBox(
+        height:
+            kBottomNavigationBarHeight + MediaQuery.of(context).padding.bottom,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      blurRadius: 15,
+                      spreadRadius: 5,
+                      offset: const Offset(0, -3),
+                    ),
+                  ],
                 ),
               ),
-              BottomNavigationBar(
-                items: const <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.people),
-                    label: '친구',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.chat_bubble),
-                    label: '채팅',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.cookie),
-                    label: '쿠키',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.sports_basketball),
-                    label: '클럽',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.settings),
-                    label: '설정',
-                  ),
-                ],
-                currentIndex: _selectedIndex,
-                selectedItemColor: const Color.fromARGB(255, 253, 86, 35),
-                selectedLabelStyle:
-                    const TextStyle(fontWeight: FontWeight.bold),
-                onTap: _onItemTapped,
-                type: BottomNavigationBarType.fixed,
-              ),
-            ],
-          ),
-        ));
+            ),
+            BottomNavigationBar(
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.people),
+                  label: '친구',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.chat_bubble),
+                  label: '채팅',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.cookie),
+                  label: '쿠키',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.sports_basketball),
+                  label: '클럽',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.settings),
+                  label: '설정',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: const Color.fromARGB(255, 253, 86, 35),
+              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+              onTap: _onItemTapped,
+              type: BottomNavigationBarType.fixed,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

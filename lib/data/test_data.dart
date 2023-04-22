@@ -39,7 +39,7 @@ const String jsonString = '''[
   {
     "name": "cw4",
     "image": "assets/images/cw4.png"
-  },
+  // },
   {
     "name": "cw5",
     "image": "assets/images/cw5.png"
@@ -54,7 +54,6 @@ const String jsonString = '''[
   }
 ]
 ''';
-
 
 // chattap.dart 테스트용
 const String jsonChatLog = '''[
@@ -89,7 +88,7 @@ const String jsonChatLog = '''[
         }
       ]
     }
-  },  
+  },
   {
     "name": "백승헌",
     "image": "assets/images/user.jpg",
@@ -137,7 +136,7 @@ const String jsonChatLog = '''[
         }
       ]
     }
-  },  
+  },
   {
     "name": "사쿠라",
     "image": "assets/images/sk1.png",
@@ -153,7 +152,7 @@ const String jsonChatLog = '''[
         }
       ]
     }
-  },  
+  },
   {
     "name": "허윤진",
     "image": "assets/images/yj1.png",
@@ -169,7 +168,7 @@ const String jsonChatLog = '''[
         }
       ]
     }
-  },  
+  },
   {
     "name": "김채원",
     "image": "assets/images/cw2.png",
@@ -185,7 +184,7 @@ const String jsonChatLog = '''[
         }
       ]
     }
-  },  
+  },
   {
     "name": "김채원",
     "image": "assets/images/cw3.png",

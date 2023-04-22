@@ -1,6 +1,6 @@
 import 'package:cookie_app/signin.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/handler/design.dart';
+import 'package:cookie_app/design.dart';
 import 'package:cookie_app/handler/storage.dart';
 
 class SettingsWidget extends StatefulWidget {
@@ -81,11 +81,13 @@ Future<void> _logout(BuildContext context) async {
   await storage.delete(key: 'id');
   await storage.delete(key: 'pw');
 
-  final destination = SignInWidget();
+  const destination = SignInWidget();
 
   // 현재 페이지를 스택에서 제거하고 대상 페이지를 스택에 추가
-  Navigator.pushReplacement(context,
-      MaterialPageRoute(builder: (BuildContext context) => destination));
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (BuildContext context) => destination),
+  );
 }
 
 Future<void> _showAlertDialog(BuildContext context) async {

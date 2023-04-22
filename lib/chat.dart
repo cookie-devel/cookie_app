@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cookie_app/handler/design.dart';
+import 'package:cookie_app/design.dart';
 import 'package:cookie_app/handler/socket.io/socket.dart';
-import 'package:cookie_app/handler/handler_chat.dart';
+import 'package:cookie_app/components/chat/handler_chat.dart';
 
 class ChatWidget extends StatefulWidget {
   final FriendInfo? user;
@@ -45,7 +45,7 @@ class _ChatWidgetState extends State<ChatWidget> {
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: Color.fromARGB(255, 240, 240, 240),
+        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
         appBar: chatAppbar(context, widget.user?.name ?? 'Unknown'),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
@@ -110,8 +110,11 @@ class _ChatWidgetState extends State<ChatWidget> {
               icon: Stack(
                 children: [
                   const Icon(Icons.send),
-                  Image.asset('assets/images/cookie_logo.png',
-                      width: 24, height: 24),
+                  Image.asset(
+                    'assets/images/cookie_logo.png',
+                    width: 24,
+                    height: 24,
+                  ),
                 ],
               ),
               splashColor: Colors.transparent,

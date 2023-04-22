@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/ect/test_data.dart';
-import 'package:cookie_app/handler/design.dart';
-import 'package:cookie_app/handler/handler_chattab.dart';
+import 'package:cookie_app/data/test_data.dart';
+import 'package:cookie_app/design.dart';
+import 'package:cookie_app/components/chat/handler_chattab.dart';
 
 class ChatTabWidget extends StatefulWidget {
   const ChatTabWidget({super.key});
@@ -29,18 +29,21 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
     return Scaffold(
       appBar: cookieAppbar(context, '채팅'),
       body: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 16, 10, 8),
-          child: ListView.builder(
-            itemCount: chatLength,
-            itemBuilder: (BuildContext context, int index) {
-              final Map<String, dynamic> log = chatLog[index];
+        padding: const EdgeInsets.fromLTRB(10, 16, 10, 8),
+        child: ListView.builder(
+          itemCount: chatLength,
+          itemBuilder: (BuildContext context, int index) {
+            final Map<String, dynamic> log = chatLog[index];
 
-              return Container(
-                child: returnChatTabWidget(
-                    context: context, user: returnUserInfo(log)),
-              );
-            },
-          )),
+            return Container(
+              child: returnChatTabWidget(
+                context: context,
+                user: returnUserInfo(log),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 

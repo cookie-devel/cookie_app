@@ -1,7 +1,7 @@
 import 'package:cookie_app/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
-import 'package:cookie_app/handler/design.dart';
+import 'package:cookie_app/design.dart';
 
 class FriendProfileWidget extends StatelessWidget {
   final FriendInfo user;

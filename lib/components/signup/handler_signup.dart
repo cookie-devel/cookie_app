@@ -58,11 +58,13 @@ class ImageSelectionDialog {
 Future<Map<String, dynamic>> sendDataToServer(String data) async {
   try {
     String address = '${dotenv.env['BASE_URI']}/account/signup';
-    http.Response res = await http.post(Uri.parse(address),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: data);
+    http.Response res = await http.post(
+      Uri.parse(address),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: data,
+    );
 
     return json.decode(res.body);
   } catch (e) {
@@ -73,7 +75,12 @@ Future<Map<String, dynamic>> sendDataToServer(String data) async {
 
 // creadte json structure
 String createJsonData(
-    String id, String pw, String name, String date, String phoneNumber) {
+  String id,
+  String pw,
+  String name,
+  String date,
+  String phoneNumber,
+) {
   Map<String, dynamic> data = {
     "userid": id,
     "password": pw,

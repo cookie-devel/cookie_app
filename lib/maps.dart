@@ -23,41 +23,41 @@ class _MapsWidgetState extends State<MapsWidget> {
     _getUserLocation();
     markers.add(
       Marker(
-        markerId: MarkerId("1"),
+        markerId: const MarkerId("1"),
         draggable: true,
         onTap: () {
           print("Marker2!");
           showDialog(
             context: context,
             builder: (context) {
-              return AlertDialog(
+              return const AlertDialog(
                 title: Text("title"),
                 content: Text("content"),
               );
             },
           );
         },
-        position: LatLng(37.2807339, 127.0437020),
+        position: const LatLng(37.2807339, 127.0437020),
       ),
     );
 
     markers.add(
       Marker(
-        markerId: MarkerId("2"),
+        markerId: const MarkerId("2"),
         draggable: true,
         onTap: () {
           print("Marker2!");
           showDialog(
             context: context,
             builder: (context) {
-              return AlertDialog(
+              return const AlertDialog(
                 title: Text("title"),
                 content: Text("content"),
               );
             },
           );
         },
-        position: LatLng(37.2822374, 127.0455223),
+        position: const LatLng(37.2822374, 127.0455223),
       ),
     );
   }
@@ -93,7 +93,8 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   void _getUserLocation() async {
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+      desiredAccuracy: LocationAccuracy.high,
+    );
     setState(() {
       _currentLocation = LatLng(position.latitude, position.longitude);
       print("currentLocation = ${_currentLocation.toString()}");
