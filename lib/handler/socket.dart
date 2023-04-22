@@ -10,3 +10,15 @@ IO.Socket socket = IO.io(
         .disableAutoConnect()
         .enableReconnection()
         .build());
+
+registerHandshakeHandler() {
+  
+}
+
+registerDefaultEventHandler() {
+  socket.onConnect((data) {
+    print('socket connected');
+    print(socket.id);
+  });
+  socket.onDisconnect((data) => print('socket disconnected: ${data}'));
+}

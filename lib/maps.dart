@@ -13,12 +13,14 @@ class MapsWidget extends StatefulWidget {
 class _MapsWidgetState extends State<MapsWidget> {
   late GoogleMapController mapController;
   static List<Marker> markers = <Marker>[];
-  static LatLng _currentLocation = const LatLng(37.5642135, 127.0016985);
+  static late LatLng _currentLocation;
+  bool loading = true;
 
   @override
   void initState() {
     super.initState();
-
+    _locationPermission();
+    _getUserLocation();
     markers.add(
       Marker(
         markerId: MarkerId("1"),
@@ -35,7 +37,7 @@ class _MapsWidgetState extends State<MapsWidget> {
             },
           );
         },
-        position: LatLng(38.4537251, 126.7960716),
+        position: LatLng(37.2807339, 127.0437020),
       ),
     );
 
@@ -55,17 +57,13 @@ class _MapsWidgetState extends State<MapsWidget> {
             },
           );
         },
-        position: LatLng(37.4537251, 126.7960716),
+        position: LatLng(37.2822374,127.0455223),
       ),
     );
   }
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-
-    _locationPermission();
-    _getUserLocation();
-
   }
 
   // https://kanoos-stu.tistory.com/64
@@ -99,24 +97,27 @@ class _MapsWidgetState extends State<MapsWidget> {
     setState(() {
       _currentLocation = LatLng(position.latitude, position.longitude);
       print("currentLocation = ${_currentLocation.toString()}");
+      loading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GoogleMap(
-        compassEnabled: true,
-        mapType: MapType.normal,
-        markers: Set.from(markers),
-        myLocationEnabled: true,
-        myLocationButtonEnabled: true,
-        onMapCreated: _onMapCreated,
-        initialCameraPosition: CameraPosition(
-          target: _currentLocation,
-          zoom: 16.0,
-        ),
-      ),
+      body: loading == false
+          ? GoogleMap(
+              compassEnabled: true,
+              mapType: MapType.normal,
+              markers: Set.from(markers),
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: _currentLocation,
+                zoom: 16.0,
+              ),
+            )
+          : null,
     );
   }
 }

@@ -11,14 +11,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 void main() async {
 
   await dotenv.load();
-  socket.onConnect((data) {
-    print('socket connected');
-    print(socket.id);
-  });
-  socket.onDisconnect((data) => print('socket disconnected: ${data}'));
-
   runApp(Cookie());
-
 }
 
 class Cookie extends StatelessWidget {
