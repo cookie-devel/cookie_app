@@ -14,7 +14,6 @@ class SignUpWidget extends StatefulWidget {
 }
 
 class _SignUpWidgetState extends State<SignUpWidget> {
-
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _pwController = TextEditingController();
@@ -48,7 +47,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
   final RegExp _regex = RegExp(r'^[a-zA-Z0-9!@#\$&*~-]+$');
 
-
   @override
   void initState() {
     super.initState();
@@ -74,19 +72,15 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
-
         home: Scaffold(
             resizeToAvoidBottomInset: true,
             appBar: cookieAppbar(context, '회원가입'),
-
             body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-
                   const SizedBox(height: 45),
 
                   // Profile Image
@@ -114,7 +108,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     //     color: const Color.fromARGB(255, 255, 99, 159),
                     //   ),
                     // ),
-                        ? const Center(child: Text('No Images')): Image.file(_imageFile!),
                   ),
 
                   SizedBox(height: 20),
@@ -124,10 +117,11 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   // select image button
                   ElevatedButton(
                     child: const Text('Select Image'),
-                    onPressed: () async{
+                    onPressed: () async {
                       // _showSelectionDialog(context);
                       final imageSelectionDialog = ImageSelectionDialog();
-                      final imageFile = await imageSelectionDialog.show(context);
+                      final imageFile =
+                          await imageSelectionDialog.show(context);
                       setState(() {
                         if (imageFile != null) {
                           _imageFile = File(imageFile.path);
@@ -161,8 +155,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         ),
                         labelText: '아이디',
                         helperText: (_idlengthCheck && _idCheck)
-                        ? null
-                        : '최소 6자 이상 입력해주세요.',
+                            ? null
+                            : '최소 6자 이상 입력해주세요.',
                         helperStyle: TextStyle(
                             color: !_idlengthCheck ? Colors.red : Colors.green),
                       ),
@@ -172,8 +166,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   // Password
                   Container(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                    child: TextField(
-                      controller: _PWController,
                     child: TextField(
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(_regex),
@@ -198,8 +190,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       decoration: InputDecoration(
                         labelText: '비밀번호',
                         helperText: (_pwlengthCheck && _pwCheck)
-                        ? null
-                        : '최소 10자 이상 입력해주세요.',
+                            ? null
+                            : '최소 10자 이상 입력해주세요.',
                         helperStyle: TextStyle(
                             color: !_pwlengthCheck ? Colors.red : Colors.green),
                         suffixIcon: IconButton(
@@ -290,8 +282,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           borderRadius: BorderRadius.circular(90.0),
                         ),
                         helperText: (_namelengthCheck && _nameCheck)
-                        ? null
-                        : '최소 1자 이상 입력해주세요.',
+                            ? null
+                            : '최소 1자 이상 입력해주세요.',
                         helperStyle: TextStyle(
                             color:
                                 !_namelengthCheck ? Colors.red : Colors.green),
@@ -304,7 +296,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                     child: TextField(
-                      controller: _dateController,
                       controller: _dateController,
                       obscureText: false,
                       decoration: InputDecoration(
@@ -461,14 +452,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                             );
                           }
                         },
-                      )
-                    ),
-
+                      )),
                 ],
               ),
-            )
-        )
-    );
+            )));
   }
-
 }
