@@ -45,4 +45,4 @@ app.*.map.json
 
 .vscode/
 
-/ios/Build/
+/ios/Build
