@@ -2,6 +2,7 @@ import 'package:cookie_app/pages/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/handler/storage.dart';
 import 'settings.appbar.dart';
+import 'detail/MyProfile.page.dart';
 
 class SettingsWidget extends StatefulWidget {
   const SettingsWidget({Key? key}) : super(key: key);
@@ -21,7 +22,25 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             title: const Text('프로필 관리'),
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () {
-              // Handle notification settings onTap
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 150),
+                  reverseTransitionDuration: Duration(milliseconds: 150),
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return MyProfileWidget();
+                  },
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    return SlideTransition(
+                      position: Tween(
+                        begin: Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                ),
+              );
             },
           ),
           const Divider(height: 1),

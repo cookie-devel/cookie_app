@@ -1,11 +1,11 @@
-import 'package:cookie_app/pages/tabs/maps/maps.tab.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:cookie_app/handler/socket.io/socket.dart';
 import 'package:cookie_app/pages/signin.dart';
-import 'package:cookie_app/pages/tabs/chatrooms/chatrooms.tab.dart';
+import 'package:cookie_app/pages/tabs/maps/maps.tab.dart';
 import 'package:cookie_app/pages/tabs/friends/friends.tab.dart';
 import 'package:cookie_app/pages/tabs/settings/settings.tab.dart';
-import 'package:cookie_app/handler/socket.io/socket.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:cookie_app/pages/tabs/chatrooms/chatrooms.tab.dart';
 
 void main() async {
   await dotenv.load();
@@ -30,7 +30,7 @@ class Cookie extends StatelessWidget {
         ),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Colors.white,
-          selectedItemColor: Colors.indigo,
+          selectedItemColor: Color.fromARGB(255, 253, 86, 35),
           unselectedItemColor: Colors.grey,
           showSelectedLabels: true,
           showUnselectedLabels: false,
