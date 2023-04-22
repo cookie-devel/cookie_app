@@ -1,31 +1,55 @@
-import 'package:cookie_app/chat.dart';
-import 'package:cookie_app/friends.dart';
 import 'package:cookie_app/maps.dart';
-import 'package:cookie_app/signin.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:cookie_app/signin.dart';
+import 'package:cookie_app/chattab.dart';
+import 'package:cookie_app/friends.dart';
+import 'package:cookie_app/settings.dart';
 import 'package:cookie_app/handler/socket.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
+
   await dotenv.load();
   socket.onConnect((data) {
     print('socket connected');
     print(socket.id);
   });
   socket.onDisconnect((data) => print('socket disconnected: ${data}'));
-  runApp(const MyApp());
+
+  runApp(Cookie());
+
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Cookie extends StatelessWidget {
+  const Cookie({super.key});
 
-  static const String _title = 'Flutter Code Sample';
-
+  static const String _title = 'Cookie';
+  
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+
       title: _title,
-      home: SignInWidget(),
+      
+      home: const SignInWidget(),
+      
+      theme: ThemeData(
+
+        appBarTheme: const AppBarTheme(
+          color: Colors.transparent,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.white),
+        ),
+        
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Colors.white,
+          selectedItemColor: Colors.indigo,
+          unselectedItemColor: Colors.grey,
+          showSelectedLabels: true,
+          showUnselectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+        ),
+      )
     );
   }
 }
@@ -49,21 +73,14 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   static const List<Widget> _widgetOptions = <Widget>[
-    // Padding(
-    //   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-    //   child: FriendsGrid(),
-    // ),
     FriendsGrid(),
-    ChatWidget(),
+    ChatTabWidget(),
     MapsWidget(),
     Text(
       'Index 2: Club',
       style: optionStyle,
     ),
-    Text(
-      'Index 3: Settings',
-      style: optionStyle,
-    ),
+    SettingsWidget(),
   ];
 
   void _onItemTapped(int index) {
@@ -75,70 +92,64 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(50.0),
-          child: AppBar(
-            title: const Text('C🍪🍪KIE'),
-            backgroundColor: Colors.orangeAccent,
-            elevation: 0,
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.settings),
-                onPressed: () {
-                  // Do something
-                },
-              ),
-            ],
-            flexibleSpace: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: <Color>[
-                    Colors.orangeAccent,
-                    Colors.deepOrangeAccent,
+      
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
+
+      bottomNavigationBar: SizedBox(
+
+        height: kBottomNavigationBarHeight + MediaQuery.of(context).padding.bottom,
+        
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      blurRadius: 15,
+                      spreadRadius: 5,
+                      offset: const Offset(0, -3),
+                    ),
                   ],
                 ),
               ),
             ),
-          ),
+            BottomNavigationBar(
+              
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.people),
+                  label: '친구',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.chat_bubble),
+                  label: '채팅',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.cookie),
+                  label: '쿠키',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.sports_basketball),
+                  label: '클럽',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.settings),
+                  label: '설정',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: const Color.fromARGB(255, 253, 86, 35),
+              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+              onTap: _onItemTapped,
+              type: BottomNavigationBarType.fixed,
+            ),
+          ],
         ),
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: SizedBox(
-          child: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.people),
-                label: 'Friends',
-                backgroundColor: Colors.orange,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.chat_bubble),
-                label: 'Chat',
-                backgroundColor: Colors.green,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.location_searching),
-                label: 'Location',
-                backgroundColor: Colors.blue,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.sports_basketball),
-                label: 'Club',
-                backgroundColor: Colors.deepOrange,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: 'Settings',
-                backgroundColor: Colors.purple,
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: Colors.black,
-            onTap: _onItemTapped,
-          ),
-        ));
+      )
+    );
   }
 }

@@ -7,7 +7,7 @@ class MapsWidget extends StatefulWidget {
   const MapsWidget({Key? key}) : super(key: key);
 
   @override
-  _MapsWidgetState createState() => _MapsWidgetState();
+  State<MapsWidget> createState() => _MapsWidgetState();
 }
 
 class _MapsWidgetState extends State<MapsWidget> {
@@ -18,6 +18,7 @@ class _MapsWidgetState extends State<MapsWidget> {
   @override
   void initState() {
     super.initState();
+
     markers.add(
       Marker(
         markerId: MarkerId("1"),
@@ -64,6 +65,7 @@ class _MapsWidgetState extends State<MapsWidget> {
 
     _locationPermission();
     _getUserLocation();
+
   }
 
   // https://kanoos-stu.tistory.com/64
