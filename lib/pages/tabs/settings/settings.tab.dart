@@ -1,6 +1,5 @@
 import 'package:cookie_app/pages/signin.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/cookie.appbar.dart';
 import 'package:cookie_app/handler/storage.dart';
 import 'settings.appbar.dart';
 
