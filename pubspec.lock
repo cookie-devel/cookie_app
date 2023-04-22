@@ -6,13 +6,16 @@ packages:
     description:
       name: _fe_analyzer_shared
       sha256: a36ec4843dc30ea6bf652bf25e3448db6c5e8bcf4aa55f063a5d1dad216d8214
+      sha256: a36ec4843dc30ea6bf652bf25e3448db6c5e8bcf4aa55f063a5d1dad216d8214
       url: "https://pub.dev"
     source: hosted
+    version: "58.0.0"
     version: "58.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
+      sha256: cc4242565347e98424ce9945c819c192ec0838cb9d1f6aa4a97cc96becbc5b27
       sha256: cc4242565347e98424ce9945c819c192ec0838cb9d1f6aa4a97cc96becbc5b27
       url: "https://pub.dev"
     source: hosted
@@ -169,6 +172,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  cross_file:
+    dependency: transitive
+    description:
+      name: cross_file
+      sha256: "0b0036e8cccbfbe0555fd83c1d31a6f30b77a96b598b35a5d36dd41f718695e9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.3+4"
   cross_file:
     dependency: transitive
     description:
@@ -349,6 +360,11 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   frontend_server_client:
     dependency: transitive
     description:
@@ -426,8 +442,10 @@ packages:
     description:
       name: google_maps_flutter_android
       sha256: ee3c1a63983b8ba17a9a7c1233c3542fbfbc0ebf540d3aa9b8fd5162681e0219
+      sha256: ee3c1a63983b8ba17a9a7c1233c3542fbfbc0ebf540d3aa9b8fd5162681e0219
       url: "https://pub.dev"
     source: hosted
+    version: "2.4.10"
     version: "2.4.10"
   google_maps_flutter_ios:
     dependency: transitive
@@ -658,8 +676,10 @@ packages:
     description:
       name: permission_handler_apple
       sha256: ee96ac32f5a8e6f80756e25b25b9f8e535816c8e6665a96b6d70681f8c4f7e85
+      sha256: ee96ac32f5a8e6f80756e25b25b9f8e535816c8e6665a96b6d70681f8c4f7e85
       url: "https://pub.dev"
     source: hosted
+    version: "9.0.8"
     version: "9.0.8"
   permission_handler_platform_interface:
     dependency: transitive
@@ -746,6 +766,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  socket_io_client:
+    dependency: "direct main"
+    description:
+      name: socket_io_client
+      sha256: a9c589d3fe2658506be38ddb36f23348daab73a00ff1645533669d07a5111cfc
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
+  socket_io_common:
+    dependency: transitive
+    description:
+      name: socket_io_common
+      sha256: "5a218a784df4d1927ae713e17af619caa736cb2ebac287c59e4e24228b22da29"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   socket_io_client:
     dependency: "direct main"
     description:

@@ -1,4 +1,5 @@
 import 'package:cookie_app/maps.dart';
+import 'package:cookie_app/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/signin.dart';
 import 'package:cookie_app/chattab.dart';
@@ -24,15 +25,15 @@ class Cookie extends StatelessWidget {
   const Cookie({super.key});
 
   static const String _title = 'Cookie';
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
 
       title: _title,
-      
+
       home: const SignInWidget(),
-      
+
       theme: ThemeData(
 
         appBarTheme: const AppBarTheme(
@@ -40,7 +41,7 @@ class Cookie extends StatelessWidget {
           elevation: 0,
           iconTheme: IconThemeData(color: Colors.white),
         ),
-        
+
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Colors.white,
           selectedItemColor: Colors.indigo,
@@ -92,7 +93,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
@@ -100,7 +101,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       bottomNavigationBar: SizedBox(
 
         height: kBottomNavigationBarHeight + MediaQuery.of(context).padding.bottom,
-        
+
         child: Stack(
           children: [
             Positioned.fill(
@@ -118,7 +119,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               ),
             ),
             BottomNavigationBar(
-              
+
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
                   icon: Icon(Icons.people),

@@ -44,16 +44,16 @@ class _ChatWidgetState extends State<ChatWidget> {
 
   @override
   Widget build(BuildContext context) {
-    
+
     return MaterialApp(
-      
+
       home: Scaffold(
-        
+
         resizeToAvoidBottomInset: true,
         backgroundColor: Color.fromARGB(255, 240, 240, 240),
-        
+
         appBar: chatAppbar(context, widget.user?.name??'Unknown'),
-        
+
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
           child: Column(
@@ -66,7 +66,7 @@ class _ChatWidgetState extends State<ChatWidget> {
           ),
         ),
       ),
-    ); 
+    );
   }
 
   @override
