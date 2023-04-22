@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:cookie_app/design.dart';
+import 'package:cookie_app/cookie.appbar.dart';
 import 'package:cookie_app/handler/socket.io/socket.dart';
-import 'package:cookie_app/components/chat/handler_chat.dart';
+import 'package:cookie_app/components/chat/chatListView.dart';
+import 'package:cookie_app/schema/FriendInfo.dart';
+import 'chatroom.appbar.dart';
 
 class ChatWidget extends StatefulWidget {
   final FriendInfo? user;

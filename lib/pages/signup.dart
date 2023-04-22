@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:cookie_app/signin.dart';
-import 'package:cookie_app/design.dart';
-import 'package:cookie_app/components/signup/handler_signup.dart';
+import 'package:cookie_app/pages/signin.dart';
+import 'package:cookie_app/cookie.appbar.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:cookie_app/components/ImageSelection.dart';
+import 'package:cookie_app/handler/signup.handler.dart';
 
 class SignUpWidget extends StatefulWidget {
   const SignUpWidget({Key? key}) : super(key: key);
@@ -371,7 +372,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     );
 
                     Map<String, dynamic> jsonMap =
-                        await sendDataToServer(jsonData);
+                        await signupHandler(jsonData);
                     bool success = jsonMap['success'];
 
                     Map<String, dynamic> account = {};
