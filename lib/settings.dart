@@ -11,10 +11,8 @@ class SettingsWidget extends StatefulWidget {
 }
 
 class _SettingsWidgetState extends State<SettingsWidget> {
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: settingsAppbar(context),
       body: ListView(
@@ -73,7 +71,6 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             },
           ),
           const Divider(height: 1),
-          
         ],
       ),
     );
@@ -81,7 +78,6 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 }
 
 Future<void> _logout(BuildContext context) async {
-
   await storage.delete(key: 'id');
   await storage.delete(key: 'pw');
 

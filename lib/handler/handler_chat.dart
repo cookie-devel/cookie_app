@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cookie_app/handler/design.dart';
 
-Widget otherBubble(BuildContext context, FriendInfo user, String text){
-
+Widget otherBubble(BuildContext context, FriendInfo user, String text) {
   return Column(
     children: [
       Row(
@@ -12,7 +11,7 @@ Widget otherBubble(BuildContext context, FriendInfo user, String text){
           // Profile Image
           InkWell(
             onTap: () {
-              profileWindow(context,user);
+              profileWindow(context, user);
             },
             child: Material(
               elevation: 5,
@@ -26,7 +25,7 @@ Widget otherBubble(BuildContext context, FriendInfo user, String text){
                 backgroundColor: Colors.grey[300],
                 child: ClipOval(
                   child: Image.asset(
-                    user.image??'assets/images/user.jpg',
+                    user.image ?? 'assets/images/user.jpg',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -41,7 +40,7 @@ Widget otherBubble(BuildContext context, FriendInfo user, String text){
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                user.name??'Unknown',
+                user.name ?? 'Unknown',
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
@@ -86,7 +85,6 @@ Widget otherBubble(BuildContext context, FriendInfo user, String text){
               )
             ],
           ),
-        
         ],
       ),
       const SizedBox(height: 15), // 수직 간격 조정
@@ -94,8 +92,7 @@ Widget otherBubble(BuildContext context, FriendInfo user, String text){
   );
 }
 
-Widget myBubble(BuildContext context, FriendInfo user, String text){
-
+Widget myBubble(BuildContext context, FriendInfo user, String text) {
   return Column(
     children: [
       Row(
@@ -131,10 +128,9 @@ Widget myBubble(BuildContext context, FriendInfo user, String text){
               vertical: 7,
             ),
             child: LongPressCopyableText(
-                text: text,
-                style: const TextStyle(fontSize: 15,
-                                      color: Colors.black87),
-              ),
+              text: text,
+              style: const TextStyle(fontSize: 15, color: Colors.black87),
+            ),
           ),
         ],
       ),
@@ -143,7 +139,7 @@ Widget myBubble(BuildContext context, FriendInfo user, String text){
   );
 }
 
-Widget chat(BuildContext context, FriendInfo user, messages){
+Widget chat(BuildContext context, FriendInfo user, messages) {
   return Expanded(
     child: SingleChildScrollView(
       reverse: true,
@@ -154,7 +150,9 @@ Widget chat(BuildContext context, FriendInfo user, messages){
             physics: const NeverScrollableScrollPhysics(),
             itemCount: messages.length,
             itemBuilder: (BuildContext context, int index) {
-              return messages[index][messages[index].length - 1]=='.'?myBubble(context, user, messages[index]):otherBubble(context, user, messages[index]);
+              return messages[index][messages[index].length - 1] == '.'
+                  ? myBubble(context, user, messages[index])
+                  : otherBubble(context, user, messages[index]);
             },
           ),
         ],

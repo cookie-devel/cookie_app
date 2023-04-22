@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cookie_app/handler/design.dart';
-import 'package:cookie_app/handler/socket.dart';
+import 'package:cookie_app/handler/socket.io/socket.dart';
 import 'package:cookie_app/handler/handler_chat.dart';
 
 class ChatWidget extends StatefulWidget {
-
   final FriendInfo? user;
 
   const ChatWidget({Key? key, this.user}) : super(key: key);
@@ -14,8 +13,7 @@ class ChatWidget extends StatefulWidget {
 }
 
 class _ChatWidgetState extends State<ChatWidget> {
-
-  List messages = ['안녕하세요','채팅 페이지 테스트입니다','대화를 원할 경우 마침표로 대화를 마무리하세요'];
+  List messages = ['안녕하세요', '채팅 페이지 테스트입니다', '대화를 원할 경우 마침표로 대화를 마무리하세요'];
 
   final chatFieldController = TextEditingController();
   ScrollController? _scrollController;
@@ -26,7 +24,7 @@ class _ChatWidgetState extends State<ChatWidget> {
 
     _scrollController = ScrollController();
 
-    socket.on('chat message', (data) {
+    socketHandler.registerSendMessageEvent((data) {
       if (mounted) {
         setState(() {
           messages.add(data);
@@ -37,31 +35,28 @@ class _ChatWidgetState extends State<ChatWidget> {
 
   send() {
     if (chatFieldController.text.trim().isNotEmpty) {
-      socket.emit("chat message", chatFieldController.text);
+      socketHandler.sendMessage(chatFieldController.text);
       chatFieldController.text = '';
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
-
       home: Scaffold(
-
         resizeToAvoidBottomInset: true,
         backgroundColor: Color.fromARGB(255, 240, 240, 240),
-
-        appBar: chatAppbar(context, widget.user?.name??'Unknown'),
-
+        appBar: chatAppbar(context, widget.user?.name ?? 'Unknown'),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
           child: Column(
             children: [
               // connectionInfo(),
-              chat(context, widget.user??FriendInfo(), messages),
+              chat(context, widget.user ?? FriendInfo(), messages),
               chatField(),
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
             ],
           ),
         ),
@@ -77,7 +72,7 @@ class _ChatWidgetState extends State<ChatWidget> {
   }
 
   Widget chatField() => Container(
-    decoration: BoxDecoration(
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Colors.white,
           boxShadow: [
@@ -101,7 +96,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: ' Type your message...',
-                  hintStyle: TextStyle(fontSize: 14,color: Colors.grey),
+                  hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
                   prefixIcon: Padding(
                     padding: EdgeInsets.only(left: 8.0),
                     child: Icon(Icons.message),
@@ -115,7 +110,8 @@ class _ChatWidgetState extends State<ChatWidget> {
               icon: Stack(
                 children: [
                   const Icon(Icons.send),
-                  Image.asset('assets/images/cookie_logo.png', width: 24, height: 24),
+                  Image.asset('assets/images/cookie_logo.png',
+                      width: 24, height: 24),
                 ],
               ),
               splashColor: Colors.transparent,

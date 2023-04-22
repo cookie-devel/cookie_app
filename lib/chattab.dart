@@ -11,10 +11,9 @@ class ChatTabWidget extends StatefulWidget {
 }
 
 class _ChatTabWidgetState extends State<ChatTabWidget> {
-  
   // late List<dynamic> chatLog;
   // late int chatLength;
-  
+
   // @override
   // void initState() {
   //   super.initState();
@@ -22,39 +21,31 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
   //   chatLength = chatLog.length;
   // }
 
-
-
   @override
   Widget build(BuildContext context) {
-
     final List<dynamic> chatLog = jsonDecode(jsonChatLog);
     final int chatLength = chatLog.length;
 
     return Scaffold(
-      appBar: cookieAppbar(context,'채팅'),
-      body:Padding(
-        padding: const EdgeInsets.fromLTRB(10, 16, 10, 8),
-        child:ListView.builder(
-          itemCount: chatLength,
-          itemBuilder: (BuildContext context, int index) {
-            final Map<String, dynamic> log = chatLog[index];
+      appBar: cookieAppbar(context, '채팅'),
+      body: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 16, 10, 8),
+          child: ListView.builder(
+            itemCount: chatLength,
+            itemBuilder: (BuildContext context, int index) {
+              final Map<String, dynamic> log = chatLog[index];
 
-            return Container(
-              child: returnChatTabWidget(
-                  context: context,
-                  user: returnUserInfo(log)
-              ),
-            );
-          },
-        )
-      ),
+              return Container(
+                child: returnChatTabWidget(
+                    context: context, user: returnUserInfo(log)),
+              );
+            },
+          )),
     );
   }
-
 
   // @override
   // void dispose() {
   //   super.dispose();
   // }
-
 }

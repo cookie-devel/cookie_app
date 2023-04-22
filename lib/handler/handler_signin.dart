@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-
 bool allCheck(idlengthCheck, pwlengthCheck) {
   if (idlengthCheck == true && pwlengthCheck == true) {
     return true;
@@ -22,7 +21,6 @@ String createJsonData(String id, String pw) {
   return jsonData;
 }
 
-
 Future<Map<String, dynamic>> sendDataToServer(String data) async {
   try {
     String address = '${dotenv.env['BASE_URI']}/account/signin';
@@ -38,14 +36,13 @@ Future<Map<String, dynamic>> sendDataToServer(String data) async {
   }
 }
 
-
-Scaffold isLoadingScreen(){
+Scaffold isLoadingScreen() {
   return Scaffold(
     backgroundColor: Colors.deepOrangeAccent,
     body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const[
+        children: const [
           SizedBox(height: 24.0),
           CupertinoActivityIndicator(
             animating: true,
@@ -86,4 +83,3 @@ Scaffold isLoadingScreen(){
     ),
   );
 }
-

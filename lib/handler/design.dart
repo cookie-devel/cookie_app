@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cookie_app/friends.dart';
-import 'package:cookie_app/handler/socket.dart';
+import 'package:cookie_app/handler/socket.io/socket.dart';
 
 // reference:
 // https://fonts.google.com/icons
 
-
 // cookie앱의 기본 Appbar
-PreferredSize? cookieAppbar(BuildContext context,String title){
-
+PreferredSize? cookieAppbar(BuildContext context, String title) {
   return PreferredSize(
     preferredSize: const Size.fromHeight(50.0),
     child: AppBar(
       title: Text(title),
       backgroundColor: Colors.orangeAccent,
       elevation: 0,
-      actions: [
-      ],
+      actions: [],
       flexibleSpace: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -35,8 +32,7 @@ PreferredSize? cookieAppbar(BuildContext context,String title){
 }
 
 // cookie앱의 friends page Appbar
-PreferredSize? friendsAppbar(BuildContext context){
-
+PreferredSize? friendsAppbar(BuildContext context) {
   return PreferredSize(
     preferredSize: const Size.fromHeight(50.0),
     child: AppBar(
@@ -63,27 +59,25 @@ PreferredSize? friendsAppbar(BuildContext context){
 }
 
 // cookie앱의 chat page Appbar
-PreferredSize? chatAppbar(BuildContext context, String name){
+PreferredSize? chatAppbar(BuildContext context, String name) {
   return PreferredSize(
     preferredSize: const Size.fromHeight(50.0),
     child: AppBar(
-  automaticallyImplyLeading: false,
-  titleSpacing: 2,
-  title: Row(
-    children: [
-      IconButton(
-        padding: const EdgeInsets.only(left: 8),
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () => Navigator.pop(context),
+      automaticallyImplyLeading: false,
+      titleSpacing: 2,
+      title: Row(
+        children: [
+          IconButton(
+            padding: const EdgeInsets.only(left: 8),
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context),
+          ),
+          Text(name),
+        ],
       ),
-      Text(name),
-    ],
-  ),
       backgroundColor: Colors.orangeAccent,
       elevation: 0,
-      actions: [
-        connectionInfo()
-      ],
+      actions: [connectionInfo()],
       flexibleSpace: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -101,16 +95,14 @@ PreferredSize? chatAppbar(BuildContext context, String name){
 }
 
 // cookie앱의 settings page Appbar
-PreferredSize? settingsAppbar(BuildContext context){
-
+PreferredSize? settingsAppbar(BuildContext context) {
   return PreferredSize(
     preferredSize: const Size.fromHeight(50.0),
     child: AppBar(
       title: Text('설정'),
       backgroundColor: Colors.orangeAccent,
       elevation: 0,
-      actions: [
-      ],
+      actions: [],
       flexibleSpace: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -128,7 +120,7 @@ PreferredSize? settingsAppbar(BuildContext context){
 }
 
 // friends page Appbar에서 icon을 눌렀을 때 나오는 bottom sheet
-IconButton friendsPageIcon(BuildContext context){
+IconButton friendsPageIcon(BuildContext context) {
   return IconButton(
     icon: const Icon(Icons.people),
     onPressed: () {
@@ -213,7 +205,6 @@ IconButton friendsPageIcon(BuildContext context){
   );
 }
 
-
 // 프로필 창 class
 class ProfileWindow extends StatelessWidget {
   final FriendInfo user;
@@ -244,7 +235,8 @@ class ProfileWindow extends StatelessWidget {
                     topRight: Radius.circular(20.0),
                   ),
                   image: DecorationImage(
-                    image: AssetImage(user.image ?? 'assets/images/cookie_logo.png'),
+                    image: AssetImage(
+                        user.image ?? 'assets/images/cookie_logo.png'),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -310,41 +302,37 @@ class ProfileWindow extends StatelessWidget {
   }
 }
 
-Future profileWindow(BuildContext context,FriendInfo user) => showDialog(
-  context: context,
-  builder: (BuildContext context) {
-    return ProfileWindow(user: user);
-  },
-);
+Future profileWindow(BuildContext context, FriendInfo user) => showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ProfileWindow(user: user);
+      },
+    );
 
 // 친구 정보 class
 class FriendInfo {
-
   final String? name;
   final String? image;
   final Map? log;
 
-  FriendInfo({this.name = "Unknown", 
-              this.image = "assets/images/user.jpg",
-              this.log = const {}});
-
+  FriendInfo(
+      {this.name = "Unknown",
+      this.image = "assets/images/user.jpg",
+      this.log = const {}});
 }
 
 // dictionary -> FriendInfo
 FriendInfo returnUserInfo(Map<String, dynamic> profile) {
   String name = profile['name'] as String;
   String image = profile['image'] as String;
-  
+
   Map log = {};
   if (profile['log'] != null) {
     Map log = profile['log'] as Map;
-  } 
-  else {
+  } else {
     Map log = {};
   }
-  return FriendInfo(name: name, 
-                    image: image,
-                    log: log);
+  return FriendInfo(name: name, image: image, log: log);
 }
 
 // text 클립보드에 복사
@@ -364,8 +352,9 @@ class LongPressCopyableText extends StatelessWidget {
       onLongPress: () {
         Clipboard.setData(ClipboardData(text: text));
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('클립보드에 복사'),
-          duration:Duration(milliseconds:300),
+          const SnackBar(
+            content: Text('클립보드에 복사'),
+            duration: Duration(milliseconds: 300),
           ),
         );
       },
@@ -376,20 +365,20 @@ class LongPressCopyableText extends StatelessWidget {
 
 // socket 연결 상태 확인
 Widget connectionInfo() => Row(
-  mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(
-        socket.connected ? Icons.check_circle : Icons.warning,
-        color: socket.connected ? Colors.green : Colors.red,
-        size: 16.0,
-      ),
-      const SizedBox(width: 4.0),
-      Text(
-        socket.connected ? 'Connected' : 'Disconnected',
-        style: const TextStyle(fontSize: 16.0),
-      ),
-      SizedBox(width: 5,),
-    ],
-);
-
-
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          socket.connected ? Icons.check_circle : Icons.warning,
+          color: socket.connected ? Colors.green : Colors.red,
+          size: 16.0,
+        ),
+        const SizedBox(width: 4.0),
+        Text(
+          socket.connected ? 'Connected' : 'Disconnected',
+          style: const TextStyle(fontSize: 16.0),
+        ),
+        SizedBox(
+          width: 5,
+        ),
+      ],
+    );

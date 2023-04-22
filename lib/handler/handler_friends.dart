@@ -4,10 +4,9 @@ import 'package:vibration/vibration.dart';
 import 'package:cookie_app/handler/design.dart';
 
 class FriendProfileWidget extends StatelessWidget {
-  
   final FriendInfo user;
-  
-  const FriendProfileWidget({Key?key, required this.user}): super(key: key);
+
+  const FriendProfileWidget({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +15,13 @@ class FriendProfileWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChatWidget(user:user),
+            builder: (context) => ChatWidget(user: user),
           ),
         );
       },
       onLongPress: () {
         Vibration.vibrate(duration: 40);
-        profileWindow(context,user);
+        profileWindow(context, user);
       },
       child: Column(
         children: [
@@ -32,7 +31,7 @@ class FriendProfileWidget extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
-                image: AssetImage(user.image??'assets/images/user.jpg'),
+                image: AssetImage(user.image ?? 'assets/images/user.jpg'),
                 fit: BoxFit.cover,
               ),
               border: Border.all(
