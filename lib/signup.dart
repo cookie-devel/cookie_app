@@ -14,7 +14,7 @@ class SignUpWidget extends StatefulWidget {
 }
 
 class _SignUpWidgetState extends State<SignUpWidget> {
-  
+
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _pwController = TextEditingController();
@@ -74,13 +74,13 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
   @override
   Widget build(BuildContext context) {
-    
+
     return MaterialApp(
 
         home: Scaffold(
             resizeToAvoidBottomInset: true,
             appBar: cookieAppbar(context, '회원가입'),
-            
+
             body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -100,8 +100,24 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       ),
                     ),
                     child: _imageFile == null
+                        ? Center(
+                            child: Text('이미지가 없습니다.'),
+                          )
+                        : Image.file(_imageFile!),
+
+                    // padding: const EdgeInsets.fromLTRB(20, 20, 20, 70),
+                    // decoration: BoxDecoration(
+                    //   shape: BoxShape.circle,
+                    //   image: const DecorationImage(
+                    //       image: AssetImage('assets/images/newjeans.jpg'), fit: BoxFit.contain),
+                    //   border: Border.all(
+                    //     color: const Color.fromARGB(255, 255, 99, 159),
+                    //   ),
+                    // ),
                         ? const Center(child: Text('No Images')): Image.file(_imageFile!),
                   ),
+
+                  SizedBox(height: 20),
 
                   const SizedBox(height: 10),
 
@@ -156,6 +172,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   // Password
                   Container(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                    child: TextField(
+                      controller: _PWController,
                     child: TextField(
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(_regex),
@@ -286,6 +304,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                     child: TextField(
+                      controller: _dateController,
                       controller: _dateController,
                       obscureText: false,
                       decoration: InputDecoration(
@@ -444,7 +463,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         },
                       )
                     ),
-                
+
                 ],
               ),
             )
