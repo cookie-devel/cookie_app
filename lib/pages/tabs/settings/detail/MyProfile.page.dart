@@ -4,6 +4,7 @@ import 'package:cookie_app/components/ImageSelection.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 
 
 class MyProfileWidget extends StatefulWidget {
@@ -107,31 +108,63 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
   }
 
   void _showEditNameDialog() {
+    String newName = profiles['name'];
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('이름을 입력하세요.'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          title: Text(
+            '이름을 입력하세요',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           content: TextField(
-            decoration: InputDecoration(hintText: 'Enter your name'),
+            decoration: InputDecoration(
+              hintText: 'Enter your name',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
             onChanged: (value) {
-              setState(() {
-                profiles['name'] = value;
-              });
+              newName = value;
             },
           ),
           actions: [
             TextButton(
-              child: Text('취소'),
+              child: Text(
+                '취소',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton(
-              child: Text('저장'),
+              child: Text(
+                '저장',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               onPressed: () {
+                setState(() {
+                  profiles['name'] = newName;
+                });
                 Navigator.of(context).pop();
               },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
             ),
           ],
         );
@@ -140,31 +173,63 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
   }
 
   void _showEditStatusDialog() {
+    String newMessage = profiles['message'];
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('상태메시지를 입력하세요.'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          title: Text(
+            '상태메시지를 입력하세요',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           content: TextField(
-            decoration: InputDecoration(hintText: 'Enter your status message'),
+            decoration: InputDecoration(
+              hintText: 'Enter your status message',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
             onChanged: (value) {
-              setState(() {
-                profiles['message'] = value;
-              });
+              newMessage = value;
             },
           ),
           actions: [
             TextButton(
-              child: Text('취소'),
+              child: Text(
+                '취소',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton(
-              child: Text('저장'),
+              child: Text(
+                '저장',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               onPressed: () {
+                setState(() {
+                  profiles['message'] = newMessage;
+                });
                 Navigator.of(context).pop();
               },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
             ),
           ],
         );
