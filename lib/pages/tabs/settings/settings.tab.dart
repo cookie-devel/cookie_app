@@ -114,21 +114,48 @@ Future<void> _showAlertDialog(BuildContext context) async {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('로그아웃'),
-        content: const Text('정말로 로그아웃 하시겠습니까?'),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        title: Text(
+          '로그아웃',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(
+          '정말로 로그아웃 하시겠습니까?',
+        ),
         actions: <Widget>[
           TextButton(
-            child: const Text('아니오'),
+            child: Text(
+              '아니오',
+              style: TextStyle(
+                color: Colors.grey,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
-          TextButton(
-            child: const Text('예'),
+          ElevatedButton(
+            child: Text(
+              '예',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             onPressed: () {
               _logout(context);
               Navigator.of(context).pop();
             },
+            style: ElevatedButton.styleFrom(
+              primary: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
           ),
         ],
       );
