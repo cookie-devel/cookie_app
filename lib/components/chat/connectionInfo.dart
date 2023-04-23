@@ -3,7 +3,7 @@ import 'package:cookie_app/handler/socket.io/socket.dart';
 
 // socket 연결 상태 확인
 Widget connectionInfo() => Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Icon(
           socket.connected ? Icons.check_circle : Icons.warning,
@@ -12,11 +12,11 @@ Widget connectionInfo() => Row(
         ),
         const SizedBox(width: 4.0),
         Text(
-          socket.connected ? 'Connected' : 'Disconnected',
+          socket.connected ? '연결' : '연결 안됨',
           style: const TextStyle(fontSize: 16.0),
         ),
         const SizedBox(
-          width: 5,
+          width: 8,
         ),
       ],
     );

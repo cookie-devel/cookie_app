@@ -35,13 +35,13 @@ class _FriendsGridState extends State<FriendsGrid> {
     return Scaffold(
       appBar: friendsAppbar(context),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 24, 10, 8),
+        padding: const EdgeInsets.fromLTRB(10, 20, 10, 8),
         child: GridView.builder(
           itemCount: profiles.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
-            childAspectRatio: 1.0,
-            mainAxisSpacing: 40.0,
+            childAspectRatio: 0.8,
+            mainAxisSpacing: 15.0,
             crossAxisSpacing: 10.0,
           ),
           itemBuilder: (BuildContext context, int index) {
