@@ -11,6 +11,11 @@ class FriendProfileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      
+    final screenWidth = MediaQuery.of(context).size.width;
+    final imageSize = screenWidth / 4;
+    const fontSize = 14.0;
+
     return InkResponse(
       onTap: () {
         Navigator.push(
@@ -27,8 +32,8 @@ class FriendProfileWidget extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            width: 85,
-            height: 85,
+            width: imageSize,
+            height: imageSize,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
@@ -51,7 +56,7 @@ class FriendProfileWidget extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: fontSize,
                 fontWeight: FontWeight.w300,
                 color: Color.fromARGB(221, 60, 60, 60),
               ),
