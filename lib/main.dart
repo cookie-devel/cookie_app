@@ -6,6 +6,7 @@ import 'package:cookie_app/pages/tabs/maps/maps.tab.dart';
 import 'package:cookie_app/pages/tabs/friends/friends.tab.dart';
 import 'package:cookie_app/pages/tabs/settings/settings.tab.dart';
 import 'package:cookie_app/pages/tabs/chatrooms/chatrooms.tab.dart';
+import 'package:cookie_app/pages/tabs/club/club.tab.dart';
 
 void main() async {
   await dotenv.load();
@@ -63,10 +64,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     FriendsGrid(),
     ChatTabWidget(),
     MapsWidget(),
-    Text(
-      'Index 2: Club',
-      style: optionStyle,
-    ),
+    ClubGrid(),
     SettingsWidget(),
   ];
 

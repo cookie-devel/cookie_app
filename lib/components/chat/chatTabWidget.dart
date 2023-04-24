@@ -57,6 +57,7 @@ class _ChatTabState extends State<ChatTab> {
         height: 82,
         child: Row(
           children: [
+            SizedBox(width: 1,),
             Container(
               width: 50,
               height: 50,
@@ -68,7 +69,8 @@ class _ChatTabState extends State<ChatTab> {
                   fit: BoxFit.cover,
                 ),
                 border: Border.all(
-                  width: 0,
+                  width: 1,
+                  color: Colors.black45
                 ),
               ),
             ),
@@ -99,7 +101,7 @@ class _ChatTabState extends State<ChatTab> {
                 ],
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 9),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
