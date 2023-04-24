@@ -51,7 +51,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
 
       appBar: cookieAppbar2(context,'프로필 관리'),
       
-      body: Column(
+      body: ListView(
         children: [
 
           const SizedBox(height: 24),
@@ -71,16 +71,21 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
           //     backgroundImage: Image.file(_image).image,
           //   ),
           // ),
-
-          CircleAvatar(
-              radius: 80,
-              backgroundImage: Image.asset(profiles['image']).image,
+          Container(
+            height: 160,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                fit: BoxFit.contain,
+                image: AssetImage(profiles['image']),
+              ),
+            ),
           ),
 
           const SizedBox(height: 16),
-
+          
           ListTile(
-            leading: Icon(Icons.person),
+            leading: Icon(Icons.person,size: 36,),
             title: Text('이름'),
             subtitle: Text(profiles['name']),
             trailing: IconButton(
@@ -92,7 +97,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
           ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.message),
+            leading: Icon(Icons.message,size: 36,),
             title: Text('상태메시지'),
             subtitle: Text(profiles['message']),
             trailing: IconButton(
@@ -101,6 +106,30 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                 _showEditStatusDialog();
               },
             ),
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.phone_android_outlined,size: 36,),
+            title: Text('전화번호'),
+            subtitle: Text('profiles[\'phonenumber\']'),
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.person,size: 36,),
+            title: Text('이름'),
+            subtitle: Text(profiles['name']),
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.heart_broken,size: 36,),
+            title: Text('이름'),
+            subtitle: Text(profiles['name']),
+          ),
+          Divider(),
+          ListTile(
+          leading: Icon(Icons.heart_broken,size: 36,),
+          title: Text('이름'),
+          subtitle: Text(profiles['name']),
           ),
         ],
       ),
