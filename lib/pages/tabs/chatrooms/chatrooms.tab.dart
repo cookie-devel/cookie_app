@@ -42,20 +42,15 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
           itemBuilder: (BuildContext context, int index) {
             final Map<String, dynamic> log = chatLog[index];
 
-            return Container(
-              child: chatTabWidget(
-                context: context,
-                user: returnUserInfo(log),
-              ),
-            );
+            return ChatTab(user: returnUserInfo(log));
           },
         ),
       ),
     );
   }
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }
