@@ -24,16 +24,16 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             onTap: () {
               Navigator.of(context).push(
                 PageRouteBuilder(
-                  transitionDuration: Duration(milliseconds: 150),
-                  reverseTransitionDuration: Duration(milliseconds: 150),
+                  transitionDuration: const Duration(milliseconds: 150),
+                  reverseTransitionDuration: const Duration(milliseconds: 150),
                   pageBuilder: (context, animation, secondaryAnimation) {
-                    return MyProfileWidget();
+                    return const MyProfileWidget();
                   },
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
                     return SlideTransition(
                       position: Tween(
-                        begin: Offset(1.0, 0.0),
+                        begin: const Offset(1.0, 0.0),
                         end: Offset.zero,
                       ).animate(animation),
                       child: child,
