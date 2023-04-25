@@ -81,55 +81,55 @@ class _ChatWidgetState extends State<ChatWidget> {
   }
 
   Widget chatField() => Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
-          ],
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(18),
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.3),
+          blurRadius: 5,
+          offset: const Offset(0, 3),
         ),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: chatFieldController,
-                onSubmitted: (text) {
-                  if (text.isNotEmpty) {
-                    send();
-                  }
-                },
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  hintText: ' Type your message...',
-                  hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
-                  prefixIcon: Padding(
-                    padding: EdgeInsets.only(left: 8.0),
-                    child: Icon(Icons.message),
-                  ),
-                ),
+      ],
+    ),
+    child: Row(
+      children: [
+        Expanded(
+          child: TextField(
+            controller: chatFieldController,
+            onSubmitted: (text) {
+              if (text.isNotEmpty) {
+                send();
+              }
+            },
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              hintText: ' Type your message...',
+              hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
+              prefixIcon: Padding(
+                padding: EdgeInsets.only(left: 8.0),
+                child: Icon(Icons.message),
               ),
             ),
-            IconButton(
-              iconSize: 0,
-              onPressed: send,
-              icon: Stack(
-                children: [
-                  const Icon(Icons.send),
-                  Image.asset(
-                    'assets/images/cookie_logo.png',
-                    width: 24,
-                    height: 24,
-                  ),
-                ],
-              ),
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-            )
-          ],
+          ),
         ),
-      );
+        IconButton(
+          iconSize: 0,
+          onPressed: send,
+          icon: Stack(
+            children: [
+              const Icon(Icons.send),
+              Image.asset(
+                'assets/images/cookie_logo.png',
+                width: 24,
+                height: 24,
+              ),
+            ],
+          ),
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+        )
+      ],
+    ),
+  );
 }
