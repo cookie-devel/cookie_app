@@ -49,7 +49,7 @@ class _ChatWidgetState extends State<ChatWidget> {
         backgroundColor: const Color.fromARGB(255, 240, 240, 240),
         appBar: chatAppbar(context, widget.user?.name ?? 'Unknown'),
         body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
           child: Column(
             children: [
               // connectionInfo(),
@@ -61,7 +61,15 @@ class _ChatWidgetState extends State<ChatWidget> {
             ],
           ),
         ),
-      ),
+        bottomNavigationBar: BottomAppBar(
+          elevation: 0,
+          child: Container(
+            height: 12,
+            color: const Color.fromARGB(255, 240, 240, 240),
+            // child: ,
+            ),
+          ),
+        ),
     );
   }
 
@@ -74,7 +82,7 @@ class _ChatWidgetState extends State<ChatWidget> {
 
   Widget chatField() => Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(18),
           color: Colors.white,
           boxShadow: [
             BoxShadow(
