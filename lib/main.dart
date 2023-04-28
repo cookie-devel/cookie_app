@@ -7,6 +7,7 @@ import 'package:cookie_app/pages/tabs/friends/friends.tab.dart';
 import 'package:cookie_app/pages/tabs/settings/settings.tab.dart';
 import 'package:cookie_app/pages/tabs/chatrooms/chatrooms.tab.dart';
 import 'package:cookie_app/pages/tabs/club/club.tab.dart';
+import 'package:cookie_app/cookie.splash.dart';
 
 void main() async {
   await dotenv.load();
@@ -22,7 +23,8 @@ class Cookie extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: _title,
-      home: const SignInWidget(),
+      // home: const SignInWidget(),
+      home: const CookieSplash(),
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
           color: Colors.transparent,
