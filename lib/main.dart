@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:cookie_app/handler/socket.io/socket.dart';
-import 'package:cookie_app/pages/signin.dart';
 import 'package:cookie_app/pages/tabs/maps/maps.tab.dart';
 import 'package:cookie_app/pages/tabs/friends/friends.tab.dart';
 import 'package:cookie_app/pages/tabs/settings/settings.tab.dart';
@@ -23,7 +22,6 @@ class Cookie extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: _title,
-      // home: const SignInWidget(),
       home: const CookieSplash(),
       theme: ThemeData(
         appBarTheme: const AppBarTheme(

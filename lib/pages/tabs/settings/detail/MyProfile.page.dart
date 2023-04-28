@@ -1,11 +1,7 @@
-import 'package:flutter/material.dart';
-import '../../../../cookie.appbar.dart';
-import 'package:cookie_app/components/ImageSelection.dart';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
-
+import '../../../../cookie.appbar.dart';
 
 class MyProfileWidget extends StatefulWidget {
   const MyProfileWidget({Key? key}) : super(key: key);
@@ -52,9 +48,8 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
       appBar: cookieAppbar2(context,'프로필 관리'),
       
       body: ListView(
+        padding: const EdgeInsets.fromLTRB(5, 25, 5, 10),
         children: [
-
-          const SizedBox(height: 24),
           
           // GestureDetector(
           //   onTap: () async {
@@ -95,7 +90,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               },
             ),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Icon(Icons.message,size: 36,),
             title: Text('상태메시지'),
@@ -107,25 +102,25 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               },
             ),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Icon(Icons.phone_android_outlined,size: 36,),
             title: Text('전화번호'),
             subtitle: Text('profiles[\'phonenumber\']'),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Icon(Icons.person,size: 36,),
             title: Text('이름'),
             subtitle: Text(profiles['name']),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Icon(Icons.heart_broken,size: 36,),
             title: Text('이름'),
             subtitle: Text(profiles['name']),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
           leading: Icon(Icons.heart_broken,size: 36,),
           title: Text('이름'),

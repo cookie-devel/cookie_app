@@ -27,8 +27,6 @@ class _CookieSplashState extends State<CookieSplash>{
     final id = await storage.read(key: 'id');
     final pw = await storage.read(key: 'pw');
 
-    await Future.delayed(Duration.zero);
-
     if (id != null && pw != null) {
       setState(() {
         _isStorageExist = true;
@@ -40,6 +38,8 @@ class _CookieSplashState extends State<CookieSplash>{
         _isLoading = false;
       });
     }
+
+    await Future.delayed(Duration.zero);
   }
 
   @override
@@ -47,7 +47,7 @@ class _CookieSplashState extends State<CookieSplash>{
 
     return Scaffold(
 
-      backgroundColor: Colors.deepOrangeAccent,
+      backgroundColor: Colors.white,
 
       body: _isLoading ? isLoadingScreen()
       :_isStorageExist ? const MyStatefulWidget() : const SignInWidget(),
@@ -64,14 +64,14 @@ Widget isLoadingScreen(){
         SizedBox(height: 24.0),
         CupertinoActivityIndicator(
           animating: true,
-          color: Colors.white,
+          color: Colors.deepOrangeAccent,
           radius: 35,
         ),
         SizedBox(height: 16.0),
         Text(
           "Loading",
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.deepOrangeAccent,
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),

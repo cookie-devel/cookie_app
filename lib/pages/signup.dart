@@ -78,7 +78,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
         resizeToAvoidBottomInset: true,
         appBar: cookieAppbar(context, '회원가입'),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(10, 45, 10, 20),
+          padding: const EdgeInsets.fromLTRB(10, 45, 10, 25),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -86,9 +86,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
               // Profile Image
               Container(
-                width: 120,
-                height: 120,
+                width: 160,
+                height: 160,
                 decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: Colors.grey,
                     width: 2,
@@ -98,14 +99,25 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ? const Center(
                         child: Text('이미지가 없습니다'),
                       )
-                    : Image.file(_imageFile!),
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(18),
+                        child: Image.file(
+                          _imageFile!,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
               ),
 
               const SizedBox(height: 10),
 
-              
               // select image button
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(color: Colors.black45, width:1),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
                 child: const Text('이미지 불러오기'),
                 onPressed: () async {
                   final imageSelectionDialog = ImageSelectionDialog();
@@ -120,7 +132,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
               // ID
               Container(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
                 child: TextFormField(
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(_regex),
@@ -150,7 +162,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
               // Password
               Container(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
                 child: TextField(
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(_regex),
@@ -192,7 +204,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
               // check Password
               Container(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                 child: TextField(
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(_regex),
@@ -232,7 +244,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
               // Name
               Container(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
                 child: TextField(
                   controller: _nameController,
                   obscureText: false,
@@ -294,8 +306,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           _dateController.text = _selectedDate;
                         });
                       },
-                      currentTime: DateTime(2000, 7, 15),
-                      // locale: LocaleType.ko,
+                      currentTime: DateTime(2000, 1, 1),
                     );
                   },
                 ),
@@ -303,7 +314,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
               // Phone Number
               Container(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
                 child: TextField(
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   controller: _phonenumberController,
@@ -322,12 +333,24 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               // Sign up
               Container(
                 height: 80,
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepOrangeAccent,
                     minimumSize: const Size.fromHeight(50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      side: const BorderSide(color: Colors.black45, width: 2),
+                    ),
                   ),
-                  child: const Text('회원가입'),
+                  child: const Text(
+                    '회원가입',
+                    style: TextStyle(
+                      fontSize: 19,
+                      color: Colors.white,
+                    ),
+                  ),
+
                   onPressed: () async {
 
                     String jsonData = createJsonData(
