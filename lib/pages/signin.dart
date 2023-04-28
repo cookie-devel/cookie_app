@@ -18,8 +18,6 @@ class _SignInWidgetState extends State<SignInWidget> {
 
   bool _idlengthCheck = false;
   bool _pwlengthCheck = false;
-  bool _idCheck = true;
-  bool _pwCheck = true;
   bool _obscureText = true;
 
   final TextEditingController _idController = TextEditingController();
@@ -97,7 +95,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                       borderRadius: BorderRadius.circular(90.0),
                     ),
                     labelText: '아이디',
-                    helperText: (_idlengthCheck && _idCheck)
+                    helperText: _idlengthCheck
                         ? null
                         : '최소 6자 이상 입력해주세요.',
                     helperStyle: TextStyle(
@@ -112,7 +110,7 @@ class _SignInWidgetState extends State<SignInWidget> {
 
               // Password
               Container(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
                 child: TextField(
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(_regex),
@@ -130,7 +128,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                       borderRadius: BorderRadius.circular(90.0),
                     ),
                     labelText: '비밀번호',
-                    helperText: (_pwlengthCheck && _pwCheck)
+                    helperText: _pwlengthCheck
                         ? null
                         : '최소 10자 이상 입력해주세요.',
                     helperStyle: TextStyle(
@@ -158,9 +156,7 @@ class _SignInWidgetState extends State<SignInWidget> {
 
               // Log In
               Container(
-                // width: 340,
-                // height: 80,
-                                padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.deepOrangeAccent,
@@ -173,7 +169,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                   child: const Text(
                     '로그인',
                     style: TextStyle(
-                      fontSize: 21,
+                      fontSize: 19,
                       color: Colors.white,
                     ),
                   ),
