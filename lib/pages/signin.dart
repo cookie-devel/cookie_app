@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:cookie_app/pages/signup.dart';
 import 'package:cookie_app/cookie.appbar.dart';
 import 'package:cookie_app/handler/storage.dart';
-import 'package:cookie_app/components/signin/signin.dart';
 import 'package:cookie_app/handler/signin.handler.dart';
+import 'package:cookie_app/components/NavigatePage.dart';
 
 class SignInWidget extends StatefulWidget {
   const SignInWidget({Key? key}) : super(key: key);
@@ -15,8 +15,6 @@ class SignInWidget extends StatefulWidget {
 }
 
 class _SignInWidgetState extends State<SignInWidget> {
-  bool _isStorageExist = false;
-  bool _isLoading = true;
 
   bool _idlengthCheck = false;
   bool _pwlengthCheck = false;
@@ -37,28 +35,6 @@ class _SignInWidgetState extends State<SignInWidget> {
     super.initState();
     _idController.text = _selectedID;
     _pwController.text = _selectedPW;
-    checkStorage();
-  }
-
-  Future<void> checkStorage() async {
-    final id = await storage.read(key: 'id');
-    final pw = await storage.read(key: 'pw');
-    // print(id);
-    // print(pw);
-    // print("===========");
-    await Future.delayed(const Duration(milliseconds: 860));
-
-    if (id != null && pw != null) {
-      setState(() {
-        _isStorageExist = true;
-        _isLoading = false;
-      });
-    } else {
-      setState(() {
-        _isStorageExist = false;
-        _isLoading = false;
-      });
-    }
   }
 
   @override
@@ -71,29 +47,22 @@ class _SignInWidgetState extends State<SignInWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return isLoadingScreen();
-    } else {
-      if (_isStorageExist) {
-        return const MyStatefulWidget();
-      }
-    }
 
     return MaterialApp(
       home: Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: cookieAppbar(context, 'c🍪🍪kie'),
+        resizeToAvoidBottomInset: false,
+        appBar: cookieAppbar(context, 'C🍪🍪KIE'),
         body: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(10, 55, 10, 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const SizedBox(height: 50),
 
               // Logo
               Container(
-                width: 110,
-                height: 110,
+                width: 120,
+                height: 120,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
@@ -117,11 +86,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                   ],
                   onChanged: (text) {
                     setState(() {
-                      if (text.length < 6) {
-                        _idlengthCheck = false;
-                      } else {
-                        _idlengthCheck = true;
-                      }
+                    _idlengthCheck = text.length < 6 ? false : true;
                     });
                   },
                   controller: _idController,
@@ -139,23 +104,22 @@ class _SignInWidgetState extends State<SignInWidget> {
                       color: !_idlengthCheck ? Colors.red : Colors.green,
                     ),
                   ),
+                  style: const TextStyle(
+                    fontSize: 18, // 입력 text 크기 조정
+                  ),
                 ),
               ),
 
               // Password
               Container(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                 child: TextField(
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(_regex),
                   ],
                   onChanged: (text) {
                     setState(() {
-                      if (text.length < 10) {
-                        _pwlengthCheck = false;
-                      } else {
-                        _pwlengthCheck = true;
-                      }
+                      _pwlengthCheck = text.length < 10 ? false : true;
                     });
                   },
                   controller: _pwController,
@@ -184,118 +148,121 @@ class _SignInWidgetState extends State<SignInWidget> {
                       },
                     ),
                   ),
+                  style: const TextStyle(
+                    fontSize: 18, // 입력 text 크기 조정
+                  ),
                 ),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
 
               // Log In
               Container(
-                width: 330,
-                height: 80,
-                padding: const EdgeInsets.all(20),
+                // width: 340,
+                // height: 80,
+                                padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepOrangeAccent,
                     minimumSize: const Size.fromHeight(50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      side: const BorderSide(color: Colors.black45, width: 2),
+                    ),
                   ),
                   child: const Text(
                     '로그인',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 21,
                       color: Colors.white,
                     ),
                   ),
                   onPressed: () async {
-                    // id, pw를 json 형식으로 반환
-                    String SigninData = createJsonData(
+
+                    // if (!mounted) return;
+                    
+                    String signinData = createJsonData(
                       _idController.text,
                       _pwController.text,
                     );
 
                     Map<String, dynamic> jsonMap =
-                        await signinHandler(SigninData);
+                        await signinHandler(signinData);
 
-                    // 로그인 실패했을 경우도 success 여부 반환해야함!
-                    bool success = jsonMap['success'];
-
+                    bool success = jsonMap.containsKey('success') ? jsonMap['success'] : false;
                     bool valid = allCheck(_idlengthCheck, _pwlengthCheck);
+
                     bool successCheck = valid && success;
-
-                    if (!_pwlengthCheck) {
-                      _pwCheck = false;
-                    } else {
-                      _pwCheck = true;
-                    }
-                    if (!_idlengthCheck) {
-                      _idCheck = false;
-                    } else {
-                      _idCheck = true;
-                    }
-
-                    if (!mounted) return;
 
                     if (successCheck) {
                       // 사용자 정보를 저장합니다.
                       await storage.write(key: 'id', value: _idController.text);
                       await storage.write(key: 'pw', value: _pwController.text);
 
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MyStatefulWidget(),
-                        ),
-                      );
+                      Future<void>.microtask(() {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MyStatefulWidget(),
+                          ),
+                        );
+                      });
+
                     } else {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('알림'),
-                            content: const Text('로그인에 실패하였습니다.'),
-                            actions: [
-                              TextButton(
-                                child: const Text('확인'),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                      Future<void>.microtask(() {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('알림'),
+                              content: const Text('로그인에 실패하였습니다.'),
+                              actions: [
+                                TextButton(
+                                  child: const Text('확인'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      });
                     }
-
-                    print("LogIn button pressed");
                   },
                 ),
               ),
 
-              // sign up
-              Container(
-                width: 330,
-                height: 80,
-                padding: const EdgeInsets.all(20),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(50),
-                  ),
-                  child: const Text(
-                    '회원가입',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SignUpWidget(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    child: const Text(
+                      '> 아이디/비밀번호 찾기',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black54,
                       ),
-                    );
-                  },
-                ),
-              ),
+                    ),
+                    onPressed: () {
+                      // navigateSlide(context, const FindIdPwWidget());
+                    },
+                  ),
+                  const SizedBox(width: 10),
+                  TextButton(
+                    child: const Text(
+                      '> 회원가입',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black54,
+                      ),
+                    ),
+                    onPressed: () {
+                      navigateSlide(context, const SignUpWidget());
+                    },
+                  ),
+                ],
+              )
             ],
           ),
         ),
@@ -303,3 +270,5 @@ class _SignInWidgetState extends State<SignInWidget> {
     );
   }
 }
+
+

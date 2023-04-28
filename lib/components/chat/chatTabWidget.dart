@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cookie_app/pages/chatroom/chatroom.dart';
-import '../../handler/chatroom.handler.dart';
 import 'package:cookie_app/schema/FriendInfo.dart';
 
 class ChatTab extends StatefulWidget {
@@ -18,25 +17,10 @@ class ChatTab extends StatefulWidget {
 
 class _ChatTabState extends State<ChatTab> {
 
-  // 추후 사용
-  // String? FriendId;
-  // Map<String,dynamic> chatRoomLog = {};
-
   @override
   void initState() {
     super.initState();
   }
-
-  // 추후 사용
-  // Future<void> _handleChatTabTap() async {
-  //   Map<String, dynamic> data = await chatRoomHandler(FriendId!);
-  //   setState(() {
-  //     chatRoomLog = data;
-  //   });
-
-  //   NavigatorState navigatorState = Navigator.of(context);
-  //   navigatorState.push(MaterialPageRoute(builder: (context) => ChatWidget(user: widget.user)));
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +33,7 @@ class _ChatTabState extends State<ChatTab> {
           ),
         );
       },
-      // 추후 사용
-      // onTap: () async{
-      //   _handleChatTabTap();
-      // },
+
       child: SizedBox(
         height: 82,
         child: Row(
