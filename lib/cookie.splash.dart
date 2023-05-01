@@ -24,8 +24,14 @@ class _CookieSplashState extends State<CookieSplash>{
   
   Future<void> checkStorage() async {
 
+    print("Initialization!");
+    print("="*30);
+    print("Checking storage...");
+
     final id = await storage.read(key: 'id');
+    print("id: $id");
     final pw = await storage.read(key: 'pw');
+    print("pw: $pw");
 
     if (id != null && pw != null) {
       setState(() {
@@ -50,7 +56,8 @@ class _CookieSplashState extends State<CookieSplash>{
       backgroundColor: Colors.white,
 
       body: _isLoading ? isLoadingScreen()
-      :_isStorageExist ? const MyStatefulWidget() : const SignInWidget(),
+      :_isStorageExist ? const SignInWidget() : const MyStatefulWidget()
+      // :_isStorageExist ? const MyStatefulWidget() : const SignInWidget(),
 
     );
   }
