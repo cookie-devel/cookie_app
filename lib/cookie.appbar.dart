@@ -28,7 +28,6 @@ PreferredSize? cookieAppbar(BuildContext context, String title) {
   );
 }
 
-
 PreferredSize? cookieAppbar2(BuildContext context, String name) {
   return PreferredSize(
     preferredSize: const Size.fromHeight(50.0),
@@ -47,7 +46,7 @@ PreferredSize? cookieAppbar2(BuildContext context, String name) {
       ),
       backgroundColor: Colors.orangeAccent,
       elevation: 0,
-      actions: [],
+      actions: const [],
       flexibleSpace: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(

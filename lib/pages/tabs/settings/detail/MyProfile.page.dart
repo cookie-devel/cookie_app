@@ -11,8 +11,7 @@ class MyProfileWidget extends StatefulWidget {
 }
 
 class _MyProfileWidgetState extends State<MyProfileWidget> {
-
-  Map<String,dynamic> profiles = {};
+  Map<String, dynamic> profiles = {};
   // File _image = File('assets/images/user.jpg');
 
   @override
@@ -30,7 +29,6 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
       profiles = data;
     });
 
-
     // // 이미지 파일 초기값 설정
     // final imagePath = profiles['image'];
     // if (imagePath != null) {
@@ -38,19 +36,13 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
     // }
   }
 
-  
   @override
   Widget build(BuildContext context) {
-    
-
     return Scaffold(
-
-      appBar: cookieAppbar2(context,'프로필 관리'),
-      
+      appBar: cookieAppbar2(context, '프로필 관리'),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(5, 25, 5, 10),
         children: [
-          
           // GestureDetector(
           //   onTap: () async {
           //     final imageSelectionDialog = ImageSelectionDialog();
@@ -78,13 +70,16 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
           ),
 
           const SizedBox(height: 16),
-          
+
           ListTile(
-            leading: Icon(Icons.person,size: 36,),
-            title: Text('이름'),
+            leading: const Icon(
+              Icons.person,
+              size: 36,
+            ),
+            title: const Text('이름'),
             subtitle: Text(profiles['name']),
             trailing: IconButton(
-              icon: Icon(Icons.edit),
+              icon: const Icon(Icons.edit),
               onPressed: () {
                 _showEditNameDialog();
               },
@@ -92,43 +87,58 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
           ),
           const Divider(),
           ListTile(
-            leading: Icon(Icons.message,size: 36,),
-            title: Text('상태메시지'),
+            leading: const Icon(
+              Icons.message,
+              size: 36,
+            ),
+            title: const Text('상태메시지'),
             subtitle: Text(profiles['message']),
             trailing: IconButton(
-              icon: Icon(Icons.edit),
+              icon: const Icon(Icons.edit),
               onPressed: () {
                 _showEditStatusDialog();
               },
             ),
           ),
           const Divider(),
-          ListTile(
-            leading: Icon(Icons.phone_android_outlined,size: 36,),
+          const ListTile(
+            leading: Icon(
+              Icons.phone_android_outlined,
+              size: 36,
+            ),
             title: Text('전화번호'),
             subtitle: Text('profiles[\'phonenumber\']'),
           ),
           const Divider(),
           ListTile(
-            leading: Icon(Icons.person,size: 36,),
-            title: Text('이름'),
+            leading: const Icon(
+              Icons.person,
+              size: 36,
+            ),
+            title: const Text('이름'),
             subtitle: Text(profiles['name']),
           ),
           const Divider(),
           ListTile(
-            leading: Icon(Icons.heart_broken,size: 36,),
-            title: Text('이름'),
+            leading: const Icon(
+              Icons.heart_broken,
+              size: 36,
+            ),
+            title: const Text('이름'),
             subtitle: Text(profiles['name']),
           ),
           const Divider(),
           ListTile(
-          leading: Icon(Icons.heart_broken,size: 36,),
-          title: Text('이름'),
-          subtitle: Text(profiles['name']),
+            leading: const Icon(
+              Icons.heart_broken,
+              size: 36,
+            ),
+            title: const Text('이름'),
+            subtitle: Text(profiles['name']),
           ),
         ],
       ),
-    );  
+    );
   }
 
   void _showEditNameDialog() {
@@ -140,7 +150,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
-          title: Text(
+          title: const Text(
             '이름을 입력하세요',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -159,7 +169,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
           ),
           actions: [
             TextButton(
-              child: Text(
+              child: const Text(
                 '취소',
                 style: TextStyle(
                   color: Colors.grey,
@@ -171,12 +181,6 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               },
             ),
             ElevatedButton(
-              child: Text(
-                '저장',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
               onPressed: () {
                 setState(() {
                   profiles['name'] = newName;
@@ -184,9 +188,15 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.blue,
+                backgroundColor: Colors.blue,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              child: const Text(
+                '저장',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -205,7 +215,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
-          title: Text(
+          title: const Text(
             '상태메시지를 입력하세요',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -224,7 +234,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
           ),
           actions: [
             TextButton(
-              child: Text(
+              child: const Text(
                 '취소',
                 style: TextStyle(
                   color: Colors.grey,
@@ -236,12 +246,6 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               },
             ),
             ElevatedButton(
-              child: Text(
-                '저장',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
               onPressed: () {
                 setState(() {
                   profiles['message'] = newMessage;
@@ -249,9 +253,15 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.blue,
+                backgroundColor: Colors.blue,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              child: const Text(
+                '저장',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -261,4 +271,3 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
     );
   }
 }
-

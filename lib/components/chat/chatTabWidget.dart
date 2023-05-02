@@ -1,22 +1,17 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:cookie_app/pages/chatroom/chatroom.dart';
 import 'package:cookie_app/schema/FriendInfo.dart';
 
 class ChatTab extends StatefulWidget {
-
   final FriendInfo user;
 
   const ChatTab({Key? key, required this.user}) : super(key: key);
 
   @override
   State<ChatTab> createState() => _ChatTabState();
-
 }
 
 class _ChatTabState extends State<ChatTab> {
-
   @override
   void initState() {
     super.initState();
@@ -25,7 +20,7 @@ class _ChatTabState extends State<ChatTab> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap:(){
+      onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -33,12 +28,13 @@ class _ChatTabState extends State<ChatTab> {
           ),
         );
       },
-
       child: SizedBox(
         height: 82,
         child: Row(
           children: [
-            SizedBox(width: 1,),
+            const SizedBox(
+              width: 1,
+            ),
             Container(
               width: 50,
               height: 50,
@@ -49,10 +45,7 @@ class _ChatTabState extends State<ChatTab> {
                       AssetImage(widget.user.image ?? 'assets/images/user.jpg'),
                   fit: BoxFit.cover,
                 ),
-                border: Border.all(
-                  width: 1,
-                  color: Colors.black45
-                ),
+                border: Border.all(width: 1, color: Colors.black45),
               ),
             ),
             const SizedBox(width: 12),
@@ -106,7 +99,7 @@ class _ChatTabState extends State<ChatTab> {
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                          horizontal: 8, vertical: 4,),
                       decoration: BoxDecoration(
                         color: const Color.fromARGB(255, 255, 99, 159),
                         borderRadius: BorderRadius.circular(20),
@@ -144,5 +137,3 @@ class _ChatTabState extends State<ChatTab> {
     super.dispose();
   }
 }
-
-

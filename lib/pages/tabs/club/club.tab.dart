@@ -9,7 +9,6 @@ class ClubGrid extends StatefulWidget {
 }
 
 class _ClubGridState extends State<ClubGrid> {
-
   @override
   void initState() {
     super.initState();
@@ -19,9 +18,8 @@ class _ClubGridState extends State<ClubGrid> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: clubAppbar(context),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 20, 10, 8),
-        
+      body: const Padding(
+        padding: EdgeInsets.fromLTRB(10, 20, 10, 8),
       ),
     );
   }
