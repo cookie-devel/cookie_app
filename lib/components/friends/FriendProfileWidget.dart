@@ -24,16 +24,11 @@ class FriendProfileWidget extends StatelessWidget {
 
     return InkResponse(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ChatWidget(user: user),
-          ),
-        );
+        profileWindow(context, user);
       },
       onLongPress: () {
         Vibration.vibrate(duration: 40);
-        profileWindow(context, user);
+        // profileWindow(context, user);
       },
       child: Column(
         children: [
