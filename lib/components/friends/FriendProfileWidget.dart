@@ -11,10 +11,14 @@ class FriendProfileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height - kBottomNavigationBarHeight - kToolbarHeight -122;
-    final imageSize = (screenWidth/4 > screenHeight/6) ? screenWidth / 4 : screenHeight / 6;
+    final screenHeight = MediaQuery.of(context).size.height -
+        kBottomNavigationBarHeight -
+        kToolbarHeight -
+        122;
+    final imageSize = (screenWidth / 4 > screenHeight / 6)
+        ? screenWidth / 4
+        : screenHeight / 6;
 
     const fontSize = 14.0;
 

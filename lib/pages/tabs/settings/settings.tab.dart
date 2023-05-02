@@ -24,7 +24,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             title: const Text('프로필 관리'),
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () {
-              navigateSlide(context, MyProfileWidget());
+              navigateSlide(context, const MyProfileWidget());
             },
           ),
           const Divider(),
@@ -124,12 +124,6 @@ Future<void> _showAlertDialog(BuildContext context) async {
             },
           ),
           ElevatedButton(
-            child: Text(
-              '예',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
             onPressed: () {
               _logout(context);
               Navigator.of(context).pop();
@@ -138,6 +132,12 @@ Future<void> _showAlertDialog(BuildContext context) async {
               backgroundColor: Colors.blue,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+            child: const Text(
+              '예',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

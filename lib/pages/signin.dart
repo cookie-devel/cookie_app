@@ -15,7 +15,6 @@ class SignInWidget extends StatefulWidget {
 }
 
 class _SignInWidgetState extends State<SignInWidget> {
-
   bool _idlengthCheck = false;
   bool _pwlengthCheck = false;
   bool _obscureText = true;
@@ -45,7 +44,6 @@ class _SignInWidgetState extends State<SignInWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -56,7 +54,6 @@ class _SignInWidgetState extends State<SignInWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-
               // Logo
               Container(
                 width: 120,
@@ -84,7 +81,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                   ],
                   onChanged: (text) {
                     setState(() {
-                    _idlengthCheck = text.length < 6 ? false : true;
+                      _idlengthCheck = text.length < 6 ? false : true;
                     });
                   },
                   controller: _idController,
@@ -95,9 +92,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                       borderRadius: BorderRadius.circular(90.0),
                     ),
                     labelText: '아이디',
-                    helperText: _idlengthCheck
-                        ? null
-                        : '최소 6자 이상 입력해주세요.',
+                    helperText: _idlengthCheck ? null : '최소 6자 이상 입력해주세요.',
                     helperStyle: TextStyle(
                       color: !_idlengthCheck ? Colors.red : Colors.green,
                     ),
@@ -128,9 +123,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                       borderRadius: BorderRadius.circular(90.0),
                     ),
                     labelText: '비밀번호',
-                    helperText: _pwlengthCheck
-                        ? null
-                        : '최소 10자 이상 입력해주세요.',
+                    helperText: _pwlengthCheck ? null : '최소 10자 이상 입력해주세요.',
                     helperStyle: TextStyle(
                       color: !_pwlengthCheck ? Colors.red : Colors.green,
                     ),
@@ -174,9 +167,8 @@ class _SignInWidgetState extends State<SignInWidget> {
                     ),
                   ),
                   onPressed: () async {
-
                     // if (!mounted) return;
-                    
+
                     String signinData = createJsonData(
                       _idController.text,
                       _pwController.text,
@@ -185,7 +177,9 @@ class _SignInWidgetState extends State<SignInWidget> {
                     Map<String, dynamic> jsonMap =
                         await signinHandler(signinData);
 
-                    bool success = jsonMap.containsKey('success') ? jsonMap['success'] : false;
+                    bool success = jsonMap.containsKey('success')
+                        ? jsonMap['success']
+                        : false;
                     bool valid = allCheck(_idlengthCheck, _pwlengthCheck);
 
                     bool successCheck = valid && success;
@@ -203,7 +197,6 @@ class _SignInWidgetState extends State<SignInWidget> {
                           ),
                         );
                       });
-
                     } else {
                       Future<void>.microtask(() {
                         showDialog(
@@ -266,5 +259,3 @@ class _SignInWidgetState extends State<SignInWidget> {
     );
   }
 }
-
-

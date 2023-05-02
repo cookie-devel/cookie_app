@@ -11,8 +11,7 @@ class CookieSplash extends StatefulWidget {
   State<CookieSplash> createState() => _CookieSplashState();
 }
 
-class _CookieSplashState extends State<CookieSplash>{
-  
+class _CookieSplashState extends State<CookieSplash> {
   bool _isStorageExist = false;
   bool _isLoading = true;
 
@@ -21,11 +20,10 @@ class _CookieSplashState extends State<CookieSplash>{
     super.initState();
     checkStorage();
   }
-  
-  Future<void> checkStorage() async {
 
+  Future<void> checkStorage() async {
     print("Initialization!");
-    print("="*30);
+    print("=" * 30);
     print("Checking storage...");
 
     final id = await storage.read(key: 'id');
@@ -50,20 +48,20 @@ class _CookieSplashState extends State<CookieSplash>{
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+        backgroundColor: Colors.white,
+        body: _isLoading
+            ? isLoadingScreen()
+            : _isStorageExist
+                ? const SignInWidget()
+                : const MyStatefulWidget(),
+        // :_isStorageExist ? const MyStatefulWidget() : const SignInWidget(),
 
-      backgroundColor: Colors.white,
-
-      body: _isLoading ? isLoadingScreen()
-      :_isStorageExist ? const SignInWidget() : const MyStatefulWidget()
-      // :_isStorageExist ? const MyStatefulWidget() : const SignInWidget(),
-
-    );
+        );
   }
 }
 
-Widget isLoadingScreen(){
+Widget isLoadingScreen() {
   return Center(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,

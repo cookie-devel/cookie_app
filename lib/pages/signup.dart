@@ -83,7 +83,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-
               // Profile Image
               Container(
                 width: 160,
@@ -114,7 +113,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    side: const BorderSide(color: Colors.black45, width:1),
+                    side: const BorderSide(color: Colors.black45, width: 1),
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
@@ -139,7 +138,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   ],
                   onChanged: (text) {
                     setState(() {
-                      _idlengthCheck = (text.length<6)? false : true;
+                      _idlengthCheck = (text.length < 6) ? false : true;
                     });
                   },
                   controller: _idController,
@@ -150,9 +149,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       borderRadius: BorderRadius.circular(90.0),
                     ),
                     labelText: '아이디',
-                    helperText: _idlengthCheck
-                        ? null
-                        : '최소 6자 이상 입력해주세요.',
+                    helperText: _idlengthCheck ? null : '최소 6자 이상 입력해주세요.',
                     helperStyle: TextStyle(
                       color: !_idlengthCheck ? Colors.red : Colors.green,
                     ),
@@ -169,8 +166,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   ],
                   onChanged: (text) {
                     setState(() {
-                      _pwlengthCheck = (text.length<10)? false : true;
-                      _pwCheckErrorText = (text != _pwCheckController.text)? false : true;
+                      _pwlengthCheck = (text.length < 10) ? false : true;
+                      _pwCheckErrorText =
+                          (text != _pwCheckController.text) ? false : true;
                     });
                   },
                   controller: _pwController,
@@ -178,9 +176,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   maxLength: 30,
                   decoration: InputDecoration(
                     labelText: '비밀번호',
-                    helperText: _pwlengthCheck
-                        ? null
-                        : '최소 10자 이상 입력해주세요.',
+                    helperText: _pwlengthCheck ? null : '최소 10자 이상 입력해주세요.',
                     helperStyle: TextStyle(
                       color: !_pwlengthCheck ? Colors.red : Colors.green,
                     ),
@@ -214,7 +210,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   maxLength: 30,
                   onChanged: (text) {
                     setState(() {
-                      _pwCheckErrorText = (text!=_pwController.text)?false:true;
+                      _pwCheckErrorText =
+                          (text != _pwController.text) ? false : true;
                     });
                   },
                   decoration: InputDecoration(
@@ -258,9 +255,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(90.0),
                     ),
-                    helperText: _namelengthCheck
-                        ? null
-                        : '최소 1자 이상 입력해주세요.',
+                    helperText: _namelengthCheck ? null : '최소 1자 이상 입력해주세요.',
                     helperStyle: TextStyle(
                       color: !_namelengthCheck ? Colors.red : Colors.green,
                     ),
@@ -350,9 +345,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       color: Colors.white,
                     ),
                   ),
-
                   onPressed: () async {
-
                     String jsonData = createJsonData(
                       _idController.text,
                       _pwController.text,

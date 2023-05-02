@@ -8,8 +8,7 @@ PreferredSize? clubAppbar(BuildContext context) {
       title: const Text('클럽'),
       backgroundColor: Colors.orangeAccent,
       elevation: 0,
-      actions: [
-      ],
+      actions: const [],
       flexibleSpace: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
