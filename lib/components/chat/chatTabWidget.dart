@@ -99,7 +99,9 @@ class _ChatTabState extends State<ChatTab> {
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4,),
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color.fromARGB(255, 255, 99, 159),
                         borderRadius: BorderRadius.circular(20),
