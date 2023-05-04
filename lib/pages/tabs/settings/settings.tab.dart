@@ -1,5 +1,4 @@
 import 'package:cookie_app/handler/signinout.handler.dart';
-import 'package:cookie_app/handler/storage.dart';
 import 'package:cookie_app/pages/signin.dart';
 import 'package:flutter/material.dart';
 import 'settings.appbar.dart';

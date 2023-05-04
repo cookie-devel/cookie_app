@@ -37,11 +37,15 @@ class Cookie extends StatelessWidget {
             borderRadius: BorderRadius.circular(16.0),
           ),
           titleTextStyle: const TextStyle(
-              fontWeight: FontWeight.bold, color: Colors.black87, fontSize: 20),
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+            fontSize: 20,
+          ),
           contentTextStyle: const TextStyle(
-              // fontWeight: FontWeight.bold,
-              color: Colors.black,
-              fontSize: 16),
+            // fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontSize: 16,
+          ),
           actionsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
           alignment: Alignment.center,
         ),
@@ -117,27 +121,35 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             BottomNavigationBar(
               items: [
                 BottomNavigationBarItem(
-                  icon: _badge(Text('1', style: TextStyle(color: Colors.white)),
-                      Icon(Icons.people)),
+                  icon: _badge(
+                    const Text('1', style: TextStyle(color: Colors.white)),
+                    const Icon(Icons.people),
+                  ),
                   label: '친구',
                 ),
                 BottomNavigationBarItem(
-                  icon: _badge(Text('2', style: TextStyle(color: Colors.white)),
-                      Icon(Icons.chat_bubble)),
+                  icon: _badge(
+                    const Text('2', style: TextStyle(color: Colors.white)),
+                    const Icon(Icons.chat_bubble),
+                  ),
                   label: '채팅',
                 ),
-                BottomNavigationBarItem(
+                const BottomNavigationBarItem(
                   icon: Icon(Icons.cookie),
                   label: '쿠키',
                 ),
                 BottomNavigationBarItem(
-                  icon: _badge(Text('3', style: TextStyle(color: Colors.white)),
-                      Icon(Icons.sports_basketball)),
+                  icon: _badge(
+                    const Text('3', style: TextStyle(color: Colors.white)),
+                    const Icon(Icons.sports_basketball),
+                  ),
                   label: '클럽',
                 ),
                 BottomNavigationBarItem(
-                  icon: _badge(Text('4', style: TextStyle(color: Colors.white)),
-                      Icon(Icons.settings)),
+                  icon: _badge(
+                    const Text('4', style: TextStyle(color: Colors.white)),
+                    const Icon(Icons.settings),
+                  ),
                   label: '설정',
                 ),
               ],
@@ -166,7 +178,6 @@ Widget _badge(Widget content, Widget child) {
     child: child,
   );
 }
-
 
 // reference
 // https://pub.dev/packages/badges [badges widget]
