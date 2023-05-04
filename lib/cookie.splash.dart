@@ -1,7 +1,7 @@
+import 'package:cookie_app/handler/signinout.handler.dart';
 import 'package:cookie_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:cookie_app/handler/storage.dart';
 import 'package:cookie_app/pages/signin.dart';
 
 class CookieSplash extends StatefulWidget {
@@ -22,46 +22,36 @@ class _CookieSplashState extends State<CookieSplash> {
   }
 
   Future<void> checkStorage() async {
-    print("Initialization!");
-    print("=" * 30);
-    print("Checking storage...");
+    var signin = await handleAutoSignIn();
 
-    final id = await storage.read(key: 'id');
-    print("id: $id");
-    final pw = await storage.read(key: 'pw');
-    print("pw: $pw");
-
-    if (id != null && pw != null) {
-      setState(() {
-        _isStorageExist = true;
-        _isLoading = false;
-      });
-    } else {
+    if (signin) {
       setState(() {
         _isStorageExist = false;
         _isLoading = false;
       });
+    } else {
+      setState(() {
+        _isStorageExist = true;
+        _isLoading = false;
+      });
     }
-
-    await Future.delayed(Duration.zero);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: _isLoading
-            ? isLoadingScreen()
-            : _isStorageExist
-                ? const SignInWidget()
-                : const MyStatefulWidget(),
-        // :_isStorageExist ? const MyStatefulWidget() : const SignInWidget(),
-
-        );
+      backgroundColor: Colors.white,
+      body: _isLoading
+          ? loadingScreen()
+          : _isStorageExist
+              ? const SignInWidget()
+              : const MyStatefulWidget(),
+      // :_isStorageExist ? const MyStatefulWidget() : const SignInWidget(),
+    );
   }
 }
 
-Widget isLoadingScreen() {
+Widget loadingScreen() {
   return Center(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
