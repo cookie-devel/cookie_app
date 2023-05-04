@@ -1,3 +1,5 @@
+import 'package:cookie_app/components/chat/connectionInfo.dart';
+import 'package:cookie_app/cookie.appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/handler/socket.io/socket.dart';
 import 'package:cookie_app/components/chat/chatListView.dart';
@@ -43,31 +45,31 @@ class _ChatWidgetState extends State<ChatWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-        appBar: chatAppbar(context, widget.user?.name ?? 'Unknown'),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-          child: Column(
-            children: [
-              // connectionInfo(),
-              chat(context, widget.user ?? FriendInfo(), messages),
-              chatField(),
-              const SizedBox(
-                height: 10,
-              ),
-            ],
-          ),
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+      appBar: CookieAppBar(
+        title: widget.user?.name ?? 'Unknown',
+        actions: [connectionInfo()],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+        child: Column(
+          children: [
+            // connectionInfo(),
+            chat(context, widget.user ?? FriendInfo(), messages),
+            chatField(),
+            const SizedBox(
+              height: 10,
+            ),
+          ],
         ),
-        bottomNavigationBar: BottomAppBar(
-          elevation: 0,
-          child: Container(
-            height: 12,
-            color: const Color.fromARGB(255, 240, 240, 240),
-            // child: ,
-          ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        elevation: 0,
+        child: Container(
+          height: 12,
+          color: const Color.fromARGB(255, 240, 240, 240),
         ),
       ),
     );

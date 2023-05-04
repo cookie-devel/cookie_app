@@ -45,7 +45,7 @@ class _SignInWidgetState extends State<SignInWidget> {
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: cookieAppbar(context, 'C🍪🍪KIE'),
+        appBar: CookieAppBar(title: 'C🍪🍪KIE'),
         body: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(10, 55, 10, 20),
           child: Column(
