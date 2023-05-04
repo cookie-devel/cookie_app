@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cookie_app/handler/account.validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cookie_app/pages/signin.dart';
@@ -23,14 +24,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   final TextEditingController _phonenumberController = TextEditingController();
 
   // Check
-  bool _pwCheckErrorText = true;
-  bool _idlengthCheck = false;
-  bool _pwlengthCheck = false;
-  bool _namelengthCheck = false;
-
-  // bool _idCheck = true;
-  // bool _pwCheck = true;
-  // bool _nameCheck = true;
+  bool _pwCheckErrorText = false;
+  bool _isValidID = false;
+  bool _isValidPW = false;
+  bool _isValidName = false;
 
   // password visible check
   bool _obscureText = true;
@@ -45,8 +42,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   final String _selectedPhoneNumber = ''; //01000000000
 
   File? _imageFile;
-
-  final RegExp _regex = RegExp(r'^[a-zA-Z0-9!@#\$&*~-]+$');
 
   @override
   void initState() {
@@ -134,11 +129,11 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
                 child: TextFormField(
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(_regex),
+                    FilteringTextInputFormatter.allow(IDPW_REGEX),
                   ],
                   onChanged: (text) {
                     setState(() {
-                      _idlengthCheck = (text.length < 6) ? false : true;
+                      _isValidID = isValidID(text);
                     });
                   },
                   controller: _idController,
@@ -149,9 +144,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       borderRadius: BorderRadius.circular(90.0),
                     ),
                     labelText: '아이디',
-                    helperText: _idlengthCheck ? null : '최소 6자 이상 입력해주세요.',
+                    helperText: _isValidID ? null : '최소 6자 이상 입력해주세요.',
                     helperStyle: TextStyle(
-                      color: !_idlengthCheck ? Colors.red : Colors.green,
+                      color: !_isValidID ? Colors.red : Colors.green,
                     ),
                   ),
                 ),
@@ -162,13 +157,13 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
                 child: TextField(
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(_regex),
+                    FilteringTextInputFormatter.allow(IDPW_REGEX),
                   ],
                   onChanged: (text) {
                     setState(() {
-                      _pwlengthCheck = (text.length < 10) ? false : true;
+                      _isValidPW = isValidPW(text);
                       _pwCheckErrorText =
-                          (text != _pwCheckController.text) ? false : true;
+                          isValidPWCheck(text, _pwCheckController.text);
                     });
                   },
                   controller: _pwController,
@@ -176,9 +171,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   maxLength: 30,
                   decoration: InputDecoration(
                     labelText: '비밀번호',
-                    helperText: _pwlengthCheck ? null : '최소 10자 이상 입력해주세요.',
+                    helperText: _isValidPW ? null : '최소 10자 이상 입력해주세요.',
                     helperStyle: TextStyle(
-                      color: !_pwlengthCheck ? Colors.red : Colors.green,
+                      color: !_isValidPW ? Colors.red : Colors.green,
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -203,7 +198,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                 child: TextField(
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(_regex),
+                    FilteringTextInputFormatter.allow(IDPW_REGEX),
                   ],
                   controller: _pwCheckController,
                   obscureText: _obscureText1,
@@ -211,7 +206,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   onChanged: (text) {
                     setState(() {
                       _pwCheckErrorText =
-                          (text != _pwController.text) ? false : true;
+                          isValidPWCheck(_pwController.text, text);
                     });
                   },
                   decoration: InputDecoration(
@@ -248,16 +243,16 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   maxLength: 10,
                   onChanged: (text) {
                     setState(() {
-                      _namelengthCheck = text.isEmpty ? false : true;
+                      _isValidName = isValidName(text);
                     });
                   },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(90.0),
                     ),
-                    helperText: _namelengthCheck ? null : '최소 1자 이상 입력해주세요.',
+                    helperText: _isValidName ? null : '최소 1자 이상 입력해주세요.',
                     helperStyle: TextStyle(
-                      color: !_namelengthCheck ? Colors.red : Colors.green,
+                      color: !_isValidName ? Colors.red : Colors.green,
                     ),
                     labelText: '이름',
                   ),
@@ -346,86 +341,67 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ),
                   ),
                   onPressed: () async {
-                    String jsonData = createJsonData(
-                      _idController.text,
-                      _pwController.text,
-                      _nameController.text,
-                      _dateController.text,
-                      _phonenumberController.text,
-                    );
-
-                    Map<String, dynamic> jsonMap =
-                        await signupHandler(jsonData);
-
-                    bool success = jsonMap['success'];
-
-                    Map<String, dynamic> account = {};
-                    int errorCode = 0;
-                    String errorMessage = '';
-
-                    if (success) {
-                      Map<String, dynamic> account = jsonMap['account'];
-                    } else {
-                      int errorCode = jsonMap['err_code'];
-                      String errorMessage = jsonMap['message'];
-                    }
-
-                    bool valid = allCheck(
-                      _idlengthCheck,
-                      _pwlengthCheck,
-                      _pwCheckErrorText,
-                      _namelengthCheck,
-                    );
-
-                    bool successCheck = valid && success;
-
-                    if (successCheck == true) {
-                      Future<void>.microtask(() {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('알림'),
-                              content: const Text('회원가입이 완료되었습니다.'),
-                              actions: [
-                                TextButton(
-                                  child: const Text('확인'),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SignInWidget(),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            );
-                          },
+                    bool success = isValidSignUp(
+                          _idController.text,
+                          _pwController.text,
+                          _pwCheckController.text,
+                          _nameController.text,
+                          _dateController.text,
+                          _phonenumberController.text,
+                        ) &&
+                        await signupHandler(
+                          _idController.text,
+                          _pwController.text,
+                          _pwCheckController.text,
+                          _nameController.text,
+                          _dateController.text,
+                          _phonenumberController.text,
                         );
-                      });
-                    } else {
-                      Future<void>.microtask(() {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('알림'),
-                              content: Text('회원가입에 실패하였습니다.\n$errorMessage'),
-                              actions: [
-                                TextButton(
-                                  child: const Text('확인'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
+                    success
+                        ? Future<void>.microtask(() {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('알림'),
+                                  content: const Text('회원가입이 완료되었습니다.'),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('확인'),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const SignInWidget(),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
                             );
-                          },
-                        );
-                      });
-                    }
+                          })
+                        : Future<void>.microtask(() {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('알림'),
+                                  content: const Text('회원가입에 실패하였습니다.\n'),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('확인'),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          });
                   },
                 ),
               ),
