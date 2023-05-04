@@ -1,10 +1,10 @@
+import 'package:cookie_app/handler/signin.validator.dart';
 import 'package:cookie_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cookie_app/pages/signup.dart';
 import 'package:cookie_app/cookie.appbar.dart';
-import 'package:cookie_app/handler/storage.dart';
-import 'package:cookie_app/handler/signin.handler.dart';
+import 'package:cookie_app/handler/signinout.handler.dart';
 import 'package:cookie_app/components/NavigatePage.dart';
 
 class SignInWidget extends StatefulWidget {
@@ -24,8 +24,6 @@ class _SignInWidgetState extends State<SignInWidget> {
 
   final String _selectedID = ''; //ID
   final String _selectedPW = ''; //password
-
-  final RegExp _regex = RegExp(r'^[a-zA-Z0-9!@#\$&*~-]+$');
 
   @override
   void initState() {
@@ -77,7 +75,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                 child: TextFormField(
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(_regex),
+                    FilteringTextInputFormatter.allow(IDPW_REGEX),
                   ],
                   onChanged: (text) {
                     setState(() {
@@ -108,7 +106,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                 padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
                 child: TextField(
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(_regex),
+                    FilteringTextInputFormatter.allow(IDPW_REGEX),
                   ],
                   onChanged: (text) {
                     setState(() {
@@ -167,57 +165,42 @@ class _SignInWidgetState extends State<SignInWidget> {
                     ),
                   ),
                   onPressed: () async {
-                    // if (!mounted) return;
-
-                    String signinData = createJsonData(
-                      _idController.text,
-                      _pwController.text,
-                    );
-
-                    Map<String, dynamic> jsonMap =
-                        await signinHandler(signinData);
-
-                    bool success = jsonMap.containsKey('success')
-                        ? jsonMap['success']
-                        : false;
-                    bool valid = allCheck(_idlengthCheck, _pwlengthCheck);
-
-                    bool successCheck = valid && success;
-
-                    if (successCheck) {
-                      // 사용자 정보를 저장합니다.
-                      await storage.write(key: 'id', value: _idController.text);
-                      await storage.write(key: 'pw', value: _pwController.text);
-
-                      Future<void>.microtask(() {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MyStatefulWidget(),
-                          ),
+                    bool signin = isValid(
+                          _idController.text,
+                          _pwController.text,
+                        ) &&
+                        await handleSignIn(
+                          _idController.text,
+                          _pwController.text,
                         );
-                      });
-                    } else {
-                      Future<void>.microtask(() {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('알림'),
-                              content: const Text('로그인에 실패하였습니다.'),
-                              actions: [
-                                TextButton(
-                                  child: const Text('확인'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
+                    signin
+                        ? Future<void>.microtask(() {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MyStatefulWidget(),
+                              ),
                             );
-                          },
-                        );
-                      });
-                    }
+                          })
+                        : Future<void>.microtask(() {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('알림'),
+                                  content: const Text('로그인에 실패하였습니다.'),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('확인'),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          });
                   },
                 ),
               ),
