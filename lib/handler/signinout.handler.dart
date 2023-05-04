@@ -1,12 +1,13 @@
+import 'package:cookie_app/handler/data.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'storage.dart';
 import 'dart:convert';
-import 'signin.validator.dart';
+import 'account.validator.dart';
 
 Future<bool> handleSignIn(id, pw) async {
-  assert(isValid(id, pw));
+  assert(isValidSignIn(id, pw));
 
   Map<String, dynamic> jsonMap = await postSignIn(id, pw);
   bool success = jsonMap.containsKey('access_token');
@@ -17,6 +18,7 @@ Future<bool> handleSignIn(id, pw) async {
       value: jsonMap['access_token'],
     );
     print("jwt: ${jsonMap['access_token']}");
+    account = jsonMap;
     return true;
   } else {
     return false;
@@ -26,7 +28,7 @@ Future<bool> handleSignIn(id, pw) async {
 Future<bool> handleAutoSignIn() async {
   var jwt = await secureStorage.read(key: 'access_token');
   if (jwt == null) return false;
-  print("jwt: ${jwt}");
+  print("jwt: $jwt");
 
   try {
     return !JwtDecoder.isExpired(jwt);

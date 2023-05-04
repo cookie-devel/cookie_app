@@ -1,4 +1,4 @@
-import 'package:cookie_app/handler/signin.validator.dart';
+import 'package:cookie_app/handler/account.validator.dart';
 import 'package:cookie_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -165,7 +165,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                     ),
                   ),
                   onPressed: () async {
-                    bool signin = isValid(
+                    bool signin = isValidSignIn(
                           _idController.text,
                           _pwController.text,
                         ) &&
