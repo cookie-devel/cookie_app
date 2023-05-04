@@ -1,7 +1,8 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 class BackKey extends StatelessWidget {
+  const BackKey({super.key});
+
   @override
   Widget build(BuildContext context) {
     return IconButton(
