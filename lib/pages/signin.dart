@@ -177,7 +177,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const MyStatefulWidget(),
+                              builder: (context) => const MainWidget(),
                             ),
                           );
                         })
