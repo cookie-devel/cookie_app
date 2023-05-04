@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/components/friends/FriendProfileWidget.dart';
 import 'package:cookie_app/schema/FriendInfo.dart';
-import 'package:flutter/services.dart';
 import 'package:cookie_app/pages/tabs/friends/friends.appbar.dart';
 import 'package:cookie_app/handler/data.dart';
 
