@@ -1,4 +1,3 @@
-import 'package:cookie_app/handler/data.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -18,7 +17,7 @@ Future<bool> handleSignIn(id, pw) async {
       value: jsonMap['access_token'],
     );
     print("jwt: ${jsonMap['access_token']}");
-    account = jsonMap['account'];
+    accountStorage.writeJSON(jsonMap['account']);
     return true;
   } else {
     return false;
@@ -57,6 +56,7 @@ Future<Map<String, dynamic>> postSignIn(String id, String pw) async {
 Future<bool> handleSignOut() async {
   try {
     await secureStorage.delete(key: 'access_token');
+    accountStorage.deleteData();
     return true;
   } catch (e) {
     print('Error signing out: $e');

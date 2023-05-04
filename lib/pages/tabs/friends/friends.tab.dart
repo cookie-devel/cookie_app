@@ -1,8 +1,8 @@
+import 'package:cookie_app/handler/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/components/friends/FriendProfileWidget.dart';
 import 'package:cookie_app/schema/FriendInfo.dart';
 import 'package:cookie_app/pages/tabs/friends/friends.appbar.dart';
-import 'package:cookie_app/handler/data.dart';
 
 class FriendsGrid extends StatefulWidget {
   const FriendsGrid({Key? key}) : super(key: key);
@@ -11,7 +11,11 @@ class FriendsGrid extends StatefulWidget {
   State<FriendsGrid> createState() => _FriendsGridState();
 }
 
-class _FriendsGridState extends State<FriendsGrid> {
+class _FriendsGridState extends State<FriendsGrid>
+    with AutomaticKeepAliveClientMixin<FriendsGrid> {
+  @override
+  bool get wantKeepAlive => true;
+
   List<dynamic> profiles = [];
 
   @override
@@ -20,7 +24,8 @@ class _FriendsGridState extends State<FriendsGrid> {
     getData();
   }
 
-  void getData() {
+  void getData() async {
+    Map<String, dynamic> account = await accountStorage.readJSON();
     setState(() {
       profiles = account['friendList'];
     });
@@ -28,12 +33,14 @@ class _FriendsGridState extends State<FriendsGrid> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: friendsAppbar(context),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(10, 20, 10, 8),
         child: profiles.isNotEmpty
             ? GridView.builder(
+                cacheExtent: 300,
                 itemCount: profiles.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
