@@ -1,7 +1,7 @@
+import 'package:cookie_app/cookie.appbar.dart';
 import 'package:cookie_app/handler/signinout.handler.dart';
 import 'package:cookie_app/pages/signin.dart';
 import 'package:flutter/material.dart';
-import 'settings.appbar.dart';
 import 'detail/MyProfile.page.dart';
 import 'package:cookie_app/components/NavigatePage.dart';
 
@@ -16,7 +16,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: settingsAppbar(context),
+      appBar: CookieAppBar(title: '설정'),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
         children: <Widget>[

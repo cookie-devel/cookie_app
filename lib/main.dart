@@ -27,8 +27,7 @@ class Cookie extends StatelessWidget {
       home: const CookieSplash(),
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
-          color: Colors.transparent,
-          elevation: 0,
+          backgroundColor: Colors.orangeAccent,
           iconTheme: IconThemeData(color: Colors.white),
         ),
         dialogTheme: DialogTheme(
