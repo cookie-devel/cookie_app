@@ -25,8 +25,6 @@ class _SignInWidgetState extends State<SignInWidget> {
   final String _selectedID = ''; //ID
   final String _selectedPW = ''; //password
 
-  final RegExp _regex = RegExp(r'^[a-zA-Z0-9!@#\$&*~-]+$');
-
   @override
   void initState() {
     super.initState();
@@ -77,7 +75,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                 child: TextFormField(
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(_regex),
+                    FilteringTextInputFormatter.allow(IDPW_REGEX),
                   ],
                   onChanged: (text) {
                     setState(() {
@@ -108,7 +106,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                 padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
                 child: TextField(
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(_regex),
+                    FilteringTextInputFormatter.allow(IDPW_REGEX),
                   ],
                   onChanged: (text) {
                     setState(() {
