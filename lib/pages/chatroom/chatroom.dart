@@ -59,7 +59,8 @@ class _ChatWidgetState extends State<ChatWidget> {
             SafeArea(
               bottom: true,
               child: chatField(),
-            )
+            ),
+            const Padding(padding: EdgeInsets.only(bottom: 6)),
           ],
         ),
       ),
