@@ -7,6 +7,7 @@ import 'package:cookie_app/pages/tabs/settings/settings.tab.dart';
 import 'package:cookie_app/pages/tabs/chatrooms/chatrooms.tab.dart';
 import 'package:cookie_app/pages/tabs/club/club.tab.dart';
 import 'package:cookie_app/cookie.splash.dart';
+import 'package:badges/badges.dart' as badges;
 
 void main() async {
   await dotenv.load();
@@ -21,6 +22,7 @@ class Cookie extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: _title,
       home: const CookieSplash(),
       theme: ThemeData(
@@ -35,11 +37,11 @@ class Cookie extends StatelessWidget {
             borderRadius: BorderRadius.circular(16.0),
           ),
           titleTextStyle: const TextStyle(
-              fontWeight: FontWeight.bold, color: Colors.black87, fontSize: 20,),
+              fontWeight: FontWeight.bold, color: Colors.black87, fontSize: 20),
           contentTextStyle: const TextStyle(
               // fontWeight: FontWeight.bold,
               color: Colors.black,
-              fontSize: 16,),
+              fontSize: 16),
           actionsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
           alignment: Alignment.center,
         ),
@@ -113,13 +115,15 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               ),
             ),
             BottomNavigationBar(
-              items: const <BottomNavigationBarItem>[
+              items: [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.people),
+                  icon: _badge(Text('1', style: TextStyle(color: Colors.white)),
+                      Icon(Icons.people)),
                   label: '친구',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.chat_bubble),
+                  icon: _badge(Text('2', style: TextStyle(color: Colors.white)),
+                      Icon(Icons.chat_bubble)),
                   label: '채팅',
                 ),
                 BottomNavigationBarItem(
@@ -127,11 +131,13 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   label: '쿠키',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.sports_basketball),
+                  icon: _badge(Text('3', style: TextStyle(color: Colors.white)),
+                      Icon(Icons.sports_basketball)),
                   label: '클럽',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.settings),
+                  icon: _badge(Text('4', style: TextStyle(color: Colors.white)),
+                      Icon(Icons.settings)),
                   label: '설정',
                 ),
               ],
@@ -147,3 +153,20 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     );
   }
 }
+
+Widget _badge(Widget content, Widget child) {
+  return badges.Badge(
+    position: badges.BadgePosition.topEnd(top: -10, end: -10),
+    badgeStyle: badges.BadgeStyle(
+      padding: const EdgeInsets.all(5),
+      borderRadius: BorderRadius.circular(10),
+      badgeColor: Colors.green.shade400,
+    ),
+    badgeContent: content,
+    child: child,
+  );
+}
+
+
+// reference
+// https://pub.dev/packages/badges [badges widget]
