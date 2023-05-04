@@ -24,20 +24,23 @@ class ProfileWindow extends StatelessWidget {
           height: MediaQuery.of(context).size.height * 0.74,
           child: Column(
             children: [
+              const SizedBox(height: 12),
               Container(
-                height: 160,
+                height: 170,
                 decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20.0),
-                    topRight: Radius.circular(20.0),
-                  ),
+                  shape: BoxShape.circle,
                   image: DecorationImage(
                     image: AssetImage(
                       user.image ?? 'assets/images/cookie_logo.png',
                     ),
                     fit: BoxFit.cover,
                   ),
+                  border: Border.all(
+                    color: Colors.orangeAccent,
+                    width: 3.0,
+                  ),
                 ),
+                
               ),
               Expanded(
                 child: Scrollbar(
@@ -48,23 +51,23 @@ class ProfileWindow extends StatelessWidget {
                     scrollDirection: Axis.vertical,
                     child: Column(
                       children: [
-                        const ListTile(
+                        ListTile(
                           title: Text(
-                            'user.status_message',
-                            style: TextStyle(
+                            "안녕하세요 저는 ${user.name}입니다.\n반갑습니다.",
+                            // 'user.status_message',
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 6),
-                        const Divider(height: 1),
+                        const Divider(),
                         userProfileListTile("이름", user.name ?? 'Unknown'),
-                        const Divider(height: 1),
+                        const Divider(),
                         userProfileListTile("생일", 'user.birthday' ?? 'Unknown'),
-                        const Divider(height: 1),
+                        const Divider(),
                         userProfileListTile("거주지", 'user.address' ?? 'Unknown'),
-                        const Divider(height: 1),
+                        const Divider(),
                         userProfileListTile("나이", 'user.age' ?? 'Unknown'),
                       ],
                     ),
@@ -89,7 +92,7 @@ class ProfileWindow extends StatelessWidget {
                     },
                     child: const Text("뒤로가기"),
                   ),
-                  const SizedBox(width: 20),
+                  const SizedBox(width: 22),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepOrangeAccent,
@@ -122,7 +125,7 @@ class ProfileWindow extends StatelessWidget {
 Future profileWindow(BuildContext context, FriendInfo user) => showDialog(
       context: context,
       builder: (BuildContext context) {
-        return ProfileWindow(user: user);
+        return AnimatedProfileWindow(user: user);
       },
     );
 
@@ -140,4 +143,49 @@ Widget userProfileListTile(String mainTitle, String subTitle) {
       style: const TextStyle(fontSize: 18),
     ),
   );
+}
+
+class AnimatedProfileWindow extends StatefulWidget {
+  final FriendInfo user;
+  const AnimatedProfileWindow({super.key, required this.user});
+
+  @override
+  State<AnimatedProfileWindow> createState() => _AnimatedProfileWindowState();
+}
+
+class _AnimatedProfileWindowState extends State<AnimatedProfileWindow>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 225),
+    );
+    _scaleAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: _scaleAnimation,
+      child: ProfileWindow(user: widget.user),
+    );
+  }
 }
