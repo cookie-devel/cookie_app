@@ -1,4 +1,4 @@
-final RegExp _regex = RegExp(r'^[a-zA-Z0-9!@#\$&*~-]+$');
+final RegExp IDPW_REGEX = RegExp(r'^[a-zA-Z0-9!@#\$&*~-]+$');
 
 const MIN_ID_LENGTH = 6;
 const MAX_ID_LENGTH = 30;
@@ -8,7 +8,7 @@ bool idLengthCheck(id) {
 }
 
 bool isValidID(id) {
-  return idLengthCheck(id) && _regex.hasMatch(id);
+  return idLengthCheck(id) && IDPW_REGEX.hasMatch(id);
 }
 
 const MIN_PW_LENGTH = 10;
@@ -19,7 +19,7 @@ bool pwLengthCheck(pw) {
 }
 
 bool isValidPW(pw) {
-  return pwLengthCheck(pw) && _regex.hasMatch(pw);
+  return pwLengthCheck(pw) && IDPW_REGEX.hasMatch(pw);
 }
 
 bool isValid(id, pw) {
