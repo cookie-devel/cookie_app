@@ -18,7 +18,7 @@ Future<bool> handleSignIn(id, pw) async {
       value: jsonMap['access_token'],
     );
     print("jwt: ${jsonMap['access_token']}");
-    account = jsonMap;
+    account = jsonMap['account'];
     return true;
   } else {
     return false;
