@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cookie_app/schema/FriendInfo.dart';
 import 'package:cookie_app/components/LongPressCopyableText.dart';
-import 'package:cookie_app/components/profile/ProfileWindow.dart';
 
 Widget otherBubble(BuildContext context, FriendInfo user, String text) {
   return Column(
@@ -13,7 +12,7 @@ Widget otherBubble(BuildContext context, FriendInfo user, String text) {
           // Profile Image
           InkWell(
             onTap: () {
-              profileWindow(context, user);
+              // profileWindow(context, user);
             },
             child: Material(
               elevation: 5,
