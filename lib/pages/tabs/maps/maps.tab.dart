@@ -126,7 +126,7 @@ class _MapsWidgetState extends State<MapsWidget> {
               markers: Set.from(markers),
               initialCameraPosition: CameraPosition(
                 target: _currentLocation,
-                zoom: 18.0,
+                zoom: 14.0,
               ),
             )
           : loadingScreen(),
