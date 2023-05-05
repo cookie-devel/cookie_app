@@ -61,7 +61,7 @@ class _MapsWidgetState extends State<MapsWidget> {
             builder: (context) {
               return AlertDialog(
                 title: Text(user.name ?? "Unknown"),
-                content: Text("user.location"),
+                content: const Text("user.location"),
               );
             },
           );
@@ -143,8 +143,10 @@ class _MapsWidgetState extends State<MapsWidget> {
 
 Future<Uint8List> getImages(String path, int width) async {
   ByteData data = await rootBundle.load(path);
-  ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-      targetHeight: width);
+  ui.Codec codec = await ui.instantiateImageCodec(
+    data.buffer.asUint8List(),
+    targetHeight: width,
+  );
   ui.FrameInfo fi = await codec.getNextFrame();
   return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
       .buffer
