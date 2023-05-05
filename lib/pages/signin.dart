@@ -4,38 +4,8 @@ import 'package:cookie_app/pages/signup.dart';
 import 'package:cookie_app/cookie.appbar.dart';
 import 'package:cookie_app/components/NavigatePage.dart';
 
-class SignInWidget extends StatefulWidget {
+class SignInWidget extends StatelessWidget {
   const SignInWidget({Key? key}) : super(key: key);
-
-  @override
-  State<SignInWidget> createState() => _SignInWidgetState();
-}
-
-class _SignInWidgetState extends State<SignInWidget> {
-  final bool _idlengthCheck = false;
-  final bool _pwlengthCheck = false;
-  final bool _obscureText = true;
-
-  final TextEditingController _idController = TextEditingController();
-  final TextEditingController _pwController = TextEditingController();
-
-  final String _selectedID = ''; //ID
-  final String _selectedPW = ''; //password
-
-  @override
-  void initState() {
-    super.initState();
-    _idController.text = _selectedID;
-    _pwController.text = _selectedPW;
-  }
-
-  @override
-  void dispose() {
-    // Dispose the TextEditingController
-    _idController.dispose();
-    _pwController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,9 +28,6 @@ class _SignInWidgetState extends State<SignInWidget> {
                   image: AssetImage('assets/images/cookie_logo.png'),
                   fit: BoxFit.contain,
                 ),
-                // border: Border.all(
-                //   // color: const Color.fromARGB(255, 255, 99, 159),
-                // ),
               ),
             ),
             const SizedBox(height: 30),

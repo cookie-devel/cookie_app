@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../../../schema/FriendInfo.dart';
-import '../../../cookie.splash.dart';
+import 'package:cookie_app/schema/FriendInfo.dart';
+import 'package:cookie_app/cookie.splash.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import 'dart:ui' as ui;

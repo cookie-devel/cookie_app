@@ -1,6 +1,6 @@
 // cookie앱의 chat page Appbar
 import 'package:flutter/material.dart';
-import '../../components/chat/connectionInfo.dart';
+import 'package:cookie_app/components/chat/connectionInfo.dart';
 
 PreferredSize? chatAppbar(BuildContext context, String name) {
   return PreferredSize(
