@@ -6,8 +6,11 @@ import 'package:flutter/material.dart';
 // cookie앱의 기본 Appbar
 
 class CookieAppBar extends AppBar {
-  CookieAppBar({Key? key, required String title, List<Widget>? actions})
-      : super(
+  CookieAppBar({
+    Key? key,
+    required String title,
+    List<Widget>? actions,
+  }) : super(
           key: key,
           title: Text(title),
           actions: actions,
@@ -27,3 +30,4 @@ class CookieAppBar extends AppBar {
           ),
         );
 }
+ 
