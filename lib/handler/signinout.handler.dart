@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'storage.dart';
+import 'package:cookie_app/handler/storage.dart';
 import 'dart:convert';
 import 'package:cookie_app/components/auth/validator.dart';
 

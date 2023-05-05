@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../../cookie.appbar.dart';
+import 'package:cookie_app/cookie.appbar.dart';
 
 class MyProfileWidget extends StatefulWidget {
   const MyProfileWidget({Key? key}) : super(key: key);

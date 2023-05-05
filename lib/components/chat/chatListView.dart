@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cookie_app/schema/FriendInfo.dart';
 
-import 'bubbles/myBubble.dart';
-import 'bubbles/otherBubble.dart';
+import 'package:cookie_app/components/chat/bubbles/myBubble.dart';
+import 'package:cookie_app/components/chat/bubbles/otherBubble.dart';
 
 Widget chat(BuildContext context, FriendInfo user, messages) {
   return Expanded(

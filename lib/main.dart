@@ -9,7 +9,7 @@ import 'package:cookie_app/pages/tabs/chatrooms/chatrooms.tab.dart';
 import 'package:cookie_app/pages/tabs/club/club.tab.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'handler/signinout.handler.dart';
+import 'package:cookie_app/handler/signinout.handler.dart';
 
 void main() async {
   // Preserve Splash Screen
