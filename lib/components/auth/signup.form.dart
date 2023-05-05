@@ -3,7 +3,6 @@ import 'package:cookie_app/components/auth/submit_button.dart';
 import 'package:cookie_app/components/auth/validator.dart';
 import 'package:cookie_app/handler/signup.handler.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
