@@ -40,7 +40,7 @@ class _SignInWidgetState extends State<SignInWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: CookieAppBar(title: 'C🍪🍪KIE'),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(10, 55, 10, 20),
