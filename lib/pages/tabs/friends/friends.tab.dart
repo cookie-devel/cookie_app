@@ -73,14 +73,19 @@ class _FriendsGridState extends State<FriendsGrid>
                   );
                 },
               )
-            : const Center(
-                child: Text(
-                  '친구를 추가해보세요!',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+            : Stack(
+                children: [
+                  ListView(),
+                  const Center(
+                    child: Text(
+                      '친구를 추가해보세요!',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
       ),
     );
