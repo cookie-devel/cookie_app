@@ -44,26 +44,24 @@ class _ChatWidgetState extends State<ChatWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-        appBar: CookieAppBar(
-          title: widget.user?.name ?? 'Unknown',
-          actions: [connectionInfo()],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-          child: Column(
-            children: [
-              chat(context, widget.user ?? FriendInfo(), messages),
-              SafeArea(
-                bottom: true,
-                child: chatField(),
-              ),
-              const Padding(padding: EdgeInsets.only(bottom: 6)),
-            ],
-          ),
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+      appBar: CookieAppBar(
+        title: widget.user?.name ?? 'Unknown',
+        actions: [connectionInfo()],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+        child: Column(
+          children: [
+            chat(context, widget.user ?? FriendInfo(), messages),
+            SafeArea(
+              bottom: true,
+              child: chatField(),
+            ),
+            const Padding(padding: EdgeInsets.only(bottom: 6)),
+          ],
         ),
       ),
     );

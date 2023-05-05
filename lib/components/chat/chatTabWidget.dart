@@ -44,7 +44,8 @@ class _ChatTabState extends State<ChatTab> {
                   borderRadius: BorderRadius.circular(22),
                   image: DecorationImage(
                     image: AssetImage(
-                        widget.user.image ?? 'assets/images/user.jpg'),
+                      widget.user.image ?? 'assets/images/user.jpg',
+                    ),
                     fit: BoxFit.cover,
                   ),
                   border: Border.all(width: 1, color: Colors.black45),
