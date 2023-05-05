@@ -1,5 +1,6 @@
 import 'package:cookie_app/cookie.appbar.dart';
 import 'package:cookie_app/handler/storage.dart';
+import 'package:cookie_app/pages/tabs/friends/friendsSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/components/friends/FriendProfileWidget.dart';
 import 'package:cookie_app/schema/FriendInfo.dart';
@@ -35,7 +36,10 @@ class _FriendsGridState extends State<FriendsGrid>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      appBar: CookieAppBar(title: '친구'),
+      appBar: CookieAppBar(
+        title: '친구',
+        actions: [friendsPageIcon(context)],
+      ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(10, 20, 10, 8),
         child: profiles.isNotEmpty
