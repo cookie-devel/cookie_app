@@ -5,8 +5,17 @@ import 'package:cookie_app/schema/FriendInfo.dart';
 
 class FriendProfileWidget extends StatelessWidget {
   final FriendInfo user;
+  final bool displayName;
+  final bool enableOnTap;
+  final bool enableOnLongPress;
 
-  const FriendProfileWidget({Key? key, required this.user}) : super(key: key);
+  const FriendProfileWidget({
+    Key? key,
+    required this.user,
+    this.displayName = true,
+    this.enableOnTap = true,
+    this.enableOnLongPress = true,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +32,12 @@ class FriendProfileWidget extends StatelessWidget {
 
     return InkResponse(
       onTap: () {
+        if (!enableOnTap) return;
         profileWindow(context, user);
       },
       onLongPress: () {
+        if (!enableOnLongPress) return;
         Vibration.vibrate(duration: 40);
-        // profileWindow(context, user);
       },
       child: Column(
         children: [
@@ -49,19 +59,20 @@ class FriendProfileWidget extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 8),
-          Flexible(
-            child: Text(
-              user.name ?? 'Unknown',
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.w300,
-                color: Color.fromARGB(221, 60, 60, 60),
+          if (displayName) const SizedBox(height: 8),
+          if (displayName)
+            Flexible(
+              child: Text(
+                user.name ?? 'Unknown',
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.w300,
+                  color: Color.fromARGB(221, 60, 60, 60),
+                ),
               ),
             ),
-          ),
         ],
       ),
     );

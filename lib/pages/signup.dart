@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cookie_app/components/friends/FriendProfileWidget.dart';
 import 'package:cookie_app/handler/account.validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +8,7 @@ import 'package:cookie_app/cookie.appbar.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:cookie_app/components/ImageSelection.dart';
 import 'package:cookie_app/handler/signup.handler.dart';
+import 'package:cookie_app/schema/FriendInfo.dart';
 
 class SignUpWidget extends StatefulWidget {
   const SignUpWidget({Key? key}) : super(key: key);
@@ -78,27 +80,13 @@ class _SignUpWidgetState extends State<SignUpWidget> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             // Profile Image
-            Container(
-              width: 160,
-              height: 160,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 2,
-                ),
-              ),
-              child: _imageFile == null
-                  ? const Center(
-                      child: Text('이미지가 없습니다'),
-                    )
-                  : ClipRRect(
-                      borderRadius: BorderRadius.circular(18),
-                      child: Image.file(
-                        _imageFile!,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+            FriendProfileWidget(
+              user: _imageFile == null
+                  ? FriendInfo()
+                  : FriendInfo(image: _imageFile!.path),
+              enableOnLongPress: false,
+              enableOnTap: false,
+              displayName: false,
             ),
 
             const SizedBox(height: 10),
