@@ -40,7 +40,6 @@ class ProfileWindow extends StatelessWidget {
                     width: 3.0,
                   ),
                 ),
-                
               ),
               Expanded(
                 child: Scrollbar(
@@ -168,10 +167,12 @@ class _AnimatedProfileWindowState extends State<AnimatedProfileWindow>
     _scaleAnimation = Tween<double>(
       begin: 0,
       end: 1,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
     _controller.forward();
   }
 

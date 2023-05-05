@@ -1,8 +1,9 @@
+import 'package:cookie_app/components/chat/connectionInfo.dart';
+import 'package:cookie_app/cookie.appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/handler/socket.io/socket.dart';
 import 'package:cookie_app/components/chat/chatListView.dart';
 import 'package:cookie_app/schema/FriendInfo.dart';
-import 'chatroom.appbar.dart';
 
 class ChatWidget extends StatefulWidget {
   final FriendInfo? user;
@@ -47,20 +48,21 @@ class _ChatWidgetState extends State<ChatWidget> {
       home: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-        appBar: chatAppbar(context, widget.user?.name ?? 'Unknown'),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-            child: Column(
-              children: [
-                // connectionInfo(),
-                chat(context, widget.user ?? FriendInfo(), messages),
-                chatField(),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
+        appBar: CookieAppBar(
+          title: widget.user?.name ?? 'Unknown',
+          actions: [connectionInfo()],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+          child: Column(
+            children: [
+              chat(context, widget.user ?? FriendInfo(), messages),
+              SafeArea(
+                bottom: true,
+                child: chatField(),
+              ),
+              const Padding(padding: EdgeInsets.only(bottom: 6)),
+            ],
           ),
         ),
       ),

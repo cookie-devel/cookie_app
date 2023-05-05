@@ -45,7 +45,7 @@ class _CookieSplashState extends State<CookieSplash> {
           ? loadingScreen()
           : _isStorageExist
               ? const SignInWidget()
-              : const MyStatefulWidget(),
+              : const MainWidget(),
       // :_isStorageExist ? const MyStatefulWidget() : const SignInWidget(),
     );
   }

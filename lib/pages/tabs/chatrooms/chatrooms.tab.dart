@@ -34,7 +34,7 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
     final int chatLength = chatLog.length;
 
     return Scaffold(
-      appBar: cookieAppbar(context, '채팅'),
+      appBar: CookieAppBar(title: '채팅'),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(10, 16, 10, 8),
         child: ListView.builder(
