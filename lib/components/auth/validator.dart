@@ -44,6 +44,8 @@ String? validatePWCheck(pw, pwCheck) {
   }
 }
 
+const MAX_NAME_LENGTH = 30;
+
 String? validateName(name) {
   if (name == null || name.isEmpty) {
     return '이름을 입력해주세요.';

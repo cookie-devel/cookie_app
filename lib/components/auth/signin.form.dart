@@ -1,8 +1,8 @@
 import 'package:cookie_app/components/CustomTextFormField.dart';
-import 'package:cookie_app/handler/account.validator.dart';
 import 'package:cookie_app/handler/signinout.handler.dart';
 import 'package:cookie_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:cookie_app/components/auth/validator.dart';
 
 // https://docs.flutter.dev/cookbook/forms/validation
 
