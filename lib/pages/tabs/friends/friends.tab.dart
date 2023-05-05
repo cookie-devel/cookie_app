@@ -38,7 +38,7 @@ class _FriendsGridState extends State<FriendsGrid>
     return Scaffold(
       appBar: CookieAppBar(
         title: '친구',
-        actions: [friendsPageIcon(context)],
+        actions: [friendsAction(context)],
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(10, 20, 10, 8),
