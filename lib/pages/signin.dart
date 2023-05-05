@@ -1,4 +1,4 @@
-import 'package:cookie_app/components/signin/signin.form.dart';
+import 'package:cookie_app/components/auth/signin.form.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/pages/signup.dart';
 import 'package:cookie_app/cookie.appbar.dart';
