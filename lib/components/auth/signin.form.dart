@@ -1,4 +1,5 @@
 import 'package:cookie_app/components/CustomTextFormField.dart';
+import 'package:cookie_app/components/auth/submit_button.dart';
 import 'package:cookie_app/handler/signinout.handler.dart';
 import 'package:cookie_app/main.dart';
 import 'package:flutter/material.dart';
@@ -65,57 +66,30 @@ ElevatedButton signInButton({
   required IDField id,
   required PWField pw,
 }) {
-  return ElevatedButton(
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.deepOrangeAccent,
-      minimumSize: const Size.fromHeight(50),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
-        side: const BorderSide(color: Colors.black45, width: 2),
-      ),
-    ),
-    child: const Text(
-      '로그인',
-      style: TextStyle(
-        fontSize: 19,
-        color: Colors.white,
-      ),
-    ),
+  return submitButton(
     onPressed: () async {
-      if (!formKey.currentState!.validate()) return;
+      if (!formKey.currentState!.validate()) return null;
       formKey.currentState!.save();
-      bool signin = await handleSignIn(id.value, pw.value);
-
-      signin
-          ? Future<void>.microtask(() {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const MainWidget(),
-                ),
-              );
-            })
-          : Future<void>.microtask(
-              () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('알림'),
-                      content: const Text('로그인에 실패하였습니다.'),
-                      actions: [
-                        TextButton(
-                          child: const Text('확인'),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            );
+      return await handleSignIn(id.value, pw.value);
+    },
+    text: '로그인',
+    onSuccess: () {
+      const snackBar = SnackBar(
+        content: Text('Welcome!'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MainWidget(),
+        ),
+      );
+    },
+    onFailure: () {
+      const snackBar = SnackBar(
+        content: Text('로그인에 실패하였습니다.'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     },
   );
 }
