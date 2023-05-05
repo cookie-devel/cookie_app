@@ -8,13 +8,14 @@ import 'package:flutter/material.dart';
 class CookieAppBar extends AppBar {
   CookieAppBar({
     Key? key,
-    required String title,
+    String? title,
     List<Widget>? actions,
   }) : super(
           key: key,
-          title: Text(title),
+          title: Text(title ?? ""),
           actions: actions,
           centerTitle: true,
+          titleSpacing: 50.0,
           backgroundColor: Colors.orangeAccent,
           flexibleSpace: Container(
             decoration: const BoxDecoration(
