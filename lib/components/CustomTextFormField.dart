@@ -29,7 +29,7 @@ class CustomTextFormField extends StatelessWidget {
       onSaved: (newValue) {
         value = newValue;
       },
-      maxLength: 30,
+      maxLength: maxLength,
       autofillHints: autofillHints,
       decoration: InputDecoration(
         border: OutlineInputBorder(

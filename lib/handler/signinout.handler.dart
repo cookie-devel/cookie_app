@@ -3,11 +3,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'storage.dart';
 import 'dart:convert';
-import 'account.validator.dart';
+import 'package:cookie_app/components/auth/validator.dart';
 
 Future<bool> handleSignIn(id, pw) async {
-  assert(isValidSignIn(id, pw));
-
+  assert(validateID(id) == null);
+  assert(validatePW(pw) == null);
   Map<String, dynamic> jsonMap = await postSignIn(id, pw);
   bool success = jsonMap.containsKey('access_token');
 

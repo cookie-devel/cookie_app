@@ -1,20 +1,23 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-import 'account.validator.dart';
+import 'package:cookie_app/components/auth/validator.dart';
 
 // jsondata to server
-Future<bool> signupHandler(
-  String id,
-  String pw,
-  String pwCheck,
-  String name,
-  String date,
-  String phoneNumber,
-) async {
-  assert(isValidSignUp(id, pw, pwCheck, name, date, phoneNumber));
-  String data = createJsonData(id, pw, name, date, phoneNumber);
+Future<bool> handleSignUp({
+  required String id,
+  required String pw,
+  required String name,
+  required String birthday,
+  required String phoneNumber,
+}) async {
+  assert(validateID(id) == null);
+  assert(validatePW(pw) == null);
+  assert(validateName(name) == null);
+  assert(validateBirthday(birthday) == null);
+  assert(validatePhoneNumber(phoneNumber) == null);
+
+  String data = createJsonData(id, pw, name, birthday, phoneNumber);
   Map<String, dynamic> resSignUp = await postSignUp(data);
   return resSignUp.containsKey('success') && resSignUp['success'] == true;
 }
