@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextFormField extends StatelessWidget {
   CustomTextFormField({
@@ -9,34 +10,38 @@ class CustomTextFormField extends StatelessWidget {
     this.autofillHints,
     this.keyboardType,
     this.maxLength,
+    this.inputFormatters,
   }) : super(key: key);
 
   final bool obscureText;
   final String labelText;
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController controller = TextEditingController();
   int? maxLength;
   TextInputType? keyboardType;
   String? Function(String?)? validator;
   Iterable<String>? autofillHints;
   String? value;
+  List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      validator: validator,
-      controller: _controller,
-      obscureText: obscureText,
+      controller: controller,
       onSaved: (newValue) {
         value = newValue;
       },
-      maxLength: maxLength,
-      autofillHints: autofillHints,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(90.0),
         ),
         labelText: labelText,
       ),
+      validator: validator,
+      obscureText: obscureText,
+      maxLength: maxLength,
+      autofillHints: autofillHints,
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
     );
   }
 }
