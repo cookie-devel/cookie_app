@@ -5,80 +5,96 @@ import 'package:flutter/material.dart';
 import 'package:cookie_app/pages/tabs/settings/detail/MyProfile.page.dart';
 import 'package:cookie_app/components/NavigatePage.dart';
 
-class SettingsWidget extends StatefulWidget {
+class SettingsWidget extends StatelessWidget {
   const SettingsWidget({Key? key}) : super(key: key);
 
-  @override
-  State<SettingsWidget> createState() => _SettingsWidgetState();
-}
-
-class _SettingsWidgetState extends State<SettingsWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CookieAppBar(title: '설정'),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-        children: <Widget>[
-          ListTile(
-            title: const Text('프로필 관리'),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              navigateSlide(context, const MyProfileWidget());
-            },
-          ),
-          const Divider(),
-          ListTile(
-            title: const Text('알림'),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              // Handle notification settings onTap
-            },
-          ),
-          const Divider(),
-          ListTile(
-            title: const Text('친구'),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              // Handle privacy settings onTap
-            },
-          ),
-          const Divider(),
-          ListTile(
-            title: const Text('언어'),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              // Handle language settings onTap
-            },
-          ),
-          const Divider(),
-          ListTile(
-            title: const Text('기타'),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              // Handle about onTap
-            },
-          ),
-          const Divider(),
-          ListTile(
-            title: const Text(
-              '로그아웃',
-              style: TextStyle(color: Colors.red),
-            ),
-            trailing: const Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.red,
-            ),
-            onTap: () {
-              _showAlertDialog(context);
-            },
-          ),
-          const Divider(),
-        ],
+      body: ListView.builder(
+        itemCount: list.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Column(
+            children: [
+              ListTile(
+                title: Text(
+                  list[index].text,
+                  style: TextStyle(color: list[index].color),
+                ),
+                leading: Icon(
+                  list[index].icon,
+                  color: list[index].color,
+                ),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  if (list[index].onTap != null) {
+                    list[index].onTap!(context);
+                  } else {
+                    navigateSlide(context, list[index].destination!);
+                  }
+                },
+              ),
+              const Divider(
+                height: 1,
+              )
+            ],
+          );
+        },
       ),
     );
   }
 }
+
+class SettingsListProp {
+  final String text;
+  final IconData icon;
+  final Widget? destination;
+  final Function? onTap;
+  final Color? color;
+
+  SettingsListProp({
+    required this.text,
+    required this.icon,
+    this.destination,
+    this.onTap,
+    this.color,
+  });
+}
+
+List<SettingsListProp> list = [
+  SettingsListProp(
+    text: '프로필 관리',
+    icon: Icons.person,
+    destination: const MyProfileWidget(),
+  ),
+  SettingsListProp(
+    text: '알림',
+    icon: Icons.notifications,
+    destination: const MyProfileWidget(),
+  ),
+  SettingsListProp(
+    text: '친구',
+    icon: Icons.people,
+    destination: const MyProfileWidget(),
+  ),
+  SettingsListProp(
+    text: '언어',
+    icon: Icons.language,
+    destination: const MyProfileWidget(),
+  ),
+  SettingsListProp(
+    text: '기타',
+    icon: Icons.more_horiz,
+    destination: const MyProfileWidget(),
+  ),
+  SettingsListProp(
+    text: '로그아웃',
+    icon: Icons.logout,
+    onTap: _showAlertDialog,
+    color: Colors.red,
+  ),
+];
 
 Future<void> _logout(BuildContext context) async {
   await handleSignOut();
