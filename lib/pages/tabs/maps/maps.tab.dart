@@ -1,3 +1,4 @@
+import 'package:cookie_app/cookie.appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -108,6 +109,7 @@ class _MapsWidgetState extends State<MapsWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CookieAppBar(title: 'C🍪🍪KIE'),
       body: loading == false
           ? GoogleMap(
               compassEnabled: true,

@@ -2,8 +2,24 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'account.validator.dart';
+
 // jsondata to server
-Future<Map<String, dynamic>> signupHandler(String data) async {
+Future<bool> signupHandler(
+  String id,
+  String pw,
+  String pwCheck,
+  String name,
+  String date,
+  String phoneNumber,
+) async {
+  assert(isValidSignUp(id, pw, pwCheck, name, date, phoneNumber));
+  String data = createJsonData(id, pw, name, date, phoneNumber);
+  Map<String, dynamic> resSignUp = await postSignUp(data);
+  return resSignUp.containsKey('success') && resSignUp['success'] == true;
+}
+
+Future<Map<String, dynamic>> postSignUp(String data) async {
   try {
     String address = '${dotenv.env['BASE_URI']}/account/signup';
     http.Response res = await http.post(
@@ -13,7 +29,6 @@ Future<Map<String, dynamic>> signupHandler(String data) async {
       },
       body: data,
     );
-
     return json.decode(res.body);
   } catch (e) {
     print('Error sending data to server: $e');
@@ -44,15 +59,4 @@ String createJsonData(
   String jsonData = const JsonEncoder.withIndent('\t').convert(data);
 
   return jsonData;
-}
-
-bool allCheck(idlengthCheck, pwlengthCheck, pwCheckErrorText, namelengthCheck) {
-  if (idlengthCheck == true &&
-      pwlengthCheck == true &&
-      pwCheckErrorText == true &&
-      namelengthCheck == true) {
-    return true;
-  } else {
-    return false;
-  }
 }

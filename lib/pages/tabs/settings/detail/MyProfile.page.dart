@@ -39,7 +39,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: cookieAppbar2(context, '프로필 관리'),
+      appBar: CookieAppBar(title: '프로필 관리'),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(5, 25, 5, 10),
         children: [

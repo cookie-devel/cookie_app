@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // friends page Appbar에서 icon을 눌렀을 때 나오는 bottom sheet
-IconButton friendsPageIcon(BuildContext context) {
+IconButton friendsAction(BuildContext context) {
   return IconButton(
     icon: const Icon(Icons.people),
     onPressed: () {

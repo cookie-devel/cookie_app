@@ -3,10 +3,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'storage.dart';
 import 'dart:convert';
-import 'signin.validator.dart';
+import 'account.validator.dart';
 
 Future<bool> handleSignIn(id, pw) async {
-  assert(isValid(id, pw));
+  assert(isValidSignIn(id, pw));
 
   Map<String, dynamic> jsonMap = await postSignIn(id, pw);
   bool success = jsonMap.containsKey('access_token');
@@ -17,6 +17,7 @@ Future<bool> handleSignIn(id, pw) async {
       value: jsonMap['access_token'],
     );
     print("jwt: ${jsonMap['access_token']}");
+    accountStorage.writeJSON(jsonMap['account']);
     return true;
   } else {
     return false;
@@ -26,7 +27,7 @@ Future<bool> handleSignIn(id, pw) async {
 Future<bool> handleAutoSignIn() async {
   var jwt = await secureStorage.read(key: 'access_token');
   if (jwt == null) return false;
-  print("jwt: ${jwt}");
+  print("jwt: $jwt");
 
   try {
     return !JwtDecoder.isExpired(jwt);
@@ -55,6 +56,7 @@ Future<Map<String, dynamic>> postSignIn(String id, String pw) async {
 Future<bool> handleSignOut() async {
   try {
     await secureStorage.delete(key: 'access_token');
+    accountStorage.deleteData();
     return true;
   } catch (e) {
     print('Error signing out: $e');
