@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../../../schema/FriendInfo.dart';
+import '../../../cookie.splash.dart';
+import 'package:flutter/services.dart' show rootBundle;
+
+import 'dart:ui' as ui;
+import 'dart:typed_data';
 
 class MapsWidget extends StatefulWidget {
   const MapsWidget({Key? key}) : super(key: key);
@@ -11,59 +17,56 @@ class MapsWidget extends StatefulWidget {
 }
 
 class _MapsWidgetState extends State<MapsWidget> {
-  late GoogleMapController mapController;
   static List<Marker> markers = <Marker>[];
+  late GoogleMapController mapController;
   static late LatLng _currentLocation;
   bool loading = true;
+  String _mapStyle = '';
 
   @override
   void initState() {
     super.initState();
     _locationPermission();
     _getUserLocation();
-    markers.add(
-      Marker(
-        markerId: const MarkerId("1"),
-        draggable: true,
-        onTap: () {
-          print("Marker2!");
-          showDialog(
-            context: context,
-            builder: (context) {
-              return const AlertDialog(
-                title: Text("title"),
-                content: Text("content"),
-              );
-            },
-          );
-        },
-        position: const LatLng(37.2807339, 127.0437020),
-      ),
-    );
 
-    markers.add(
-      Marker(
-        markerId: const MarkerId("2"),
-        draggable: true,
-        onTap: () {
-          print("Marker2!");
-          showDialog(
-            context: context,
-            builder: (context) {
-              return const AlertDialog(
-                title: Text("title"),
-                content: Text("content"),
-              );
-            },
-          );
-        },
-        position: const LatLng(37.2822374, 127.0455223),
-      ),
-    );
+    rootBundle.loadString('assets/data/mapStyle.json').then((string) {
+      _mapStyle = string;
+    });
+
+    addFriendMarker(context, markers, FriendInfo(name: "test1"));
   }
 
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
+  void addFriendMarker(
+    BuildContext context,
+    List<Marker> markers,
+    FriendInfo user,
+  ) async {
+    final Uint8List markIcons =
+        await getImages('assets/images/cookie_logo.png', 100);
+
+    markers.add(
+      Marker(
+        draggable: false,
+        markerId: MarkerId(user.name.toString()),
+        position: const LatLng(37.2807339, 127.0437020),
+        icon: BitmapDescriptor.fromBytes(markIcons),
+        infoWindow: InfoWindow(
+          title: user.name,
+          // snippet: '안녕~',
+        ),
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(user.name ?? "Unknown"),
+                content: Text("user.location"),
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 
   // https://kanoos-stu.tistory.com/64
@@ -97,8 +100,8 @@ class _MapsWidgetState extends State<MapsWidget> {
     );
     setState(() {
       _currentLocation = LatLng(position.latitude, position.longitude);
-      print("currentLocation = ${_currentLocation.toString()}");
       loading = false;
+      print("currentLocation = ${_currentLocation.toString()}");
     });
   }
 
@@ -108,17 +111,43 @@ class _MapsWidgetState extends State<MapsWidget> {
       body: loading == false
           ? GoogleMap(
               compassEnabled: true,
+              myLocationEnabled: true,
+              zoomControlsEnabled: false, // 축소확대 버튼
+              minMaxZoomPreference: const MinMaxZoomPreference(14, 20), // 줌 제한
+              myLocationButtonEnabled: true,
+
+              onMapCreated: (GoogleMapController controller) {
+                mapController = controller;
+                mapController.setMapStyle(_mapStyle);
+              },
               mapType: MapType.normal,
               markers: Set.from(markers),
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-              onMapCreated: _onMapCreated,
               initialCameraPosition: CameraPosition(
                 target: _currentLocation,
-                zoom: 16.0,
+                zoom: 18.0,
               ),
             )
-          : null,
+          : loadingScreen(),
     );
   }
+
+  @override
+  void dispose() {
+    mapController.dispose();
+    markers.clear();
+    super.dispose();
+  }
 }
+
+Future<Uint8List> getImages(String path, int width) async {
+  ByteData data = await rootBundle.load(path);
+  ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+      targetHeight: width);
+  ui.FrameInfo fi = await codec.getNextFrame();
+  return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+      .buffer
+      .asUint8List();
+}
+
+//reference
+// https://snazzymaps.com/explore?text=&sort=popular&tag=&color= [google map theme]
