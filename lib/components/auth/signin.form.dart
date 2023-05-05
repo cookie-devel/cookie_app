@@ -1,3 +1,4 @@
+import 'package:cookie_app/components/CustomTextFormField.dart';
 import 'package:cookie_app/handler/account.validator.dart';
 import 'package:cookie_app/handler/signinout.handler.dart';
 import 'package:cookie_app/main.dart';
@@ -30,50 +31,14 @@ class SignInForm extends StatelessWidget {
               id: idField,
               pw: pwField,
             ),
-          ].map((e) => wrapped(e)).toList(),
+          ].map(wrapped).toList(),
         ),
       ),
     );
   }
 }
 
-class FormField extends StatelessWidget {
-  final bool obscureText;
-  String? Function(String?)? validator;
-  final String labelText;
-  FormField({
-    Key? key,
-    this.obscureText = false,
-    this.labelText = "",
-    this.validator,
-    this.autofillHints,
-  }) : super(key: key);
-  Iterable<String>? autofillHints;
-  final TextEditingController _controller = TextEditingController();
-  String? value;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      validator: validator,
-      controller: _controller,
-      obscureText: obscureText,
-      onSaved: (newValue) {
-        value = newValue;
-      },
-      maxLength: 30,
-      autofillHints: autofillHints,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(90.0),
-        ),
-        labelText: labelText,
-      ),
-    );
-  }
-}
-
-class IDField extends FormField {
+class IDField extends CustomTextFormField {
   IDField({Key? key})
       : super(
           key: key,
@@ -83,7 +48,7 @@ class IDField extends FormField {
         );
 }
 
-class PWField extends FormField {
+class PWField extends CustomTextFormField {
   PWField({Key? key})
       : super(
           key: key,
@@ -94,7 +59,7 @@ class PWField extends FormField {
         );
 }
 
-signInButton({
+ElevatedButton signInButton({
   required BuildContext context,
   required GlobalKey<FormState> formKey,
   required IDField id,
