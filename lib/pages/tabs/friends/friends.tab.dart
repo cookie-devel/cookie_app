@@ -1,4 +1,5 @@
 import 'package:cookie_app/cookie.appbar.dart';
+import 'package:cookie_app/handler/friends_refresh.handler.dart';
 import 'package:cookie_app/handler/storage.dart';
 import 'package:cookie_app/pages/tabs/friends/friendsSheet.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,17 @@ class _FriendsGridState extends State<FriendsGrid>
     });
   }
 
+  Future<void> updateData() async {
+    var data = await apiGetFriends();
+    print(data);
+    setState(() {
+      profiles = data['result'];
+    });
+    Map<String, dynamic> account = await accountStorage.readJSON();
+    account['friendList'] = data['result'];
+    accountStorage.writeJSON(account);
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -40,34 +52,37 @@ class _FriendsGridState extends State<FriendsGrid>
         title: '친구',
         actions: [friendsAction(context)],
       ),
-      body: profiles.isNotEmpty
-          ? GridView.builder(
-              cacheExtent: 300,
-              itemCount: profiles.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 0.8,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                final Map<String, dynamic> profile = profiles[index];
+      body: RefreshIndicator(
+        onRefresh: updateData,
+        child: profiles.isNotEmpty
+            ? GridView.builder(
+                cacheExtent: 300,
+                itemCount: profiles.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 0.8,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  final Map<String, dynamic> profile = profiles[index];
 
-                return Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: FriendProfileWidget(
-                    user: returnUserInfo(profile),
+                  return Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: FriendProfileWidget(
+                      user: returnUserInfo(profile),
+                    ),
+                  );
+                },
+              )
+            : const Center(
+                child: Text(
+                  '친구를 추가해보세요!',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
-                );
-              },
-            )
-          : const Center(
-              child: Text(
-                '친구를 추가해보세요!',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
+      ),
     );
   }
 }
