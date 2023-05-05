@@ -62,9 +62,12 @@ String? validateBirthday(birthday) {
   }
 }
 
+RegExp PHONE_REGEX = RegExp(r'^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$');
 String? validatePhoneNumber(phoneNumber) {
   if (phoneNumber == null || phoneNumber.isEmpty) {
     return '휴대폰 번호를 입력해주세요.';
+  } else if (!PHONE_REGEX.hasMatch(phoneNumber)) {
+    return '휴대폰 번호를 정확히 입력해주세요.';
   } else {
     return null;
   }

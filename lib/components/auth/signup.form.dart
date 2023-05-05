@@ -3,6 +3,7 @@ import 'package:cookie_app/components/auth/submit_button.dart';
 import 'package:cookie_app/components/auth/validator.dart';
 import 'package:cookie_app/handler/signup.handler.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -15,7 +16,7 @@ class SignUpForm extends StatelessWidget {
 
   IDField idField = IDField();
   PWField pwField = PWField();
-  PWCheckField pwCheckField = PWCheckField();
+  // PWCheckField pwCheckField = PWCheckField(pwField: pwField,);
   NameField nameField = NameField();
   BirthdayField birthdayField = BirthdayField();
   PhoneNumberField phoneNumberField = PhoneNumberField();
@@ -24,6 +25,7 @@ class SignUpForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: AutofillGroup(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -31,7 +33,9 @@ class SignUpForm extends StatelessWidget {
           children: <Widget>[
             idField,
             pwField,
-            pwCheckField,
+            PWCheckField(
+              pwField: pwField,
+            ),
             nameField,
             birthdayField,
             phoneNumberField,
@@ -73,12 +77,17 @@ class PWField extends CustomTextFormField {
 }
 
 class PWCheckField extends CustomTextFormField {
-  PWCheckField({Key? key})
+  PWCheckField({Key? key, required PWField pwField})
       : super(
           key: key,
           obscureText: true,
           labelText: "비밀번호 확인",
-          // validator: validatePWCheck,
+          validator: (pwCheck) {
+            return validatePWCheck(
+              pwField.controller.text,
+              pwCheck,
+            );
+          },
           autofillHints: [AutofillHints.newPassword],
         );
 }
@@ -119,6 +128,7 @@ class _BirthdayFieldState extends State<BirthdayField> {
         labelText: '생년월일',
         suffixIcon: const Icon(Icons.calendar_today),
       ),
+      validator: validateBirthday,
       onSaved: (newValue) {
         widget.value = newValue;
       },
