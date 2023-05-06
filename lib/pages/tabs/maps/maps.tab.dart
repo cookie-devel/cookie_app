@@ -30,44 +30,49 @@ class _MapsWidgetState extends State<MapsWidget> {
     _locationPermission();
     _getUserLocation();
 
+    _addMarker(markers, FriendInfo(name: '채원',image:'assets/images/cw1.png'), LatLng(37.2811339, 127.0455020));
+    _addMarker(markers, FriendInfo(name: '은채',image:'assets/images/ec1.png'), LatLng(37.2822411, 127.0466999));
+    _addMarker(markers, FriendInfo(name: '윤진',image:'assets/images/yj1.png'), LatLng(37.2833289, 127.0477240));
+    _addMarker(markers, FriendInfo(name: '즈하',image:'assets/images/kz1.png'), LatLng(37.2844555, 127.0488222));
+
     rootBundle.loadString('assets/data/mapStyle.json').then((string) {
       _mapStyle = string;
     });
-
-    addFriendMarker(context, markers, FriendInfo(name: "test1"));
   }
 
-  void addFriendMarker(
-    BuildContext context,
+  void _addMarker(
     List<Marker> markers,
     FriendInfo user,
+    LatLng location,
   ) async {
-    final Uint8List markIcons =
-        await getImages('assets/images/cookie_logo.png', 100);
+    // 추후에 json 형식으로 받아서 처리
+    Uint8List markIcons = await _getRoundedImages(user.image!, 95, Colors.deepOrangeAccent, 4);
 
-    markers.add(
-      Marker(
-        draggable: false,
-        markerId: MarkerId(user.name.toString()),
-        position: const LatLng(37.2807339, 127.0437020),
-        icon: BitmapDescriptor.fromBytes(markIcons),
-        infoWindow: InfoWindow(
-          title: user.name,
-          // snippet: '안녕~',
+    setState(() {
+      markers.add(
+        Marker(
+          draggable: false,
+          markerId: MarkerId(user.name.toString()),
+          position: location,
+          icon: BitmapDescriptor.fromBytes(markIcons),
+          infoWindow: InfoWindow(
+            title: user.name,
+            // snippet: '안녕~',
+          ),
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(user.name ?? "Unknown"),
+                  content: Text(location.latitude.toString()+'\n'+location.longitude.toString()),
+                );
+              },
+            );
+          },
         ),
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text(user.name ?? "Unknown"),
-                content: const Text("user.location"),
-              );
-            },
-          );
-        },
-      ),
-    );
+      );
+    });
   }
 
   // https://kanoos-stu.tistory.com/64
@@ -148,10 +153,69 @@ Future<Uint8List> getImages(String path, int width) async {
     targetHeight: width,
   );
   ui.FrameInfo fi = await codec.getNextFrame();
-  return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+  Uint8List markIcons= (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
       .buffer
       .asUint8List();
+  
+  return markIcons;
 }
+
+
+Future<Uint8List> _getRoundedImages(String path, int width, Color borderColor, double borderWidth) async {
+
+  ByteData data = await rootBundle.load(path);
+  ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
+
+  ui.FrameInfo fi = await codec.getNextFrame();
+
+  final int imageSize = width;
+  final ui.Image image = fi.image;
+  final ui.Rect paintRect = Offset.zero & Size(imageSize.toDouble(), imageSize.toDouble());
+  final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+  final ui.Canvas canvas = ui.Canvas(pictureRecorder);
+
+  final Paint paint = Paint()
+    ..isAntiAlias = true;
+  
+  final double radius = imageSize.toDouble() / 2;
+
+  final Paint borderPaint = Paint()
+    ..color = borderColor
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = borderWidth;
+
+  canvas.saveLayer(paintRect, Paint()); // 레이어 생성
+
+  // 원형 이미지 그리기
+  canvas.drawCircle(Offset(radius, radius), radius, paint);
+
+  // 이미지 클리핑
+  canvas.clipPath(Path()..addOval(paintRect));
+
+  // 이미지 그리기
+  canvas.drawImageRect(
+    image,
+    ui.Rect.fromLTRB(0, 0, image.width.toDouble(), image.height.toDouble()),
+    paintRect,
+    paint,
+  );
+
+  // 테두리 그리기
+  canvas.drawCircle(Offset(radius, radius), radius - borderWidth / 2, borderPaint);
+
+  canvas.restore(); // 레이어 복원
+
+  final ui.Picture picture = pictureRecorder.endRecording();
+  final ui.Image roundedImage = await picture.toImage(imageSize, imageSize);
+  final ByteData? byteData = await roundedImage.toByteData(format: ui.ImageByteFormat.png);
+
+  if (byteData != null) {
+    return byteData.buffer.asUint8List();
+  } else {
+    throw Exception('Failed to convert image to byte data.');
+  }
+}
+
 
 //reference
 // https://snazzymaps.com/explore?text=&sort=popular&tag=&color= [google map theme]
