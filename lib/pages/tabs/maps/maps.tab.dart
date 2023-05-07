@@ -10,7 +10,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:typed_data';
 
-
 String tmpData = '''{
   "success": true,
   "result": [
@@ -41,7 +40,6 @@ String tmpData = '''{
   ]
 }''';
 
-
 class MapsWidget extends StatefulWidget {
   const MapsWidget({Key? key}) : super(key: key);
 
@@ -63,41 +61,57 @@ class _MapsWidgetState extends State<MapsWidget> {
     _getUserLocation();
 
     _addMarker(
-        markers,
-        FriendInfo(
-          username: '채원',
-          image: 'assets/images/cw1.png',
-          message: '안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요',
-        ),
-        const LatLng(37.2811339, 127.0455020),);
+      markers,
+      FriendInfo(
+        username: '김채원',
+        image: 'assets/images/cw1.png',
+        message: '안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!',
+      ),
+      const LatLng(37.2811339, 127.0455020),
+    );
     _addMarker(
-        markers,
-        FriendInfo(
-          username: '은채',
-          image: 'assets/images/ec1.png',
-          message: '반가워요!',
-        ),
-        const LatLng(37.2822411, 127.0466999),);
+      markers,
+      FriendInfo(
+        username: '홍은채',
+        image: 'assets/images/ec1.png',
+        message: '반가워요!',
+      ),
+      const LatLng(37.2822411, 127.0466999),
+    );
     _addMarker(
-        markers,
-        FriendInfo(
-          username: '윤진',
-          image: 'assets/images/yj1.png',
-          message: '안녕!',
-        ),
-        const LatLng(37.2833289, 127.0455020),);
+      markers,
+      FriendInfo(
+        username: '허윤진',
+        image: 'assets/images/yj1.png',
+        message: '안녕!',
+      ),
+      const LatLng(37.2833289, 127.0455020),
+    );
     _addMarker(
-        markers,
-        FriendInfo(
-          username: '즈하',
-          image: 'assets/images/kz1.png',
-          message: '반가워!',
-        ),
-        const LatLng(37.2842411, 127.0435222),);
-    _addMarker(markers, FriendInfo(username: 'test1'),
-        const LatLng(37.2842411, 127.0466999),);
-    _addMarker(markers, FriendInfo(username: 'test2'),
-        const LatLng(37.2837999, 127.0466999),);
+      markers,
+      FriendInfo(
+        username: '카즈하',
+        image: 'assets/images/kz1.png',
+        message: '반가워!',
+      ),
+      const LatLng(37.2842411, 127.0435222),
+    );
+    _addMarker(
+      markers,
+      FriendInfo(username: 'test1'),
+      const LatLng(37.2842411, 127.0466999),
+      size: 70,
+      color: Colors.transparent,
+      width: 0,
+    );
+    _addMarker(
+      markers,
+      FriendInfo(username: 'test2'),
+      const LatLng(37.2837999, 127.0466999),
+      size: 70,
+      color: Colors.transparent,
+      width: 0,
+    );
 
     rootBundle.loadString('assets/data/mapStyle.json').then((string) {
       _mapStyle = string;
@@ -109,12 +123,16 @@ class _MapsWidgetState extends State<MapsWidget> {
     List<Marker> markers,
     FriendInfo user,
     LatLng location, {
-    int size = 95,
+    int size = 100,
     Color color = Colors.deepOrangeAccent,
     double width = 4,
   }) async {
-    Uint8List markIcons = await getRoundedImages(user.image!, size,
-        borderColor: color, borderWidth: width,);
+    Uint8List markIcons = await getRoundedImages(
+      user.image!,
+      size,
+      borderColor: color,
+      borderWidth: width,
+    );
 
     setState(() {
       markers.add(
@@ -164,26 +182,52 @@ class _MapsWidgetState extends State<MapsWidget> {
     return Scaffold(
       appBar: CookieAppBar(title: 'C🍪🍪KIE'),
       body: loading == false
-          ? GoogleMap(
-              compassEnabled: true,
-              myLocationEnabled: true,
-              zoomControlsEnabled: false, // 축소확대 버튼
-              minMaxZoomPreference: const MinMaxZoomPreference(14, 20), // 줌 제한
-              myLocationButtonEnabled: true,
-              mapToolbarEnabled: false, // 길찾기 버튼
-              onMapCreated: (GoogleMapController controller) {
-                mapController = controller;
-                mapController.setMapStyle(_mapStyle);
-              },
-              mapType: MapType.normal,
-              markers: Set.from(markers),
-              initialCameraPosition: CameraPosition(
-                target: _currentLocation,
-                zoom: 15.2,
-              ),
+          ? Stack(
+              children: [
+                GoogleMap(
+                  myLocationButtonEnabled: false, // 내위치 버튼
+                  compassEnabled: true, // 나침반 버튼
+                  myLocationEnabled: true, // 본인 마커
+                  zoomControlsEnabled: false, // 축소확대 버튼
+                  minMaxZoomPreference:
+                      const MinMaxZoomPreference(14, 20), // 줌 제한
+                  mapToolbarEnabled: false, // 길찾기 버튼
+                  onMapCreated: (GoogleMapController controller) {
+                    mapController = controller;
+                    mapController.setMapStyle(_mapStyle);
+                  },
+                  mapType: MapType.normal,
+                  markers: Set.from(markers),
+                  initialCameraPosition: CameraPosition(
+                    target: _currentLocation,
+                    zoom: 15.2,
+                  ),
+                ),
+                Positioned(
+                  bottom: 16,
+                  right: 16,
+                  child: SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: FloatingActionButton(
+                      backgroundColor: Colors.deepOrangeAccent,
+                      onPressed: () {
+                        _moveToCurrentLocation();
+                      },
+                      child: const Icon(
+                        Icons.my_location,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             )
           : loadingScreen(),
     );
+  }
+
+  void _moveToCurrentLocation() {
+    mapController.animateCamera(CameraUpdate.newLatLng(_currentLocation));
   }
 
   @override
