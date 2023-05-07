@@ -6,16 +6,24 @@ import 'dart:typed_data';
 Widget bottomSheetInside(BuildContext context, FriendInfo user) {
   return SafeArea(
     child: Container(
-      height: MediaQuery.of(context).size.height * 0.20,
+      height: MediaQuery.of(context).size.height * 0.225,
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: Color.fromARGB(255, 249, 253, 255),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24),
           topRight: Radius.circular(24),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 10.0,
+            spreadRadius: 0.5,
+            offset: Offset(0.7, 0.7),
+          ),
+        ],
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 2, 16, 2),
+        padding: const EdgeInsets.fromLTRB(16, 10, 13, 10),
         child: Row(
           children: [
             Container(
@@ -25,34 +33,54 @@ Widget bottomSheetInside(BuildContext context, FriendInfo user) {
                 shape: BoxShape.circle,
                 image: DecorationImage(
                   image: AssetImage(
-                    user.image ?? "assets/images/cookie_log.png",
+                    user.image ?? "https://i.imgur.com/9cHRbzX.png",
                   ),
                   fit: BoxFit.cover,
                 ),
-                border: Border.all(width: 1.5, color: Colors.black54),
+                border: Border.all(width: 1, color: Colors.black54),
               ),
             ),
-            const SizedBox(width: 25),
+            const SizedBox(width: 20),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Flexible(
-                    child: Text(
-                      user.username ?? "Unknown",
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          user.username ?? "Unknown",
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                      const SizedBox(width: 6),
+                      const Icon(
+                        Icons.person,
+                        size: 16,
+                        color: Colors.black54,
+                      ),
+                      const SizedBox(width: 1),
+                      Text(
+                        "33",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 8),
                   Flexible(
                     child: Text(
-                      user.message ?? "Unknown",
+                      user.message!+'\n',
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.black54,
@@ -61,8 +89,9 @@ Widget bottomSheetInside(BuildContext context, FriendInfo user) {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -70,19 +99,21 @@ Widget bottomSheetInside(BuildContext context, FriendInfo user) {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                             side: const BorderSide(
-                                color: Colors.black45, width: 1),
+                              color: Colors.black45,
+                              width: 1,
+                            ),
                           ),
                         ),
                         child: const Text(
                           '채팅하기',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 14,
                             color: Colors.white,
                           ),
                         ),
                         onPressed: () {},
                       ),
-                      const SizedBox(width: 16),
+                      const SizedBox(width: 18),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.deepOrangeAccent,
@@ -97,7 +128,7 @@ Widget bottomSheetInside(BuildContext context, FriendInfo user) {
                         child: const Text(
                           '친구신청',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 14,
                             color: Colors.white,
                           ),
                         ),
