@@ -1,13 +1,12 @@
+import 'package:cookie_app/components/map/ImageProcess.dart';
 import 'package:cookie_app/cookie.appbar.dart';
+import 'package:cookie_app/schema/FriendInfo.dart';
+import 'package:cookie_app/cookie.splash.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:cookie_app/schema/FriendInfo.dart';
-import 'package:cookie_app/cookie.splash.dart';
-import 'package:flutter/services.dart' show rootBundle;
-
-import 'dart:ui' as ui;
 import 'dart:typed_data';
 
 class MapsWidget extends StatefulWidget {
@@ -30,10 +29,26 @@ class _MapsWidgetState extends State<MapsWidget> {
     _locationPermission();
     _getUserLocation();
 
-    _addMarker(markers, FriendInfo(username: '채원', image:'assets/images/cw1.png'), LatLng(37.2811339, 127.0455020));
-    _addMarker(markers, FriendInfo(username: '은채', image:'assets/images/ec1.png'), LatLng(37.2822411, 127.0466999));
-    _addMarker(markers, FriendInfo(username: '윤진', image:'assets/images/yj1.png'), LatLng(37.2833289, 127.0477240));
-    _addMarker(markers, FriendInfo(username: '즈하', image:'assets/images/kz1.png'), LatLng(37.2844555, 127.0488222));
+    _addMarker(
+        markers,
+        FriendInfo(username: '채원', image: 'assets/images/cw1.png'),
+        LatLng(37.2811339, 127.0455020));
+    _addMarker(
+        markers,
+        FriendInfo(username: '은채', image: 'assets/images/ec1.png'),
+        LatLng(37.2822411, 127.0466999));
+    _addMarker(
+        markers,
+        FriendInfo(username: '윤진', image: 'assets/images/yj1.png'),
+        LatLng(37.2833289, 127.0455020));
+    _addMarker(
+        markers,
+        FriendInfo(username: '즈하', image: 'assets/images/kz1.png'),
+        LatLng(37.2842411, 127.0435222));
+    _addMarker(markers, FriendInfo(username: 'test1'),
+        LatLng(37.2842411, 127.0466999));
+    _addMarker(markers, FriendInfo(username: 'test2'),
+        LatLng(37.2837999, 127.0466999));
 
     rootBundle.loadString('assets/data/mapStyle.json').then((string) {
       _mapStyle = string;
@@ -43,10 +58,13 @@ class _MapsWidgetState extends State<MapsWidget> {
   void _addMarker(
     List<Marker> markers,
     FriendInfo user,
-    LatLng location,
-  ) async {
+    LatLng location, {
+    Color color = Colors.deepOrangeAccent,
+    double width = 4,
+  }) async {
     // 추후에 json 형식으로 받아서 처리
-    Uint8List markIcons = await _getRoundedImages(user.image!, 95, Colors.deepOrangeAccent, 4);
+    Uint8List markIcons = await getRoundedImages(user.image!, 95,
+        borderColor: color, borderWidth: width);
 
     setState(() {
       markers.add(
@@ -65,7 +83,9 @@ class _MapsWidgetState extends State<MapsWidget> {
               builder: (context) {
                 return AlertDialog(
                   title: Text(user.username ?? "Unknown"),
-                  content: Text(location.latitude.toString()+'\n'+location.longitude.toString()),
+                  content: Text(location.latitude.toString() +
+                      '\n' +
+                      location.longitude.toString()),
                 );
               },
             );
@@ -145,77 +165,6 @@ class _MapsWidgetState extends State<MapsWidget> {
     super.dispose();
   }
 }
-
-Future<Uint8List> getImages(String path, int width) async {
-  ByteData data = await rootBundle.load(path);
-  ui.Codec codec = await ui.instantiateImageCodec(
-    data.buffer.asUint8List(),
-    targetHeight: width,
-  );
-  ui.FrameInfo fi = await codec.getNextFrame();
-  Uint8List markIcons= (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-      .buffer
-      .asUint8List();
-  
-  return markIcons;
-}
-
-
-Future<Uint8List> _getRoundedImages(String path, int width, Color borderColor, double borderWidth) async {
-
-  ByteData data = await rootBundle.load(path);
-  ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
-
-  ui.FrameInfo fi = await codec.getNextFrame();
-
-  final int imageSize = width;
-  final ui.Image image = fi.image;
-  final ui.Rect paintRect = Offset.zero & Size(imageSize.toDouble(), imageSize.toDouble());
-  final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-  final ui.Canvas canvas = ui.Canvas(pictureRecorder);
-
-  final Paint paint = Paint()
-    ..isAntiAlias = true;
-  
-  final double radius = imageSize.toDouble() / 2;
-
-  final Paint borderPaint = Paint()
-    ..color = borderColor
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = borderWidth;
-
-  canvas.saveLayer(paintRect, Paint()); // 레이어 생성
-
-  // 원형 이미지 그리기
-  canvas.drawCircle(Offset(radius, radius), radius, paint);
-
-  // 이미지 클리핑
-  canvas.clipPath(Path()..addOval(paintRect));
-
-  // 이미지 그리기
-  canvas.drawImageRect(
-    image,
-    ui.Rect.fromLTRB(0, 0, image.width.toDouble(), image.height.toDouble()),
-    paintRect,
-    paint,
-  );
-
-  // 테두리 그리기
-  canvas.drawCircle(Offset(radius, radius), radius - borderWidth / 2, borderPaint);
-
-  canvas.restore(); // 레이어 복원
-
-  final ui.Picture picture = pictureRecorder.endRecording();
-  final ui.Image roundedImage = await picture.toImage(imageSize, imageSize);
-  final ByteData? byteData = await roundedImage.toByteData(format: ui.ImageByteFormat.png);
-
-  if (byteData != null) {
-    return byteData.buffer.asUint8List();
-  } else {
-    throw Exception('Failed to convert image to byte data.');
-  }
-}
-
 
 //reference
 // https://snazzymaps.com/explore?text=&sort=popular&tag=&color= [google map theme]
