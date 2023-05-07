@@ -15,9 +15,10 @@ Widget chat(BuildContext context, FriendInfo user, messages) {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: messages.length,
             itemBuilder: (BuildContext context, int index) {
-              return messages[index][messages[index].length - 1] == '.'
-                  ? myBubble(context, user, messages[index])
-                  : otherBubble(context, user, messages[index]);
+              final message = messages[index];
+              return message.endsWith('.')
+                  ? myBubble(context, user, message)
+                  : otherBubble(context, user, message);
             },
           ),
         ],
