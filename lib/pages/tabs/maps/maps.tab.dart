@@ -31,19 +31,35 @@ class _MapsWidgetState extends State<MapsWidget> {
 
     _addMarker(
         markers,
-        FriendInfo(username: '채원', image: 'assets/images/cw1.png'),
+        FriendInfo(
+          username: '채원',
+          image: 'assets/images/cw1.png',
+          message: '안녕하세요!',
+        ),
         LatLng(37.2811339, 127.0455020));
     _addMarker(
         markers,
-        FriendInfo(username: '은채', image: 'assets/images/ec1.png'),
+        FriendInfo(
+          username: '은채',
+          image: 'assets/images/ec1.png',
+          message: '반가워요!',
+        ),
         LatLng(37.2822411, 127.0466999));
     _addMarker(
         markers,
-        FriendInfo(username: '윤진', image: 'assets/images/yj1.png'),
+        FriendInfo(
+          username: '윤진',
+          image: 'assets/images/yj1.png',
+          message: '안녕!',
+        ),
         LatLng(37.2833289, 127.0455020));
     _addMarker(
         markers,
-        FriendInfo(username: '즈하', image: 'assets/images/kz1.png'),
+        FriendInfo(
+          username: '즈하',
+          image: 'assets/images/kz1.png',
+          message: '반가워!',
+        ),
         LatLng(37.2842411, 127.0435222));
     _addMarker(markers, FriendInfo(username: 'test1'),
         LatLng(37.2842411, 127.0466999));
@@ -73,19 +89,114 @@ class _MapsWidgetState extends State<MapsWidget> {
           markerId: MarkerId(user.username.toString()),
           position: location,
           icon: BitmapDescriptor.fromBytes(markIcons),
-          infoWindow: InfoWindow(
-            title: user.username,
-            // snippet: '안녕~',
-          ),
           onTap: () {
-            showDialog(
+            showModalBottomSheet(
               context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text(user.username ?? "Unknown"),
-                  content: Text(location.latitude.toString() +
-                      '\n' +
-                      location.longitude.toString()),
+              backgroundColor: Colors.transparent,
+              barrierColor: Colors.transparent,
+              isDismissible: true, // 배경 터치 시 닫힐지 말지 설정
+              enableDrag: true, // 드래그로 닫힐지 말지 설정
+              builder: (BuildContext context) {
+                return SafeArea(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.20,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(24),
+                        topRight: Radius.circular(24),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 1, 5, 1),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.height * 0.15,
+                            height: MediaQuery.of(context).size.height * 0.15,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  user.image ?? "assets/images/cookie_log.png",
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                              border:
+                                  Border.all(width: 1.5, color: Colors.black45),
+                            ),
+                          ),
+                          const SizedBox(width: 25),
+                          Container(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                user.username ?? "Unknown",
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                user.message ?? "Unknown",
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Row(
+                                children: [
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.deepOrangeAccent,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                        side: const BorderSide(
+                                            color: Colors.black45, width: 1),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      '채팅하기',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    onPressed: () {},
+                                  ),
+                                  const SizedBox(width: 16),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.deepOrangeAccent,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                        side: const BorderSide(
+                                          color: Colors.black45,
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      '친구신청',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    onPressed: () {},
+                                  ),
+                                ],
+                              )
+                            ],
+                          )),
+                        ],
+                      ),
+                    ),
+                  ),
                 );
               },
             );
@@ -142,7 +253,7 @@ class _MapsWidgetState extends State<MapsWidget> {
               zoomControlsEnabled: false, // 축소확대 버튼
               minMaxZoomPreference: const MinMaxZoomPreference(14, 20), // 줌 제한
               myLocationButtonEnabled: true,
-
+              mapToolbarEnabled: false, // 길찾기 버튼
               onMapCreated: (GoogleMapController controller) {
                 mapController = controller;
                 mapController.setMapStyle(_mapStyle);
