@@ -63,7 +63,7 @@ class FriendProfileWidget extends StatelessWidget {
           if (displayName)
             Flexible(
               child: Text(
-                user.name ?? 'Unknown',
+                user.username ?? 'Unknown',
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: const TextStyle(

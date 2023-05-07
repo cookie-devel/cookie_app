@@ -52,7 +52,7 @@ class ProfileWindow extends StatelessWidget {
                       children: [
                         ListTile(
                           title: Text(
-                            "안녕하세요 저는 ${user.name}입니다.\n반갑습니다.",
+                            "안녕하세요 저는 ${user.username}입니다.\n반갑습니다.",
                             // 'user.status_message',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
@@ -61,7 +61,7 @@ class ProfileWindow extends StatelessWidget {
                           ),
                         ),
                         const Divider(),
-                        userProfileListTile("이름", user.name ?? 'Unknown'),
+                        userProfileListTile("이름", user.username ?? 'Unknown'),
                         const Divider(),
                         userProfileListTile("생일", 'user.birthday' ?? 'Unknown'),
                         const Divider(),

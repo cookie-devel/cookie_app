@@ -1,26 +1,31 @@
 // 친구 정보 class
 class FriendInfo {
-  final String? name;
+  final String? username;
   final String? image;
-  final Map? log;
+  final String? message;
+  final String? userid;
 
   FriendInfo({
-    this.name = "Unknown",
-    this.image = "assets/images/user.jpg",
-    this.log = const {},
+    this.username = "Unknown",
+    this.image = "assets/images/cookie_logo.png",
+    this.message = "",
+    this.userid = "",
   });
 }
 
 // dictionary -> FriendInfo
 FriendInfo returnUserInfo(Map<String, dynamic> profile) {
-  String name = profile['name'] as String;
-  String image = profile['image'] as String;
+  String username = profile['username'] ?? "Unknown";
+  String userid = profile['userid'] ?? "";
 
-  Map log = {};
-  if (profile['log'] != null) {
-    Map log = profile['log'] as Map;
-  } else {
-    Map log = {};
-  }
-  return FriendInfo(name: name, image: image, log: log);
+  Map<String, dynamic> prof = profile['profile'] ?? {};
+  String image = prof['image'] ?? "assets/images/cookie_logo.png";
+  String message = prof['message'] ?? "";
+
+  return FriendInfo(
+    username: username,
+    image: image,
+    message: message,
+    userid: userid,
+  );
 }

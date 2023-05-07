@@ -58,7 +58,7 @@ class _ChatTabState extends State<ChatTab> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      widget.user.name ?? 'Unknown',
+                      widget.user.username ?? 'Unknown',
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
