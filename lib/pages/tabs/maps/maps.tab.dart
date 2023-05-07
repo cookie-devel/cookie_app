@@ -30,10 +30,10 @@ class _MapsWidgetState extends State<MapsWidget> {
     _locationPermission();
     _getUserLocation();
 
-    _addMarker(markers, FriendInfo(name: '채원',image:'assets/images/cw1.png'), LatLng(37.2811339, 127.0455020));
-    _addMarker(markers, FriendInfo(name: '은채',image:'assets/images/ec1.png'), LatLng(37.2822411, 127.0466999));
-    _addMarker(markers, FriendInfo(name: '윤진',image:'assets/images/yj1.png'), LatLng(37.2833289, 127.0477240));
-    _addMarker(markers, FriendInfo(name: '즈하',image:'assets/images/kz1.png'), LatLng(37.2844555, 127.0488222));
+    _addMarker(markers, FriendInfo(username: '채원', image:'assets/images/cw1.png'), LatLng(37.2811339, 127.0455020));
+    _addMarker(markers, FriendInfo(username: '은채', image:'assets/images/ec1.png'), LatLng(37.2822411, 127.0466999));
+    _addMarker(markers, FriendInfo(username: '윤진', image:'assets/images/yj1.png'), LatLng(37.2833289, 127.0477240));
+    _addMarker(markers, FriendInfo(username: '즈하', image:'assets/images/kz1.png'), LatLng(37.2844555, 127.0488222));
 
     rootBundle.loadString('assets/data/mapStyle.json').then((string) {
       _mapStyle = string;
@@ -52,11 +52,11 @@ class _MapsWidgetState extends State<MapsWidget> {
       markers.add(
         Marker(
           draggable: false,
-          markerId: MarkerId(user.name.toString()),
+          markerId: MarkerId(user.username.toString()),
           position: location,
           icon: BitmapDescriptor.fromBytes(markIcons),
           infoWindow: InfoWindow(
-            title: user.name,
+            title: user.username,
             // snippet: '안녕~',
           ),
           onTap: () {
@@ -64,7 +64,7 @@ class _MapsWidgetState extends State<MapsWidget> {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: Text(user.name ?? "Unknown"),
+                  title: Text(user.username ?? "Unknown"),
                   content: Text(location.latitude.toString()+'\n'+location.longitude.toString()),
                 );
               },

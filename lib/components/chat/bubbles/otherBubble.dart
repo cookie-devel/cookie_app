@@ -41,7 +41,7 @@ Widget otherBubble(BuildContext context, FriendInfo user, String text) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                user.name ?? 'Unknown',
+                user.username ?? 'Unknown',
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
