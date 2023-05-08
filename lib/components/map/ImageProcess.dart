@@ -20,8 +20,12 @@ Future<Uint8List> getImages(String path, int width) async {
 }
 
 // 원형 marker 이미지 불러오기
-Future<Uint8List> getRoundedImages(String path, int width,
-    {Color borderColor = Colors.transparent, double borderWidth = 0.0}) async {
+Future<Uint8List> getRoundedImages(
+  String path,
+  int width, {
+  Color borderColor = Colors.transparent,
+  double borderWidth = 0.0,
+}) async {
   ByteData data = await rootBundle.load(path);
   ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
 
@@ -61,7 +65,10 @@ Future<Uint8List> getRoundedImages(String path, int width,
 
   // 테두리 그리기
   canvas.drawCircle(
-      Offset(radius, radius), radius - borderWidth / 2, borderPaint);
+    Offset(radius, radius),
+    radius - borderWidth / 2,
+    borderPaint,
+  );
 
   canvas.restore(); // 레이어 복원
 
