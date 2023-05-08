@@ -22,10 +22,11 @@ Widget otherBubble(BuildContext context, FriendInfo user, String text) {
                 borderRadius: BorderRadius.circular(16),
                 image: DecorationImage(
                   image: NetworkImage(
-                      user.image ?? 'https://example.com/default_image.jpg',),
+                    user.image ?? 'https://example.com/default_image.jpg',
+                  ),
                   fit: BoxFit.cover,
                 ),
-                border: Border.all(width:0.5, color: Colors.black45),
+                border: Border.all(width: 0.5, color: Colors.black45),
               ),
             ),
           ),
@@ -50,7 +51,7 @@ Widget otherBubble(BuildContext context, FriendInfo user, String text) {
                   maxWidth: 200,
                 ),
                 decoration: ShapeDecoration(
-                  color: Color.fromARGB(213, 244, 143, 177),
+                  color: const Color.fromARGB(213, 244, 143, 177),
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(2),

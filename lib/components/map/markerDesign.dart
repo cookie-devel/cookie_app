@@ -68,9 +68,9 @@ Widget bottomSheetInside(BuildContext context, FriendInfo user) {
                         color: Colors.black54,
                       ),
                       const SizedBox(width: 1),
-                      Text(
+                      const Text(
                         "33",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           color: Colors.black54,
                         ),
@@ -80,7 +80,7 @@ Widget bottomSheetInside(BuildContext context, FriendInfo user) {
                   const SizedBox(height: 8),
                   Flexible(
                     child: Text(
-                      user.message!+'\n',
+                      '${user.message!}\n',
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.black54,
@@ -159,8 +159,12 @@ Future<void> markerBottomSheet(BuildContext context, FriendInfo user) {
   );
 }
 
-Marker addMarker(BuildContext context, FriendInfo user, LatLng location,
-    Uint8List markIcons) {
+Marker addMarker(
+  BuildContext context,
+  FriendInfo user,
+  LatLng location,
+  Uint8List markIcons,
+) {
   return Marker(
     draggable: false,
     markerId: MarkerId(user.username.toString()),
