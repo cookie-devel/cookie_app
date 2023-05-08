@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:cookie_app/components/auth/validator.dart';
@@ -20,14 +19,17 @@ Future<bool> handleSignUp({
   assert(validatePhoneNumber(phoneNumber) == null);
 
   String data = createJsonData(id, pw, name, birthday, phoneNumber);
-  Map<String, dynamic> resSignUp = await multipartPostSignUp({
-    "userid": id,
-    "password": pw,
-    "username": name,
-    "birthday": birthday,
-    "phone": phoneNumber,
-    "profile": {"image": null, "message": null}
-  }, profile);
+  Map<String, dynamic> resSignUp = await multipartPostSignUp(
+    {
+      "userid": id,
+      "password": pw,
+      "username": name,
+      "birthday": birthday,
+      "phone": phoneNumber,
+      "profile": {"image": null, "message": null}
+    },
+    profile,
+  );
   return resSignUp.containsKey('success') && resSignUp['success'] == true;
 }
 
@@ -60,10 +62,12 @@ Future multipartPostSignUp(data, profile) async {
     request.fields['username'] = data['username'];
     request.fields['birthday'] = data['birthday'];
     request.fields['phone'] = data['phone'];
-    request.files.add(await MultipartFile.fromPath(
-      'profile_image',
-      profile['image'].path,
-    ));
+    request.files.add(
+      await MultipartFile.fromPath(
+        'profile_image',
+        profile['image'].path,
+      ),
+    );
 
     StreamedResponse res = await request.send();
     final body = await res.stream.bytesToString();

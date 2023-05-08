@@ -206,7 +206,7 @@ class _AnimatedProfileWindowState extends State<AnimatedProfileWindow>
 class FullScreenImage extends StatelessWidget {
   final String imageUrl;
 
-  FullScreenImage({required this.imageUrl});
+  const FullScreenImage({super.key, required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {

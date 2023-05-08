@@ -46,7 +46,7 @@ class _ChatWidgetState extends State<ChatWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Color.fromARGB(247, 253, 253, 253),
+      backgroundColor: const Color.fromARGB(247, 253, 253, 253),
       appBar: CookieAppBar(
         title: widget.user?.username ?? 'Unknown',
         actions: [connectionInfo()],
