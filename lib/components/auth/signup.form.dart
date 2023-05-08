@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cookie_app/components/CustomTextFormField.dart';
 import 'package:cookie_app/components/auth/submit_button.dart';
 import 'package:cookie_app/components/auth/validator.dart';
@@ -7,52 +9,6 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
 // https://docs.flutter.dev/cookbook/forms/validation
-
-class SignUpForm extends StatelessWidget {
-  SignUpForm({Key? key}) : super(key: key);
-
-  final _formKey = GlobalKey<FormState>();
-
-  IDField idField = IDField();
-  PWField pwField = PWField();
-  // PWCheckField pwCheckField = PWCheckField(pwField: pwField,);
-  NameField nameField = NameField();
-  BirthdayField birthdayField = BirthdayField();
-  PhoneNumberField phoneNumberField = PhoneNumberField();
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: AutofillGroup(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            idField,
-            pwField,
-            PWCheckField(
-              pwField: pwField,
-            ),
-            nameField,
-            birthdayField,
-            phoneNumberField,
-            signUpButton(
-              context: context,
-              formKey: _formKey,
-              id: idField,
-              pw: pwField,
-              nameField: nameField,
-              birthdayField: birthdayField,
-              phoneNumberField: phoneNumberField,
-            ),
-          ].map(wrapped).toList(),
-        ),
-      ),
-    );
-  }
-}
 
 class IDField extends CustomTextFormField {
   IDField({Key? key})
@@ -173,6 +129,8 @@ ElevatedButton signUpButton({
   required NameField nameField,
   required BirthdayField birthdayField,
   required PhoneNumberField phoneNumberField,
+  File? profileImg,
+  String? profileMsg,
 }) {
   return submitButton(
     onPressed: () async {
@@ -184,6 +142,10 @@ ElevatedButton signUpButton({
         name: nameField.value!,
         birthday: birthdayField.value!,
         phoneNumber: phoneNumberField.value!,
+        profile: {
+          'image': profileImg,
+          'message': profileMsg,
+        },
       );
     },
     text: '회원가입',
