@@ -31,7 +31,7 @@ class ProfileWindow extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => FullScreenImage(
-                        imageUrl: user.image ?? 'assets/images/cookie_logo.png',
+                        imageUrl: user.profileImage ?? 'assets/images/cookie_logo.png',
                       ),
                     ),
                   );
@@ -43,7 +43,7 @@ class ProfileWindow extends StatelessWidget {
                     shape: BoxShape.circle,
                     image: DecorationImage(
                       image: NetworkImage(
-                        user.image ?? 'assets/images/cookie_logo.png',
+                        user.profileImage ?? 'assets/images/cookie_logo.png',
                       ),
                       fit: BoxFit.cover,
                     ),
@@ -65,7 +65,7 @@ class ProfileWindow extends StatelessWidget {
                       children: [
                         ListTile(
                           title: Text(
-                            user.message ?? "",
+                            user.profileMessage ?? "",
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0,
@@ -191,7 +191,7 @@ class _AnimatedProfileWindowState extends State<AnimatedProfileWindow>
   @override
   void dispose() {
     _controller.dispose();
-    super.dispose(); 
+    super.dispose();
   }
 
   @override

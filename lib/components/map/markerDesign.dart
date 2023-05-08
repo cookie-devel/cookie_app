@@ -33,7 +33,7 @@ Widget bottomSheetInside(BuildContext context, FriendInfo user) {
                 shape: BoxShape.circle,
                 image: DecorationImage(
                   image: AssetImage(
-                    user.image ?? "https://i.imgur.com/9cHRbzX.png",
+                    user.profileImage ?? "https://i.imgur.com/9cHRbzX.png",
                   ),
                   fit: BoxFit.cover,
                 ),
@@ -80,7 +80,7 @@ Widget bottomSheetInside(BuildContext context, FriendInfo user) {
                   const SizedBox(height: 8),
                   Flexible(
                     child: Text(
-                      '${user.message!}\n',
+                      '${user.profileMessage!}\n',
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.black54,

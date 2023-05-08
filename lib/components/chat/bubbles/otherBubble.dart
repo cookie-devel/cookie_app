@@ -22,7 +22,7 @@ Widget otherBubble(BuildContext context, FriendInfo user, String text) {
                 borderRadius: BorderRadius.circular(16),
                 image: DecorationImage(
                   image: NetworkImage(
-                    user.image ?? 'https://example.com/default_image.jpg',
+                    user.profileImage ?? 'https://example.com/default_image.jpg',
                   ),
                   fit: BoxFit.cover,
                 ),

@@ -1,31 +1,26 @@
 // 친구 정보 class
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class FriendInfo {
-  final String? username;
-  final String? image;
-  final String? message;
   final String? userid;
+  String? username;
+  String? profileImage;
+  String? profileMessage;
 
   FriendInfo({
-    this.username = "Unknown",
-    this.image = "assets/images/cookie_logo.png",
-    this.message = "",
-    this.userid = "",
+    this.userid,
+    this.username,
+    this.profileImage,
+    this.profileMessage,
   });
-}
+  
+  String get getUsername => username ?? "Unknown User";
+  String get getProfileImage => profileImage ?? '${dotenv.env['BASE_URI']}/cookie_logo.png';
 
-// dictionary -> FriendInfo
-FriendInfo returnUserInfo(Map<String, dynamic> profile) {
-  String username = profile['username'] ?? "Unknown";
-  String userid = profile['userid'] ?? "";
-
-  Map<String, dynamic> prof = profile['profile'] ?? {};
-  String image = prof['image'] ?? "assets/images/cookie_logo.png";
-  String message = prof['message'] ?? "";
-
-  return FriendInfo(
-    username: username,
-    image: image,
-    message: message,
-    userid: userid,
-  );
+  FriendInfo.fromMap(Map<String, dynamic> data)
+      : userid = data['userid'] ?? "",
+        username = data['username'] ?? "Unknown",
+        profileImage =
+            '${dotenv.env['BASE_URI']}/${data['profile']['image'] ?? "cookie_logo.png"}',
+        profileMessage = data['profile']['message'] ?? "";
 }

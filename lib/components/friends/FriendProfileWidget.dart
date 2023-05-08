@@ -48,7 +48,7 @@ class FriendProfileWidget extends StatelessWidget {
               shape: BoxShape.circle,
               image: DecorationImage(
                 image: NetworkImage(
-                    user.image ?? 'https://i.imgur.com/9cHRbzX.png'),
+                    user.profileImage ?? 'https://i.imgur.com/9cHRbzX.png'),
                 fit: BoxFit.cover,
               ),
               border: const Border.fromBorderSide(

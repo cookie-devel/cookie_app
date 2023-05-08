@@ -46,7 +46,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               FriendProfileWidget(
                 user: _imageFile == null
                     ? FriendInfo()
-                    : FriendInfo(image: _imageFile!.path),
+                    : FriendInfo(profileImage: _imageFile!.path),
                 enableOnLongPress: false,
                 enableOnTap: false,
                 displayName: false,

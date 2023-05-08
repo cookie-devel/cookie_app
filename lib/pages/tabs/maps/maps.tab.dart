@@ -64,8 +64,8 @@ class _MapsWidgetState extends State<MapsWidget> {
       markers,
       FriendInfo(
         username: '김채원',
-        image: 'assets/images/cw1.png',
-        message: '안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!',
+        profileImage: 'assets/images/cw1.png',
+        profileMessage: '안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!',
       ),
       const LatLng(37.2811339, 127.0455020),
     );
@@ -73,8 +73,8 @@ class _MapsWidgetState extends State<MapsWidget> {
       markers,
       FriendInfo(
         username: '홍은채',
-        image: 'assets/images/ec1.png',
-        message: '반가워요!',
+        profileImage: 'assets/images/ec1.png',
+        profileMessage: '반가워요!',
       ),
       const LatLng(37.2822411, 127.0466999),
     );
@@ -82,8 +82,8 @@ class _MapsWidgetState extends State<MapsWidget> {
       markers,
       FriendInfo(
         username: '허윤진',
-        image: 'assets/images/yj1.png',
-        message: '안녕!',
+        profileImage: 'assets/images/yj1.png',
+        profileMessage: '안녕!',
       ),
       const LatLng(37.2833289, 127.0455020),
     );
@@ -91,8 +91,8 @@ class _MapsWidgetState extends State<MapsWidget> {
       markers,
       FriendInfo(
         username: '카즈하',
-        image: 'assets/images/kz1.png',
-        message: '반가워!',
+        profileImage: 'assets/images/kz1.png',
+        profileMessage: '반가워!',
       ),
       const LatLng(37.2842411, 127.0435222),
     );
@@ -128,7 +128,7 @@ class _MapsWidgetState extends State<MapsWidget> {
     double width = 4,
   }) async {
     Uint8List markIcons = await getRoundedImages(
-      user.image!,
+      user.profileImage!,
       size,
       borderColor: color,
       borderWidth: width,
