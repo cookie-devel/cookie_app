@@ -35,20 +35,15 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
 
     return Scaffold(
       appBar: CookieAppBar(title: '채팅'),
-      body:
-          // Padding(
-          // padding: const EdgeInsets.fromLTRB(10, 16, 10, 8),
-          // child:
-          ListView.builder(
+      body: ListView.builder(
         itemCount: chatLength,
         itemBuilder: (BuildContext context, int index) {
           final Map<String, dynamic> log = chatLog[index];
 
-          return ChatTab(user: returnUserInfo(log));
+          return ChatTab(user: FriendInfo.fromMap(log));
         },
       ),
     );
-    // );
   }
 
   @override

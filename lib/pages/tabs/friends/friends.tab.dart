@@ -84,7 +84,7 @@ class _FriendsGridState extends State<FriendsGrid>
                   return Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: FriendProfileWidget(
-                      user: returnUserInfo(profile),
+                      user: FriendInfo.fromMap(profile),
                     ),
                   );
                 },
