@@ -191,7 +191,7 @@ class _AnimatedProfileWindowState extends State<AnimatedProfileWindow>
   @override
   void dispose() {
     _controller.dispose();
-    super.dispose();
+    super.dispose(); 
   }
 
   @override
@@ -217,7 +217,7 @@ class FullScreenImage extends StatelessWidget {
           InteractiveViewer(
             child: GestureDetector(
               onTap: () {
-                Navigator.pop(context);
+                // Navigator.pop(context);
               },
               child: Center(
                 child: Image.network(

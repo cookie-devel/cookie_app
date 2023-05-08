@@ -54,6 +54,7 @@ dependencies:
   shared_preferences: ^2.1.0
   jwt_decoder: ^2.0.1
   path_provider: ^2.0.14
+  fluttertoast: ^8.2.1
 
 dev_dependencies:
   flutter_test:

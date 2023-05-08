@@ -29,7 +29,7 @@ class _FriendsGridState extends State<FriendsGrid>
   void getData() async {
     Map<String, dynamic> account = await accountStorage.readJSON();
     setState(() {
-      profiles = account['friendList'];
+      profiles = sortList(account['friendList'],'username');
     });
   }
 
@@ -37,11 +37,27 @@ class _FriendsGridState extends State<FriendsGrid>
     var data = await apiGetFriends();
     print(data);
     setState(() {
-      profiles = data['result'];
+      profiles = sortList(data['result'],'username');
     });
     Map<String, dynamic> account = await accountStorage.readJSON();
     account['friendList'] = data['result'];
     accountStorage.writeJSON(account);
+  }
+
+  List sortList(List<dynamic> list, String key, {bool reverse = false}) {
+    list.sort((a, b) {
+      if (a[key] == null) {
+        return 1;
+      } else if (b[key] == null) {
+        return -1;
+      } else {
+        return a[key].compareTo(b[key]);
+      }
+    });
+    if (reverse) {
+      list = list.reversed.toList();
+    }
+    return list;
   }
 
   @override
