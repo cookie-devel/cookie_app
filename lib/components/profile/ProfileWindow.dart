@@ -214,14 +214,16 @@ class FullScreenImage extends StatelessWidget {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Center(
-              child: Image.network(
-                imageUrl,
-                fit: BoxFit.contain,
+          InteractiveViewer(
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Center(
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
           ),

@@ -46,16 +46,17 @@ class _ChatWidgetState extends State<ChatWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+      backgroundColor: Color.fromARGB(247, 253, 253, 253),
       appBar: CookieAppBar(
         title: widget.user?.username ?? 'Unknown',
         actions: [connectionInfo()],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
         child: Column(
           children: [
             chat(context, widget.user ?? FriendInfo(), messages),
+            const SizedBox(height: 6),
             SafeArea(
               bottom: true,
               child: chatField(),
