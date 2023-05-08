@@ -5,6 +5,7 @@ import 'package:cookie_app/components/LongPressCopyableText.dart';
 Widget otherBubble(BuildContext context, FriendInfo user, String text) {
   return Column(
     children: [
+      const SizedBox(height: 7.5),
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -14,22 +15,17 @@ Widget otherBubble(BuildContext context, FriendInfo user, String text) {
             onTap: () {
               // profileWindow(context, user);
             },
-            child: Material(
-              elevation: 5,
-              shape: const CircleBorder(
-                side: BorderSide(
-                  color: Color.fromARGB(255, 255, 99, 159),
-                  width: 1.5,
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                image: DecorationImage(
+                  image: NetworkImage(
+                      user.image ?? 'https://example.com/default_image.jpg',),
+                  fit: BoxFit.cover,
                 ),
-              ),
-              child: CircleAvatar(
-                backgroundColor: Colors.grey[300],
-                child: ClipOval(
-                  child: Image.asset(
-                    user.image ?? 'assets/images/user.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                border: Border.all(width:0.5, color: Colors.black45),
               ),
             ),
           ),
@@ -54,10 +50,10 @@ Widget otherBubble(BuildContext context, FriendInfo user, String text) {
                   maxWidth: 200,
                 ),
                 decoration: ShapeDecoration(
-                  color: const Color.fromARGB(255, 189, 252, 138),
+                  color: Color.fromARGB(213, 244, 143, 177),
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.zero,
+                      topLeft: Radius.circular(2),
                       topRight: Radius.circular(10),
                       bottomRight: Radius.circular(10),
                       bottomLeft: Radius.circular(10),
@@ -80,7 +76,7 @@ Widget otherBubble(BuildContext context, FriendInfo user, String text) {
                   text: text,
                   style: const TextStyle(
                     fontSize: 15,
-                    color: Colors.black87,
+                    color: Colors.white,
                   ),
                 ),
               )
@@ -88,7 +84,7 @@ Widget otherBubble(BuildContext context, FriendInfo user, String text) {
           ),
         ],
       ),
-      const SizedBox(height: 15), // 수직 간격 조정
+      const SizedBox(height: 7.5), // 수직 간격 조정
     ],
   );
 }
