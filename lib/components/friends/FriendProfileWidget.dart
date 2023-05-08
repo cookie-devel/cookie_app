@@ -47,8 +47,7 @@ class FriendProfileWidget extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
-                image: NetworkImage(
-                    user.profileImage ?? 'https://i.imgur.com/9cHRbzX.png'),
+                image: NetworkImage(user.profileImage),
                 fit: BoxFit.cover,
               ),
               border: const Border.fromBorderSide(
@@ -64,7 +63,7 @@ class FriendProfileWidget extends StatelessWidget {
           if (displayName)
             Flexible(
               child: Text(
-                user.username ?? 'Unknown',
+                user.username,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: const TextStyle(

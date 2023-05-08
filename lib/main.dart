@@ -196,8 +196,8 @@ class _MainWidgetState extends State<MainWidget> {
                     '채팅',
                   ),
                   iconItem(
-                    Text(''),
-                    Icon(Icons.cookie),
+                    const Text(''),
+                    const Icon(Icons.cookie),
                     '쿠키',
                   ),
                   iconItem(
@@ -228,4 +228,3 @@ class _MainWidgetState extends State<MainWidget> {
 
 // reference
 // https://pub.dev/packages/badges [badges widget]
-

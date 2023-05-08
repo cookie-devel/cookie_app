@@ -29,15 +29,14 @@ class _FriendsGridState extends State<FriendsGrid>
   void getData() async {
     Map<String, dynamic> account = await accountStorage.readJSON();
     setState(() {
-      profiles = sortList(account['friendList'],'username');
+      profiles = sortList(account['friendList'], 'username');
     });
   }
 
   Future<void> updateData() async {
     var data = await apiGetFriends();
-    print(data);
     setState(() {
-      profiles = sortList(data['result'],'username');
+      profiles = sortList(data['result'], 'username');
     });
     Map<String, dynamic> account = await accountStorage.readJSON();
     account['friendList'] = data['result'];

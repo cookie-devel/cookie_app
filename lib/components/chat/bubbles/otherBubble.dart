@@ -22,7 +22,7 @@ Widget otherBubble(BuildContext context, FriendInfo user, String text) {
                 borderRadius: BorderRadius.circular(16),
                 image: DecorationImage(
                   image: NetworkImage(
-                    user.profileImage ?? 'https://example.com/default_image.jpg',
+                    user.profileImage,
                   ),
                   fit: BoxFit.cover,
                 ),
@@ -38,7 +38,7 @@ Widget otherBubble(BuildContext context, FriendInfo user, String text) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                user.username ?? 'Unknown',
+                user.username,
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,

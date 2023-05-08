@@ -31,7 +31,7 @@ class ProfileWindow extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => FullScreenImage(
-                        imageUrl: user.profileImage ?? 'assets/images/cookie_logo.png',
+                        imageUrl: user.profileImage,
                       ),
                     ),
                   );
@@ -43,7 +43,7 @@ class ProfileWindow extends StatelessWidget {
                     shape: BoxShape.circle,
                     image: DecorationImage(
                       image: NetworkImage(
-                        user.profileImage ?? 'assets/images/cookie_logo.png',
+                        user.profileImage,
                       ),
                       fit: BoxFit.cover,
                     ),
@@ -73,7 +73,7 @@ class ProfileWindow extends StatelessWidget {
                           ),
                         ),
                         const Divider(),
-                        userProfileListTile("이름", user.username ?? 'Unknown'),
+                        userProfileListTile("이름", user.username),
                         const Divider(),
                         userProfileListTile("생일", 'user.birthday' ?? 'Unknown'),
                         const Divider(),
