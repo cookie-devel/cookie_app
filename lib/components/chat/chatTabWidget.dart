@@ -43,8 +43,8 @@ class _ChatTabState extends State<ChatTab> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(22),
                   image: DecorationImage(
-                    image: AssetImage(
-                      widget.user.profileImage ?? 'assets/images/user.jpg',
+                    image: NetworkImage(
+                      widget.user.profileImage,
                     ),
                     fit: BoxFit.cover,
                   ),
@@ -58,7 +58,7 @@ class _ChatTabState extends State<ChatTab> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      widget.user.username ?? 'Unknown',
+                      widget.user.username,
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,

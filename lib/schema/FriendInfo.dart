@@ -2,25 +2,31 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class FriendInfo {
-  final String? userid;
-  String? username;
-  String? profileImage;
-  String? profileMessage;
+  final String? _userid;
+  final String? _username;
+  final String? _profileImage;
+  final String? _profileMessage;
 
   FriendInfo({
-    this.userid,
-    this.username,
-    this.profileImage,
-    this.profileMessage,
-  });
-  
-  String get getUsername => username ?? "Unknown User";
-  String get getProfileImage => profileImage ?? '${dotenv.env['BASE_URI']}/cookie_logo.png';
+    String? userid,
+    String? username,
+    String? profileImage,
+    String? profileMessage,
+  })  : _userid = userid,
+        _username = username,
+        _profileImage = profileImage,
+        _profileMessage = profileMessage;
+
+  String? get userid => _userid;
+  String get username => _username ?? "Unknown User";
+  String get profileImage =>
+      _profileImage ?? '${dotenv.env['BASE_URI']}/cookie_logo.png';
+  String? get profileMessage => _profileMessage;
 
   FriendInfo.fromMap(Map<String, dynamic> data)
-      : userid = data['userid'] ?? "",
-        username = data['username'] ?? "Unknown",
-        profileImage =
+      : _userid = data['userid'] ?? "",
+        _username = data['username'] ?? "Unknown",
+        _profileImage =
             '${dotenv.env['BASE_URI']}/${data['profile']['image'] ?? "cookie_logo.png"}',
-        profileMessage = data['profile']['message'] ?? "";
+        _profileMessage = data['profile']['message'] ?? "";
 }

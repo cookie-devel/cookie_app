@@ -128,7 +128,7 @@ class _MapsWidgetState extends State<MapsWidget> {
     double width = 4,
   }) async {
     Uint8List markIcons = await getRoundedImages(
-      user.profileImage!,
+      user.profileImage,
       size,
       borderColor: color,
       borderWidth: width,
