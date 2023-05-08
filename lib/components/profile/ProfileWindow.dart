@@ -24,20 +24,33 @@ class ProfileWindow extends StatelessWidget {
           height: MediaQuery.of(context).size.height * 0.74,
           child: Column(
             children: [
-              const SizedBox(height: 12),
-              Container(
-                height: 170,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: AssetImage(
-                      user.image ?? 'assets/images/cookie_logo.png',
+              const SizedBox(height: 16),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FullScreenImage(
+                        imageUrl: user.image ?? 'assets/images/cookie_logo.png',
+                      ),
                     ),
-                    fit: BoxFit.cover,
-                  ),
-                  border: Border.all(
-                    color: Colors.orangeAccent,
-                    width: 3.0,
+                  );
+                },
+                child: Container(
+                  width: 170,
+                  height: 170,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        user.image ?? 'assets/images/cookie_logo.png',
+                      ),
+                      fit: BoxFit.cover,
+                    ),
+                    border: Border.all(
+                      color: Colors.orangeAccent,
+                      width: 3.0,
+                    ),
                   ),
                 ),
               ),
@@ -52,8 +65,7 @@ class ProfileWindow extends StatelessWidget {
                       children: [
                         ListTile(
                           title: Text(
-                            "안녕하세요 저는 ${user.username}입니다.\n반갑습니다.",
-                            // 'user.status_message',
+                            user.message ?? "",
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0,
@@ -187,6 +199,48 @@ class _AnimatedProfileWindowState extends State<AnimatedProfileWindow>
     return ScaleTransition(
       scale: _scaleAnimation,
       child: ProfileWindow(user: widget.user),
+    );
+  }
+}
+
+class FullScreenImage extends StatelessWidget {
+  final String imageUrl;
+
+  FullScreenImage({required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Stack(
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Center(
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 40,
+            right: 16,
+            child: IconButton(
+              icon: const Icon(
+                Icons.close,
+                color: Colors.white,
+                size: 30,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
