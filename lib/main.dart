@@ -72,6 +72,7 @@ class Cookie extends StatelessWidget {
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Colors.white,
           selectedItemColor: Color.fromARGB(255, 253, 86, 35),
+          selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
           unselectedItemColor: Colors.grey,
           showSelectedLabels: true,
           showUnselectedLabels: false,
@@ -95,12 +96,6 @@ class _MainWidgetState extends State<MainWidget> {
   @override
   void initState() {
     super.initState();
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
   }
 
   DateTime? currentBackPressTime;
@@ -158,6 +153,36 @@ class _MainWidgetState extends State<MainWidget> {
     }
   }
 
+  List<BottomNavigationBarItem> bottomBarItems() {
+    return [
+      iconItem(
+        const Text('1', style: TextStyle(color: Colors.white)),
+        const Icon(Icons.people),
+        '친구',
+      ),
+      iconItem(
+        const Text('2', style: TextStyle(color: Colors.white)),
+        const Icon(Icons.chat_bubble),
+        '채팅',
+      ),
+      iconItem(
+        const Text(''),
+        const Icon(Icons.cookie),
+        '쿠키',
+      ),
+      iconItem(
+        const Text('3', style: TextStyle(color: Colors.white)),
+        const Icon(Icons.sports_basketball),
+        '클럽',
+      ),
+      iconItem(
+        const Text('4', style: TextStyle(color: Colors.white)),
+        const Icon(Icons.settings),
+        '설정',
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -186,39 +211,9 @@ class _MainWidgetState extends State<MainWidget> {
                 ),
               ),
               BottomNavigationBar(
-                items: [
-                  iconItem(
-                    const Text('1', style: TextStyle(color: Colors.white)),
-                    const Icon(Icons.people),
-                    '친구',
-                  ),
-                  iconItem(
-                    const Text('2', style: TextStyle(color: Colors.white)),
-                    const Icon(Icons.chat_bubble),
-                    '채팅',
-                  ),
-                  iconItem(
-                    const Text(''),
-                    const Icon(Icons.cookie),
-                    '쿠키',
-                  ),
-                  iconItem(
-                    const Text('3', style: TextStyle(color: Colors.white)),
-                    const Icon(Icons.sports_basketball),
-                    '클럽',
-                  ),
-                  iconItem(
-                    const Text('4', style: TextStyle(color: Colors.white)),
-                    const Icon(Icons.settings),
-                    '설정',
-                  ),
-                ],
+                items: bottomBarItems(),
                 currentIndex: _selectedIndex,
-                selectedItemColor: const Color.fromARGB(255, 253, 86, 35),
-                selectedLabelStyle:
-                    const TextStyle(fontWeight: FontWeight.bold),
-                onTap: _onItemTapped,
-                type: BottomNavigationBarType.fixed,
+                onTap: (i) => setState(() => _selectedIndex = i),
               ),
             ],
           ),
