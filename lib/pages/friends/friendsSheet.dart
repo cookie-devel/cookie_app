@@ -26,54 +26,13 @@ IconButton friendsAction(BuildContext context) {
                   child: ListView(
                     shrinkWrap: true,
                     children: [
-                      ListTile(
-                        leading: const Icon(Icons.person),
-                        title: const Text('친구관리'),
-                        onTap: () {
-                          // TODO: Implement settings page
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.notifications),
-                        title: const Text('알림'),
-                        onTap: () {
-                          // TODO: Implement notifications page
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.privacy_tip),
-                        title: const Text('개인정보'),
-                        onTap: () {
-                          // TODO: Implement privacy page
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.help),
-                        title: const Text('도움말'),
-                        onTap: () {
-                          // TODO: Implement help and feedback page
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.help),
-                        title: const Text('도움말'),
-                        onTap: () {
-                          // TODO: Implement help and feedback page
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.help),
-                        title: const Text('도움말'),
-                        onTap: () {
-                          // TODO: Implement help and feedback page
-                          Navigator.pop(context);
-                        },
-                      ),
+                      listTile(const Icon(Icons.person), '친구관리', () {}),
+                      listTile(const Icon(Icons.notifications), '알림', () {}),
+                      listTile(const Icon(Icons.sort), '정렬', () {
+                        sortFriendsList(context);
+                      }),
+                      listTile(const Icon(Icons.privacy_tip), '개인정보', () {}),
+                      listTile(const Icon(Icons.help), '도움말', () {}),
                     ],
                   ),
                 ),
@@ -84,4 +43,49 @@ IconButton friendsAction(BuildContext context) {
       );
     },
   );
+}
+
+ListTile listTile(Icon icon, String title, Function onTap) {
+  return ListTile(
+    leading: icon,
+    title: Text(title),
+    onTap: () {
+      onTap();
+    },
+  );
+}
+
+Future<void> sortFriendsList(context) {
+  return showDialog<String>(
+    context: context,
+    builder: (BuildContext context) => SimpleDialog(
+      title: const Text('정렬'),
+      children: <Widget>[
+        ListTile(
+          leading: const Icon(Icons.sort_by_alpha),
+          title: const Text('오름차순'),
+          onTap: () => Navigator.pop(context, '오름차순'),
+        ),
+        ListTile(
+          leading: const Icon(Icons.sort_by_alpha),
+          title: const Text('내림차순'),
+          onTap: () => Navigator.pop(context, '내림차순'),
+        ),
+        ListTile(
+          leading: const Icon(Icons.favorite),
+          title: const Text('친밀도순'),
+          onTap: () => Navigator.pop(context, '친밀도순'),
+        ),
+      ],
+    ),
+  ).then((returnVal) {
+    if (returnVal != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('$returnVal으로 정렬되었습니다.'),
+          duration: const Duration(milliseconds: 750),
+        ),
+      );
+    }
+  });
 }

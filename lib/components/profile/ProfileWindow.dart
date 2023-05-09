@@ -113,7 +113,7 @@ class ProfileWindow extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => ChatRoom(room: user),
