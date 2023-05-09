@@ -5,16 +5,16 @@ import 'package:cookie_app/handler/socket.io/socket.dart';
 import 'package:cookie_app/components/chat/chatListView.dart';
 import 'package:cookie_app/schema/FriendInfo.dart';
 
-class ChatWidget extends StatefulWidget {
-  final FriendInfo? user;
+class ChatRoom extends StatefulWidget {
+  final FriendInfo? room;
 
-  const ChatWidget({Key? key, this.user}) : super(key: key);
+  const ChatRoom({Key? key, this.room}) : super(key: key);
 
   @override
-  State<ChatWidget> createState() => _ChatWidgetState();
+  State<ChatRoom> createState() => _ChatRoomState();
 }
 
-class _ChatWidgetState extends State<ChatWidget> {
+class _ChatRoomState extends State<ChatRoom> {
   List messages = ['안녕하세요', '채팅 페이지 테스트입니다', '대화를 원할 경우 마침표로 대화를 마무리하세요'];
 
   final chatFieldController = TextEditingController();
@@ -48,14 +48,14 @@ class _ChatWidgetState extends State<ChatWidget> {
       resizeToAvoidBottomInset: true,
       backgroundColor: const Color.fromARGB(247, 253, 253, 253),
       appBar: CookieAppBar(
-        title: widget.user?.username ?? 'Unknown',
+        title: widget.room?.username ?? 'Unknown',
         actions: [connectionInfo()],
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
         child: Column(
           children: [
-            chat(context, widget.user ?? FriendInfo(), messages),
+            chat(context, widget.room ?? FriendInfo(), messages),
             const SizedBox(height: 6),
             SafeArea(
               bottom: true,

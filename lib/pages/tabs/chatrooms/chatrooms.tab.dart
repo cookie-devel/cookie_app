@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/cookie.appbar.dart';
-import 'package:cookie_app/components/chat/chatTabWidget.dart';
+import 'package:cookie_app/components/chat/chatroom_list_entry.dart';
 import 'package:cookie_app/schema/FriendInfo.dart';
 import 'package:flutter/services.dart';
+import 'package:cookie_app/pages/chatroom/chatroom.dart';
 
 class ChatTabWidget extends StatefulWidget {
   const ChatTabWidget({super.key});
@@ -40,7 +41,14 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
         itemBuilder: (BuildContext context, int index) {
           final Map<String, dynamic> log = chatLog[index];
 
-          return ChatTab(user: FriendInfo.fromMap(log));
+          return ChatRoomListEntry(
+            name: "새 채팅방",
+            image: log['profile']['image'],
+            message: "채팅방 메시지",
+            time: DateTime.tryParse("2023-04-01 12:00:00"),
+            unread: 48,
+            navigate: ChatRoom(room: FriendInfo.fromMap(log)),
+          );
         },
       ),
     );
