@@ -1,7 +1,7 @@
 import 'package:cookie_app/cookie.appbar.dart';
 import 'package:cookie_app/handler/friends_refresh.handler.dart';
 import 'package:cookie_app/handler/storage.dart';
-import 'package:cookie_app/pages/tabs/friends/friendsSheet.dart';
+import 'package:cookie_app/pages/friends/friendsSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/components/friends/FriendProfileWidget.dart';
 import 'package:cookie_app/schema/FriendInfo.dart';
