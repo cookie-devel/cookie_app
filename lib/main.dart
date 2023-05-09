@@ -90,6 +90,8 @@ class MainWidget extends StatefulWidget {
 }
 
 class _MainWidgetState extends State<MainWidget> {
+  int _selectedIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -111,7 +113,7 @@ class _MainWidgetState extends State<MainWidget> {
     if (backButtonInterval >= const Duration(milliseconds: 2000)) {
       currentBackPressTime = currentTime;
       Fluttertoast.showToast(
-        msg: '\'뒤로\' 버튼을 또 누르시면 종료됩니다.',
+        msg: '\'뒤로\' 버튼을 다시 누르면 종료됩니다.',
         backgroundColor: Colors.black.withOpacity(0.2),
         textColor: Colors.white,
       );
@@ -119,8 +121,6 @@ class _MainWidgetState extends State<MainWidget> {
     }
     return true;
   }
-
-  int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
     FriendsGrid(),
@@ -130,12 +130,11 @@ class _MainWidgetState extends State<MainWidget> {
     SettingsWidget(),
   ];
 
-  static const Color greenShade400 = Color(0xFF66BB6A);
   BottomNavigationBarItem iconItem(
     Text text,
     Icon icon,
     String label, {
-    Color color = greenShade400,
+    Color color = const Color(0xFF66BB6A),
   }) {
     if (text.data == null || text.data!.isEmpty) {
       return BottomNavigationBarItem(
