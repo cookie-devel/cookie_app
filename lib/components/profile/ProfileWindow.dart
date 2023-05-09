@@ -31,7 +31,7 @@ class ProfileWindow extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => FullScreenImage(
-                        imageUrl: user.profileImage,
+                        image: user.profileImage,
                       ),
                     ),
                   );
@@ -42,9 +42,7 @@ class ProfileWindow extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: NetworkImage(
-                        user.profileImage,
-                      ),
+                      image: user.profileImage,
                       fit: BoxFit.cover,
                     ),
                     border: Border.all(
@@ -204,9 +202,10 @@ class _AnimatedProfileWindowState extends State<AnimatedProfileWindow>
 }
 
 class FullScreenImage extends StatelessWidget {
-  final String imageUrl;
+  // final String imageUrl;
+  final ImageProvider image;
 
-  const FullScreenImage({super.key, required this.imageUrl});
+  const FullScreenImage({super.key, required this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -220,10 +219,7 @@ class FullScreenImage extends StatelessWidget {
                 // Navigator.pop(context);
               },
               child: Center(
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.contain,
-                ),
+                child: Image(image: image),
               ),
             ),
           ),
