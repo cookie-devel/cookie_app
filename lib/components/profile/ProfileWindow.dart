@@ -116,7 +116,7 @@ class ProfileWindow extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ChatWidget(user: user),
+                          builder: (context) => ChatRoom(room: user),
                         ),
                       );
                     },

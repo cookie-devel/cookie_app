@@ -11,11 +11,14 @@ import 'package:badges/badges.dart' as badges;
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:cookie_app/handler/signinout.handler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 void main() async {
   // Preserve Splash Screen
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  timeago.setLocaleMessages('ko', timeago.KoMessages());
 
   // Load Data
   await dotenv.load();
