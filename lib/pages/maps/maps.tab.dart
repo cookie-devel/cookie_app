@@ -64,7 +64,8 @@ class _MapsWidgetState extends State<MapsWidget> {
       markers,
       FriendInfo(
         username: '김채원',
-        profileImage: 'assets/images/cw1.png',
+        // profileImage: 'assets/images/cw1.png',
+        profileImage: Image.asset('assets/images/cw1.png').image,
         profileMessage: '안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!',
       ),
       const LatLng(37.2811339, 127.0455020),
@@ -73,7 +74,7 @@ class _MapsWidgetState extends State<MapsWidget> {
       markers,
       FriendInfo(
         username: '홍은채',
-        profileImage: 'assets/images/ec1.png',
+        profileImage: const AssetImage('assets/images/ec1.png'),
         profileMessage: '반가워요!',
       ),
       const LatLng(37.2822411, 127.0466999),
@@ -82,7 +83,7 @@ class _MapsWidgetState extends State<MapsWidget> {
       markers,
       FriendInfo(
         username: '허윤진',
-        profileImage: 'assets/images/yj1.png',
+        profileImage: const AssetImage('assets/images/yj1.png'),
         profileMessage: '안녕!',
       ),
       const LatLng(37.2833289, 127.0455020),
@@ -91,7 +92,7 @@ class _MapsWidgetState extends State<MapsWidget> {
       markers,
       FriendInfo(
         username: '카즈하',
-        profileImage: 'assets/images/kz1.png',
+        profileImage: const AssetImage('assets/images/kz1.png'),
         profileMessage: '반가워!',
       ),
       const LatLng(37.2842411, 127.0435222),

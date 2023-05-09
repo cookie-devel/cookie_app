@@ -4,35 +4,35 @@ import 'dart:ui' as ui;
 import 'dart:typed_data';
 
 // 일반적인 marker 이미지 불러오기
-Future<Uint8List> getImages(String path, int width) async {
-  ByteData data = await rootBundle.load(path);
-  ui.Codec codec = await ui.instantiateImageCodec(
-    data.buffer.asUint8List(),
-    targetHeight: width,
-  );
-  ui.FrameInfo fi = await codec.getNextFrame();
-  Uint8List markIcons =
-      (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-          .buffer
-          .asUint8List();
+// Future<Uint8List> getImages(String path, int width) async {
+//   ByteData data = await rootBundle.load(path);
+//   ui.Codec codec = await ui.instantiateImageCodec(
+//     data.buffer.asUint8List(),
+//     targetHeight: width,
+//   );
+//   ui.FrameInfo fi = await codec.getNextFrame();
+//   Uint8List markIcons =
+//       (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+//           .buffer
+//           .asUint8List();
 
-  return markIcons;
-}
+//   return markIcons;
+// }
 
 // 원형 marker 이미지 불러오기
 Future<Uint8List> getRoundedImages(
-  String path,
+  ImageProvider image,
   int width, {
   Color borderColor = Colors.transparent,
   double borderWidth = 0.0,
 }) async {
-  ByteData data = await rootBundle.load(path);
+  // TODO: should convert ImageProvider to Uint8List BitmapDescriptor eventually
+  ByteData data = await rootBundle.load(image);
   ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
 
-  ui.FrameInfo fi = await codec.getNextFrame();
-
   final int imageSize = width;
-  final ui.Image image = fi.image;
+  final ui.Image asdfimage = (await codec.getNextFrame()).image;
+
   final ui.Rect paintRect =
       Offset.zero & Size(imageSize.toDouble(), imageSize.toDouble());
   final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
@@ -57,8 +57,9 @@ Future<Uint8List> getRoundedImages(
 
   // 이미지 그리기
   canvas.drawImageRect(
-    image,
-    ui.Rect.fromLTRB(0, 0, image.width.toDouble(), image.height.toDouble()),
+    asdfimage,
+    ui.Rect.fromLTRB(
+        0, 0, asdfimage.width.toDouble(), asdfimage.height.toDouble()),
     paintRect,
     paint,
   );

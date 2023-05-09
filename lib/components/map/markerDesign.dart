@@ -32,9 +32,7 @@ Widget bottomSheetInside(BuildContext context, FriendInfo user) {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                  image: AssetImage(
-                    user.profileImage ?? "https://i.imgur.com/9cHRbzX.png",
-                  ),
+                  image: user.profileImage,
                   fit: BoxFit.cover,
                 ),
                 border: Border.all(width: 1, color: Colors.black54),
