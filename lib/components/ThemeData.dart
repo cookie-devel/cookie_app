@@ -24,6 +24,15 @@ ThemeData defaultThemeData() {
       actionsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
       alignment: Alignment.center,
     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.deepOrangeAccent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          side: const BorderSide(width: 1, color: Colors.black45),
+        ),
+      ),
+    ),
     scaffoldBackgroundColor: Colors.grey[100],
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
