@@ -1,3 +1,5 @@
+import 'package:cookie_app/components/chat/bubbles/myBubble.dart';
+import 'package:cookie_app/components/chat/bubbles/otherBubble.dart';
 import 'package:cookie_app/components/chat/connectionInfo.dart';
 import 'package:cookie_app/cookie.appbar.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,10 @@ class ChatRoom extends StatefulWidget {
 
 class _ChatRoomState extends State<ChatRoom> {
   List messages = ['안녕하세요', '채팅 페이지 테스트입니다', '대화를 원할 경우 마침표로 대화를 마무리하세요'];
+
+  List sample_messages = [
+    {'user': FriendInfo(), 'message': 'sample text'}
+  ];
 
   final chatFieldController = TextEditingController();
   ScrollController? _scrollController;
@@ -55,7 +61,30 @@ class _ChatRoomState extends State<ChatRoom> {
         padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
         child: Column(
           children: [
-            chat(context, widget.room ?? FriendInfo(), messages),
+            // chat(context, widget.room ?? FriendInfo(), messages),
+            Expanded(
+              child: SingleChildScrollView(
+                reverse: true,
+                child: Column(
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: messages.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final message = messages[index];
+                        return message.endsWith('.')
+                            ? MyBubble(text: message)
+                            : OtherBubble(
+                                user: FriendInfo(),
+                                text: message,
+                              );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
             const SizedBox(height: 6),
             SafeArea(
               bottom: true,
