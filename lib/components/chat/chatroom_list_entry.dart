@@ -31,14 +31,11 @@ class ChatRoomListEntry extends StatelessWidget {
         );
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        padding: const EdgeInsets.symmetric(vertical:8),
         child: SizedBox(
-          height: 82,
+          height: 68,
           child: Row(
             children: [
-              const SizedBox(
-                width: 1,
-              ),
               ChatRoomImage(image: image),
               const SizedBox(width: 12),
               Expanded(
@@ -52,19 +49,14 @@ class ChatRoomListEntry extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 9),
+              const SizedBox(width: 12),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   ChatRoomTime(time: time),
-                  const SizedBox(height: 5),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SizedBox(width: 27),
-                      ChatRoomUnreadBadge(unread: unread),
-                    ],
-                  ),
+                  const SizedBox(height: 8),
+                  ChatRoomUnreadBadge(unread: unread),
                 ],
               ),
             ],
@@ -115,6 +107,7 @@ class ChatRoomMessage extends StatelessWidget {
         fontWeight: FontWeight.w400,
         color: Color.fromARGB(221, 100, 100, 100),
       ),
+      maxLines: 2,
       overflow: TextOverflow.ellipsis,
     );
   }
@@ -131,8 +124,8 @@ class ChatRoomImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 50,
-      height: 50,
+      width: 48,
+      height: 48,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(22),
         image: DecorationImage(

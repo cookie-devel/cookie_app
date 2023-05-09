@@ -37,6 +37,7 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
     return Scaffold(
       appBar: CookieAppBar(title: '채팅'),
       body: ListView.builder(
+        padding: const EdgeInsets.fromLTRB(12, 0, 10, 0),
         itemCount: chatLength,
         itemBuilder: (BuildContext context, int index) {
           final Map<String, dynamic> log = chatLog[index];
@@ -45,8 +46,8 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
             name: "새 채팅방",
             image: log['profile']['image'],
             message: "채팅방 메시지",
-            time: DateTime.tryParse("2023-04-01 12:00:00"),
-            unread: 48,
+            time: DateTime.tryParse("2023-05-01 12:00:00"),
+            unread: 1000,
             navigate: ChatRoom(room: FriendInfo.fromMap(log)),
           );
         },
