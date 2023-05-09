@@ -65,7 +65,7 @@ class _FriendsGridState extends State<FriendsGrid>
     return Scaffold(
       appBar: CookieAppBar(
         title: '친구',
-        actions: [friendsAction(context)],
+        actions: [FriendsAction()],
       ),
       body: RefreshIndicator(
         onRefresh: updateData,
