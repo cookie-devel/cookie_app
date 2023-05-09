@@ -2,7 +2,7 @@ import 'package:cookie_app/cookie.appbar.dart';
 import 'package:cookie_app/handler/signinout.handler.dart';
 import 'package:cookie_app/pages/signin.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/pages/tabs/settings/detail/MyProfile.page.dart';
+import 'package:cookie_app/pages/settings/detail/MyProfile.page.dart';
 import 'package:cookie_app/components/NavigatePage.dart';
 
 class SettingsWidget extends StatelessWidget {
