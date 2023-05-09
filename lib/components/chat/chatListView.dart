@@ -17,8 +17,8 @@ Widget chat(BuildContext context, FriendInfo user, messages) {
             itemBuilder: (BuildContext context, int index) {
               final message = messages[index];
               return message.endsWith('.')
-                  ? myBubble(context, user, message)
-                  : otherBubble(context, user, message);
+                  ? MyBubble(text: message)
+                  : OtherBubble(user: user, text: message);
             },
           ),
         ],
