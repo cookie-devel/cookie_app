@@ -94,14 +94,14 @@ class _MainWidgetState extends State<MainWidget> {
   ];
 
   BottomNavigationBarItem iconItem(
-    Text text,
-    Icon icon,
-    String label, {
+    String text,
+    IconData iconName,
+    String label, [
     Color color = const Color(0xFF66BB6A),
-  }) {
-    if (text.data == null || text.data!.isEmpty) {
+  ]) {
+    if (text.isEmpty) {
       return BottomNavigationBarItem(
-        icon: icon,
+        icon: Icon(iconName),
         label: label,
       );
     } else {
@@ -113,8 +113,8 @@ class _MainWidgetState extends State<MainWidget> {
             borderRadius: BorderRadius.circular(10),
             badgeColor: color,
           ),
-          badgeContent: text,
-          child: icon,
+          badgeContent: Text(text, style: const TextStyle(color: Colors.white)),
+          child: Icon(iconName),
         ),
         label: label,
       );
@@ -124,28 +124,28 @@ class _MainWidgetState extends State<MainWidget> {
   List<BottomNavigationBarItem> bottomBarItems() {
     return [
       iconItem(
-        const Text('1', style: TextStyle(color: Colors.white)),
-        const Icon(Icons.people),
+        '1',
+        Icons.people,
         '친구',
       ),
       iconItem(
-        const Text('2', style: TextStyle(color: Colors.white)),
-        const Icon(Icons.chat_bubble),
+        '2',
+        Icons.chat_bubble,
         '채팅',
       ),
       iconItem(
-        const Text(''),
-        const Icon(Icons.cookie),
+        '',
+        Icons.cookie,
         '쿠키',
       ),
       iconItem(
-        const Text('3', style: TextStyle(color: Colors.white)),
-        const Icon(Icons.sports_basketball),
+        '3',
+        Icons.sports_basketball,
         '클럽',
       ),
       iconItem(
-        const Text('4', style: TextStyle(color: Colors.white)),
-        const Icon(Icons.settings),
+        '4',
+        Icons.settings,
         '설정',
       ),
     ];
