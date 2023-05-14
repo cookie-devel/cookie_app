@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:typed_data';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 String tmpData = '''{
   "success": true,
@@ -97,23 +98,6 @@ class _MapsWidgetState extends State<MapsWidget> {
       ),
       const LatLng(37.2842411, 127.0435222),
     );
-    _addMarker(
-      markers,
-      FriendInfo(username: 'test1'),
-      const LatLng(37.2842411, 127.0466999),
-      size: 70,
-      color: Colors.transparent,
-      width: 0,
-    );
-    _addMarker(
-      markers,
-      FriendInfo(username: 'test2'),
-      const LatLng(37.2837999, 127.0466999),
-      size: 70,
-      color: Colors.transparent,
-      width: 0,
-    );
-
     rootBundle.loadString('assets/data/mapStyle.json').then((string) {
       _mapStyle = string;
     });
@@ -128,7 +112,7 @@ class _MapsWidgetState extends State<MapsWidget> {
     Color color = Colors.deepOrangeAccent,
     double width = 4,
   }) async {
-    Uint8List markIcons = await getRoundedImages(
+    Uint8List markIcons = await getRoundedImage(
       user.profileImage,
       size,
       borderColor: color,
@@ -207,19 +191,7 @@ class _MapsWidgetState extends State<MapsWidget> {
                 Positioned(
                   bottom: 16,
                   right: 16,
-                  child: SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: FloatingActionButton(
-                      backgroundColor: Colors.deepOrangeAccent,
-                      onPressed: () {
-                        _moveToCurrentLocation();
-                      },
-                      child: const Icon(
-                        Icons.my_location,
-                      ),
-                    ),
-                  ),
+                  child: _floatingButtons(),
                 ),
               ],
             )
@@ -236,6 +208,63 @@ class _MapsWidgetState extends State<MapsWidget> {
     mapController.dispose();
     markers.clear();
     super.dispose();
+  }
+
+  SpeedDialChild speedDialChild(
+      String label, IconData icon, void Function()? onTap) {
+    return SpeedDialChild(
+      child: Icon(icon, color: Colors.white),
+      label: label,
+      labelBackgroundColor: Colors.white,
+      labelStyle: const TextStyle(
+        fontWeight: FontWeight.w500,
+        color: Colors.deepOrangeAccent,
+        fontSize: 13.0,
+      ),
+      backgroundColor: Colors.deepOrangeAccent,
+      onTap: onTap,
+    );
+  }
+
+  List<SpeedDialChild> speedDialChildren() {
+    return [
+      speedDialChild(
+        "설정",
+        Icons.settings_sharp,
+        () {},
+      ),
+      speedDialChild(
+        "현위치",
+        Icons.location_searching_sharp,
+        () {
+          _moveToCurrentLocation();
+        },
+      ),
+      speedDialChild(
+        "친구찾기",
+        Icons.person_search_rounded,
+        () {},
+      ),
+      speedDialChild(
+        "쿠키",
+        Icons.cookie,
+        () {},
+      ),
+    ];
+  }
+
+  Widget _floatingButtons() {
+    return SpeedDial(
+      animatedIcon: AnimatedIcons.menu_close,
+      visible: true,
+      buttonSize: const Size(44, 44),
+      childrenButtonSize: const Size(48, 48),
+      overlayOpacity: 0.0,
+      curve: Curves.bounceIn,
+      backgroundColor: Colors.deepOrangeAccent,
+      spaceBetweenChildren: 10.0,
+      children: speedDialChildren(),
+    );
   }
 }
 

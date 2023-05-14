@@ -26,17 +26,30 @@ Widget bottomSheetInside(BuildContext context, FriendInfo user) {
         padding: const EdgeInsets.fromLTRB(16, 10, 13, 10),
         child: Row(
           children: [
-            Container(
-              width: MediaQuery.of(context).size.height * 0.15,
-              height: MediaQuery.of(context).size.height * 0.15,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: user.profileImage,
-                  fit: BoxFit.cover,
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.height * 0.15,
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border:
+                        Border.all(width: 1, color: Colors.deepOrangeAccent),
+                  ),
                 ),
-                border: Border.all(width: 1, color: Colors.black54),
-              ),
+                Container(
+                  width: MediaQuery.of(context).size.height * 0.15 - 6,
+                  height: MediaQuery.of(context).size.height * 0.15 - 6,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: user.profileImage,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(width: 20),
             Expanded(
@@ -144,7 +157,7 @@ Widget bottomSheetInside(BuildContext context, FriendInfo user) {
   );
 }
 
-Future<void> markerBottomSheet(BuildContext context, FriendInfo user) {
+Future<void> _markerBottomSheet(BuildContext context, FriendInfo user) {
   return showModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
@@ -169,7 +182,7 @@ Marker addMarker(
     position: location,
     icon: BitmapDescriptor.fromBytes(markIcons),
     onTap: () {
-      markerBottomSheet(context, user);
+      _markerBottomSheet(context, user);
     },
   );
 }

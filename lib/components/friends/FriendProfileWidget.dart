@@ -41,23 +41,32 @@ class FriendProfileWidget extends StatelessWidget {
       },
       child: Column(
         children: [
-          Container(
-            width: imageSize,
-            height: imageSize,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: user.profileImage,
-                fit: BoxFit.cover,
-              ),
-              border: const Border.fromBorderSide(
-                BorderSide(
-                  style: BorderStyle.solid,
-                  color: Colors.deepOrangeAccent,
-                  width: 2,
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                width: imageSize,
+                height: imageSize,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.deepOrangeAccent,
+                    width: 1.0,
+                  ),
                 ),
               ),
-            ),
+              Container(
+                width: imageSize - 12,
+                height: imageSize - 12,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: user.profileImage,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ],
           ),
           if (displayName) const SizedBox(height: 8),
           if (displayName)
@@ -68,7 +77,7 @@ class FriendProfileWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: fontSize,
-                  fontWeight: FontWeight.w300,
+                  fontWeight: FontWeight.w400,
                   color: Color.fromARGB(221, 60, 60, 60),
                 ),
               ),

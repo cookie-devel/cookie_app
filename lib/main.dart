@@ -107,13 +107,24 @@ class _MainWidgetState extends State<MainWidget> {
     } else {
       return BottomNavigationBarItem(
         icon: badges.Badge(
-          position: badges.BadgePosition.topEnd(top: -10, end: -10),
+          position: badges.BadgePosition.topEnd(top: -8, end: -8),
           badgeStyle: badges.BadgeStyle(
-            padding: const EdgeInsets.all(5),
-            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Colors.white, width: 1),
+            shape: badges.BadgeShape.circle,
             badgeColor: color,
           ),
-          badgeContent: Text(text, style: const TextStyle(color: Colors.white)),
+          badgeContent: SizedBox(
+            width: 8,
+            height: 8,
+            child: FittedBox(
+              fit: BoxFit.cover,
+              child: Text(
+                text.length > 3 ? '999+' : text,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
           child: Icon(iconName),
         ),
         label: label,
@@ -124,7 +135,7 @@ class _MainWidgetState extends State<MainWidget> {
   List<BottomNavigationBarItem> bottomBarItems() {
     return [
       iconItem(
-        '1',
+        '1111',
         Icons.people,
         '친구',
       ),

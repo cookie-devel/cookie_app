@@ -31,7 +31,7 @@ class ChatRoomListEntry extends StatelessWidget {
         );
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical:8),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: SizedBox(
           height: 68,
           child: Row(
