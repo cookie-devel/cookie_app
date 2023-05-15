@@ -1,4 +1,3 @@
-import 'package:cookie_app/components/map/ImageProcess.dart';
 import 'package:cookie_app/components/map/markerDesign.dart';
 import 'package:cookie_app/cookie.appbar.dart';
 import 'package:cookie_app/schema/FriendInfo.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'dart:typed_data';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:latlong2/latlong.dart' as latlong;
 import 'dart:convert';
@@ -33,34 +31,28 @@ class _MapsWidgetState extends State<MapsWidget> {
   @override
   void initState() {
     super.initState();
-
+    _initializeData();
     _locationPermission();
     _getUserLocation();
+    _loadMapStyle();
+  }
 
-    _getSampleData().then((_) {
-      _addMarkers();
-    });
-
+  Future<void> _loadMapStyle() async {
     rootBundle.loadString('assets/data/mapStyle.json').then((string) {
       _mapStyle = string;
     });
   }
 
-  // 임시로 json 데이터 생성하여 가져옴
-  Future<void> _getSampleData() async {
-    rootBundle.loadString('assets/data/map.json').then((string) {
-      mapLog = json.decode(string)["result"];
-    });
+  Future<void> _initializeData() async {
+    await _getSampleData();
+    _addMarkers();
   }
 
-  Future<void> _addMarker(
-    List<Marker> markers,
-    FriendInfo user,
-    LatLng location,
-  ) async {
-    Marker marker = await addMarker(context, user, location);
+  // 임시로 json 데이터 생성하여 가져옴
+  Future<void> _getSampleData() async {
+    String jsonString = await rootBundle.loadString('assets/data/map.json');
     setState(() {
-      markers.add(marker);
+      mapLog = json.decode(jsonString)["result"];
     });
   }
 
@@ -77,12 +69,14 @@ class _MapsWidgetState extends State<MapsWidget> {
         mapLog[i]["location"]["longitude"],
       );
 
-      _addMarker(markers, friendInfo, location);
+      Marker marker = await addMarker(context, friendInfo, location);
+      setState(() {
+        markers.add(marker);
+      });
     }
   }
 
   // https://kanoos-stu.tistory.com/64
-
   void _locationPermission() async {
     var requestStatus = await Permission.location.request();
     var status = await Permission.location.status;
@@ -154,14 +148,17 @@ class _MapsWidgetState extends State<MapsWidget> {
     );
   }
 
+  // speedDial => 현위치
   void _moveToCurrentLocation() {
     mapController.animateCamera(CameraUpdate.newLatLng(_currentLocation));
   }
 
+  // 해당 location으로 camera 이동
   void _moveToFriendLocation(LatLng location) {
     mapController.animateCamera(CameraUpdate.newLatLng(location));
   }
 
+  // 두 좌표 간 거리계산
   String _calDistance(LatLng mylocation, LatLng friendlocation) {
     final dist = distance(
       latlong.LatLng(mylocation.latitude, mylocation.longitude),
@@ -245,6 +242,7 @@ class _MapsWidgetState extends State<MapsWidget> {
     );
   }
 
+  // sppeedDial => 친구찾기
   Future<void> _friendLocationBottomSheet({required List mapLog}) async {
     return showModalBottomSheet<void>(
       context: context,
