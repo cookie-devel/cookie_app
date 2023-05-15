@@ -70,13 +70,15 @@ class _MainWidgetState extends State<MainWidget> {
   Future<bool> _onWillPop() async {
     final currentTime = DateTime.now();
     final backButtonInterval = currentBackPressTime == null
-        ? const Duration(milliseconds: 2000)
+        ? const Duration(milliseconds: 1500)
         : currentTime.difference(currentBackPressTime!);
 
-    if (backButtonInterval >= const Duration(milliseconds: 2000)) {
+    if (backButtonInterval >= const Duration(milliseconds: 1500)) {
       currentBackPressTime = currentTime;
       Fluttertoast.showToast(
         msg: '\'뒤로\' 버튼을 다시 누르면 종료됩니다.',
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIosWeb: 1,
         backgroundColor: Colors.black.withOpacity(0.2),
         textColor: Colors.white,
       );
