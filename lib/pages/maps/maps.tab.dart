@@ -10,36 +10,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:typed_data';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-
-String tmpData = '''{
-  "success": true,
-  "result": [
-    {
-      "username" : "Unknown1",
-      "profile": {
-        "image": "assets/images/cookie_logo.png",
-        "message": "안녕하세요!"
-      },
-      "userid": "Unknown1"
-      "location": {
-        "latitude": 37.2811339,
-        "longitude": 127.0455020
-      }
-    },
-    {
-      "username" : "Unknown2",
-      "profile": {
-        "image": "assets/images/cookie_logo.png",
-        "message": "안녕하세요."
-      },
-      "userid": "Unknown2"
-      "location": {
-        "latitude": 37.2811324,
-        "longitude": 127.0455533
-      }
-    }
-  ]
-}''';
+import 'package:latlong2/latlong.dart' as latlong;
+import 'dart:convert';
 
 class MapsWidget extends StatefulWidget {
   const MapsWidget({Key? key}) : super(key: key);
@@ -54,76 +26,59 @@ class _MapsWidgetState extends State<MapsWidget> {
   static late LatLng _currentLocation;
   bool loading = true;
   String _mapStyle = '';
+  final latlong.Distance distance = const latlong.Distance();
+
+  List<dynamic> mapLog = [];
 
   @override
   void initState() {
     super.initState();
+
     _locationPermission();
     _getUserLocation();
 
-    _addMarker(
-      markers,
-      FriendInfo(
-        username: '김채원',
-        // profileImage: 'assets/images/cw1.png',
-        profileImage: Image.asset('assets/images/cw1.png').image,
-        profileMessage: '안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!',
-      ),
-      const LatLng(37.2811339, 127.0455020),
-    );
-    _addMarker(
-      markers,
-      FriendInfo(
-        username: '홍은채',
-        profileImage: const AssetImage('assets/images/ec1.png'),
-        profileMessage: '반가워요!',
-      ),
-      const LatLng(37.2822411, 127.0466999),
-    );
-    _addMarker(
-      markers,
-      FriendInfo(
-        username: '허윤진',
-        profileImage: const AssetImage('assets/images/yj1.png'),
-        profileMessage: '안녕!',
-      ),
-      const LatLng(37.2833289, 127.0455020),
-    );
-    _addMarker(
-      markers,
-      FriendInfo(
-        username: '카즈하',
-        profileImage: const AssetImage('assets/images/kz1.png'),
-        profileMessage: '반가워!',
-      ),
-      const LatLng(37.2842411, 127.0435222),
-    );
+    _getSampleData().then((_) {
+      _addMarkers();
+    });
+
     rootBundle.loadString('assets/data/mapStyle.json').then((string) {
       _mapStyle = string;
     });
   }
 
-  // 추후에 json 형식으로 받아서 처리
-  void _addMarker(
+  // 임시로 json 데이터 생성하여 가져옴
+  Future<void> _getSampleData() async {
+    rootBundle.loadString('assets/data/map.json').then((string) {
+      mapLog = json.decode(string)["result"];
+    });
+  }
+
+  Future<void> _addMarker(
     List<Marker> markers,
     FriendInfo user,
-    LatLng location, {
-    int size = 100,
-    Color color = Colors.deepOrangeAccent,
-    double width = 4,
-  }) async {
-    Uint8List markIcons = await getRoundedImage(
-      user.profileImage,
-      size,
-      borderColor: color,
-      borderWidth: width,
-    );
-
+    LatLng location,
+  ) async {
+    Marker marker = await addMarker(context, user, location);
     setState(() {
-      markers.add(
-        addMarker(context, user, location, markIcons),
-      );
+      markers.add(marker);
     });
+  }
+
+  Future<void> _addMarkers() async {
+    for (int i = 0; i < mapLog.length; i++) {
+      final FriendInfo friendInfo = FriendInfo(
+        username: mapLog[i]["username"],
+        profileImage: Image.asset(mapLog[i]["profile"]["image"]).image,
+        profileMessage: mapLog[i]["profile"]["message"],
+      );
+
+      final LatLng location = LatLng(
+        mapLog[i]["location"]["latitude"],
+        mapLog[i]["location"]["longitude"],
+      );
+
+      _addMarker(markers, friendInfo, location);
+    }
   }
 
   // https://kanoos-stu.tistory.com/64
@@ -203,6 +158,23 @@ class _MapsWidgetState extends State<MapsWidget> {
     mapController.animateCamera(CameraUpdate.newLatLng(_currentLocation));
   }
 
+  void _moveToFriendLocation(LatLng location) {
+    mapController.animateCamera(CameraUpdate.newLatLng(location));
+  }
+
+  String _calDistance(LatLng mylocation, LatLng friendlocation) {
+    final dist = distance(
+      latlong.LatLng(mylocation.latitude, mylocation.longitude),
+      latlong.LatLng(friendlocation.latitude, friendlocation.longitude),
+    );
+
+    if (dist < 1000) {
+      return "${dist.toStringAsFixed(0)} m";
+    } else {
+      return "${(dist / 1000).toStringAsFixed(1)} km";
+    }
+  }
+
   @override
   void dispose() {
     mapController.dispose();
@@ -211,7 +183,10 @@ class _MapsWidgetState extends State<MapsWidget> {
   }
 
   SpeedDialChild speedDialChild(
-      String label, IconData icon, void Function()? onTap) {
+    String label,
+    IconData icon,
+    void Function()? onTap,
+  ) {
     return SpeedDialChild(
       child: Icon(icon, color: Colors.white),
       label: label,
@@ -243,7 +218,9 @@ class _MapsWidgetState extends State<MapsWidget> {
       speedDialChild(
         "친구찾기",
         Icons.person_search_rounded,
-        () {},
+        () {
+          _friendLocationBottomSheet(mapLog: mapLog);
+        },
       ),
       speedDialChild(
         "쿠키",
@@ -257,13 +234,123 @@ class _MapsWidgetState extends State<MapsWidget> {
     return SpeedDial(
       animatedIcon: AnimatedIcons.menu_close,
       visible: true,
-      buttonSize: const Size(44, 44),
+      buttonSize: const Size(48, 48),
       childrenButtonSize: const Size(48, 48),
+      childMargin: const EdgeInsets.all(2),
+      spaceBetweenChildren: 10.0,
       overlayOpacity: 0.0,
       curve: Curves.bounceIn,
       backgroundColor: Colors.deepOrangeAccent,
-      spaceBetweenChildren: 10.0,
       children: speedDialChildren(),
+    );
+  }
+
+  Future<void> _friendLocationBottomSheet({required List mapLog}) async {
+    return showModalBottomSheet<void>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      backgroundColor: Colors.white,
+      barrierColor: Colors.transparent,
+      isDismissible: true,
+      enableDrag: true,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.fromLTRB(20, 20, 10, 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.circle_outlined,
+                          color: Colors.green.shade400,
+                        ),
+                        const SizedBox(width: 10),
+                        const Text(
+                          '현재 접속중인 친구',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    PopupMenuButton(
+                      icon: const Icon(Icons.more_vert),
+                      itemBuilder: (BuildContext context) {
+                        return [
+                          PopupMenuItem(
+                            child: const Text('거리순'),
+                            value: 1,
+                          ),
+                          PopupMenuItem(
+                            child: const Text('친밀도순'),
+                            value: 2,
+                          ),
+                        ];
+                      },
+                      onSelected: (value) {
+                        print(value);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: mapLog.length,
+                  padding: const EdgeInsets.fromLTRB(5, 4, 10, 4),
+                  itemBuilder: (BuildContext context, int index) {
+                    final Map<String, dynamic> log = mapLog[index];
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        backgroundImage: AssetImage(log["profile"]["image"]),
+                      ),
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(log["username"]),
+                          Text(
+                            _calDistance(
+                              _currentLocation,
+                              LatLng(
+                                log["location"]["latitude"],
+                                log["location"]["longitude"],
+                              ),
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        _moveToFriendLocation(
+                          LatLng(
+                            log["location"]["latitude"],
+                            log["location"]["longitude"],
+                          ),
+                        );
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

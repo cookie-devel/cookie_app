@@ -2,6 +2,7 @@ import 'package:cookie_app/schema/FriendInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:typed_data';
+import 'ImageProcess.dart';
 
 Widget bottomSheetInside(BuildContext context, FriendInfo user) {
   return SafeArea(
@@ -170,12 +171,20 @@ Future<void> _markerBottomSheet(BuildContext context, FriendInfo user) {
   );
 }
 
-Marker addMarker(
+Future<Marker> addMarker(
   BuildContext context,
   FriendInfo user,
-  LatLng location,
-  Uint8List markIcons,
-) {
+  LatLng location, {
+  int size = 100,
+  Color color = Colors.deepOrangeAccent,
+  double width = 4,
+}) async {
+  Uint8List markIcons = await getRoundedImage(
+    user.profileImage,
+    size,
+    borderColor: color,
+    borderWidth: width,
+  );
   return Marker(
     draggable: false,
     markerId: MarkerId(user.username.toString()),

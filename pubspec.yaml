@@ -57,6 +57,7 @@ dependencies:
   fluttertoast: ^8.2.1
   timeago: ^3.3.0
   flutter_speed_dial: ^6.2.0
+  latlong2: ^0.8.1
 
 dev_dependencies:
   flutter_test:
@@ -85,7 +86,6 @@ flutter:
   assets:
     - .env
     - assets/images/
-    - assets/json/
     - assets/data/
   #   - images/a_dot_ham.jpeg
 
