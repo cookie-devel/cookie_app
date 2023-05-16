@@ -173,7 +173,7 @@ Widget bottomSheetInside(BuildContext context, FriendInfo user) {
   );
 }
 
-Future<void> _markerBottomSheet(BuildContext context, FriendInfo user) {
+Future<void> markerBottomSheet(BuildContext context, FriendInfo user) {
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
@@ -203,7 +203,7 @@ Future<Marker> addMarker(
     position: location,
     icon: BitmapDescriptor.fromBytes(markIcons),
     onTap: () {
-      _markerBottomSheet(context, user);
+      markerBottomSheet(context, user);
     },
   );
 }

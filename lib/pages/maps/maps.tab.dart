@@ -142,7 +142,7 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   // 해당 location으로 camera 이동
   void _moveToFriendLocation(LatLng location) {
-    mapController.animateCamera(CameraUpdate.newLatLng(location));
+    mapController.animateCamera(CameraUpdate.newLatLngZoom(location,17.0));
   }
 
   // 두 좌표 간 거리계산
@@ -385,6 +385,7 @@ class _MapsWidgetState extends State<MapsWidget> {
                               ),
                             );
                             Navigator.pop(context);
+                            markerBottomSheet(context, FriendInfo.fromMap(log));
                           },
                         );
                       },
