@@ -43,5 +43,12 @@ ThemeData defaultThemeData() {
       showUnselectedLabels: false,
       type: BottomNavigationBarType.fixed,
     ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      backgroundColor: Colors.white,
+      modalBarrierColor: Colors.transparent,
+    ),
   );
 }
