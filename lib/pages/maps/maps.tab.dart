@@ -10,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:latlong2/latlong.dart' as latlong;
 import 'dart:convert';
+import 'dart:async';
 
 class MapsWidget extends StatefulWidget {
   const MapsWidget({Key? key}) : super(key: key);
@@ -19,14 +20,15 @@ class MapsWidget extends StatefulWidget {
 }
 
 class _MapsWidgetState extends State<MapsWidget> {
-  static List<Marker> markers = <Marker>[];
-  late GoogleMapController mapController;
-  static late LatLng _currentLocation;
   bool loading = true;
   String _mapStyle = '';
-  final latlong.Distance distance = const latlong.Distance();
-
   List<dynamic> mapLog = [];
+  static late LatLng _currentLocation;
+  late GoogleMapController mapController;
+  static List<Marker> markers = <Marker>[];
+  final latlong.Distance distance = const latlong.Distance();
+  int selectedSortOption = 1;
+  Timer? _timer;
 
   @override
   void initState() {
@@ -35,6 +37,26 @@ class _MapsWidgetState extends State<MapsWidget> {
     _locationPermission();
     _getUserLocation();
     _loadMapStyle();
+    startLocationUpdates();
+  }
+
+  @override
+  void dispose() {
+    mapController.dispose();
+    markers.clear();
+    stopLocationUpdates();
+    super.dispose();
+  }
+
+  void startLocationUpdates() {
+    stopLocationUpdates();
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      _getUserLocation();
+    });
+  }
+
+  void stopLocationUpdates() {
+    _timer?.cancel();
   }
 
   Future<void> _loadMapStyle() async {
@@ -57,6 +79,7 @@ class _MapsWidgetState extends State<MapsWidget> {
   }
 
   Future<void> _addMarkers() async {
+    List<Marker> allMarkers = [];
     for (int i = 0; i < mapLog.length; i++) {
       final FriendInfo friendInfo = FriendInfo(
         username: mapLog[i]["username"],
@@ -70,10 +93,11 @@ class _MapsWidgetState extends State<MapsWidget> {
       );
 
       Marker marker = await addMarker(context, friendInfo, location);
-      setState(() {
-        markers.add(marker);
-      });
+      allMarkers.add(marker);
     }
+    setState(() {
+      markers.addAll(allMarkers);
+    });
   }
 
   // https://kanoos-stu.tistory.com/64
@@ -111,6 +135,31 @@ class _MapsWidgetState extends State<MapsWidget> {
     });
   }
 
+  // speedDial => 현위치
+  void _moveToCurrentLocation() {
+    mapController.animateCamera(CameraUpdate.newLatLng(_currentLocation));
+  }
+
+  // 해당 location으로 camera 이동
+  void _moveToFriendLocation(LatLng location) {
+    mapController.animateCamera(CameraUpdate.newLatLng(location));
+  }
+
+  // 두 좌표 간 거리계산
+  String _calDistance(LatLng myLocation, LatLng friendLocation) {
+    final latLong1 = latlong.LatLng(myLocation.latitude, myLocation.longitude);
+    final latLong2 =
+        latlong.LatLng(friendLocation.latitude, friendLocation.longitude);
+    final dist = distance(latLong1, latLong2);
+
+    final double distanceInMeters = dist < 1000 ? dist : dist / 1000;
+    final String distanceString =
+        distanceInMeters.toStringAsFixed(distanceInMeters < 10 ? 1 : 0);
+    final String unit = dist < 1000 ? 'm' : 'km';
+
+    return '$distanceString $unit';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,41 +191,24 @@ class _MapsWidgetState extends State<MapsWidget> {
                   right: 16,
                   child: _floatingButtons(),
                 ),
+                // Positioned(
+                //   bottom: 0,
+                //   left: 0,
+                //   child: Container(
+                //     color: Colors.white,
+                //     child: Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         Text(_currentLocation.latitude.toString()),
+                //         Text(_currentLocation.longitude.toString()),
+                //       ],
+                //     ),
+                //   ),
+                // ),
               ],
             )
           : loadingScreen(),
     );
-  }
-
-  // speedDial => 현위치
-  void _moveToCurrentLocation() {
-    mapController.animateCamera(CameraUpdate.newLatLng(_currentLocation));
-  }
-
-  // 해당 location으로 camera 이동
-  void _moveToFriendLocation(LatLng location) {
-    mapController.animateCamera(CameraUpdate.newLatLng(location));
-  }
-
-  // 두 좌표 간 거리계산
-  String _calDistance(LatLng mylocation, LatLng friendlocation) {
-    final dist = distance(
-      latlong.LatLng(mylocation.latitude, mylocation.longitude),
-      latlong.LatLng(friendlocation.latitude, friendlocation.longitude),
-    );
-
-    if (dist < 1000) {
-      return "${dist.toStringAsFixed(0)} m";
-    } else {
-      return "${(dist / 1000).toStringAsFixed(1)} km";
-    }
-  }
-
-  @override
-  void dispose() {
-    mapController.dispose();
-    markers.clear();
-    super.dispose();
   }
 
   SpeedDialChild speedDialChild(
@@ -198,35 +230,6 @@ class _MapsWidgetState extends State<MapsWidget> {
     );
   }
 
-  List<SpeedDialChild> speedDialChildren() {
-    return [
-      speedDialChild(
-        "설정",
-        Icons.settings_sharp,
-        () {},
-      ),
-      speedDialChild(
-        "현위치",
-        Icons.location_searching_sharp,
-        () {
-          _moveToCurrentLocation();
-        },
-      ),
-      speedDialChild(
-        "친구찾기",
-        Icons.person_search_rounded,
-        () {
-          _friendLocationBottomSheet(mapLog: mapLog);
-        },
-      ),
-      speedDialChild(
-        "쿠키",
-        Icons.cookie,
-        () {},
-      ),
-    ];
-  }
-
   Widget _floatingButtons() {
     return SpeedDial(
       animatedIcon: AnimatedIcons.menu_close,
@@ -238,11 +241,36 @@ class _MapsWidgetState extends State<MapsWidget> {
       overlayOpacity: 0.0,
       curve: Curves.bounceIn,
       backgroundColor: Colors.deepOrangeAccent,
-      children: speedDialChildren(),
+      children: [
+        speedDialChild(
+          "설정",
+          Icons.settings_sharp,
+          () {},
+        ),
+        speedDialChild(
+          "현위치",
+          Icons.location_searching_sharp,
+          () {
+            _moveToCurrentLocation();
+          },
+        ),
+        speedDialChild(
+          "친구찾기",
+          Icons.person_search_rounded,
+          () {
+            _friendLocationBottomSheet(mapLog: mapLog);
+          },
+        ),
+        speedDialChild(
+          "쿠키",
+          Icons.cookie,
+          () {},
+        ),
+      ],
     );
   }
 
-  // sppeedDial => 친구찾기
+  // speedDial => 친구찾기
   Future<void> _friendLocationBottomSheet({required List mapLog}) async {
     return showModalBottomSheet<void>(
       context: context,
@@ -254,99 +282,137 @@ class _MapsWidgetState extends State<MapsWidget> {
       isDismissible: true,
       enableDrag: true,
       builder: (BuildContext context) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.fromLTRB(20, 20, 10, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
+        return StatefulBuilder(
+          builder: (
+            BuildContext context,
+            StateSetter setModalState,
+          ) {
+            return SafeArea(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.fromLTRB(20, 20, 10, 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(
-                          Icons.circle_outlined,
-                          color: Colors.green.shade400,
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.circle_outlined,
+                              color: Colors.green.shade400,
+                            ),
+                            const SizedBox(width: 10),
+                            const Text(
+                              '현재 접속중인 친구',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                setModalState(() {
+                                  _currentLocation = _currentLocation;
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.replay,
+                                size: 20,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 10),
-                        const Text(
-                          '현재 접속중인 친구',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        PopupMenuButton(
+                          offset: const Offset(0,40),
+                          icon: const Icon(Icons.more_vert),
+                          itemBuilder: (BuildContext context) {
+                            return const [
+                              PopupMenuItem(
+                                value: 1,
+                                child: Text('이름순 (ㄱ-ㅎ)'),
+                              ),
+                              PopupMenuItem(
+                                value: 2,
+                                child: Text('이름순 (ㅎ-ㄱ)'),
+                              ),
+                              PopupMenuItem(
+                                value: 3,
+                                child: Text('친밀도순'),
+                              ),
+                            ];
+                          },
+                          onSelected: (value) {
+                            setModalState(() {
+                              selectedSortOption = value;
+                              if (selectedSortOption == 1) {
+                                mapLog.sort(
+                                  (a, b) =>
+                                      a["username"].compareTo(b["username"]),
+                                );
+                              } else if (selectedSortOption == 2) {
+                                mapLog.sort(
+                                  (b, a) =>
+                                      a["username"].compareTo(b["username"]),
+                                );
+                              }
+                            });
+                          },
                         ),
                       ],
                     ),
-                    PopupMenuButton(
-                      icon: const Icon(Icons.more_vert),
-                      itemBuilder: (BuildContext context) {
-                        return [
-                          PopupMenuItem(
-                            child: const Text('거리순'),
-                            value: 1,
+                  ),
+                  const Divider(),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: mapLog.length,
+                      padding: const EdgeInsets.fromLTRB(5, 4, 10, 4),
+                      itemBuilder: (BuildContext context, int index) {
+                        final Map<String, dynamic> log = mapLog[index];
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            backgroundImage:
+                                AssetImage(log["profile"]["image"]),
                           ),
-                          PopupMenuItem(
-                            child: const Text('친밀도순'),
-                            value: 2,
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(log["username"]),
+                              Text(
+                                _calDistance(
+                                  _currentLocation,
+                                  LatLng(
+                                    log["location"]["latitude"],
+                                    log["location"]["longitude"],
+                                  ),
+                                ),
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
                           ),
-                        ];
-                      },
-                      onSelected: (value) {
-                        print(value);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              const Divider(),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: mapLog.length,
-                  padding: const EdgeInsets.fromLTRB(5, 4, 10, 4),
-                  itemBuilder: (BuildContext context, int index) {
-                    final Map<String, dynamic> log = mapLog[index];
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        backgroundImage: AssetImage(log["profile"]["image"]),
-                      ),
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(log["username"]),
-                          Text(
-                            _calDistance(
-                              _currentLocation,
+                          onTap: () {
+                            _moveToFriendLocation(
                               LatLng(
                                 log["location"]["latitude"],
                                 log["location"]["longitude"],
                               ),
-                            ),
-                            style: const TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                      onTap: () {
-                        _moveToFriendLocation(
-                          LatLng(
-                            log["location"]["latitude"],
-                            log["location"]["longitude"],
-                          ),
+                            );
+                            Navigator.pop(context);
+                          },
                         );
-                        Navigator.pop(context);
                       },
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
