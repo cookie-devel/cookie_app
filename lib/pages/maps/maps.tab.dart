@@ -191,20 +191,6 @@ class _MapsWidgetState extends State<MapsWidget> {
                   right: 16,
                   child: _floatingButtons(),
                 ),
-                // Positioned(
-                //   bottom: 0,
-                //   left: 0,
-                //   child: Container(
-                //     color: Colors.white,
-                //     child: Column(
-                //       crossAxisAlignment: CrossAxisAlignment.start,
-                //       children: [
-                //         Text(_currentLocation.latitude.toString()),
-                //         Text(_currentLocation.longitude.toString()),
-                //       ],
-                //     ),
-                //   ),
-                // ),
               ],
             )
           : loadingScreen(),
@@ -274,20 +260,15 @@ class _MapsWidgetState extends State<MapsWidget> {
   Future<void> _friendLocationBottomSheet({required List mapLog}) async {
     return showModalBottomSheet<void>(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      backgroundColor: Colors.white,
-      barrierColor: Colors.transparent,
-      isDismissible: true,
-      enableDrag: true,
+      useSafeArea: true,
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (
             BuildContext context,
             StateSetter setModalState,
           ) {
-            return SafeArea(
+            return SizedBox(
+              height: MediaQuery.of(context).size.height * 0.45,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -326,7 +307,7 @@ class _MapsWidgetState extends State<MapsWidget> {
                           ],
                         ),
                         PopupMenuButton(
-                          offset: const Offset(0,40),
+                          offset: const Offset(0, 40),
                           icon: const Icon(Icons.more_vert),
                           itemBuilder: (BuildContext context) {
                             return const [
