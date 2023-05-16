@@ -33,7 +33,6 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
   @override
   Widget build(BuildContext context) {
     final int chatLength = chatLog.length;
-
     return Scaffold(
       appBar: CookieAppBar(title: '채팅'),
       body: ListView.builder(
@@ -41,18 +40,44 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
         itemCount: chatLength,
         itemBuilder: (BuildContext context, int index) {
           final Map<String, dynamic> log = chatLog[index];
+          final String name = log['username'];
 
+          final Map messages = log['log'];
+          final Map lastdata = _lastData(messages);
+          final String lastkey = lastdata['lastkey'];
+          final String lastmessage = lastdata['lastmessage'];
           return ChatRoomListEntry(
-            name: "새 채팅방",
+            name: name,
             image: log['profile']['image'],
-            message: "채팅방 메시지",
-            time: DateTime.tryParse("2023-05-01 12:00:00"),
+            message: lastmessage,
+            time: DateTime.tryParse(lastkey),
             unread: 1000,
-            navigate: ChatRoom(room: FriendInfo.fromMap(log)),
+            navigate: ChatRoom(
+              room: FriendInfo.fromMap(log),
+            ),
           );
         },
       ),
     );
+  }
+
+  Map _lastData(Map log) {
+    if (log.isEmpty) {
+      return {};
+    }
+
+    final List keys = log.keys.toList();
+    final String lastKey = keys.last;
+    final List list = log[lastKey];
+
+    if (list.isEmpty) {
+      return {};
+    }
+
+    final int lastIndex = list.length - 1;
+    final String lastMessage = list[lastIndex]['message'];
+
+    return {'lastkey': lastKey, 'lastmessage': lastMessage};
   }
 
   @override

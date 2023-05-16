@@ -18,7 +18,7 @@ class ChatRoom extends StatefulWidget {
 
 class _ChatRoomState extends State<ChatRoom> {
   List messages = ['안녕하세요', '채팅 페이지 테스트입니다', '대화를 원할 경우 마침표로 대화를 마무리하세요'];
-
+  
   List sample_messages = [
     {'user': FriendInfo(), 'message': 'sample text'}
   ];
@@ -76,7 +76,7 @@ class _ChatRoomState extends State<ChatRoom> {
                         return message.endsWith('.')
                             ? MyBubble(text: message)
                             : OtherBubble(
-                                user: FriendInfo(),
+                                user: widget.room ?? FriendInfo(),
                                 text: message,
                               );
                       },
