@@ -33,7 +33,8 @@ class FriendProfileWidget extends StatelessWidget {
     return InkResponse(
       onTap: () {
         if (!enableOnTap) return;
-        profileWindow(context, user);
+        profileBottomSheet(context, user);
+        // profileWindow(context, user);
       },
       onLongPress: () {
         if (!enableOnLongPress) return;
