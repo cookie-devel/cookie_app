@@ -5,202 +5,217 @@ import 'package:cookie_app/pages/chatroom/chatroom.dart';
 // 프로필 창 class
 class ProfileWindow extends StatelessWidget {
   final FriendInfo user;
-  ProfileWindow({super.key, required this.user});
-
-  final ScrollController _scrollController = ScrollController();
+  const ProfileWindow({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      child: Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.74,
-          child: Column(
-            children: [
-              const SizedBox(height: 16),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FullScreenImage(
-                        image: user.profileImage,
-                      ),
-                    ),
-                  );
-                },
-                child: Container(
-                  width: 170,
-                  height: 170,
+    double imageSize = MediaQuery.of(context).size.height * 0.19;
+    Widget divider = const Divider(thickness: 2);
+    return SizedBox(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 16),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FullScreenImage(
+                    image: user.profileImage,
+                  ),
+                ),
+              );
+            },
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: imageSize,
+                  height: imageSize,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(width: 1, color: Colors.white),
+                  ),
+                ),
+                Container(
+                  width: imageSize - 8,
+                  height: imageSize - 8,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
                       image: user.profileImage,
                       fit: BoxFit.cover,
                     ),
-                    border: Border.all(
-                      color: Colors.orangeAccent,
-                      width: 3.0,
-                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Scrollbar(
-                  controller: _scrollController,
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    controller: _scrollController,
-                    scrollDirection: Axis.vertical,
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Text(
-                            user.profileMessage ?? "",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0,
-                            ),
-                          ),
-                        ),
-                        const Divider(),
-                        userProfileListTile("이름", user.username),
-                        const Divider(),
-                        userProfileListTile("생일", 'user.birthday'),
-                        const Divider(),
-                        userProfileListTile("거주지", 'user.address'),
-                        const Divider(),
-                        userProfileListTile("나이", 'user.age'),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const Divider(),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepOrangeAccent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        side: const BorderSide(width: 1, color: Colors.black45),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text("뒤로가기"),
-                  ),
-                  const SizedBox(width: 22),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepOrangeAccent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        side: const BorderSide(width: 1, color: Colors.black45),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChatRoom(room: user),
-                        ),
-                      );
-                    },
-                    child: const Text("채팅하기"),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-            ],
+              ],
+            ),
           ),
-        ),
+          const SizedBox(height: 14),
+          Flexible(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(12, 16, 12, 12),
+              scrollDirection: Axis.vertical,
+              children: [
+                Container(
+                  height: imageSize,
+                  decoration: const BoxDecoration(
+                    color: Colors.orangeAccent,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 10.0,
+                        spreadRadius: 0.5,
+                        offset: Offset(0.5, 0.5),
+                      ),
+                    ],
+                  ),
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        user.username,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        user.profileMessage ?? "",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 19.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                Container(
+                  height: imageSize * 0.4,
+                  decoration: const BoxDecoration(
+                    color: Colors.orangeAccent,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 10.0,
+                        spreadRadius: 0.5,
+                        offset: Offset(0.5, 0.5),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatRoom(room: user),
+                            ),
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.chat_bubble_outline,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.favorite_border_outlined,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.cookie_outlined,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                divider,
+                userProfiletile("생일", 'user.birthday'),
+                divider,
+                userProfiletile("거주지", 'user.address'),
+                divider,
+                userProfiletile("나이", 'user.age'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget userProfiletile(String mainTitle, String subTitle) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.orangeAccent,
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10.0,
+            spreadRadius: 0.5,
+            offset: Offset(0.5, 0.5),
+          ),
+        ],
+      ),
+      alignment: Alignment.topLeft,
+      padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            mainTitle,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18.0,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            subTitle,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 26.0,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }
 }
-
-Future profileWindow(BuildContext context, FriendInfo user) => showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AnimatedProfileWindow(user: user);
-      },
-    );
-
-Widget userProfileListTile(String mainTitle, String subTitle) {
-  return ListTile(
-    title: Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
-      child: Text(
-        mainTitle,
-        style: const TextStyle(fontSize: 14),
-      ),
-    ),
-    subtitle: Text(
-      subTitle,
-      style: const TextStyle(fontSize: 18),
-    ),
+Future<void> profileBottomSheet(BuildContext context, FriendInfo user) {
+  return showModalBottomSheet(
+    context: context,
+    useSafeArea: true,
+    backgroundColor: const Color.fromARGB(255, 254, 218, 230),
+    builder: (BuildContext context) {
+      return ProfileWindow(user: user);
+    },
   );
 }
-
-class AnimatedProfileWindow extends StatefulWidget {
-  final FriendInfo user;
-  const AnimatedProfileWindow({super.key, required this.user});
-
-  @override
-  State<AnimatedProfileWindow> createState() => _AnimatedProfileWindowState();
-}
-
-class _AnimatedProfileWindowState extends State<AnimatedProfileWindow>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 225),
-    );
-    _scaleAnimation = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInOut,
-      ),
-    );
-    _controller.forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _scaleAnimation,
-      child: ProfileWindow(user: widget.user),
-    );
-  }
-}
-
 class FullScreenImage extends StatelessWidget {
   // final String imageUrl;
   final ImageProvider image;

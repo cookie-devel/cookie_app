@@ -1,16 +1,16 @@
-import 'package:cookie_app/components/map/markerDesign.dart';
-import 'package:cookie_app/cookie.appbar.dart';
-import 'package:cookie_app/schema/FriendInfo.dart';
-import 'package:cookie_app/cookie.splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:cookie_app/cookie.appbar.dart';
+import 'package:cookie_app/cookie.splash.dart';
+import 'package:cookie_app/schema/FriendInfo.dart';
+import 'package:cookie_app/components/map/markerDesign.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart' as latlong;
-import 'dart:convert';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
+import 'dart:convert';
 
 class MapsWidget extends StatefulWidget {
   const MapsWidget({Key? key}) : super(key: key);
@@ -23,9 +23,9 @@ class _MapsWidgetState extends State<MapsWidget> {
   bool loading = true;
   String _mapStyle = '';
   List<dynamic> mapLog = [];
-  static late LatLng _currentLocation;
+  List<Marker> markers = <Marker>[];
+  late LatLng _currentLocation;
   late GoogleMapController mapController;
-  static List<Marker> markers = <Marker>[];
   final latlong.Distance distance = const latlong.Distance();
   int selectedSortOption = 1;
   Timer? _timer;
@@ -33,8 +33,8 @@ class _MapsWidgetState extends State<MapsWidget> {
   @override
   void initState() {
     super.initState();
-    _initializeData();
     _locationPermission();
+    _initializeData();
     _getUserLocation();
     _loadMapStyle();
     startLocationUpdates();
@@ -46,118 +46,6 @@ class _MapsWidgetState extends State<MapsWidget> {
     markers.clear();
     stopLocationUpdates();
     super.dispose();
-  }
-
-  void startLocationUpdates() {
-    stopLocationUpdates();
-    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
-      _getUserLocation();
-    });
-  }
-
-  void stopLocationUpdates() {
-    _timer?.cancel();
-  }
-
-  Future<void> _loadMapStyle() async {
-    rootBundle.loadString('assets/data/mapStyle.json').then((string) {
-      _mapStyle = string;
-    });
-  }
-
-  Future<void> _initializeData() async {
-    await _getSampleData();
-    _addMarkers();
-  }
-
-  // 임시로 json 데이터 생성하여 가져옴
-  Future<void> _getSampleData() async {
-    String jsonString = await rootBundle.loadString('assets/data/map.json');
-    setState(() {
-      mapLog = json.decode(jsonString)["result"];
-    });
-  }
-
-  Future<void> _addMarkers() async {
-    List<Marker> allMarkers = [];
-    for (int i = 0; i < mapLog.length; i++) {
-      final FriendInfo friendInfo = FriendInfo(
-        username: mapLog[i]["username"],
-        profileImage: Image.asset(mapLog[i]["profile"]["image"]).image,
-        profileMessage: mapLog[i]["profile"]["message"],
-      );
-
-      final LatLng location = LatLng(
-        mapLog[i]["location"]["latitude"],
-        mapLog[i]["location"]["longitude"],
-      );
-
-      Marker marker = await addMarker(context, friendInfo, location);
-      allMarkers.add(marker);
-    }
-    setState(() {
-      markers.addAll(allMarkers);
-    });
-  }
-
-  // https://kanoos-stu.tistory.com/64
-  void _locationPermission() async {
-    var requestStatus = await Permission.location.request();
-    var status = await Permission.location.status;
-    if (requestStatus.isGranted && status.isLimited) {
-      // isLimited - 제한적 동의 (ios 14 < )
-      // 요청 동의됨
-      if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
-        _getUserLocation();
-      } else {
-        // 요청 동의 + gps 꺼짐
-      }
-    } else if (requestStatus.isPermanentlyDenied ||
-        status.isPermanentlyDenied) {
-      // 권한 요청 거부, 해당 권한에 대한 요청에 대해 다시 묻지 않음 선택하여 설정화면에서 변경해야함. android
-      openAppSettings();
-    } else if (status.isRestricted) {
-      // 권한 요청 거부, 해당 권한에 대한 요청을 표시하지 않도록 선택하여 설정화면에서 변경해야함. ios
-      openAppSettings();
-    } else if (status.isDenied) {
-      // 권한 요청 거절
-    }
-  }
-
-  void _getUserLocation() async {
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-    setState(() {
-      _currentLocation = LatLng(position.latitude, position.longitude);
-      loading = false;
-      print("currentLocation = ${_currentLocation.toString()}");
-    });
-  }
-
-  // speedDial => 현위치
-  void _moveToCurrentLocation() {
-    mapController.animateCamera(CameraUpdate.newLatLng(_currentLocation));
-  }
-
-  // 해당 location으로 camera 이동
-  void _moveToFriendLocation(LatLng location) {
-    mapController.animateCamera(CameraUpdate.newLatLngZoom(location,17.0));
-  }
-
-  // 두 좌표 간 거리계산
-  String _calDistance(LatLng myLocation, LatLng friendLocation) {
-    final latLong1 = latlong.LatLng(myLocation.latitude, myLocation.longitude);
-    final latLong2 =
-        latlong.LatLng(friendLocation.latitude, friendLocation.longitude);
-    final dist = distance(latLong1, latLong2);
-
-    final double distanceInMeters = dist < 1000 ? dist : dist / 1000;
-    final String distanceString =
-        distanceInMeters.toStringAsFixed(distanceInMeters < 10 ? 1 : 0);
-    final String unit = dist < 1000 ? 'm' : 'km';
-
-    return '$distanceString $unit';
   }
 
   @override
@@ -197,26 +85,167 @@ class _MapsWidgetState extends State<MapsWidget> {
     );
   }
 
-  SpeedDialChild speedDialChild(
-    String label,
-    IconData icon,
-    void Function()? onTap,
-  ) {
-    return SpeedDialChild(
-      child: Icon(icon, color: Colors.white),
-      label: label,
-      labelBackgroundColor: Colors.white,
-      labelStyle: const TextStyle(
-        fontWeight: FontWeight.w500,
-        color: Colors.deepOrangeAccent,
-        fontSize: 13.0,
-      ),
-      backgroundColor: Colors.deepOrangeAccent,
-      onTap: onTap,
-    );
+  void startLocationUpdates() {
+    stopLocationUpdates();
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      _getUserLocation();
+    });
   }
 
+  void stopLocationUpdates() {
+    _timer?.cancel();
+  }
+
+  Future<void> _loadMapStyle() async {
+    rootBundle.loadString('assets/data/mapStyle.json').then((string) {
+      _mapStyle = string;
+    });
+  }
+
+  Future<void> _initializeData() async {
+    await _getSampleData();
+    _addMarkers();
+  }
+
+  // 임시로 json 데이터 생성하여 가져옴
+  Future<void> _getSampleData() async {
+    String jsonString = await rootBundle.loadString('assets/data/map.json');
+    setState(() {
+      mapLog = json.decode(jsonString)["result"];
+    });
+  }
+
+  Future<void> _addMarkers() async {
+    List<Marker> allMarkers = [];
+    List<Future<Marker>> markerFutures = [];
+
+    for (int i = 0; i < mapLog.length; i++) {
+      final FriendInfo friendInfo = FriendInfo.fromMap(mapLog[i]);
+
+      // final FriendInfo friendInfo = FriendInfo(
+      //   username: mapLog[i]["username"],
+      //   profileImage: Image.asset(mapLog[i]["profile"]["image"]).image,
+      //   profileMessage: mapLog[i]["profile"]["message"],
+      // );
+
+      final LatLng location = LatLng(
+        mapLog[i]["location"]["latitude"],
+        mapLog[i]["location"]["longitude"],
+      );
+
+      Future<Marker> markerFuture = addMarker(context, friendInfo, location);
+      markerFutures.add(markerFuture);
+    }
+
+    List<Marker> mark = await Future.wait(markerFutures);
+    allMarkers.addAll(mark);
+
+    setState(() {
+      markers.addAll(allMarkers);
+    });
+  }
+
+  // https://kanoos-stu.tistory.com/64
+  Future<void> _locationPermission() async {
+    final PermissionStatus requestStatus = await Permission.location.request();
+    final PermissionStatus status = await Permission.location.status;
+
+    if (requestStatus.isGranted && status.isLimited) {
+      final bool isLocationServiceEnabled =
+          await Permission.locationWhenInUse.serviceStatus.isEnabled;
+
+      if (isLocationServiceEnabled) {
+        _getUserLocation();
+      } else {
+        // TODO: 위치 서비스가 꺼져 있는 경우 처리할 내용 추가
+      }
+    } else if (requestStatus.isPermanentlyDenied ||
+        status.isPermanentlyDenied) {
+      openAppSettings();
+    } else if (status.isRestricted) {
+      openAppSettings();
+    }
+  }
+
+  Future<void> _getUserLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      setState(() {
+        _currentLocation = LatLng(position.latitude, position.longitude);
+        loading = false;
+        print("currentLocation = $_currentLocation");
+      });
+    } catch (e) {
+      print("Failed to get user location: $e");
+    }
+  }
+
+  // 해당 location으로 camera 이동
+  void _moveToFriendLocation(LatLng location) {
+    mapController.animateCamera(CameraUpdate.newLatLngZoom(location, 16.0));
+  }
+
+  // 두 좌표 간 거리계산
+  String _calDistance(LatLng myLocation, LatLng friendLocation) {
+    final latLong1 = latlong.LatLng(myLocation.latitude, myLocation.longitude);
+    final latLong2 =
+        latlong.LatLng(friendLocation.latitude, friendLocation.longitude);
+    final dist = distance(latLong1, latLong2);
+
+    final double distanceInMeters = dist < 1000 ? dist : dist / 1000;
+    final String distanceString =
+        distanceInMeters.toStringAsFixed(distanceInMeters < 10 ? 1 : 0);
+    final String unit = dist < 1000 ? 'm' : 'km';
+
+    return '$distanceString $unit';
+  }
+
+  // speedDial
   Widget _floatingButtons() {
+    SpeedDialChild speedDialChild(
+      String label,
+      IconData icon,
+      void Function()? onTap,
+    ) {
+      return SpeedDialChild(
+        child: Icon(icon, color: Colors.white),
+        label: label,
+        labelBackgroundColor: Colors.white,
+        labelStyle: const TextStyle(
+          fontWeight: FontWeight.w500,
+          color: Colors.deepOrangeAccent,
+          fontSize: 13.0,
+        ),
+        backgroundColor: Colors.deepOrangeAccent,
+        onTap: onTap,
+      );
+    }
+
+    final List<SpeedDialChild> speedDialChildren = [
+      speedDialChild(
+        "설정",
+        Icons.settings_sharp,
+        () {},
+      ),
+      speedDialChild(
+        "현위치",
+        Icons.location_searching_sharp,
+        _moveToCurrentLocation,
+      ),
+      speedDialChild(
+        "친구찾기",
+        Icons.person_search_rounded,
+        () => _friendLocationBottomSheet(mapLog: mapLog),
+      ),
+      speedDialChild(
+        "쿠키",
+        Icons.cookie,
+        () {},
+      ),
+    ];
+
     return SpeedDial(
       animatedIcon: AnimatedIcons.menu_close,
       visible: true,
@@ -227,33 +256,13 @@ class _MapsWidgetState extends State<MapsWidget> {
       overlayOpacity: 0.0,
       curve: Curves.bounceIn,
       backgroundColor: Colors.deepOrangeAccent,
-      children: [
-        speedDialChild(
-          "설정",
-          Icons.settings_sharp,
-          () {},
-        ),
-        speedDialChild(
-          "현위치",
-          Icons.location_searching_sharp,
-          () {
-            _moveToCurrentLocation();
-          },
-        ),
-        speedDialChild(
-          "친구찾기",
-          Icons.person_search_rounded,
-          () {
-            _friendLocationBottomSheet(mapLog: mapLog);
-          },
-        ),
-        speedDialChild(
-          "쿠키",
-          Icons.cookie,
-          () {},
-        ),
-      ],
+      children: speedDialChildren,
     );
+  }
+
+  // speedDial => 현위치
+  void _moveToCurrentLocation() {
+    mapController.animateCamera(CameraUpdate.newLatLng(_currentLocation));
   }
 
   // speedDial => 친구찾기
