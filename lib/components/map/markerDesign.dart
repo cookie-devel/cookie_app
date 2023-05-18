@@ -3,7 +3,6 @@ import 'package:cookie_app/schema/FriendInfo.dart';
 import 'package:cookie_app/pages/chatroom/chatroom.dart';
 import 'package:cookie_app/components/map/ImageProcess.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:typed_data';
 
 class BottomSheetInside extends StatelessWidget {
@@ -13,166 +12,126 @@ class BottomSheetInside extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final imageSize = mediaQuery.size.height * 0.165;
-    return Container(
+    return SizedBox(
       height: mediaQuery.size.height * 0.2,
-      decoration: const BoxDecoration(
-        color: Color.fromARGB(255, 249, 253, 255),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(21),
-          topRight: Radius.circular(21),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 10.0,
-            spreadRadius: 0.5,
-            offset: Offset(0.7, 0.7),
-          ),
-        ],
-      ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 10, 10, 8),
+        padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
         child: Row(
           children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  width: imageSize,
-                  height: imageSize,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border:
-                        Border.all(width: 1, color: Colors.deepOrangeAccent),
+            Flexible(
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(width: 3.0, color: Colors.white),
+                  image: DecorationImage(
+                    image: user.profileImage,
+                    fit: BoxFit.cover,
                   ),
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.height * 0.158 - 2,
-                  height: MediaQuery.of(context).size.height * 0.158 - 2,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: user.profileImage,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-            const SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          user.username,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      const Icon(
-                        Icons.person,
-                        size: 16,
-                        color: Colors.black54,
-                      ),
-                      const SizedBox(width: 1),
-                      const Text(
-                        "777",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Flexible(
-                    child: Text(
-                      '${user.profileMessage!}\n',
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: Colors.black54,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+            const SizedBox(width: 16),
+            Flexible(
+              flex: 2,
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(12, 14, 12, 0),
+                decoration: const BoxDecoration(
+                  color: Colors.orangeAccent,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 10.0,
+                      spreadRadius: 0.5,
+                      offset: Offset(0.5, 0.5),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.deepOrangeAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            side: const BorderSide(
-                              color: Colors.black45,
-                              width: 1,
+                  ],
+                ),
+                alignment: Alignment.topLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            user.username,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        child: const Text(
-                          'COOKIE!',
+                        const SizedBox(width: 6),
+                        const Icon(
+                          Icons.person,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 1),
+                        const Text(
+                          "777",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 12,
                             color: Colors.white,
                           ),
                         ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Fluttertoast.showToast(
-                            msg: 'COOKIE!!!',
-                            toastLength: Toast.LENGTH_SHORT,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.black.withOpacity(0.2),
-                            textColor: Colors.white,
-                          );
-                        },
-                      ),
-                      const SizedBox(width: 18),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.deepOrangeAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            side: const BorderSide(
-                              color: Colors.black45,
-                              width: 1,
-                            ),
-                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Flexible(
+                      child: Text(
+                        '${user.profileMessage!}\n',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
-                        child: const Text(
-                          '채팅하기',
-                          style: TextStyle(
-                            fontSize: 14,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatRoom(room: user),
+                              ),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.chat_bubble_outline,
                             color: Colors.white,
                           ),
                         ),
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ChatRoom(room: user),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  )
-                ],
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.favorite_border_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.cookie_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ],
@@ -186,6 +145,7 @@ Future<void> markerBottomSheet(BuildContext context, FriendInfo user) {
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
+    backgroundColor: const Color.fromARGB(255, 83, 56, 63),
     builder: (BuildContext context) {
       return BottomSheetInside(user: user);
     },
