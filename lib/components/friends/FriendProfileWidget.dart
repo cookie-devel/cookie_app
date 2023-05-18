@@ -3,7 +3,7 @@ import 'package:vibration/vibration.dart';
 import 'package:cookie_app/components/profile/ProfileWindow.dart';
 import 'package:cookie_app/schema/FriendInfo.dart';
 
-class FriendProfileWidget extends StatelessWidget {
+class FriendProfileWidget extends StatefulWidget {
   final FriendInfo user;
   final bool displayName;
   final bool enableOnTap;
@@ -18,6 +18,44 @@ class FriendProfileWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<FriendProfileWidget> createState() => _FriendProfileWidgetState();
+}
+
+class _FriendProfileWidgetState extends State<FriendProfileWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<Offset> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _animation = Tween<Offset>(
+      begin: const Offset(0, 0),
+      end: const Offset(0, 0.03),
+    ).animate(_animationController);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _startAnimation() {
+    _animationController.reset();
+    _animationController.forward();
+  }
+
+  void _reverseAnimation() {
+    _animationController.reverse();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height -
@@ -30,50 +68,69 @@ class FriendProfileWidget extends StatelessWidget {
 
     const fontSize = 14.0;
 
-    return InkResponse(
+    return GestureDetector(
       onTap: () {
-        if (!enableOnTap) return;
-        profileBottomSheet(context, user);
-        // profileWindow(context, user);
+        if (widget.enableOnTap) {
+          if (widget.enableOnTap) {
+            _startAnimation();
+            profileBottomSheet(context, widget.user);
+            Future.delayed(const Duration(milliseconds: 300), () {
+              _reverseAnimation();
+            });
+          }
+        }
       },
       onLongPress: () {
-        if (!enableOnLongPress) return;
-        Vibration.vibrate(duration: 40);
+        if (widget.enableOnLongPress) {
+          Vibration.vibrate(duration: 40);
+        }
       },
       child: Column(
         children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                width: imageSize,
-                height: imageSize,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.deepOrangeAccent,
-                    width: 1.0,
+          SlideTransition(
+            position: _animation,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: imageSize,
+                  height: imageSize,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.orangeAccent,
+                      width: 2.0,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 4,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              Container(
-                width: imageSize - 12,
-                height: imageSize - 12,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: user.profileImage,
-                    fit: BoxFit.cover,
+                Container(
+                  width: imageSize - 14,
+                  height: imageSize - 14,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: widget.user.profileImage,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          if (displayName) const SizedBox(height: 8),
-          if (displayName)
+          if (widget.displayName) const SizedBox(height: 8),
+          if (widget.displayName)
             Flexible(
               child: Text(
-                user.username,
+                widget.user.username,
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
