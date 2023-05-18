@@ -83,3 +83,19 @@ Future<Uint8List> _createRoundedImage(
     throw Exception('Failed to convert image to byte data.');
   }
 }
+
+// 일반적인 marker 이미지 불러오기
+// Future<Uint8List> getImages(String path, int width) async {
+//   ByteData data = await rootBundle.load(path);
+//   ui.Codec codec = await ui.instantiateImageCodec(
+//     data.buffer.asUint8List(),
+//     targetHeight: width,
+//   );
+//   ui.FrameInfo fi = await codec.getNextFrame();
+//   Uint8List markIcons =
+//       (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+//           .buffer
+//           .asUint8List();
+
+//   return markIcons;
+// }

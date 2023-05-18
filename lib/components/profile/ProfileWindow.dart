@@ -9,13 +9,13 @@ class ProfileWindow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double imageSize = MediaQuery.of(context).size.height * 0.19;
+    double pivotSize = MediaQuery.of(context).size.height * 0.19;
     Widget divider = const Divider(thickness: 2);
-    return SizedBox(
+    return SizedBox.expand(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(height: 16),
+          SizedBox(height: pivotSize * 0.13),
           GestureDetector(
             onTap: () {
               Navigator.push(
@@ -31,8 +31,8 @@ class ProfileWindow extends StatelessWidget {
               alignment: Alignment.center,
               children: [
                 Container(
-                  width: imageSize,
-                  height: imageSize,
+                  width: pivotSize,
+                  height: pivotSize,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.white,
@@ -40,8 +40,8 @@ class ProfileWindow extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  width: imageSize - 8,
-                  height: imageSize - 8,
+                  width: pivotSize * 0.942,
+                  height: pivotSize * 0.942,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
@@ -53,18 +53,18 @@ class ProfileWindow extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 14),
-          Flexible(
+          SizedBox(height: pivotSize * 0.087),
+          Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(12, 16, 12, 12),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
               scrollDirection: Axis.vertical,
               children: [
                 Container(
-                  height: imageSize,
-                  decoration: const BoxDecoration(
+                  height: pivotSize,
+                  decoration: BoxDecoration(
                     color: Colors.orangeAccent,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    boxShadow: [
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: const [
                       BoxShadow(
                         color: Colors.black12,
                         blurRadius: 10.0,
@@ -80,6 +80,8 @@ class ProfileWindow extends StatelessWidget {
                     children: [
                       Text(
                         user.username,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 30.0,
@@ -89,6 +91,8 @@ class ProfileWindow extends StatelessWidget {
                       const SizedBox(height: 12),
                       Text(
                         user.profileMessage ?? "",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 19.0,
@@ -100,11 +104,11 @@ class ProfileWindow extends StatelessWidget {
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                 Container(
-                  height: imageSize * 0.4,
-                  decoration: const BoxDecoration(
+                  height: pivotSize * 0.45,
+                  decoration: BoxDecoration(
                     color: Colors.orangeAccent,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    boxShadow: [
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: const [
                       BoxShadow(
                         color: Colors.black12,
                         blurRadius: 10.0,
@@ -125,26 +129,26 @@ class ProfileWindow extends StatelessWidget {
                             ),
                           );
                         },
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.chat_bubble_outline,
                           color: Colors.white,
-                          size: 30,
+                          size: pivotSize * 0.22,
                         ),
                       ),
                       IconButton(
                         onPressed: () {},
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.favorite_border_outlined,
                           color: Colors.white,
-                          size: 30,
+                          size: pivotSize * 0.22,
                         ),
                       ),
                       IconButton(
                         onPressed: () {},
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.cookie_outlined,
                           color: Colors.white,
-                          size: 30,
+                          size: pivotSize * 0.22,
                         ),
                       ),
                     ],
@@ -167,10 +171,10 @@ class ProfileWindow extends StatelessWidget {
 
   Widget userProfiletile(String mainTitle, String subTitle) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: Colors.orangeAccent,
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-        boxShadow: [
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 10.0,
@@ -206,16 +210,18 @@ class ProfileWindow extends StatelessWidget {
     );
   }
 }
+
 Future<void> profileBottomSheet(BuildContext context, FriendInfo user) {
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
-    backgroundColor: const Color.fromARGB(255, 254, 218, 230),
+    backgroundColor: const Color.fromARGB(255, 83, 56, 63),
     builder: (BuildContext context) {
       return ProfileWindow(user: user);
     },
   );
 }
+
 class FullScreenImage extends StatelessWidget {
   // final String imageUrl;
   final ImageProvider image;
