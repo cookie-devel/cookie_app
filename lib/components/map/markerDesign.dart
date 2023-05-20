@@ -21,7 +21,7 @@ class BottomSheetInside extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(width: 3.0, color: Colors.white),
+                  border: Border.all(width: 2.0, color: Colors.white),
                   image: DecorationImage(
                     image: user.profileImage,
                     fit: BoxFit.cover,
@@ -34,10 +34,14 @@ class BottomSheetInside extends StatelessWidget {
               flex: 2,
               child: Container(
                 padding: const EdgeInsets.fromLTRB(12, 14, 12, 0),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: Colors.orangeAccent,
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  boxShadow: [
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 2,
+                  ),
+                  boxShadow: const [
                     BoxShadow(
                       color: Colors.black12,
                       blurRadius: 10.0,
@@ -145,7 +149,7 @@ Future<void> markerBottomSheet(BuildContext context, User user) {
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
-    backgroundColor: const Color.fromARGB(255, 83, 56, 63),
+    backgroundColor: Colors.deepOrange.withOpacity(0.9),
     builder: (BuildContext context) {
       return BottomSheetInside(user: user);
     },
