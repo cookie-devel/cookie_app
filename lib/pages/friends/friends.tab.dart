@@ -5,6 +5,7 @@ import 'package:cookie_app/pages/friends/friendsSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/components/friends/FriendProfileWidget.dart';
 import 'package:cookie_app/schema/User.dart';
+import 'package:vibration/vibration.dart';
 
 class FriendsGrid extends StatefulWidget {
   const FriendsGrid({Key? key}) : super(key: key);
@@ -65,7 +66,9 @@ class _FriendsGridState extends State<FriendsGrid>
     return Scaffold(
       appBar: CookieAppBar(
         title: '친구',
-        actions: const [FriendsAction()],
+        actions: const [
+          FriendsAction(),
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: updateData,
@@ -82,8 +85,16 @@ class _FriendsGridState extends State<FriendsGrid>
 
                   return Padding(
                     padding: const EdgeInsets.all(18.0),
-                    child: FriendProfileWidget(
-                      user: User.fromMap(profile),
+                    child: InkWell(
+                      onLongPress: () {
+                        Vibration.vibrate(duration: 40);
+                        setState(() {
+                          _showDeleteConfirmationSnackBar(index);
+                        });
+                      },
+                      child: FriendProfileWidget(
+                        user: User.fromMap(profile),
+                      ),
                     ),
                   );
                 },
@@ -105,10 +116,29 @@ class _FriendsGridState extends State<FriendsGrid>
       ),
     );
   }
+
+  void _showDeleteConfirmationSnackBar(int index) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: const Text('정말로 삭제하겠습니까?'),
+        duration: const Duration(seconds: 2),
+        action: SnackBarAction(
+          label: '삭제',
+          onPressed: () {
+            setState(() {
+              profiles.removeAt(index);
+            });
+            scaffold.hideCurrentSnackBar();
+          },
+        ),
+      ),
+    );
+  }
 }
 
-/*
+/* 
 Reference:
  https://eunoia3jy.tistory.com/106
  https://memostack.tistory.com/329
-*/
+*/ 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vibration/vibration.dart';
 import 'package:cookie_app/components/profile/ProfileWindow.dart';
 import 'package:cookie_app/schema/User.dart';
 
@@ -36,7 +35,7 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
 
     _animation = Tween<Offset>(
       begin: const Offset(0, 0),
-      end: const Offset(0, 0.03),
+      end: const Offset(0, 0.05),
     ).animate(_animationController);
   }
 
@@ -78,11 +77,6 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
               _reverseAnimation();
             });
           }
-        }
-      },
-      onLongPress: () {
-        if (widget.enableOnLongPress) {
-          Vibration.vibrate(duration: 40);
         }
       },
       child: Column(
