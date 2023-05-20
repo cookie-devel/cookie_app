@@ -22,7 +22,7 @@ class _CookieSplashState extends State<CookieSplash> {
   }
 
   Future<void> checkStorage() async {
-    var signin = await handleAutoSignIn();
+    var signin = await checkJWT();
 
     if (signin) {
       setState(() {

@@ -1,4 +1,5 @@
 import 'package:cookie_app/pages/signin.dart';
+import 'package:cookie_app/utils/myinfo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:cookie_app/handler/socket.io/socket.dart';
@@ -23,19 +24,19 @@ void main() async {
 
   // Load Data
   await dotenv.load();
-  bool autoSignIn = await handleAutoSignIn();
-  socketHandler.connect();
+  bool autoSignIn = await checkJWT();
 
-  runApp(
-    Cookie(
-      success: autoSignIn,
-    ),
-  );
+  if (autoSignIn) {
+    my.loadFromStorage();
+    socketHandler.connect();
+  }
+
+  runApp(Cookie(signin: autoSignIn));
 }
 
 class Cookie extends StatelessWidget {
-  final bool success;
-  const Cookie({super.key, required bool success}) : success = success;
+  final bool signin;
+  Cookie({super.key, required this.signin});
 
   static const String _title = 'Cookie';
 
@@ -45,7 +46,7 @@ class Cookie extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: _title,
-      home: success ? const MainWidget() : const SignInWidget(),
+      home: signin ? const MainWidget() : const SignInWidget(),
       theme: defaultThemeData(),
     );
   }
@@ -134,36 +135,6 @@ class _MainWidgetState extends State<MainWidget> {
     }
   }
 
-  List<BottomNavigationBarItem> bottomBarItems() {
-    return [
-      iconItem(
-        '1111',
-        Icons.people,
-        '친구',
-      ),
-      iconItem(
-        '2',
-        Icons.chat_bubble,
-        '채팅',
-      ),
-      iconItem(
-        '',
-        Icons.cookie,
-        '쿠키',
-      ),
-      iconItem(
-        '3',
-        Icons.sports_basketball,
-        '클럽',
-      ),
-      iconItem(
-        '4',
-        Icons.settings,
-        '설정',
-      ),
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -192,7 +163,33 @@ class _MainWidgetState extends State<MainWidget> {
                 ),
               ),
               BottomNavigationBar(
-                items: bottomBarItems(),
+                items: [
+                  iconItem(
+                    '1111',
+                    Icons.people,
+                    '친구',
+                  ),
+                  iconItem(
+                    '2',
+                    Icons.chat_bubble,
+                    '채팅',
+                  ),
+                  iconItem(
+                    '',
+                    Icons.cookie,
+                    '쿠키',
+                  ),
+                  iconItem(
+                    '3',
+                    Icons.sports_basketball,
+                    '클럽',
+                  ),
+                  iconItem(
+                    '4',
+                    Icons.settings,
+                    '설정',
+                  ),
+                ],
                 currentIndex: _selectedIndex,
                 onTap: (i) => setState(() => _selectedIndex = i),
               ),

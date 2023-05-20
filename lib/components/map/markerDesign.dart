@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:cookie_app/schema/FriendInfo.dart';
-import 'package:cookie_app/pages/chatroom/chatroom.dart';
+import 'package:cookie_app/schema/User.dart';
 import 'package:cookie_app/components/map/ImageProcess.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:typed_data';
 
 class BottomSheetInside extends StatelessWidget {
-  final FriendInfo user;
+  final User user;
   const BottomSheetInside({Key? key, required this.user}) : super(key: key);
 
   @override
@@ -58,7 +57,7 @@ class BottomSheetInside extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Text(
-                            user.username,
+                            user.name,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 24,
@@ -102,28 +101,29 @@ class BottomSheetInside extends StatelessWidget {
                       children: [
                         IconButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ChatRoom(room: user),
-                              ),
-                            );
+                            // TODO: ChatRoom room
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => ChatRoom(room: user),
+                            //   ),
+                            // );
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.chat_bubble_outline,
                             color: Colors.white,
                           ),
                         ),
                         IconButton(
                           onPressed: () {},
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.favorite_border_outlined,
                             color: Colors.white,
                           ),
                         ),
                         IconButton(
                           onPressed: () {},
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.cookie_outlined,
                             color: Colors.white,
                           ),
@@ -141,7 +141,7 @@ class BottomSheetInside extends StatelessWidget {
   }
 }
 
-Future<void> markerBottomSheet(BuildContext context, FriendInfo user) {
+Future<void> markerBottomSheet(BuildContext context, User user) {
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
@@ -154,7 +154,7 @@ Future<void> markerBottomSheet(BuildContext context, FriendInfo user) {
 
 Future<Marker> addMarker(
   BuildContext context,
-  FriendInfo user,
+  User user,
   LatLng location, {
   int size = 100,
   Color color = Colors.deepOrangeAccent,
@@ -167,7 +167,7 @@ Future<Marker> addMarker(
     borderWidth: width,
   );
   return Marker(
-    markerId: MarkerId(user.username.toString()),
+    markerId: MarkerId(user.name.toString()),
     icon: BitmapDescriptor.fromBytes(markIcons),
     position: location,
     onTap: () {

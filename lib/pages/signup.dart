@@ -4,7 +4,7 @@ import 'package:cookie_app/components/friends/FriendProfileWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/cookie.appbar.dart';
 import 'package:cookie_app/components/ImageSelection.dart';
-import 'package:cookie_app/schema/FriendInfo.dart';
+import 'package:cookie_app/schema/User.dart';
 
 class SignUpWidget extends StatefulWidget {
   const SignUpWidget({Key? key}) : super(key: key);
@@ -45,9 +45,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               // Profile Image
               FriendProfileWidget(
                 user: _imageFile == null
-                    ? FriendInfo()
+                    ? User()
                     // : FriendInfo(profileImage: _imageFile!.path),
-                    : FriendInfo(profileImage: FileImage(_imageFile!)),
+                    : User(profileImage: FileImage(_imageFile!)),
                 enableOnLongPress: false,
                 enableOnTap: false,
                 displayName: false,

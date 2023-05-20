@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
 import 'package:cookie_app/components/profile/ProfileWindow.dart';
-import 'package:cookie_app/schema/FriendInfo.dart';
+import 'package:cookie_app/schema/User.dart';
 
 class FriendProfileWidget extends StatefulWidget {
-  final FriendInfo user;
+  final User user;
   final bool displayName;
   final bool enableOnTap;
   final bool enableOnLongPress;
@@ -129,7 +129,7 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
           if (widget.displayName)
             Flexible(
               child: Text(
-                widget.user.username,
+                widget.user.name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,

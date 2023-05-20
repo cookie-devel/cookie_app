@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:cookie_app/schema/FriendInfo.dart';
+import 'package:cookie_app/schema/User.dart';
 import 'package:cookie_app/components/LongPressCopyableText.dart';
 
 class OtherBubble extends StatelessWidget {
-  final FriendInfo user;
-  final String text;
+  final User user;
+  final String content;
 
   const OtherBubble({
     Key? key,
     required this.user,
-    required this.text,
+    required this.content,
   }) : super(key: key);
 
   @override
@@ -32,7 +32,7 @@ class OtherBubble extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   image: DecorationImage(
-                    image: user.profileImage,
+                    image: user.profileImage as ImageProvider,
                     fit: BoxFit.cover,
                   ),
                   border: Border.all(width: 0.5, color: Colors.black45),
@@ -47,7 +47,7 @@ class OtherBubble extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  user.username,
+                  user.name,
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
@@ -83,7 +83,7 @@ class OtherBubble extends StatelessWidget {
                     vertical: 7,
                   ),
                   child: LongPressCopyableText(
-                    text: text,
+                    text: content,
                     style: const TextStyle(
                       fontSize: 15,
                       color: Colors.white,

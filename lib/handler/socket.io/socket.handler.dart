@@ -1,6 +1,6 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:cookie_app/handler/storage.dart';
+import 'package:cookie_app/utils/storage.dart';
 
 class SocketHandler {
   SocketHandler._privateConstructor();
@@ -19,17 +19,12 @@ class SocketHandler {
         .build(),
   );
 
-  static String userID = "";
+  connect() async {
+    socket.auth = {
+      'token': await secureStorage.read(key: "token")
+    };
 
-  get() {
-    return socket;
-  }
-
-  connect() {
-    var sessionID = secureStorage.read(key: 'sessionID');
-    socket.auth = {'sessionID': sessionID};
-
-    registerDefaultEventHandler();
+    registerDefaultEventHandlers();
     socket.connect();
   }
 
@@ -37,8 +32,8 @@ class SocketHandler {
 
   registerHandshakeHandler() {}
 
-  registerDefaultEventHandler() {
-    socket.auth = {'username': 'test'};
+  registerDefaultEventHandlers() {
+    // socket.auth = {'username': 'test'};
 
     socket.onConnect((data) {
       print('socket connected; id: ${socket.id}');
@@ -46,17 +41,25 @@ class SocketHandler {
 
     socket.on("connect_error", (data) => print('socket error: $data'));
 
-    socket.on("session", (data) {
-      String sessionID = data['sessionID'];
-      String userID = data['userID'];
-
-      socket.auth['sessionID'] = sessionID;
-      secureStorage.write(key: 'sessionID', value: sessionID);
-
-      SocketHandler.userID = userID;
-
-      print('socket session: $sessionID $userID');
+    socket.on("users", (data) {
+      print('socket users: $data');
     });
+
+    socket.on("user connected", (data) {
+      print('socket user connected: $data');
+    });
+
+
+
+    // socket.on("session", (data) {
+    //   // String sessionID = data['sessionID'];
+    //   String userID = data['userID'];
+
+    //   // socket.auth['sessionID'] = sessionID;
+    //   // secureStorage.write(key: 'sessionID', value: sessionID);
+
+    //   // print('socket session: $sessionID $userID');
+    // });
 
     socket.onDisconnect((data) => print('socket disconnected: $data'));
   }

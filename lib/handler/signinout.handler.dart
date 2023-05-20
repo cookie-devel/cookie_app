@@ -1,33 +1,47 @@
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:cookie_app/handler/storage.dart';
 import 'dart:convert';
 import 'package:cookie_app/components/auth/validator.dart';
+import 'package:cookie_app/utils/jwt.dart';
+import 'package:cookie_app/utils/myinfo.dart';
 
 Future<bool> handleSignIn(id, pw) async {
   assert(validateID(id) == null);
   assert(validatePW(pw) == null);
-  Map<String, dynamic> jsonMap = await postSignIn(id, pw);
-  bool success = jsonMap.containsKey('access_token');
+  Future<Map<String, dynamic>> jsonMap = postSignIn(id, pw);
+  bool success = (await jsonMap).containsKey('access_token');
 
   if (success) {
-    await secureStorage.write(
-      key: 'access_token',
-      value: jsonMap['access_token'],
+    String token = (await jsonMap)['access_token'];
+    JWT.write(token);
+    print("jwt: ${token}");
+
+    Map<String, dynamic> account = (await jsonMap)['account'];
+
+    my = Me(
+      id: account['userid'],
+      name: account['username'],
+      profileImage: account['profile']['image'] != null
+          ? NetworkImage(account['profile']['image'])
+          : const AssetImage("images/default_profile.png") as ImageProvider,
+      profileMessage: account['profile']['message'],
+      phone: account['phone'],
+      friendList: account['friendList'],
     );
-    print("jwt: ${jsonMap['access_token']}");
-    accountStorage.writeJSON(jsonMap['account']);
+
+    accountStorage.writeJSON(account);
+
     return true;
   } else {
     return false;
   }
 }
 
-Future<bool> handleAutoSignIn() async {
-  var jwt = await secureStorage.read(key: 'access_token');
+Future<bool> checkJWT() async {
+  String? jwt = await JWT.read();
   if (jwt == null) return false;
-  print("jwt: $jwt");
 
   try {
     return !JwtDecoder.isExpired(jwt);
@@ -55,7 +69,7 @@ Future<Map<String, dynamic>> postSignIn(String id, String pw) async {
 
 Future<bool> handleSignOut() async {
   try {
-    await secureStorage.delete(key: 'access_token');
+    JWT.delete();
     accountStorage.deleteData();
     return true;
   } catch (e) {

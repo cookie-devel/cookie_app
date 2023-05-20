@@ -4,25 +4,24 @@ import 'package:cookie_app/components/chat/connectionInfo.dart';
 import 'package:cookie_app/cookie.appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/handler/socket.io/socket.dart';
-import 'package:cookie_app/components/chat/chatListView.dart';
-import 'package:cookie_app/schema/FriendInfo.dart';
+
+import 'package:cookie_app/schema/Room.dart';
+import 'package:cookie_app/utils/myinfo.dart';
 
 class ChatRoom extends StatefulWidget {
-  final FriendInfo? room;
+  // final User? room;
+  final Room room;
 
-  const ChatRoom({Key? key, this.room}) : super(key: key);
+  const ChatRoom({
+    Key? key,
+    required this.room,
+  }) : super(key: key);
 
   @override
   State<ChatRoom> createState() => _ChatRoomState();
 }
 
 class _ChatRoomState extends State<ChatRoom> {
-  List messages = ['안녕하세요', '채팅 페이지 테스트입니다', '대화를 원할 경우 마침표로 대화를 마무리하세요'];
-  
-  List sample_messages = [
-    {'user': FriendInfo(), 'message': 'sample text'}
-  ];
-
   final chatFieldController = TextEditingController();
   ScrollController? _scrollController;
 
@@ -35,7 +34,7 @@ class _ChatRoomState extends State<ChatRoom> {
     socketHandler.registerSendMessageEvent((data) {
       if (mounted) {
         setState(() {
-          messages.add(data);
+          widget.room.messages.add(data);
         });
       }
     });
@@ -54,14 +53,13 @@ class _ChatRoomState extends State<ChatRoom> {
       resizeToAvoidBottomInset: true,
       backgroundColor: const Color.fromARGB(247, 253, 253, 253),
       appBar: CookieAppBar(
-        title: widget.room?.username ?? 'Unknown',
+        title: widget.room.name,
         actions: [connectionInfo()],
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
         child: Column(
           children: [
-            // chat(context, widget.room ?? FriendInfo(), messages),
             Expanded(
               child: SingleChildScrollView(
                 reverse: true,
@@ -70,14 +68,14 @@ class _ChatRoomState extends State<ChatRoom> {
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: messages.length,
+                      itemCount: widget.room.messages.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final message = messages[index];
-                        return message.endsWith('.')
-                            ? MyBubble(text: message)
+                        final message = widget.room.messages[index];
+                        return message.sender.id == my.id
+                            ? MyBubble(content: message.content)
                             : OtherBubble(
-                                user: widget.room ?? FriendInfo(),
-                                text: message,
+                                user: message.sender,
+                                content: message.content,
                               );
                       },
                     ),
