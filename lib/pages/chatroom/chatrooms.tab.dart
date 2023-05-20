@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:cookie_app/schema/Room.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/cookie.appbar.dart';
 import 'package:cookie_app/components/chat/chatroom_list_entry.dart';
-import 'package:cookie_app/schema/FriendInfo.dart';
 import 'package:flutter/services.dart';
 import 'package:cookie_app/pages/chatroom/chatroom.dart';
+
+import '../../utils/myinfo.dart';
 
 class ChatTabWidget extends StatefulWidget {
   const ChatTabWidget({super.key});
@@ -22,6 +24,7 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
   List<dynamic> chatLog = [];
 
   void getSampleData() async {
+    print(my.id);
     final String res = await rootBundle.loadString('assets/data/chat.json');
     final data = await json.decode(res);
 
@@ -46,6 +49,7 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
           final Map lastdata = _lastData(messages);
           final String lastkey = lastdata['lastkey'];
           final String lastmessage = lastdata['lastmessage'];
+
           return ChatRoomListEntry(
             name: name,
             image: log['profile']['image'],
@@ -53,7 +57,13 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
             time: DateTime.tryParse(lastkey),
             unread: 1000,
             navigate: ChatRoom(
-              room: FriendInfo.fromMap(log),
+              // room: User.fromMap(log),
+              room: Room(
+                id: '',
+                name: name,
+                messages: [],
+                users: [],
+              ),
             ),
           );
         },

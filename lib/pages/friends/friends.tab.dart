@@ -1,10 +1,10 @@
 import 'package:cookie_app/cookie.appbar.dart';
 import 'package:cookie_app/handler/friends_refresh.handler.dart';
-import 'package:cookie_app/handler/storage.dart';
+import 'package:cookie_app/utils/myinfo.dart';
 import 'package:cookie_app/pages/friends/friendsSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/components/friends/FriendProfileWidget.dart';
-import 'package:cookie_app/schema/FriendInfo.dart';
+import 'package:cookie_app/schema/User.dart';
 
 class FriendsGrid extends StatefulWidget {
   const FriendsGrid({Key? key}) : super(key: key);
@@ -27,10 +27,12 @@ class _FriendsGridState extends State<FriendsGrid>
   }
 
   void getData() async {
-    Map<String, dynamic> account = await accountStorage.readJSON();
-    setState(() {
-      profiles = sortList(account['friendList'], 'username');
-    });
+    var friendList = my.friendList;
+    if (friendList != null) {
+      setState(() {
+        profiles = sortList(friendList, 'username');
+      });
+    }
   }
 
   Future<void> updateData() async {
@@ -38,9 +40,7 @@ class _FriendsGridState extends State<FriendsGrid>
     setState(() {
       profiles = sortList(data['result'], 'username');
     });
-    Map<String, dynamic> account = await accountStorage.readJSON();
-    account['friendList'] = data['result'];
-    accountStorage.writeJSON(account);
+    my.friendList = data['result'];
   }
 
   List sortList(List<dynamic> list, String key, {bool reverse = false}) {
@@ -65,7 +65,7 @@ class _FriendsGridState extends State<FriendsGrid>
     return Scaffold(
       appBar: CookieAppBar(
         title: '친구',
-        actions: [FriendsAction()],
+        actions: const [FriendsAction()],
       ),
       body: RefreshIndicator(
         onRefresh: updateData,
@@ -83,7 +83,7 @@ class _FriendsGridState extends State<FriendsGrid>
                   return Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: FriendProfileWidget(
-                      user: FriendInfo.fromMap(profile),
+                      user: User.fromMap(profile),
                     ),
                   );
                 },
@@ -107,8 +107,8 @@ class _FriendsGridState extends State<FriendsGrid>
   }
 }
 
-/* 
+/*
 Reference:
  https://eunoia3jy.tistory.com/106
  https://memostack.tistory.com/329
-*/ 
+*/

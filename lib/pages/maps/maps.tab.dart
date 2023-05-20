@@ -3,7 +3,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:cookie_app/cookie.appbar.dart';
 import 'package:cookie_app/cookie.splash.dart';
-import 'package:cookie_app/schema/FriendInfo.dart';
+import 'package:cookie_app/schema/User.dart';
 import 'package:cookie_app/components/map/markerDesign.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart' as latlong;
@@ -120,7 +120,7 @@ class _MapsWidgetState extends State<MapsWidget> {
     List<Future<Marker>> markerFutures = [];
 
     for (int i = 0; i < mapLog.length; i++) {
-      final FriendInfo friendInfo = FriendInfo.fromMap(mapLog[i]);
+      final User friendInfo = User.fromMap(mapLog[i]);
 
       // final FriendInfo friendInfo = FriendInfo(
       //   username: mapLog[i]["username"],
@@ -394,7 +394,7 @@ class _MapsWidgetState extends State<MapsWidget> {
                               ),
                             );
                             Navigator.pop(context);
-                            markerBottomSheet(context, FriendInfo.fromMap(log));
+                            markerBottomSheet(context, User.fromMap(log));
                           },
                         );
                       },

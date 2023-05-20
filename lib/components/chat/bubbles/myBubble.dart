@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:cookie_app/components/LongPressCopyableText.dart';
 
 class MyBubble extends StatelessWidget {
-  final String text;
+  final String content;
 
   const MyBubble({
     Key? key,
-    required this.text,
+    required this.content,
   }) : super(key: key);
 
   @override
@@ -47,7 +47,7 @@ class MyBubble extends StatelessWidget {
                 vertical: 7,
               ),
               child: LongPressCopyableText(
-                text: text,
+                text: content,
                 style: const TextStyle(fontSize: 15, color: Colors.white),
               ),
             ),

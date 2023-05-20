@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:cookie_app/schema/FriendInfo.dart';
-import 'package:cookie_app/pages/chatroom/chatroom.dart';
+import 'package:cookie_app/schema/User.dart';
 
 // 프로필 창 class
 class ProfileWindow extends StatelessWidget {
-  final FriendInfo user;
+  final User user;
   const ProfileWindow({super.key, required this.user});
 
   @override
@@ -79,7 +78,7 @@ class ProfileWindow extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        user.username,
+                        user.name,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
@@ -90,7 +89,7 @@ class ProfileWindow extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        user.profileMessage ?? "",
+                        user.profileMessage,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
@@ -122,12 +121,13 @@ class ProfileWindow extends StatelessWidget {
                     children: [
                       IconButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ChatRoom(room: user),
-                            ),
-                          );
+                          // TODO: ChatRoom room
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => ChatRoom(room: user),
+                          //   ),
+                          // );
                         },
                         icon: Icon(
                           Icons.chat_bubble_outline,
@@ -211,7 +211,7 @@ class ProfileWindow extends StatelessWidget {
   }
 }
 
-Future<void> profileBottomSheet(BuildContext context, FriendInfo user) {
+Future<void> profileBottomSheet(BuildContext context, User user) {
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
