@@ -11,6 +11,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'package:provider/provider.dart';
+import 'package:cookie_app/utils/themeProvider.dart';
+import 'package:cookie_app/utils/mapProvider.dart';
 
 class MapsWidget extends StatefulWidget {
   const MapsWidget({Key? key}) : super(key: key);
@@ -21,7 +24,6 @@ class MapsWidget extends StatefulWidget {
 
 class _MapsWidgetState extends State<MapsWidget> {
   bool loading = true;
-  String _mapStyle = '';
   List<dynamic> mapLog = [];
   List<Marker> markers = <Marker>[];
   late LatLng _currentLocation;
@@ -36,7 +38,6 @@ class _MapsWidgetState extends State<MapsWidget> {
     _locationPermission();
     _initializeData();
     _getUserLocation();
-    _loadMapStyle();
     startLocationUpdates();
   }
 
@@ -50,38 +51,45 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CookieAppBar(title: 'C🍪🍪KIE'),
-      body: loading == false
-          ? Stack(
-              children: [
-                GoogleMap(
-                  myLocationButtonEnabled: false, // 내위치 버튼
-                  compassEnabled: true, // 나침반 버튼
-                  myLocationEnabled: true, // 본인 마커
-                  zoomControlsEnabled: false, // 축소확대 버튼
-                  minMaxZoomPreference:
-                      const MinMaxZoomPreference(14, 20), // 줌 제한
-                  mapToolbarEnabled: false, // 길찾기 버튼
-                  onMapCreated: (GoogleMapController controller) {
-                    mapController = controller;
-                    mapController.setMapStyle(_mapStyle);
-                  },
-                  mapType: MapType.normal,
-                  markers: Set.from(markers),
-                  initialCameraPosition: CameraPosition(
-                    target: _currentLocation,
-                    zoom: 15.2,
-                  ),
-                ),
-                Positioned(
-                  bottom: 16,
-                  right: 16,
-                  child: _floatingButtons(),
-                ),
-              ],
-            )
-          : loadingScreen(),
+    return Consumer2<ThemeProvider, MapProvider>(
+      builder: (context, themeProvider, mapProvider, _) {
+        String mapStyle = themeProvider.isDarkModeEnabled
+            ? mapProvider.mapStyleDark
+            : mapProvider.mapStyleLight;
+        return Scaffold(
+          appBar: CookieAppBar(title: 'C🍪🍪KIE'),
+          body: loading == false
+              ? Stack(
+                  children: [
+                    GoogleMap(
+                      myLocationButtonEnabled: false, // 내위치 버튼
+                      compassEnabled: true, // 나침반 버튼
+                      myLocationEnabled: true, // 본인 마커
+                      zoomControlsEnabled: false, // 축소확대 버튼
+                      minMaxZoomPreference:
+                          const MinMaxZoomPreference(14, 20), // 줌 제한
+                      mapToolbarEnabled: false, // 길찾기 버튼
+                      onMapCreated: (GoogleMapController controller) {
+                        mapController = controller;
+                        mapController.setMapStyle(mapStyle);
+                      },
+                      mapType: MapType.normal,
+                      markers: Set.from(markers),
+                      initialCameraPosition: CameraPosition(
+                        target: _currentLocation,
+                        zoom: 15.2,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 16,
+                      right: 16,
+                      child: _floatingButtons(),
+                    ),
+                  ],
+                )
+              : loadingScreen(),
+        );
+      },
     );
   }
 
@@ -94,12 +102,6 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   void stopLocationUpdates() {
     _timer?.cancel();
-  }
-
-  Future<void> _loadMapStyle() async {
-    rootBundle.loadString('assets/data/mapStyle.json').then((string) {
-      _mapStyle = string;
-    });
   }
 
   Future<void> _initializeData() async {
@@ -121,12 +123,6 @@ class _MapsWidgetState extends State<MapsWidget> {
 
     for (int i = 0; i < mapLog.length; i++) {
       final User friendInfo = User.fromMap(mapLog[i]);
-
-      // final FriendInfo friendInfo = FriendInfo(
-      //   username: mapLog[i]["username"],
-      //   profileImage: Image.asset(mapLog[i]["profile"]["image"]).image,
-      //   profileMessage: mapLog[i]["profile"]["message"],
-      // );
 
       final LatLng location = LatLng(
         mapLog[i]["location"]["latitude"],
@@ -410,5 +406,8 @@ class _MapsWidgetState extends State<MapsWidget> {
   }
 }
 
-//reference
-// https://snazzymaps.com/explore?text=&sort=popular&tag=&color= [google map theme]
+/* 
+reference
+ https://snazzymaps.com/explore?text=&sort=popular&tag=&color= [google map theme]
+
+*/

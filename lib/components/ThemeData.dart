@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 
 ThemeData defaultThemeData() {
   return ThemeData(
+    brightness: Brightness.light,
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.orangeAccent,
       iconTheme: IconThemeData(color: Colors.white),
+      centerTitle: true,
+      titleSpacing: 50.0,
     ),
     dialogTheme: DialogTheme(
       backgroundColor: Colors.white,
@@ -17,7 +20,6 @@ ThemeData defaultThemeData() {
         fontSize: 20,
       ),
       contentTextStyle: const TextStyle(
-        // fontWeight: FontWeight.bold,
         color: Colors.black,
         fontSize: 16,
       ),
@@ -48,6 +50,61 @@ ThemeData defaultThemeData() {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       backgroundColor: Colors.white,
+      modalBarrierColor: Colors.transparent,
+    ),
+  );
+}
+
+ThemeData darkThemeData() {
+  return ThemeData(
+    brightness: Brightness.dark,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.black,
+      iconTheme: IconThemeData(color: Colors.white),
+      centerTitle: true,
+      titleSpacing: 50.0,
+    ),
+    dialogTheme: DialogTheme(
+      backgroundColor: Colors.black,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      titleTextStyle: const TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+        fontSize: 20,
+      ),
+      contentTextStyle: const TextStyle(
+        color: Colors.white,
+        fontSize: 16,
+      ),
+      actionsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+      alignment: Alignment.center,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.black,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          side: const BorderSide(width: 1, color: Colors.black45),
+        ),
+      ),
+    ),
+    scaffoldBackgroundColor: Colors.black,
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Colors.black,
+      selectedItemColor: Colors.white,
+      selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+      unselectedItemColor: Colors.grey,
+      showSelectedLabels: true,
+      showUnselectedLabels: false,
+      type: BottomNavigationBarType.fixed,
+    ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      backgroundColor: Colors.black,
       modalBarrierColor: Colors.transparent,
     ),
   );

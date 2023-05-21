@@ -14,20 +14,17 @@ class CookieAppBar extends AppBar {
           key: key,
           title: Text(title ?? ""),
           actions: actions,
-          centerTitle: true,
-          titleSpacing: 50.0,
-          backgroundColor: Colors.orangeAccent,
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-                  Colors.orangeAccent,
-                  Colors.deepOrangeAccent,
-                ],
-              ),
-            ),
-          ),
+          // flexibleSpace: Container(
+          //   decoration: const BoxDecoration(
+          //     gradient: LinearGradient(
+          //       begin: Alignment.topLeft,
+          //       end: Alignment.bottomRight,
+          //       colors: <Color>[
+          //         Colors.orangeAccent,
+          //         Colors.deepOrangeAccent,
+          //       ],
+          //     ),
+          //   ),
+          // ),
         );
 }

@@ -3,6 +3,7 @@ import 'package:cookie_app/handler/signinout.handler.dart';
 import 'package:cookie_app/pages/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/pages/settings/detail/MyProfile.page.dart';
+import 'package:cookie_app/pages/settings/detail/appTheme.page.dart';
 import 'package:cookie_app/components/NavigatePage.dart';
 
 class SettingsWidget extends StatelessWidget {
@@ -84,6 +85,11 @@ List<SettingsListProp> list = [
     destination: const MyProfileWidget(),
   ),
   SettingsListProp(
+    text: '테마',
+    icon: Icons.color_lens,
+    destination: const ThemeSettingsPage(),
+  ),
+  SettingsListProp(
     text: '기타',
     icon: Icons.more_horiz,
     destination: const MyProfileWidget(),
@@ -142,12 +148,6 @@ Future<void> _showAlertDialog(BuildContext context) async {
               _logout(context);
               Navigator.of(context).pop();
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-            ),
             child: const Text(
               '예',
               style: TextStyle(
