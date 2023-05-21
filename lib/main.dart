@@ -14,6 +14,9 @@ import 'package:cookie_app/handler/signinout.handler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:cookie_app/components/ThemeData.dart';
+import 'package:provider/provider.dart';
+import 'package:cookie_app/utils/themeProvider.dart';
+import 'package:cookie_app/utils/mapProvider.dart';
 
 void main() async {
   // Preserve Splash Screen
@@ -31,7 +34,19 @@ void main() async {
     socketHandler.connect();
   }
 
-  runApp(Cookie(signin: autoSignIn));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ThemeProvider>(
+          create: (_) => ThemeProvider(),
+        ),
+        ChangeNotifierProvider<MapProvider>(
+          create: (_) => MapProvider(),
+        ),
+      ],
+      child: Cookie(signin: autoSignIn),
+    ),
+  );
 }
 
 class Cookie extends StatelessWidget {
@@ -43,11 +58,16 @@ class Cookie extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: _title,
-      home: signin ? const MainWidget() : const SignInWidget(),
-      theme: defaultThemeData(),
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, _) {
+        final isDarkModeEnabled = themeProvider.isDarkModeEnabled;
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: _title,
+          home: signin ? const MainWidget() : const SignInWidget(),
+          theme: isDarkModeEnabled ? darkThemeData() : defaultThemeData(),
+        );
+      },
     );
   }
 }
