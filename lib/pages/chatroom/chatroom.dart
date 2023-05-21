@@ -7,6 +7,8 @@ import 'package:cookie_app/handler/socket.io/socket.dart';
 
 import 'package:cookie_app/schema/Room.dart';
 import 'package:cookie_app/utils/myinfo.dart';
+import 'package:cookie_app/utils/themeProvider.dart';
+import 'package:provider/provider.dart';
 
 class ChatRoom extends StatefulWidget {
   // final User? room;
@@ -49,49 +51,54 @@ class _ChatRoomState extends State<ChatRoom> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: const Color.fromARGB(247, 253, 253, 253),
-      appBar: CookieAppBar(
-        title: widget.room.name,
-        actions: [connectionInfo()],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                reverse: true,
-                child: Column(
-                  children: [
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: widget.room.messages.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final message = widget.room.messages[index];
-                        return message.sender.id == my.id
-                            ? MyBubble(content: message.content)
-                            : OtherBubble(
-                                user: message.sender,
-                                content: message.content,
-                              );
-                      },
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, _) {
+        final isDark = themeProvider.isDarkModeEnabled;
+        return Scaffold(
+          resizeToAvoidBottomInset: true,
+          backgroundColor: !isDark? const Color.fromARGB(247, 253, 253, 253) :Colors.black,
+          appBar: CookieAppBar(
+            title: widget.room.name,
+            actions: [connectionInfo()],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    reverse: true,
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: widget.room.messages.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final message = widget.room.messages[index];
+                            return message.sender.id == my.id
+                                ? MyBubble(content: message.content)
+                                : OtherBubble(
+                                    user: message.sender,
+                                    content: message.content,
+                                  );
+                          },
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+                const SizedBox(height: 6),
+                SafeArea(
+                  bottom: true,
+                  child: chatField(),
+                ),
+                const Padding(padding: EdgeInsets.only(bottom: 6)),
+              ],
             ),
-            const SizedBox(height: 6),
-            SafeArea(
-              bottom: true,
-              child: chatField(),
-            ),
-            const Padding(padding: EdgeInsets.only(bottom: 6)),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

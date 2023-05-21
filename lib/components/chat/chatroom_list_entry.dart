@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:cookie_app/utils/themeProvider.dart';
+import 'package:provider/provider.dart';
 
 class ChatRoomListEntry extends StatelessWidget {
   final String name;
@@ -79,14 +81,17 @@ class ChatRoomName extends StatelessWidget {
   Widget build(BuildContext context) {
     // // TODO: implement build
     // throw UnimplementedError();
-    return Text(
-      name,
-      style: const TextStyle(
-        fontSize: 15,
-        fontWeight: FontWeight.w600,
-        color: Color.fromARGB(221, 42, 42, 42),
-      ),
-    );
+    return Consumer<ThemeProvider>(builder: (context, themeProvider, _) {
+      final isDark = themeProvider.isDarkModeEnabled;
+      return Text(
+        name,
+        style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+          color: !isDark ? const Color.fromARGB(221, 42, 42, 42) : Colors.white,
+        ),
+      );
+    });
   }
 }
 
@@ -100,15 +105,22 @@ class ChatRoomMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      message,
-      style: const TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: Color.fromARGB(221, 100, 100, 100),
-      ),
-      maxLines: 2,
-      overflow: TextOverflow.ellipsis,
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, _) {
+        final isDark = themeProvider.isDarkModeEnabled;
+        return Text(
+          message,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: !isDark
+                ? const Color.fromARGB(221, 100, 100, 100)
+                : Colors.white60,
+          ),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        );
+      },
     );
   }
 }
@@ -172,36 +184,42 @@ class ChatRoomUnreadBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 8,
-        vertical: 4,
-      ),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 255, 99, 159),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.white,
-          width: 0,
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            unread == 0
-                ? ""
-                : unread.toString().length > 3
-                    ? "999+"
-                    : unread.toString(),
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, _) {
+        final isDark = themeProvider.isDarkModeEnabled;
+        return Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8,
+            vertical: 4,
+          ),
+          decoration: BoxDecoration(
+            color:
+                !isDark ? const Color.fromARGB(255, 255, 99, 159) : Colors.grey,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
               color: Colors.white,
+              width: 0,
             ),
           ),
-        ],
-      ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                unread == 0
+                    ? ""
+                    : unread.toString().length > 3
+                        ? "999+"
+                        : unread.toString(),
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

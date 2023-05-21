@@ -26,15 +26,17 @@ class _MapsWidgetState extends State<MapsWidget> {
   bool loading = true;
   List<dynamic> mapLog = [];
   List<Marker> markers = <Marker>[];
-  late LatLng _currentLocation;
+  LatLng _currentLocation = LatLng(37.5665, 126.9780);
   late GoogleMapController mapController;
   final latlong.Distance distance = const latlong.Distance();
   int selectedSortOption = 1;
   Timer? _timer;
+  late MapProvider _mapProvider;
 
   @override
   void initState() {
     super.initState();
+    _mapProvider = Provider.of<MapProvider>(context, listen: false);
     _locationPermission();
     _initializeData();
     _getUserLocation();
@@ -56,6 +58,7 @@ class _MapsWidgetState extends State<MapsWidget> {
         String mapStyle = themeProvider.isDarkModeEnabled
             ? mapProvider.mapStyleDark
             : mapProvider.mapStyleLight;
+
         return Scaffold(
           appBar: CookieAppBar(title: 'C🍪🍪KIE'),
           body: loading == false
@@ -157,9 +160,13 @@ class _MapsWidgetState extends State<MapsWidget> {
       }
     } else if (requestStatus.isPermanentlyDenied ||
         status.isPermanentlyDenied) {
-      openAppSettings();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        openAppSettings();
+      });
     } else if (status.isRestricted) {
-      openAppSettings();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        openAppSettings();
+      });
     }
   }
 
@@ -171,6 +178,7 @@ class _MapsWidgetState extends State<MapsWidget> {
       setState(() {
         _currentLocation = LatLng(position.latitude, position.longitude);
         loading = false;
+        _mapProvider.setCurrentLocation(_currentLocation);
         print("currentLocation = $_currentLocation");
       });
     } catch (e) {
