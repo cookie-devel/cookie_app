@@ -30,7 +30,7 @@ void main() async {
   bool autoSignIn = await checkJWT();
 
   if (autoSignIn) {
-    my.loadFromStorage();
+    await my.loadFromStorage();
     socketHandler.connect();
   }
 
