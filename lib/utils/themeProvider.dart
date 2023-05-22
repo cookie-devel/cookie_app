@@ -18,7 +18,7 @@ class ThemeProvider with ChangeNotifier {
 
   void _loadFromStorage() async {
     Map<String, dynamic> data = await themeStorage.readJSON();
-    if (data != null && data.containsKey("darktheme")) {
+    if (data.containsKey("darktheme")) {
       _isDarkModeEnabled = data["darktheme"];
     }
     notifyListeners();

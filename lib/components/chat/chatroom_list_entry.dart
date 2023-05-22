@@ -81,17 +81,20 @@ class ChatRoomName extends StatelessWidget {
   Widget build(BuildContext context) {
     // // TODO: implement build
     // throw UnimplementedError();
-    return Consumer<ThemeProvider>(builder: (context, themeProvider, _) {
-      final isDark = themeProvider.isDarkModeEnabled;
-      return Text(
-        name,
-        style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w600,
-          color: !isDark ? const Color.fromARGB(221, 42, 42, 42) : Colors.white,
-        ),
-      );
-    });
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, _) {
+        final isDark = themeProvider.isDarkModeEnabled;
+        return Text(
+          name,
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+            color:
+                !isDark ? const Color.fromARGB(221, 42, 42, 42) : Colors.white,
+          ),
+        );
+      },
+    );
   }
 }
 

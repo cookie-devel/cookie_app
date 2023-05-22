@@ -137,8 +137,8 @@ class _FriendsGridState extends State<FriendsGrid>
   }
 }
 
-/* 
+/*
 Reference:
  https://eunoia3jy.tistory.com/106
  https://memostack.tistory.com/329
-*/ 
+*/

@@ -26,7 +26,7 @@ class _MapsWidgetState extends State<MapsWidget> {
   bool loading = true;
   List<dynamic> mapLog = [];
   List<Marker> markers = <Marker>[];
-  LatLng _currentLocation = LatLng(37.5665, 126.9780);
+  LatLng _currentLocation = const LatLng(37.5665, 126.9780);
   late GoogleMapController mapController;
   final latlong.Distance distance = const latlong.Distance();
   int selectedSortOption = 1;

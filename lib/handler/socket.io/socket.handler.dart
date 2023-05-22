@@ -20,9 +20,7 @@ class SocketHandler {
   );
 
   connect() async {
-    socket.auth = {
-      'token': await secureStorage.read(key: "token")
-    };
+    socket.auth = {'token': await secureStorage.read(key: "token")};
 
     registerDefaultEventHandlers();
     socket.connect();
@@ -48,8 +46,6 @@ class SocketHandler {
     socket.on("user connected", (data) {
       print('socket user connected: $data');
     });
-
-
 
     // socket.on("session", (data) {
     //   // String sessionID = data['sessionID'];

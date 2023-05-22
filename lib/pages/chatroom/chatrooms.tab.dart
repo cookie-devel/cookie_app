@@ -6,7 +6,7 @@ import 'package:cookie_app/components/chat/chatroom_list_entry.dart';
 import 'package:flutter/services.dart';
 import 'package:cookie_app/pages/chatroom/chatroom.dart';
 
-import '../../utils/myinfo.dart';
+import 'package:cookie_app/utils/myinfo.dart';
 
 class ChatTabWidget extends StatefulWidget {
   const ChatTabWidget({super.key});

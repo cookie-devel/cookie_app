@@ -51,7 +51,7 @@ void main() async {
 
 class Cookie extends StatelessWidget {
   final bool signin;
-  Cookie({super.key, required this.signin});
+  const Cookie({super.key, required this.signin});
 
   static const String _title = 'Cookie';
 
