@@ -16,21 +16,9 @@ Future<bool> handleSignIn(id, pw) async {
   if (success) {
     String token = (await jsonMap)['access_token'];
     JWT.write(token);
-    print("jwt: ${token}");
 
     Map<String, dynamic> account = (await jsonMap)['account'];
-
-    my = Me(
-      id: account['userid'],
-      name: account['username'],
-      profileImage: account['profile']['image'] != null
-          ? NetworkImage(account['profile']['image'])
-          : const AssetImage("images/default_profile.png") as ImageProvider,
-      profileMessage: account['profile']['message'],
-      phone: account['phone'],
-      friendList: account['friendList'],
-    );
-
+    my = Me.loadFromJSON(account);
     accountStorage.writeJSON(account);
 
     return true;

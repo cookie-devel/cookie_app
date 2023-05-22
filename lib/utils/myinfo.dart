@@ -1,5 +1,4 @@
 import 'package:cookie_app/handler/friends_refresh.handler.dart';
-import 'package:cookie_app/schema/User.dart';
 import 'package:cookie_app/utils/jwt.dart';
 import 'package:cookie_app/utils/storage.dart';
 import 'package:flutter/material.dart';
@@ -46,8 +45,8 @@ class Me {
 
   void loadFromJSON(Map<String, dynamic> data) {
     _isLoaded = false;
-    _id = data["id"];
-    _name = data["name"];
+    _id = data["userid"];
+    _name = data["username"];
     _profileImage = data["profile"]?["image"] != null
         ? NetworkImage(data["profile"]["image"])
         : const AssetImage("images/default_profile.png") as ImageProvider;
@@ -71,8 +70,8 @@ class Me {
   Future<void> update() async {
     await accountStorage.writeJSON(
       {
-        "id": id,
-        "name": name,
+        "userid": id,
+        "username": name,
         "profile": {
           "image": profileImage,
           "message": profileMessage,
