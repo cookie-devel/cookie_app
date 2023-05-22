@@ -11,10 +11,10 @@ Future<Map<String, dynamic>> data = accountStorage.readJSON();
 class Me {
   static bool _isLoaded = false;
 
-  String? _id;
-  String? _name;
-  ImageProvider? _profileImage;
-  String? _profileMessage;
+  static String? _id;
+  static String? _name;
+  static ImageProvider? _profileImage;
+  static String? _profileMessage;
   static String? _phone;
   static List<dynamic> _friendList = [];
 
@@ -38,13 +38,13 @@ class Me {
     loadFromJSON(data);
   }
 
-  loadFromJWT() async {
+  Future<void> loadFromJWT() async {
     var decodedJWT = await JWT.decode();
     _id = decodedJWT["userid"];
     _name = decodedJWT["username"];
   }
 
-  loadFromJSON(Map<String, dynamic> data) {
+  void loadFromJSON(Map<String, dynamic> data) {
     _isLoaded = false;
     _id = data["id"];
     _name = data["name"];
@@ -57,18 +57,18 @@ class Me {
     _isLoaded = true;
   }
 
-  loadFromStorage() async {
+  Future<void> loadFromStorage() async {
     loadFromJSON(await accountStorage.readJSON());
     await loadFromJWT();
   }
 
-  void updateFriendList() async {
+  Future<void> updateFriendList() async {
     var data = await apiGetFriends();
     _friendList = data['result'];
     update();
   }
 
-  void update() async {
+  Future<void> update() async {
     await accountStorage.writeJSON(
       {
         "id": id,
@@ -138,8 +138,6 @@ class Me {
     _friendList = friendList ?? [];
     update();
   }
-
-  static bool get isLoaded => _isLoaded;
 }
 
 Me my = Me();
