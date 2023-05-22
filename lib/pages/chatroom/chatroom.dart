@@ -56,7 +56,8 @@ class _ChatRoomState extends State<ChatRoom> {
         final isDark = themeProvider.isDarkModeEnabled;
         return Scaffold(
           resizeToAvoidBottomInset: true,
-          backgroundColor: !isDark? const Color.fromARGB(247, 253, 253, 253) :Colors.black,
+          backgroundColor:
+              !isDark ? const Color.fromARGB(247, 253, 253, 253) : Colors.black,
           appBar: CookieAppBar(
             title: widget.room.name,
             actions: [connectionInfo()],

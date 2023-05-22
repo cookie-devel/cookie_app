@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:cookie_app/utils/jwt.dart';
-import 'package:cookie_app/utils/storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 

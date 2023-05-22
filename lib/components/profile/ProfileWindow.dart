@@ -112,7 +112,8 @@ class ProfileWindow extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.01),
+                        height: MediaQuery.of(context).size.height * 0.01,
+                      ),
                       Expanded(
                         flex: 45,
                         child: Container(
