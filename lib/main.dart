@@ -1,4 +1,5 @@
 import 'package:cookie_app/pages/signin.dart';
+import 'package:cookie_app/utils/jwt.dart';
 import 'package:cookie_app/utils/myinfo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -27,7 +28,7 @@ void main() async {
 
   // Load Data
   await dotenv.load();
-  bool autoSignIn = await checkJWT();
+  bool autoSignIn = !(await JWT.isExpired());
 
   if (autoSignIn) {
     await my.loadFromStorage();

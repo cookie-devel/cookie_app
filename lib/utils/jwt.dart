@@ -22,4 +22,8 @@ class JWT {
   static Future<void> delete() async {
     return await secureStorage.delete(key: 'access_token');
   }
+
+  static Future<bool> isExpired() async {
+    return JwtDecoder.isExpired((await JWT.token)!);
+  }
 }
