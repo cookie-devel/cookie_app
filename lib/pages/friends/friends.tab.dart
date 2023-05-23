@@ -1,5 +1,5 @@
 import 'package:cookie_app/cookie.appbar.dart';
-import 'package:cookie_app/handler/friends_refresh.handler.dart';
+import 'package:cookie_app/api/friends.dart';
 import 'package:cookie_app/utils/myinfo.dart';
 import 'package:cookie_app/pages/friends/friendsSheet.dart';
 import 'package:flutter/material.dart';

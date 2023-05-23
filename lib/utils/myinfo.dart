@@ -1,4 +1,4 @@
-import 'package:cookie_app/handler/friends_refresh.handler.dart';
+import 'package:cookie_app/api/friends.dart';
 import 'package:cookie_app/utils/jwt.dart';
 import 'package:cookie_app/utils/storage.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +64,6 @@ class Me {
   Future<void> updateFriendList() async {
     var data = await apiGetFriends();
     _friendList = data['result'];
-    update();
   }
 
   Future<void> update() async {
@@ -110,32 +109,26 @@ class Me {
 
   set id(String? id) {
     _id = id;
-    update();
   }
 
   set name(String? name) {
     _name = name;
-    update();
   }
 
   set profileImage(ImageProvider? profileImage) {
     _profileImage = profileImage;
-    update();
   }
 
   set profileMessage(String? profileMessage) {
     _profileMessage = profileMessage;
-    update();
   }
 
   set phone(String? phone) {
     _phone = phone;
-    update();
   }
 
   set friendList(List<dynamic>? friendList) {
     _friendList = friendList ?? [];
-    update();
   }
 }
 

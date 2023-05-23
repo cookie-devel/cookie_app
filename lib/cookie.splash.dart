@@ -1,5 +1,6 @@
 import 'package:cookie_app/handler/signinout.handler.dart';
 import 'package:cookie_app/main.dart';
+import 'package:cookie_app/utils/jwt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cookie_app/pages/signin.dart';
@@ -24,7 +25,7 @@ class _CookieSplashState extends State<CookieSplash> {
   }
 
   Future<void> checkStorage() async {
-    var signin = await checkJWT();
+    var signin = !(await JWT.isExpired());
 
     if (signin) {
       setState(() {
