@@ -5,8 +5,8 @@ import 'package:cookie_app/cookie.appbar.dart';
 import 'package:cookie_app/components/chat/chatroom_list_entry.dart';
 import 'package:flutter/services.dart';
 import 'package:cookie_app/pages/chatroom/chatroom.dart';
-
 import 'package:cookie_app/utils/myinfo.dart';
+import 'package:cookie_app/pages/chatroom/addChatroom.dart';
 
 class ChatTabWidget extends StatefulWidget {
   const ChatTabWidget({super.key});
@@ -37,7 +37,10 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
   Widget build(BuildContext context) {
     final int chatLength = chatLog.length;
     return Scaffold(
-      appBar: CookieAppBar(title: '채팅'),
+      appBar: CookieAppBar(
+        title: '채팅',
+        actions: const [ChatroomAction()],
+      ),
       body: ListView.builder(
         padding: const EdgeInsets.fromLTRB(12, 0, 10, 0),
         itemCount: chatLength,
@@ -93,5 +96,26 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
   @override
   void dispose() {
     super.dispose();
+  }
+}
+
+class ChatroomAction extends StatelessWidget {
+  const ChatroomAction({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.add_box_outlined),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const FriendSelectionScreen(),
+          ),
+        );
+      },
+    );
   }
 }

@@ -108,12 +108,19 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
                 Container(
                   width: imageSize - 14,
                   height: imageSize - 14,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: widget.user.profileImage,
-                      fit: BoxFit.cover,
-                    ),
+                  ),
+                  child: Image(
+                    image: widget.user.profileImage,
+                    fit: BoxFit.cover,
+                    errorBuilder: (
+                      BuildContext context,
+                      Object error,
+                      StackTrace? stackTrace,
+                    ) {
+                      return const Icon(Icons.error);
+                    },
                   ),
                 ),
               ],
