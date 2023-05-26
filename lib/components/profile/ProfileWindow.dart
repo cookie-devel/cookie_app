@@ -41,12 +41,19 @@ class ProfileWindow extends StatelessWidget {
                 Container(
                   width: pivotSize * 0.942,
                   height: pivotSize * 0.942,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: user.profileImage,
-                      fit: BoxFit.cover,
-                    ),
+                  ),
+                  child: Image(
+                    image: user.profileImage,
+                    fit: BoxFit.cover,
+                    errorBuilder: (
+                      BuildContext context,
+                      Object error,
+                      StackTrace? stackTrace,
+                    ) {
+                      return const Icon(Icons.person);
+                    },
                   ),
                 ),
               ],
@@ -98,7 +105,7 @@ class ProfileWindow extends StatelessWidget {
                               ),
                               const SizedBox(height: 12),
                               Text(
-                                user.profileMessage,
+                                user.profileMessage??'',
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(

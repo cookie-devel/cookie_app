@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cookie_app/cookie.appbar.dart';
+import 'package:cookie_app/utils/myinfo.dart';
 
 class MyProfileWidget extends StatefulWidget {
   const MyProfileWidget({Key? key}) : super(key: key);
@@ -11,29 +12,9 @@ class MyProfileWidget extends StatefulWidget {
 }
 
 class _MyProfileWidgetState extends State<MyProfileWidget> {
-  Map<String, dynamic> profiles = {};
-  // File _image = File('assets/images/user.jpg');
-
   @override
   void initState() {
     super.initState();
-    // _image = File('assets/images/user.jpg');
-    getSampleData();
-  }
-
-  void getSampleData() async {
-    final String res = await rootBundle.loadString('assets/data/user.json');
-    final data = await json.decode(res);
-
-    setState(() {
-      profiles = data;
-    });
-
-    // // 이미지 파일 초기값 설정
-    // final imagePath = profiles['image'];
-    // if (imagePath != null) {
-    //   _image = File(imagePath);
-    // }
   }
 
   @override
@@ -43,45 +24,32 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(5, 25, 5, 10),
         children: [
-          // GestureDetector(
-          //   onTap: () async {
-          //     final imageSelectionDialog = ImageSelectionDialog();
-          //     final imageFile = await imageSelectionDialog.show(context);
-          //     setState(() {
-          //       if (imageFile != null) {
-          //         _image = File(imageFile.path);
-          //       }
-          //     });
-          //   },
-          //   child: CircleAvatar(
-          //     radius: 80,
-          //     backgroundImage: Image.file(_image).image,
-          //   ),
-          // ),
           Container(
             height: 160,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              image: DecorationImage(
-                fit: BoxFit.contain,
-                image: AssetImage(profiles['image']),
-              ),
+            ),
+            child: Image(
+              image: my.profileImage,
+              fit: BoxFit.cover,
+              errorBuilder:
+                  (BuildContext context, Object error, StackTrace? stackTrace) {
+                return const Icon(Icons.error, size: 36);
+              },
             ),
           ),
-
           const SizedBox(height: 16),
-
           ListTile(
             leading: const Icon(
               Icons.person,
               size: 36,
             ),
             title: const Text('이름'),
-            subtitle: Text(profiles['name']),
+            subtitle: Text(my.name!),
             trailing: IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {
-                _showEditNameDialog();
+                // _showEditNameDialog();
               },
             ),
           ),
@@ -92,11 +60,11 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               size: 36,
             ),
             title: const Text('상태메시지'),
-            subtitle: Text(profiles['message']),
+            subtitle: Text(my.profileMessage!),
             trailing: IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {
-                _showEditStatusDialog();
+                // _showEditStatusDialog();
               },
             ),
           ),
@@ -110,164 +78,138 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             subtitle: Text('profiles[\'phonenumber\']'),
           ),
           const Divider(),
-          ListTile(
-            leading: const Icon(
-              Icons.person,
-              size: 36,
-            ),
-            title: const Text('이름'),
-            subtitle: Text(profiles['name']),
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(
-              Icons.heart_broken,
-              size: 36,
-            ),
-            title: const Text('이름'),
-            subtitle: Text(profiles['name']),
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(
-              Icons.heart_broken,
-              size: 36,
-            ),
-            title: const Text('이름'),
-            subtitle: Text(profiles['name']),
-          ),
         ],
       ),
     );
   }
 
-  void _showEditNameDialog() {
-    String newName = profiles['name'];
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          title: const Text(
-            '이름을 입력하세요',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: TextField(
-            decoration: InputDecoration(
-              hintText: 'Enter your name',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-            ),
-            onChanged: (value) {
-              newName = value;
-            },
-          ),
-          actions: [
-            TextButton(
-              child: const Text(
-                '취소',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  profiles['name'] = newName;
-                });
-                Navigator.of(context).pop();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              child: const Text(
-                '저장',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // void _showEditNameDialog() {
+  //   // String newName = profiles['name'];
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(16.0),
+  //         ),
+  //         title: const Text(
+  //           '이름을 입력하세요',
+  //           style: TextStyle(
+  //             fontWeight: FontWeight.bold,
+  //           ),
+  //         ),
+  //         content: TextField(
+  //           decoration: InputDecoration(
+  //             hintText: 'Enter your name',
+  //             border: OutlineInputBorder(
+  //               borderRadius: BorderRadius.circular(10.0),
+  //             ),
+  //           ),
+  //           onChanged: (value) {
+  //             newName = value;
+  //           },
+  //         ),
+  //         actions: [
+  //           TextButton(
+  //             child: const Text(
+  //               '취소',
+  //               style: TextStyle(
+  //                 color: Colors.grey,
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //             ),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //           ElevatedButton(
+  //             onPressed: () {
+  //               setState(() {
+  //                 profiles['name'] = newName;
+  //               });
+  //               Navigator.of(context).pop();
+  //             },
+  //             style: ElevatedButton.styleFrom(
+  //               backgroundColor: Colors.blue,
+  //               shape: RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.circular(10.0),
+  //               ),
+  //             ),
+  //             child: const Text(
+  //               '저장',
+  //               style: TextStyle(
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
-  void _showEditStatusDialog() {
-    String newMessage = profiles['message'];
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          title: const Text(
-            '상태메시지를 입력하세요',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: TextField(
-            decoration: InputDecoration(
-              hintText: 'Enter your status message',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-            ),
-            onChanged: (value) {
-              newMessage = value;
-            },
-          ),
-          actions: [
-            TextButton(
-              child: const Text(
-                '취소',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  profiles['message'] = newMessage;
-                });
-                Navigator.of(context).pop();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              child: const Text(
-                '저장',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // void _showEditStatusDialog() {
+  //   // String newMessage = profiles['message'];
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(16.0),
+  //         ),
+  //         title: const Text(
+  //           '상태메시지를 입력하세요',
+  //           style: TextStyle(
+  //             fontWeight: FontWeight.bold,
+  //           ),
+  //         ),
+  //         content: TextField(
+  //           decoration: InputDecoration(
+  //             hintText: 'Enter your status message',
+  //             border: OutlineInputBorder(
+  //               borderRadius: BorderRadius.circular(10.0),
+  //             ),
+  //           ),
+  //           onChanged: (value) {
+  //             newMessage = value;
+  //           },
+  //         ),
+  //         actions: [
+  //           TextButton(
+  //             child: const Text(
+  //               '취소',
+  //               style: TextStyle(
+  //                 color: Colors.grey,
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //             ),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //           ElevatedButton(
+  //             onPressed: () {
+  //               setState(() {
+  //                 profiles['message'] = newMessage;
+  //               });
+  //               Navigator.of(context).pop();
+  //             },
+  //             style: ElevatedButton.styleFrom(
+  //               backgroundColor: Colors.blue,
+  //               shape: RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.circular(10.0),
+  //               ),
+  //             ),
+  //             child: const Text(
+  //               '저장',
+  //               style: TextStyle(
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }

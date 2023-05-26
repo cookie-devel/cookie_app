@@ -31,7 +31,7 @@ ThemeData defaultThemeData() {
         backgroundColor: Colors.deepOrangeAccent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
-          side: const BorderSide(width: 1, color: Colors.black45),
+          side: const BorderSide(width: 1, color: Colors.white),
         ),
       ),
     ),
