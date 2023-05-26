@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:cookie_app/utils/jwt.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 Future<Map<String, dynamic>> apiGetFriends() async {
   String token = (await JWT.read())!;
   try {
     String address = '${dotenv.env['BASE_URI']}/friends';
-    http.Response res = await http.get(
+    Response res = await get(
       Uri.parse(address),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
