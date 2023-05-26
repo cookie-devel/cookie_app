@@ -1,6 +1,7 @@
+import 'package:cookie_app/utils/jwt.dart';
+import 'package:cookie_app/utils/myinfo.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:cookie_app/utils/storage.dart';
 
 class SocketHandler {
   SocketHandler._privateConstructor();
@@ -20,7 +21,8 @@ class SocketHandler {
   );
 
   connect() async {
-    socket.auth = {'token': await secureStorage.read(key: "token")};
+    socket.auth = {'token': await JWT.read()};
+    print('socket auth: ${socket.auth}');
 
     registerDefaultEventHandlers();
     socket.connect();
@@ -31,8 +33,6 @@ class SocketHandler {
   registerHandshakeHandler() {}
 
   registerDefaultEventHandlers() {
-    // socket.auth = {'username': 'test'};
-
     socket.onConnect((data) {
       print('socket connected; id: ${socket.id}');
     });
@@ -47,6 +47,10 @@ class SocketHandler {
       print('socket user connected: $data');
     });
 
+    socket.on("user disconnected", (data) {
+      print('socket user disconnected: $data');
+    });
+
     // socket.on("session", (data) {
     //   // String sessionID = data['sessionID'];
     //   String userID = data['userID'];
@@ -55,6 +59,11 @@ class SocketHandler {
     //   // secureStorage.write(key: 'sessionID', value: sessionID);
 
     //   // print('socket session: $sessionID $userID');
+    // });
+
+    // socket.on("private message", (data) {
+    //   var content = data["content"];
+    //   var to = data["to"];
     // });
 
     socket.onDisconnect((data) => print('socket disconnected: $data'));
