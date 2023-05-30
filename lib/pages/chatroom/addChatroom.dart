@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:cookie_app/cookie.appbar.dart';
 import 'package:cookie_app/pages/chatroom/chatroom.dart';
 import 'package:cookie_app/utils/myinfo.dart';
+import 'package:cookie_app/schema/User.dart';
+import 'package:cookie_app/schema/Message.dart';
 
 class FriendSelectionScreen extends StatefulWidget {
   const FriendSelectionScreen({Key? key}) : super(key: key);
@@ -74,71 +76,18 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
                           itemCount: friendsList!.length,
                           itemBuilder: (BuildContext context, int index) {
                             Map<String, dynamic> friend = friendsList![index];
-                            return ListTile(
-                              leading: Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 2,
-                                      blurRadius: 3,
-                                      offset: const Offset(0, 1), // 그림자 설정
-                                    ),
-                                  ],
-                                ),
-                                child: Image(
-                                  image: my.profileImage,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (
-                                    BuildContext context,
-                                    Object error,
-                                    StackTrace? stackTrace,
-                                  ) {
-                                    return Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.blue,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(0.5),
-                                            spreadRadius: 2,
-                                            blurRadius: 3,
-                                            offset: const Offset(0, 1),
-                                          ),
-                                        ],
-                                      ),
-                                      child: const Icon(
-                                        Icons.person,
-                                        color: Colors.white,
-                                        size: 24,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              title: Text(friend["username"]),
-                              subtitle: Text(
-                                friend["profile"]["message"] ?? "",
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                              trailing: Checkbox(
-                                value: selectedIndexes.contains(index),
-                                onChanged: (value) {
-                                  setState(() {
-                                    if (value == true) {
-                                      selectedIndexes.add(index);
-                                    } else {
-                                      selectedIndexes.remove(index);
-                                    }
-                                  });
-                                },
-                              ),
+                            return FriendTile(
+                              friend: friend,
+                              isSelected: selectedIndexes.contains(index),
+                              onCheckboxChanged: (value) {
+                                setState(() {
+                                  if (value == true) {
+                                    selectedIndexes.add(index);
+                                  } else {
+                                    selectedIndexes.remove(index);
+                                  }
+                                });
+                              },
                             );
                           },
                         ),
@@ -169,6 +118,65 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
     textEditingController.dispose();
     selectedIndexes.clear();
     super.dispose();
+  }
+}
+
+class FriendTile extends StatelessWidget {
+  final Map<String, dynamic> friend;
+  final bool isSelected;
+  final ValueChanged<bool?>? onCheckboxChanged;
+
+  const FriendTile({
+    Key? key,
+    required this.friend,
+    required this.isSelected,
+    required this.onCheckboxChanged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Container(
+        width: 40,
+        height: 40,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+        ),
+        child: Image(
+          image: my.profileImage,
+          fit: BoxFit.cover,
+          errorBuilder: (
+            BuildContext context,
+            Object error,
+            StackTrace? stackTrace,
+          ) {
+            return Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.blue,
+              ),
+              child: const Icon(
+                Icons.person,
+                color: Colors.white,
+                size: 24,
+              ),
+            );
+          },
+        ),
+      ),
+      title: Text(friend["username"]),
+      subtitle: Text(
+        friend["profile"]["message"] ?? "",
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+      ),
+      trailing: Checkbox(
+        value: isSelected,
+        onChanged: onCheckboxChanged,
+      ),
+    );
   }
 }
 
@@ -233,15 +241,30 @@ class _AddChatroomActionState extends State<AddChatroomAction> {
                         ),
                         ElevatedButton(
                           onPressed: () {
+                            List<User> userList =
+                                widget.selectedFriendsList.map<User>((map) {
+                              return User.fromMap(map);
+                            }).toList();
+
+                            Message temp = Message(
+                              sender: userList[0],
+                              content: '안녕?',
+                              time: DateTime.now(),
+                            );
+
                             Navigator.pop(context);
                             Navigator.pop(context);
                             Navigator.push(
+                              // TODO: chatrooms tab에도 추가
+                              // TODO: 채팅방 목록 데이터에도 추가
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ChatRoom(
                                   room: Room(
                                     id: '',
                                     name: widget.roomTitle,
+                                    users: userList,
+                                    messages: [temp],
                                   ),
                                 ),
                               ),
@@ -257,7 +280,10 @@ class _AddChatroomActionState extends State<AddChatroomAction> {
   }
 
   SnackBar _snackBar(
-          ScaffoldMessengerState scaffold, String title, String label) =>
+    ScaffoldMessengerState scaffold,
+    String title,
+    String label,
+  ) =>
       SnackBar(
         content: Text(title),
         duration: const Duration(seconds: 2),

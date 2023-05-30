@@ -21,21 +21,15 @@ class MapProvider with ChangeNotifier {
   }
 
   void _loadLightMapStyle() async {
-    rootBundle.loadString('assets/data/mapStyle.json').then((string) {
-      _mapStyleLight = string;
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      notifyListeners();
-    });
+    final string = await rootBundle.loadString('assets/data/mapStyle.json');
+    _mapStyleLight = string;
+    notifyListeners();
   }
 
   void _loadDarkMapStyle() async {
-    rootBundle.loadString('assets/data/mapStyleDark.json').then((string) {
-      _mapStyleDark = string;
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      notifyListeners();
-    });
+    final string = await rootBundle.loadString('assets/data/mapStyleDark.json');
+    _mapStyleDark = string;
+    notifyListeners();
   }
 
   void setCurrentLocation(LatLng location) {
