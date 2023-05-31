@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:cookie_app/api/account/signup.dart';
-import 'package:cookie_app/components/auth/validator.dart';
+import 'package:cookie_app/view/components/auth/validator.dart';
 
 // jsondata to server
 Future<bool> handleSignUp({

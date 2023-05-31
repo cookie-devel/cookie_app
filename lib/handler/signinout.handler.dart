@@ -1,7 +1,7 @@
 import 'package:cookie_app/api/account/signin.dart';
-import 'package:cookie_app/components/auth/validator.dart';
+import 'package:cookie_app/view/components/auth/validator.dart';
 import 'package:cookie_app/utils/jwt.dart';
-import 'package:cookie_app/utils/myinfo.dart';
+import 'package:cookie_app/repository/myinfo.dart';
 
 Future<bool> handleSignIn(id, pw) async {
   assert(validateID(id) == null);
@@ -14,7 +14,7 @@ Future<bool> handleSignIn(id, pw) async {
     JWT.write(token);
 
     Map<String, dynamic> account = (await jsonMap)['account'];
-    my = Me.loadFromJSON(account);
+    my = MyInfoRepository.loadFromJSON(account);
     accountStorage.writeJSON(account);
 
     return true;
