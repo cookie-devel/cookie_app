@@ -1,5 +1,5 @@
 import 'package:cookie_app/utils/jwt.dart';
-import 'package:cookie_app/utils/myinfo.dart';
+import 'package:cookie_app/repository/myinfo.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
