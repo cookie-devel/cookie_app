@@ -3,10 +3,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 
 Future<Map<String, dynamic>> apiPostSignIn(String id, String pw) async {
+  final uri = Uri.https(dotenv.env['BASE_URI']!, '/account/signin');
   try {
-    String address = '${dotenv.env['BASE_URI']}/account/signin';
     Response res = await post(
-      Uri.parse(address),
+      uri,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
