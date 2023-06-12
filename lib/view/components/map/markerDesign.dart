@@ -1,11 +1,11 @@
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/schema/User.dart';
 import 'package:cookie_app/view/components/map/ImageProcess.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:typed_data';
 
 class BottomSheetInside extends StatelessWidget {
-  final User user;
+  final PublicAccountViewModel user;
   const BottomSheetInside({Key? key, required this.user}) : super(key: key);
 
   @override
@@ -145,7 +145,7 @@ class BottomSheetInside extends StatelessWidget {
   }
 }
 
-Future<void> markerBottomSheet(BuildContext context, User user) {
+Future<void> markerBottomSheet(BuildContext context, PublicAccountViewModel user) {
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
@@ -158,7 +158,7 @@ Future<void> markerBottomSheet(BuildContext context, User user) {
 
 Future<Marker> addMarker(
   BuildContext context,
-  User user,
+  PublicAccountViewModel user,
   LatLng location, {
   int size = 100,
   Color color = Colors.deepOrangeAccent,

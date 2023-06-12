@@ -35,4 +35,11 @@ class JWTModel {
     }
     return JWTPayload.fromJWT(token!);
   }
+
+  bool isExpired() {
+    if (token == null) {
+      throw Exception('JWT token is null');
+    }
+    return JwtDecoder.isExpired(token!);
+  }
 }

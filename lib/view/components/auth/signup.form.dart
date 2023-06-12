@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cookie_app/view/components/CustomTextFormField.dart';
 import 'package:cookie_app/view/components/auth/submit_button.dart';
 import 'package:cookie_app/view/components/auth/validator.dart';
-import 'package:cookie_app/handler/signup.handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
@@ -136,17 +135,26 @@ ElevatedButton signUpButton({
     onPressed: () async {
       if (!formKey.currentState!.validate()) return null;
       formKey.currentState!.save();
-      return await handleSignUp(
-        id: id.value!,
-        pw: pw.value!,
-        name: nameField.value!,
-        birthday: birthdayField.value!,
-        phoneNumber: phoneNumberField.value!,
-        profile: {
-          'image': profileImg,
-          'message': profileMsg,
-        },
-      );
+      return null;
+      // await Provider.of<AuthViewModel>(context, listen: false).signUp(
+      // )
+
+      // return await handleSignUp(
+      //   signUpForm: SignUpFormModel(id: id, pw: pw, name: name, birthday: birthday, phoneNumber: phoneNumber, profile: ProfileModel(
+      //     imageURL: profileImg,
+      //     message: profileMsg,
+      //   ),)
+
+      //   id: id.value!,
+      //   pw: pw.value!,
+      //   name: nameField.value!,
+      //   birthday: birthdayField.value!,
+      //   phoneNumber: phoneNumberField.value!,
+      //   profile: {
+      //     'image': profileImg,
+      //     'message': profileMsg,
+      //   },
+      // );
     },
     text: '회원가입',
     onSuccess: () {

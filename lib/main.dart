@@ -1,6 +1,7 @@
+import 'package:cookie_app/types/jwt_payload.dart';
 import 'package:cookie_app/view/mainwidget.dart';
 import 'package:cookie_app/view/pages/signin.dart';
-import 'package:cookie_app/repository/jwt.dart';
+import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
 import 'package:cookie_app/viewmodel/myinfo.viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -22,12 +23,13 @@ void main() async {
 
   // Load Data
   await dotenv.load();
-  bool autoSignIn = !(await JWT.isExpired());
+  // bool autoSignIn = !(await JWT.isExpired());
+  // bool autoSignIn = !JWTModel.fromJWT((await JWTRepositoryStorageImpl().read())!).isExpired();
 
-  if (autoSignIn) {
-    // await my.loadFromStorage();
-    socketHandler.connect();
-  }
+  // if (autoSignIn) {
+  //   // await my.loadFromStorage();
+  //   await socketHandler.connect();
+  // }
 
   runApp(
     MultiProvider(
