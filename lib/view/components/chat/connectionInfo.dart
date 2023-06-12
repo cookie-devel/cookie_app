@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cookie_app/handler/socket.io/socket.dart';
+import 'package:cookie_app/socket.io/socket.dart';
 
 // socket 연결 상태 확인
 Widget connectionInfo() => Row(

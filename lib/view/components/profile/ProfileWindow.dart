@@ -1,9 +1,9 @@
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/schema/User.dart';
 
 // 프로필 창 class
 class ProfileWindow extends StatelessWidget {
-  final User user;
+  final PublicAccountViewModel user;
   const ProfileWindow({super.key, required this.user});
 
   @override
@@ -244,7 +244,7 @@ class ProfileWindow extends StatelessWidget {
   }
 }
 
-Future<void> profileBottomSheet(BuildContext context, User user) {
+Future<void> profileBottomSheet(BuildContext context, PublicAccountViewModel user) {
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,

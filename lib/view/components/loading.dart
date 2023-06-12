@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:cookie_app/utils/themeProvider.dart';
+import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
 import 'package:provider/provider.dart';
 
 Widget loadingScreen() {

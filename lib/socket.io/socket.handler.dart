@@ -1,4 +1,4 @@
-import 'package:cookie_app/repository/jwt.dart';
+import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -20,7 +20,7 @@ class SocketHandler {
   );
 
   connect() async {
-    socket.auth = {'token': await JWT.read()};
+    socket.auth = {'token': await JWTRepositoryStorageImpl().read()};
     print('socket auth: ${socket.auth}');
 
     registerDefaultEventHandlers();

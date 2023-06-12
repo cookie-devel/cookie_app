@@ -16,20 +16,18 @@ class CustomTextFormField extends StatelessWidget {
   final bool obscureText;
   final String labelText;
   final TextEditingController controller = TextEditingController();
-  int? maxLength;
-  TextInputType? keyboardType;
-  String? Function(String?)? validator;
-  Iterable<String>? autofillHints;
+  final int? maxLength;
+  final TextInputType? keyboardType;
+  final String? Function(String?)? validator;
+  final Iterable<String>? autofillHints;
   String? value;
-  List<TextInputFormatter>? inputFormatters;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      onSaved: (newValue) {
-        value = newValue;
-      },
+      onSaved: (newValue) => value = newValue,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(90.0),

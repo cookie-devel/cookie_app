@@ -1,9 +1,9 @@
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/view/components/profile/ProfileWindow.dart';
-import 'package:cookie_app/schema/User.dart';
 
 class FriendProfileWidget extends StatefulWidget {
-  final User user;
+  final PublicAccountViewModel user;
   final bool displayName;
   final bool enableOnTap;
   final bool enableOnLongPress;

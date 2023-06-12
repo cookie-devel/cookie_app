@@ -1,9 +1,9 @@
 import 'package:cookie_app/view/components/CustomTextFormField.dart';
 import 'package:cookie_app/view/components/auth/submit_button.dart';
-import 'package:cookie_app/handler/signin.handler.dart';
-import 'package:cookie_app/main.dart';
+import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/view/components/auth/validator.dart';
+import 'package:provider/provider.dart';
 
 // https://docs.flutter.dev/cookbook/forms/validation
 
@@ -12,8 +12,8 @@ class SignInForm extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
 
-  IDField idField = IDField();
-  PWField pwField = PWField();
+  final IDField idField = IDField();
+  final PWField pwField = PWField();
 
   @override
   Widget build(BuildContext context) {
@@ -70,28 +70,37 @@ ElevatedButton signInButton({
     onPressed: () async {
       if (!formKey.currentState!.validate()) return null;
       formKey.currentState!.save();
-      return await handleSignIn(id.value, pw.value);
+      await Provider.of<AuthViewModel>(context, listen: false).signIn(
+        id: id.value!,
+        pw: pw.value!,
+      );
+      return null;
     },
     text: '로그인',
-    onSuccess: () {
-      const snackBar = SnackBar(
-        content: Text('Welcome!'),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const MainWidget(),
-        ),
-      );
-    },
-    onFailure: () {
-      const snackBar = SnackBar(
-        content: Text('로그인에 실패하였습니다.'),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    },
+    onSuccess: onSignInSuccess(context),
+    onFailure: onSignInFail(context),
   );
+}
+
+onSignInSuccess(context) {
+  const snackBar = SnackBar(
+    content: Text('Welcome!'),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  // No need to pushReplacement because provider will rebuild the widget from CookieApp
+  // Navigator.pushReplacement(
+  //   context,
+  //   MaterialPageRoute(
+  //     builder: (context) => const MainWidget(),
+  //   ),
+  // );
+}
+
+onSignInFail(context) {
+  const snackBar = SnackBar(
+    content: Text('로그인에 실패하였습니다.'),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
 Container wrapped(child) {
