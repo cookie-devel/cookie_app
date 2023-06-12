@@ -3,7 +3,7 @@ import 'package:http/http.dart';
 import 'package:cookie_app/types/api/account/info.dart';
 import 'package:cookie_app/types/api/account/exists.dart';
 import 'package:cookie_app/types/api/error.dart';
-import 'package:cookie_app/repository/jwt.dart';
+import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AccountAPI {
@@ -29,7 +29,7 @@ class AccountAPI {
   }
 
   static Future<InfoResponse> getInfo({List<String>? fields}) async {
-    String token = JWT.token!;
+    String token = (await JWTRepositoryStorageImpl().read())!;
     final uri = Uri.https(
       dotenv.env['BASE_URI']!,
       '/account/info',
