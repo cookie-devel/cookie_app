@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:cookie_app/types/api/error.dart';
 import 'package:cookie_app/types/api/friends.dart';
-import 'package:cookie_app/repository/jwt.dart';
+import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 
 Future<GetFriendsResponse> apiGetFriends() async {
-  String token = JWT.token!;
+  String token = (await JWTRepositoryStorageImpl().read())!;
   final uri = Uri.https(dotenv.env['BASE_URI']!, '/friends');
   Response res = await get(
     uri,
