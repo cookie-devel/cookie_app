@@ -22,7 +22,7 @@ class RoundedImage extends StatelessWidget {
           image: image,
           fit: BoxFit.cover,
         ),
-        borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+        shape: BoxShape.circle,
         border: Border.all(
           color: Colors.orangeAccent,
           width: 2.0,
