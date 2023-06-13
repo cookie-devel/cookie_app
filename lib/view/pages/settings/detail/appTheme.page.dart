@@ -1,7 +1,7 @@
 import 'package:cookie_app/view/components/cookie.appbar.dart';
+import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cookie_app/utils/themeProvider.dart';
 
 class ThemeSettingsPage extends StatelessWidget {
   const ThemeSettingsPage({Key? key}) : super(key: key);

@@ -1,10 +1,14 @@
+import 'package:cookie_app/view/components/fullscreen_image.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
 
 // 프로필 창 class
 class ProfileWindow extends StatelessWidget {
   final PublicAccountViewModel user;
-  const ProfileWindow({super.key, required this.user});
+  const ProfileWindow({
+    super.key,
+    required this.user,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +109,7 @@ class ProfileWindow extends StatelessWidget {
                               ),
                               const SizedBox(height: 12),
                               Text(
-                                user.profileMessage??'',
+                                user.profileMessage ?? '',
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
@@ -185,11 +189,11 @@ class ProfileWindow extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 divider,
-                userProfiletile("생일", '2000-01-01'),
+                const UserProfileTile(mainTitle: "생일", subTitle: '2000-01-01'),
                 divider,
-                userProfiletile("거주지", '경기 수원'),
+                const UserProfileTile(mainTitle: "거주지", subTitle: '경기 수원'),
                 divider,
-                userProfiletile("나이", '24'),
+                const UserProfileTile(mainTitle: "나이", subTitle: '24'),
               ],
             ),
           ),
@@ -197,8 +201,20 @@ class ProfileWindow extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget userProfiletile(String mainTitle, String subTitle) {
+class UserProfileTile extends StatelessWidget {
+  const UserProfileTile({
+    super.key,
+    required this.mainTitle,
+    required this.subTitle,
+  });
+
+  final String mainTitle;
+  final String subTitle;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.orangeAccent,
@@ -236,59 +252,6 @@ class ProfileWindow extends StatelessWidget {
               fontWeight: FontWeight.bold,
               fontSize: 26.0,
               color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-Future<void> profileBottomSheet(BuildContext context, PublicAccountViewModel user) {
-  return showModalBottomSheet(
-    context: context,
-    useSafeArea: true,
-    backgroundColor: Colors.deepOrange.withOpacity(0.9),
-    builder: (BuildContext context) {
-      return ProfileWindow(user: user);
-    },
-  );
-}
-
-class FullScreenImage extends StatelessWidget {
-  // final String imageUrl;
-  final ImageProvider image;
-
-  const FullScreenImage({super.key, required this.image});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          InteractiveViewer(
-            child: GestureDetector(
-              onTap: () {
-                // Navigator.pop(context);
-              },
-              child: Center(
-                child: Image(image: image),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 40,
-            right: 16,
-            child: IconButton(
-              icon: const Icon(
-                Icons.close,
-                color: Colors.white,
-                size: 30,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
             ),
           ),
         ],

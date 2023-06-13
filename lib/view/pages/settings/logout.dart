@@ -2,7 +2,7 @@ import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-Future<void> _handleSignout(BuildContext context) async {
+Future<void> handleSignout(BuildContext context) async {
   Provider.of<AuthViewModel>(context, listen: false).signOut();
 
   // const destination = SignInWidget();
@@ -46,7 +46,7 @@ Future<void> _logoutDialog(BuildContext context) async {
           ),
           ElevatedButton(
             onPressed: () {
-              _handleSignout(context);
+              handleSignout(context);
               Navigator.of(context).pop();
             },
             child: const Text(

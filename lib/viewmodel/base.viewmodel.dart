@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class BaseViewModel extends ChangeNotifier {
+abstract class BaseViewModel extends ChangeNotifier {
   bool _busy = false;
   bool get busy => _busy;
 

@@ -1,11 +1,13 @@
-import 'dart:convert';
 import 'package:cookie_app/view/components/cookie.appbar.dart';
+import 'package:cookie_app/viewmodel/myinfo.viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:cookie_app/repository/myinfo.dart';
 
 class MyProfileWidget extends StatefulWidget {
-  const MyProfileWidget({Key? key}) : super(key: key);
+  final MyInfoViewModel my;
+  const MyProfileWidget({
+    Key? key,
+    required this.my,
+  }) : super(key: key);
 
   @override
   State<MyProfileWidget> createState() => _MyProfileWidgetState();
@@ -30,7 +32,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               shape: BoxShape.circle,
             ),
             child: Image(
-              image: my.profileImage,
+              image: widget.my.profileImage,
               fit: BoxFit.cover,
               errorBuilder:
                   (BuildContext context, Object error, StackTrace? stackTrace) {
@@ -45,7 +47,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               size: 36,
             ),
             title: const Text('이름'),
-            subtitle: Text(my.name!),
+            subtitle: Text(widget.my.name),
             trailing: IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {
@@ -60,7 +62,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               size: 36,
             ),
             title: const Text('상태메시지'),
-            subtitle: Text(my.profileMessage!),
+            subtitle: Text(widget.my.profileMessage!),
             trailing: IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {

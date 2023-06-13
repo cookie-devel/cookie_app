@@ -1,10 +1,9 @@
-import 'package:cookie_app/types/account/account_info.dart';
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/view/components/LongPressCopyableText.dart';
 
 class OtherBubble extends StatelessWidget {
-  // final User user;
-  final PublicAccount user;
+  final PublicAccountViewModel user;
   final String content;
 
   const OtherBubble({
@@ -33,11 +32,7 @@ class OtherBubble extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   image: DecorationImage(
-                    // image: user.profileImage as ImageProvider,
-                    image: user.profile.imageURL != null
-                        ? NetworkImage(user.profile.imageURL!)
-                        : const AssetImage('assets/images/default_profile.png')
-                            as ImageProvider,
+                    image: user.profileImage,
                     fit: BoxFit.cover,
                   ),
                   border: Border.all(width: 0.5, color: Colors.black45),

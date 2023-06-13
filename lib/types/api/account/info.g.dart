@@ -11,7 +11,7 @@ InfoResponse _$InfoResponseFromJson(Map<String, dynamic> json) => InfoResponse(
       username: json['username'] as String?,
       phone: json['phone'] as String?,
       friends: (json['friends'] as List<dynamic>?)
-          ?.map((e) => PublicAccount.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => PublicAccountModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       profile: json['profile'] == null
           ? null

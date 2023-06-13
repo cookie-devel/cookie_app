@@ -2,7 +2,6 @@ import 'package:cookie_app/view/components/auth/signin.form.dart';
 import 'package:cookie_app/view/components/cookie.appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/view/pages/signup.dart';
-import 'package:cookie_app/view/components/NavigatePage.dart';
 
 class SignInWidget extends StatelessWidget {
   const SignInWidget({Key? key}) : super(key: key);
@@ -56,9 +55,11 @@ class SignInWidget extends StatelessWidget {
                       color: Colors.black54,
                     ),
                   ),
-                  onPressed: () {
-                    navigateSlide(context, const SignUpWidget());
-                  },
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const SignUpWidget(),
+                    ),
+                  ),
                 ),
               ],
             )

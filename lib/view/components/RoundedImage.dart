@@ -1,0 +1,42 @@
+import 'package:flutter/material.dart';
+
+class RoundedImage extends StatelessWidget {
+  final ImageProvider image;
+  final double imageSize;
+  final bool shadow;
+  const RoundedImage({
+    super.key,
+    required this.image,
+    this.imageSize = 100.0,
+    this.shadow = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: imageSize,
+      height: imageSize,
+      decoration: BoxDecoration(
+        color: const Color(0xff7c94b6),
+        image: DecorationImage(
+          image: image,
+          fit: BoxFit.cover,
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+        border: Border.all(
+          color: Colors.orangeAccent,
+          width: 2.0,
+        ),
+        boxShadow: shadow == true
+            ? [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 4,
+                  offset: const Offset(0, 3),
+                ),
+              ]
+            : null,
+      ),
+    );
+  }
+}

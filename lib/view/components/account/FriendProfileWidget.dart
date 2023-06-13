@@ -1,16 +1,17 @@
+import 'package:cookie_app/view/components/RoundedImage.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/view/components/profile/ProfileWindow.dart';
+import 'package:cookie_app/view/components/account/ProfileWindow.dart';
 
 class FriendProfileWidget extends StatefulWidget {
-  final PublicAccountViewModel user;
+  final PublicAccountViewModel account;
   final bool displayName;
   final bool enableOnTap;
   final bool enableOnLongPress;
 
   const FriendProfileWidget({
     Key? key,
-    required this.user,
+    required this.account,
     this.displayName = true,
     this.enableOnTap = true,
     this.enableOnLongPress = true,
@@ -72,7 +73,15 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
         if (widget.enableOnTap) {
           if (widget.enableOnTap) {
             _startAnimation();
-            profileBottomSheet(context, widget.user);
+            showModalBottomSheet(
+              context: context,
+              useSafeArea: true,
+              backgroundColor: Colors.deepOrange.withOpacity(0.9),
+              builder: (BuildContext context) {
+                return ProfileWindow(user: widget.account);
+              },
+            );
+
             Future.delayed(const Duration(milliseconds: 300), () {
               _reverseAnimation();
             });
@@ -83,54 +92,16 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
         children: [
           SlideTransition(
             position: _animation,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  width: imageSize,
-                  height: imageSize,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.orangeAccent,
-                      width: 2.0,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 4,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: imageSize - 14,
-                  height: imageSize - 14,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: Image(
-                    image: widget.user.profileImage,
-                    fit: BoxFit.cover,
-                    errorBuilder: (
-                      BuildContext context,
-                      Object error,
-                      StackTrace? stackTrace,
-                    ) {
-                      return const Icon(Icons.error);
-                    },
-                  ),
-                ),
-              ],
+            child: RoundedImage(
+              imageSize: imageSize,
+              image: widget.account.profileImage,
             ),
           ),
           if (widget.displayName) const SizedBox(height: 8),
           if (widget.displayName)
             Flexible(
               child: Text(
-                widget.user.name,
+                widget.account.name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,

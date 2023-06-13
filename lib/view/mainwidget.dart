@@ -1,11 +1,13 @@
+import 'package:cookie_app/viewmodel/myinfo.viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/view/pages/maps/maps.tab.dart';
+// import 'package:cookie_app/view/pages/.maps/maps.tab.dart';
 import 'package:cookie_app/view/pages/friends/friends.tab.dart';
 import 'package:cookie_app/view/pages/settings/settings.tab.dart';
-import 'package:cookie_app/view/pages/chatroom/chatrooms.tab.dart';
+// import 'package:cookie_app/view/pages/.chatroom/chatrooms.tab.dart';
 import 'package:cookie_app/view/pages/club/club.tab.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class MainWidget extends StatefulWidget {
   const MainWidget({super.key});
@@ -42,14 +44,6 @@ class _MainWidgetState extends State<MainWidget> {
     }
     return true;
   }
-
-  static const List<Widget> _widgetOptions = <Widget>[
-    FriendsGrid(),
-    ChatTabWidget(),
-    MapsWidget(),
-    ClubGrid(),
-    SettingsWidget(),
-  ];
 
   BottomNavigationBarItem iconItem(
     String text,
@@ -92,11 +86,21 @@ class _MainWidgetState extends State<MainWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> widgetOptions = <Widget>[
+      FriendsGrid(
+        my: Provider.of<MyInfoViewModel>(context),
+      ),
+      // ChatTabWidget(),
+      // MapsWidget(),
+      const ClubGrid(),
+      const SettingsWidget(),
+    ];
+
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
         body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
+          child: widgetOptions.elementAt(_selectedIndex),
         ),
         bottomNavigationBar: SizedBox(
           height: kBottomNavigationBarHeight +

@@ -6,7 +6,10 @@ import 'dart:typed_data';
 
 class BottomSheetInside extends StatelessWidget {
   final PublicAccountViewModel user;
-  const BottomSheetInside({Key? key, required this.user}) : super(key: key);
+  const BottomSheetInside({
+    Key? key,
+    required this.user,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +148,10 @@ class BottomSheetInside extends StatelessWidget {
   }
 }
 
-Future<void> markerBottomSheet(BuildContext context, PublicAccountViewModel user) {
+Future<void> markerBottomSheet(
+  BuildContext context,
+  PublicAccountViewModel user,
+) {
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
