@@ -59,4 +59,13 @@ abstract class BaseStorage {
       return false;
     }
   }
+
+  Future<bool> isExist() async {
+    try {
+      final file = await _localFile;
+      return await file.exists();
+    } catch (e) {
+      return false;
+    }
+  }
 }

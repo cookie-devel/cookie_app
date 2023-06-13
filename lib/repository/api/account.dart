@@ -8,7 +8,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AccountAPI {
   static Future<ExistsResponse> getExistance(
-      String? userid, String? phone,) async {
+    String? userid,
+    String? phone,
+  ) async {
     final uri = Uri.https(dotenv.env['BASE_URI']!, '/account/exists', {
       'userid': userid,
       'phone': phone,

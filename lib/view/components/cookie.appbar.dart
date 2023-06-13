@@ -12,19 +12,7 @@ class CookieAppBar extends AppBar {
     List<Widget>? actions,
   }) : super(
           key: key,
-          title: Text(title ?? ""),
+          title: title == null ? null : Text(title),
           actions: actions,
-          // flexibleSpace: Container(
-          //   decoration: const BoxDecoration(
-          //     gradient: LinearGradient(
-          //       begin: Alignment.topLeft,
-          //       end: Alignment.bottomRight,
-          //       colors: <Color>[
-          //         Colors.orangeAccent,
-          //         Colors.deepOrangeAccent,
-          //       ],
-          //     ),
-          //   ),
-          // ),
         );
 }

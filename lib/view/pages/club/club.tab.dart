@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../components/cookie.appbar.dart';
+import 'package:cookie_app/view/components/cookie.appbar.dart';
 
 class ClubGrid extends StatefulWidget {
   const ClubGrid({Key? key}) : super(key: key);

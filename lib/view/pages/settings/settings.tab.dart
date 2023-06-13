@@ -1,10 +1,5 @@
-import 'package:cookie_app/handler/signinout.handler.dart';
 import 'package:cookie_app/view/components/cookie.appbar.dart';
-import 'package:cookie_app/view/pages/signin.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/view/pages/settings/detail/MyProfile.page.dart';
-import 'package:cookie_app/view/pages/settings/detail/appTheme.page.dart';
-import 'package:cookie_app/view/components/NavigatePage.dart';
 
 class SettingsWidget extends StatelessWidget {
   const SettingsWidget({Key? key}) : super(key: key);
@@ -32,7 +27,11 @@ class SettingsWidget extends StatelessWidget {
                   if (list[index].onTap != null) {
                     list[index].onTap!(context);
                   } else {
-                    navigateSlide(context, list[index].destination!);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => list[index].destination!,
+                      ),
+                    );
                   }
                 },
               ),
@@ -64,99 +63,41 @@ class SettingsListProp {
 }
 
 List<SettingsListProp> list = [
-  SettingsListProp(
-    text: '프로필 관리',
-    icon: Icons.person,
-    destination: const MyProfileWidget(),
-  ),
-  SettingsListProp(
-    text: '알림',
-    icon: Icons.notifications,
-    destination: const MyProfileWidget(),
-  ),
-  SettingsListProp(
-    text: '친구',
-    icon: Icons.people,
-    destination: const MyProfileWidget(),
-  ),
-  SettingsListProp(
-    text: '언어',
-    icon: Icons.language,
-    destination: const MyProfileWidget(),
-  ),
-  SettingsListProp(
-    text: '테마',
-    icon: Icons.color_lens,
-    destination: const ThemeSettingsPage(),
-  ),
-  SettingsListProp(
-    text: '기타',
-    icon: Icons.more_horiz,
-    destination: const MyProfileWidget(),
-  ),
-  SettingsListProp(
-    text: '로그아웃',
-    icon: Icons.logout,
-    onTap: _showAlertDialog,
-    color: Colors.red,
-  ),
+  // SettingsListProp(
+  //   text: '프로필 관리',
+  //   icon: Icons.person,
+  //   destination: const MyProfileWidget(),
+  // ),
+  // SettingsListProp(
+  //   text: '알림',
+  //   icon: Icons.notifications,
+  //   destination: const MyProfileWidget(),
+  // ),
+  // SettingsListProp(
+  //   text: '친구',
+  //   icon: Icons.people,
+  //   destination: const MyProfileWidget(),
+  // ),
+  // SettingsListProp(
+  //   text: '언어',
+  //   icon: Icons.language,
+  //   destination: const MyProfileWidget(),
+  // ),
+  // SettingsListProp(
+  //   text: '테마',
+  //   icon: Icons.color_lens,
+  //   destination: const ThemeSettingsPage(),
+  // ),
+  // SettingsListProp(
+  //   text: '기타',
+  //   icon: Icons.more_horiz,
+  //   destination: const MyProfileWidget(),
+  // ),
+  // SettingsListProp(
+  //   text: '로그아웃',
+  //   icon: Icons.logout,
+  //   // onTap: handleSignOut,
+  //   onTap: () => Provider.of<AuthViewModel>(context, listen: false).signOut(),
+  //   color: Colors.red,
+  // ),
 ];
-
-Future<void> _logout(BuildContext context) async {
-  await handleSignOut();
-  const destination = SignInWidget();
-
-  // 현재 페이지를 스택에서 제거하고 대상 페이지를 스택에 추가
-  await Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(builder: (BuildContext context) => destination),
-  );
-}
-
-Future<void> _showAlertDialog(BuildContext context) async {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.0),
-        ),
-        title: const Text(
-          '로그아웃',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: const Text(
-          '정말로 로그아웃 하시겠습니까?',
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: const Text(
-              '아니오',
-              style: TextStyle(
-                color: Colors.grey,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          ElevatedButton(
-            onPressed: () {
-              _logout(context);
-              Navigator.of(context).pop();
-            },
-            child: const Text(
-              '예',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      );
-    },
-  );
-}

@@ -9,7 +9,8 @@ class SignInFormModel {
 
   SignInFormModel({required this.id, required this.pw});
 
-  factory SignInFormModel.fromJson(Map<String, dynamic> json) => _$SignInFormModelFromJson(json);
+  factory SignInFormModel.fromJson(Map<String, dynamic> json) =>
+      _$SignInFormModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$SignInFormModelToJson(this);
 }

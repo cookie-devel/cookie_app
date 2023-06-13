@@ -1,14 +1,18 @@
-import 'package:cookie_app/api/friends.dart';
-import 'package:cookie_app/repository/myinfo.dart';
 import 'package:cookie_app/view/components/cookie.appbar.dart';
 import 'package:cookie_app/view/pages/friends/friendsSheet.dart';
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
+import 'package:cookie_app/viewmodel/myinfo.viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/view/components/friends/FriendProfileWidget.dart';
-import 'package:cookie_app/schema/User.dart';
+import 'package:cookie_app/view/components/account/FriendProfileWidget.dart';
 import 'package:vibration/vibration.dart';
 
 class FriendsGrid extends StatefulWidget {
-  const FriendsGrid({Key? key}) : super(key: key);
+  MyInfoViewModel my;
+
+  FriendsGrid({
+    Key? key,
+    required this.my,
+  }) : super(key: key);
 
   @override
   State<FriendsGrid> createState() => _FriendsGridState();
@@ -18,51 +22,17 @@ class _FriendsGridState extends State<FriendsGrid>
     with AutomaticKeepAliveClientMixin<FriendsGrid> {
   @override
   bool get wantKeepAlive => true;
-
-  List<dynamic> profiles = [];
-
-  @override
-  void initState() {
-    super.initState();
-    getData();
-  }
-
-  void getData() async {
-    var friendList = my.friendList;
-    if (friendList != null) {
-      setState(() {
-        profiles = sortList(friendList, 'username');
-      });
-    }
-  }
+  // List<dynamic> profiles = [];
+  List<PublicAccountViewModel> friends = [];
 
   Future<void> updateData() async {
-    var data = await apiGetFriends();
-    setState(() {
-      profiles = sortList(data['result'], 'username');
-    });
-    my.friendList = data['result'];
-  }
-
-  List sortList(List<dynamic> list, String key, {bool reverse = false}) {
-    list.sort((a, b) {
-      if (a[key] == null) {
-        return 1;
-      } else if (b[key] == null) {
-        return -1;
-      } else {
-        return a[key].compareTo(b[key]);
-      }
-    });
-    if (reverse) {
-      list = list.reversed.toList();
-    }
-    return list;
+    widget.my.updateMyInfo();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     return Scaffold(
       appBar: CookieAppBar(
         title: '친구',
@@ -72,16 +42,16 @@ class _FriendsGridState extends State<FriendsGrid>
       ),
       body: RefreshIndicator(
         onRefresh: updateData,
-        child: profiles.isNotEmpty
+        child: friends.isNotEmpty
             ? GridView.builder(
                 cacheExtent: 300,
-                itemCount: profiles.length,
+                itemCount: friends.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   childAspectRatio: 0.8,
                 ),
                 itemBuilder: (BuildContext context, int index) {
-                  final Map<String, dynamic> profile = profiles[index];
+                  final PublicAccountViewModel friend = friends[index];
 
                   return Padding(
                     padding: const EdgeInsets.all(18.0),
@@ -89,11 +59,11 @@ class _FriendsGridState extends State<FriendsGrid>
                       onLongPress: () {
                         Vibration.vibrate(duration: 40);
                         setState(() {
-                          _showDeleteConfirmationSnackBar(index);
+                          // _showDeleteConfirmationSnackBar(index);
                         });
                       },
                       child: FriendProfileWidget(
-                        user: User.fromMap(profile),
+                        account: friend,
                       ),
                     ),
                   );
@@ -127,7 +97,7 @@ class _FriendsGridState extends State<FriendsGrid>
           label: '삭제',
           onPressed: () {
             setState(() {
-              profiles.removeAt(index);
+              // profiles.removeAt(index);
             });
             scaffold.hideCurrentSnackBar();
           },

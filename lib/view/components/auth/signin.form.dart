@@ -60,13 +60,13 @@ class PWField extends CustomTextFormField {
         );
 }
 
-ElevatedButton signInButton({
+SubmitButton signInButton({
   required BuildContext context,
   required GlobalKey<FormState> formKey,
   required IDField id,
   required PWField pw,
 }) {
-  return submitButton(
+  return SubmitButton(
     onPressed: () async {
       if (!formKey.currentState!.validate()) return null;
       formKey.currentState!.save();
@@ -87,13 +87,6 @@ onSignInSuccess(context) {
     content: Text('Welcome!'),
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  // No need to pushReplacement because provider will rebuild the widget from CookieApp
-  // Navigator.pushReplacement(
-  //   context,
-  //   MaterialPageRoute(
-  //     builder: (context) => const MainWidget(),
-  //   ),
-  // );
 }
 
 onSignInFail(context) {

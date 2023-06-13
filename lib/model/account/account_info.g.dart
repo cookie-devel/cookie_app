@@ -6,32 +6,34 @@ part of 'account_info.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PublicAccount _$PublicAccountFromJson(Map<String, dynamic> json) =>
-    PublicAccount(
+PublicAccountModel _$PublicAccountModelFromJson(Map<String, dynamic> json) =>
+    PublicAccountModel(
       id: json['id'] as String,
       name: json['name'] as String,
-      profile: Profile.fromJson(json['profile'] as Map<String, dynamic>),
+      profile: json['profile'],
     );
 
-Map<String, dynamic> _$PublicAccountToJson(PublicAccount instance) =>
+Map<String, dynamic> _$PublicAccountModelToJson(PublicAccountModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'profile': instance.profile,
     };
 
-PrivateAccount _$PrivateAccountFromJson(Map<String, dynamic> json) =>
-    PrivateAccount(
+PrivateAccountModel _$PrivateAccountModelFromJson(Map<String, dynamic> json) =>
+    PrivateAccountModel(
       id: json['id'] as String,
       name: json['name'] as String,
       phone: json['phone'] as String,
       friends: (json['friends'] as List<dynamic>)
-          .map((e) => PublicAccount.fromJson(e as Map<String, dynamic>))
+          .map((e) => PublicAccountModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      profile: Profile.fromJson(json['profile'] as Map<String, dynamic>),
+      profile: json['profile'],
     );
 
-Map<String, dynamic> _$PrivateAccountToJson(PrivateAccount instance) =>
+Map<String, dynamic> _$PrivateAccountModelToJson(
+  PrivateAccountModel instance,
+) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,

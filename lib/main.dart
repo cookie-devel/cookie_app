@@ -1,15 +1,13 @@
-import 'package:cookie_app/types/jwt_payload.dart';
+import 'package:cookie_app/themes/dark.dart';
+import 'package:cookie_app/themes/default.dart';
 import 'package:cookie_app/view/mainwidget.dart';
 import 'package:cookie_app/view/pages/signin.dart';
-import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
 import 'package:cookie_app/viewmodel/myinfo.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:cookie_app/socket.io/socket.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:cookie_app/view/components/ThemeData.dart';
 import 'package:provider/provider.dart';
 import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
@@ -23,6 +21,7 @@ void main() async {
 
   // Load Data
   await dotenv.load();
+  Future.delayed(const Duration(milliseconds: 1000));
   // bool autoSignIn = !(await JWT.isExpired());
   // bool autoSignIn = !JWTModel.fromJWT((await JWTRepositoryStorageImpl().read())!).isExpired();
 
@@ -69,7 +68,7 @@ class Cookie extends StatelessWidget {
           home: Provider.of<AuthViewModel>(context, listen: true).isSigned
               ? const MainWidget()
               : const SignInWidget(),
-          theme: isDarkModeEnabled ? darkThemeData() : defaultThemeData(),
+          theme: isDarkModeEnabled ? darkThemeData : defaultThemeData,
         );
       },
     );

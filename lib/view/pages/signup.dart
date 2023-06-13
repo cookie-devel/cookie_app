@@ -1,10 +1,9 @@
 import 'dart:io';
+import 'package:cookie_app/view/components/RoundedImage.dart';
 import 'package:cookie_app/view/components/auth/signup.form.dart';
 import 'package:cookie_app/view/components/cookie.appbar.dart';
-import 'package:cookie_app/view/components/friends/FriendProfileWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/view/components/ImageSelection.dart';
-import 'package:cookie_app/schema/User.dart';
 
 class SignUpWidget extends StatefulWidget {
   const SignUpWidget({Key? key}) : super(key: key);
@@ -42,15 +41,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              // Profile Image
-              FriendProfileWidget(
-                user: _imageFile == null
-                    ? User()
-                    // : FriendInfo(profileImage: _imageFile!.path),
-                    : User(profileImage: FileImage(_imageFile!)),
-                enableOnLongPress: false,
-                enableOnTap: false,
-                displayName: false,
+              RoundedImage(
+                image: _imageFile == null
+                    ? const AssetImage("assets/images/kz1.png") as ImageProvider
+                    : FileImage(_imageFile!),
               ),
 
               // select image button

@@ -120,7 +120,7 @@ class PhoneNumberField extends CustomTextFormField {
         );
 }
 
-ElevatedButton signUpButton({
+SubmitButton signUpButton({
   required BuildContext context,
   required GlobalKey<FormState> formKey,
   required IDField id,
@@ -131,7 +131,7 @@ ElevatedButton signUpButton({
   File? profileImg,
   String? profileMsg,
 }) {
-  return submitButton(
+  return SubmitButton(
     onPressed: () async {
       if (!formKey.currentState!.validate()) return null;
       formKey.currentState!.save();
