@@ -2,8 +2,8 @@ import 'package:cookie_app/view/components/cookie.appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:cookie_app/cookie.splash.dart';
-import 'package:cookie_app/schema/User.dart';
+import 'package:cookie_app/view/components/loading.dart';
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/view/components/map/markerDesign.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart' as latlong;
@@ -12,8 +12,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:provider/provider.dart';
-import 'package:cookie_app/utils/themeProvider.dart';
-import 'package:cookie_app/utils/mapProvider.dart';
+import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
+import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 
 class MapsWidget extends StatefulWidget {
   const MapsWidget({Key? key}) : super(key: key);
@@ -90,7 +90,7 @@ class _MapsWidgetState extends State<MapsWidget> {
                     ),
                   ],
                 )
-              : loadingScreen(),
+              : const LoadingScreen(),
         );
       },
     );
