@@ -7,7 +7,12 @@ import 'package:http/http.dart';
 
 Future<GetFriendsResponse> apiGetFriends() async {
   String token = (await JWTRepositoryStorageImpl().read())!;
-  final uri = Uri.https(dotenv.env['BASE_URI']!, '/friends');
+  final uri = Uri(
+    scheme: dotenv.env['API_SCHEME'],
+    host: dotenv.env['API_HOST'],
+    port: int.parse(dotenv.env['API_PORT']!),
+    path: '/friends',
+  );
   Response res = await get(
     uri,
     headers: <String, String>{

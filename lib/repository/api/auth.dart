@@ -8,7 +8,13 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthAPI {
   static Future<SignInResponse> postSignIn(SignInFormModel signin) async {
-    final uri = Uri.https(dotenv.env['BASE_URI']!, '/account/signin');
+    final uri = Uri(
+      scheme: dotenv.env['API_SCHEME'],
+      host: dotenv.env['API_HOST'],
+      port: int.parse(dotenv.env['API_PORT']!),
+      path: '/auth/signin',
+    );
+
     Response res = await post(
       uri,
       headers: <String, String>{
@@ -25,7 +31,12 @@ class AuthAPI {
   }
 
   static Future<void> postSignUp(SignUpFormModel signUpForm) async {
-    final uri = Uri.https(dotenv.env['BASE_URI']!, '/account/signup');
+    final uri = Uri(
+      scheme: dotenv.env['API_SCHEME'],
+      host: dotenv.env['API_HOST'],
+      port: int.parse(dotenv.env['API_PORT']!),
+      path: '/auth/signup',
+    );
 
     MultipartRequest request = MultipartRequest('POST', uri);
 
