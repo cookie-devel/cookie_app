@@ -1,5 +1,4 @@
 import 'package:cookie_app/model/account/account_info.dart';
-import 'package:cookie_app/types/account/profile.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 import 'package:flutter/material.dart';
 
@@ -14,17 +13,9 @@ class PublicAccountViewModel extends BaseViewModel {
   String? get profileMessage => _model.profile.message!;
 
   PublicAccountViewModel({
-    PublicAccountModel? model,
-  }) {
-    _model = model ??
-        PublicAccountModel(
-          id: '',
-          name: '',
-          profile: Profile(
-            imageURL: '',
-            message: '',
-          ),
-        );
+    required PublicAccountModel model,
+  }) : super() {
+    _model = model;
   }
 }
 
