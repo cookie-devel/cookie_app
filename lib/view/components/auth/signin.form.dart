@@ -77,8 +77,8 @@ SubmitButton signInButton({
       return null;
     },
     text: '로그인',
-    onSuccess: onSignInSuccess(context),
-    onFailure: onSignInFail(context),
+    onSuccess: onSignInSuccess,
+    onFailure: onSignInFailure,
   );
 }
 
@@ -89,7 +89,7 @@ onSignInSuccess(context) {
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
-onSignInFail(context) {
+onSignInFailure(context) {
   const snackBar = SnackBar(
     content: Text('로그인에 실패하였습니다.'),
   );

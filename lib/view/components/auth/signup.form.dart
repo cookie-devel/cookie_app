@@ -157,20 +157,24 @@ SubmitButton signUpButton({
       // );
     },
     text: '회원가입',
-    onSuccess: () {
-      const snackBar = SnackBar(
-        content: Text('회원가입이 완료되었습니다.'),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      Navigator.pop(context);
-    },
-    onFailure: () {
-      const snackBar = SnackBar(
-        content: Text('회원가입에 실패하였습니다.'),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    },
+    onSuccess: onSignUpSuccess,
+    onFailure: onSignUpFailure,
   );
+}
+
+onSignUpSuccess(context) {
+  const snackBar = SnackBar(
+    content: Text('회원가입이 완료되었습니다.'),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  Navigator.pop(context);
+}
+
+onSignUpFailure(context) {
+  const snackBar = SnackBar(
+    content: Text('회원가입에 실패하였습니다.'),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
 Container wrapped(child) {
