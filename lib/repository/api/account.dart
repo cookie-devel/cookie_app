@@ -11,10 +11,16 @@ class AccountAPI {
     String? userid,
     String? phone,
   ) async {
-    final uri = Uri.https(dotenv.env['BASE_URI']!, '/account/exists', {
-      'userid': userid,
-      'phone': phone,
-    });
+    final uri = Uri(
+      scheme: dotenv.env['API_SCHEME'],
+      host: dotenv.env['API_HOST'],
+      port: int.parse(dotenv.env['API_PORT']!),
+      path: '/account/exists',
+      queryParameters: {
+        'userid': userid,
+        'phone': phone,
+      },
+    );
 
     Response res = await get(
       uri,
