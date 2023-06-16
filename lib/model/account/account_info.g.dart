@@ -10,7 +10,7 @@ PublicAccountModel _$PublicAccountModelFromJson(Map<String, dynamic> json) =>
     PublicAccountModel(
       id: json['id'] as String,
       name: json['name'] as String,
-      profile: json['profile'],
+      profile: Profile.fromJson(json['profile'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$PublicAccountModelToJson(PublicAccountModel instance) =>
@@ -28,12 +28,11 @@ PrivateAccountModel _$PrivateAccountModelFromJson(Map<String, dynamic> json) =>
       friends: (json['friends'] as List<dynamic>)
           .map((e) => PublicAccountModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      profile: json['profile'],
+      profile: Profile.fromJson(json['profile'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$PrivateAccountModelToJson(
-  PrivateAccountModel instance,
-) =>
+        PrivateAccountModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
