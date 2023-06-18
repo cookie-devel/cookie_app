@@ -9,14 +9,14 @@ class InfoResponse {
   String? userid;
   String? username;
   String? phone;
-  List<PublicAccountModel>? friends;
+  List<PublicAccountModel>? friendList;
   Profile? profile;
 
   InfoResponse({
     this.userid,
     this.username,
     this.phone,
-    this.friends,
+    this.friendList,
     this.profile,
   });
 
@@ -27,11 +27,11 @@ class InfoResponse {
 
   PrivateAccountModel toPrivateAccount() {
     return PrivateAccountModel(
-      id: userid!,
-      name: username!,
+      userid: userid!,
+      username: username!,
       phone: phone!,
       profile: profile!,
-      friends: friends!,
+      friends: friendList == null ? [] : friendList!,
     );
   }
 }

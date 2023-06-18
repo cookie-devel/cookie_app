@@ -1,9 +1,9 @@
 import 'package:cookie_app/view/components/cookie.appbar.dart';
-import 'package:cookie_app/viewmodel/myinfo.viewmodel.dart';
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
 
 class MyProfileWidget extends StatefulWidget {
-  final MyInfoViewModel my;
+  final PrivateAccountViewModel my;
   const MyProfileWidget({
     Key? key,
     required this.my,

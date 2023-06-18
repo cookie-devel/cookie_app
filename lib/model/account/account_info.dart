@@ -5,13 +5,13 @@ part 'account_info.g.dart';
 
 @JsonSerializable()
 class PublicAccountModel {
-  String id;
-  String name;
+  String userid;
+  String username;
   Profile profile;
 
   PublicAccountModel({
-    required this.id,
-    required this.name,
+    required this.userid,
+    required this.username,
     required this.profile,
   });
 
@@ -27,14 +27,14 @@ class PrivateAccountModel extends PublicAccountModel {
   List<PublicAccountModel> friends;
 
   PrivateAccountModel({
-    required super.id,
-    required super.name,
+    required super.userid,
+    required super.username,
     required this.phone,
     required this.friends,
     required super.profile,
   }) {
     friends.sort((a, b) {
-      return a.name.compareTo(b.name);
+      return a.username.compareTo(b.username);
     });
   }
 
