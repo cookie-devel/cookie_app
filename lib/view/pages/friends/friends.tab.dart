@@ -1,17 +1,14 @@
 import 'package:cookie_app/view/components/cookie.appbar.dart';
 import 'package:cookie_app/view/pages/friends/friendsSheet.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:cookie_app/viewmodel/myinfo.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/view/components/account/FriendProfileWidget.dart';
+import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
 class FriendsGrid extends StatefulWidget {
-  MyInfoViewModel my;
-
   FriendsGrid({
     Key? key,
-    required this.my,
   }) : super(key: key);
 
   @override
@@ -23,10 +20,15 @@ class _FriendsGridState extends State<FriendsGrid>
   @override
   bool get wantKeepAlive => true;
   // List<dynamic> profiles = [];
-  List<PublicAccountViewModel> friends = [];
+  // List<PublicAccountViewModel> friends = [];
 
   Future<void> updateData() async {
-    widget.my.updateMyInfo();
+    // await widget.my.updateMyInfo();
+    await Provider.of<PrivateAccountViewModel>(context, listen: false)
+        .updateMyInfo();
+    // setState(() {
+    //   friends = widget.my.friends;
+    // });
   }
 
   @override
@@ -42,16 +44,25 @@ class _FriendsGridState extends State<FriendsGrid>
       ),
       body: RefreshIndicator(
         onRefresh: updateData,
-        child: friends.isNotEmpty
+        child: Provider.of<PrivateAccountViewModel>(context, listen: false)
+                .friends
+                .isNotEmpty
             ? GridView.builder(
                 cacheExtent: 300,
-                itemCount: friends.length,
+                itemCount:
+                    Provider.of<PrivateAccountViewModel>(context, listen: false)
+                        .friends
+                        .length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   childAspectRatio: 0.8,
                 ),
                 itemBuilder: (BuildContext context, int index) {
-                  final PublicAccountViewModel friend = friends[index];
+                  final PublicAccountViewModel friend =
+                      Provider.of<PrivateAccountViewModel>(
+                    context,
+                    listen: false,
+                  ).friends[index];
 
                   return Padding(
                     padding: const EdgeInsets.all(18.0),

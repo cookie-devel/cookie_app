@@ -38,10 +38,11 @@ class AccountAPI {
 
   static Future<InfoResponse> getInfo({List<String>? fields}) async {
     String token = (await JWTRepositoryStorageImpl().read())!;
-    final uri = Uri.https(
-      dotenv.env['BASE_URI']!,
-      '/account/info',
-      fields != null ? {"fields": fields.join(',')} : null,
+    final uri = Uri(
+      scheme: dotenv.env['API_SCHEME'],
+      host: dotenv.env['API_HOST'],
+      port: int.parse(dotenv.env['API_PORT']!),
+      path: '/account/info',
     );
     Response res = await get(
       uri,

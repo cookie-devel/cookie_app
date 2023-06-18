@@ -8,22 +8,22 @@ part of 'account_info.dart';
 
 PublicAccountModel _$PublicAccountModelFromJson(Map<String, dynamic> json) =>
     PublicAccountModel(
-      id: json['id'] as String,
-      name: json['name'] as String,
+      userid: json['userid'] as String,
+      username: json['username'] as String,
       profile: Profile.fromJson(json['profile'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$PublicAccountModelToJson(PublicAccountModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
+      'userid': instance.userid,
+      'username': instance.username,
       'profile': instance.profile,
     };
 
 PrivateAccountModel _$PrivateAccountModelFromJson(Map<String, dynamic> json) =>
     PrivateAccountModel(
-      id: json['id'] as String,
-      name: json['name'] as String,
+      userid: json['userid'] as String,
+      username: json['username'] as String,
       phone: json['phone'] as String,
       friends: (json['friends'] as List<dynamic>)
           .map((e) => PublicAccountModel.fromJson(e as Map<String, dynamic>))
@@ -34,8 +34,8 @@ PrivateAccountModel _$PrivateAccountModelFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$PrivateAccountModelToJson(
         PrivateAccountModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
+      'userid': instance.userid,
+      'username': instance.username,
       'profile': instance.profile,
       'phone': instance.phone,
       'friends': instance.friends,
