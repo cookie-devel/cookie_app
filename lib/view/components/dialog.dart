@@ -42,7 +42,10 @@ class CancelButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: onPressed,
+      onPressed: () {
+        onPressed();
+        Navigator.of(context).pop();
+      },
       child: const Text(
         '취소',
         style: TextStyle(
@@ -61,7 +64,10 @@ class ConfirmButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: () {
+        onPressed();
+        Navigator.of(context).pop();
+      },
       child: const Text('확인'),
     );
   }
