@@ -1,3 +1,4 @@
+import 'package:cookie_app/model/chat/room.dart';
 import 'package:cookie_app/types/account/profile.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -25,6 +26,7 @@ class PublicAccountModel {
 class PrivateAccountModel extends PublicAccountModel {
   String phone;
   List<PublicAccountModel> friends;
+  List<ChatRoomModel> chatRooms;
 
   PrivateAccountModel({
     required super.userid,
@@ -32,6 +34,7 @@ class PrivateAccountModel extends PublicAccountModel {
     required this.phone,
     required this.friends,
     required super.profile,
+    required this.chatRooms,
   }) {
     friends.sort((a, b) {
       return a.username.compareTo(b.username);

@@ -16,7 +16,9 @@ InfoResponse _$InfoResponseFromJson(Map<String, dynamic> json) => InfoResponse(
       profile: json['profile'] == null
           ? null
           : Profile.fromJson(json['profile'] as Map<String, dynamic>),
-    );
+    )..chatRooms = (json['chatRooms'] as List<dynamic>?)
+        ?.map((e) => ChatRoomModel.fromJson(e as Map<String, dynamic>))
+        .toList();
 
 Map<String, dynamic> _$InfoResponseToJson(InfoResponse instance) =>
     <String, dynamic>{
@@ -25,4 +27,5 @@ Map<String, dynamic> _$InfoResponseToJson(InfoResponse instance) =>
       'phone': instance.phone,
       'friendList': instance.friendList,
       'profile': instance.profile,
+      'chatRooms': instance.chatRooms,
     };

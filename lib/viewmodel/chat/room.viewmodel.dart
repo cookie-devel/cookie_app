@@ -3,9 +3,8 @@ import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 import 'package:cookie_app/viewmodel/chat/message.viewmodel.dart';
 
-class RoomViewModel extends BaseViewModel {
-  late RoomModel _model;
-  RoomViewModel() : super();
+class ChatRoomViewModel extends BaseViewModel {
+  late ChatRoomModel _model;
 
   String get id => _model.id;
   String get name => _model.name;
@@ -15,4 +14,8 @@ class RoomViewModel extends BaseViewModel {
   List<MessageViewModel> get messages => _model.messages
       .map((e) => MessageViewModel(model: e))
       .toList(growable: false);
+
+  ChatRoomViewModel({required ChatRoomModel model}) : super() {
+    _model = model;
+  }
 }

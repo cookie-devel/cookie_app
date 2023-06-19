@@ -5,6 +5,7 @@ import 'package:cookie_app/repository/storage/account.storage.dart';
 import 'package:cookie_app/types/api/account/signin.dart';
 import 'package:cookie_app/types/form/signin.dart';
 import 'package:cookie_app/types/form/signup.dart';
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,11 @@ class AuthViewModel extends BaseViewModel {
     return formKey.currentState!.validate();
   }
 
-  Future<void> signIn({required String id, required String pw}) async {
+  Future<void> signIn({
+    required String id,
+    required String pw,
+    required PrivateAccountViewModel privateAccountViewModel,
+  }) async {
     setBusy(true);
     // Handle Signin
     try {
@@ -31,7 +36,9 @@ class AuthViewModel extends BaseViewModel {
       );
 
       _jwtModel.save(response.access_token);
-      // TODO: Implement MyInfoModel load
+      privateAccountViewModel.updateMyInfo(
+        model: response.account.toPrivateAccount(),
+      );
 
       _isSigned = true;
     } catch (e) {
