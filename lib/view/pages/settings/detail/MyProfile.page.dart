@@ -1,12 +1,11 @@
 import 'package:cookie_app/view/components/cookie.appbar.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MyProfileWidget extends StatefulWidget {
-  final PrivateAccountViewModel my;
   const MyProfileWidget({
     Key? key,
-    required this.my,
   }) : super(key: key);
 
   @override
@@ -23,64 +22,69 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CookieAppBar(title: '프로필 관리'),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(5, 25, 5, 10),
-        children: [
-          Container(
-            height: 160,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
+      body: Consumer<PrivateAccountViewModel>(
+        builder: (context, value, child) => ListView(
+          padding: const EdgeInsets.fromLTRB(5, 25, 5, 10),
+          children: [
+            Container(
+              height: 160,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              child: Image(
+                image: value.profileImage,
+                fit: BoxFit.cover,
+                errorBuilder: (
+                  BuildContext context,
+                  Object error,
+                  StackTrace? stackTrace,
+                ) {
+                  return const Icon(Icons.error, size: 36);
+                },
+              ),
             ),
-            child: Image(
-              image: widget.my.profileImage,
-              fit: BoxFit.cover,
-              errorBuilder:
-                  (BuildContext context, Object error, StackTrace? stackTrace) {
-                return const Icon(Icons.error, size: 36);
-              },
+            const SizedBox(height: 16),
+            ListTile(
+              leading: const Icon(
+                Icons.person,
+                size: 36,
+              ),
+              title: const Text('이름'),
+              subtitle: Text(value.name),
+              trailing: IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  // _showEditNameDialog();
+                },
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          ListTile(
-            leading: const Icon(
-              Icons.person,
-              size: 36,
+            const Divider(),
+            ListTile(
+              leading: const Icon(
+                Icons.message,
+                size: 36,
+              ),
+              title: const Text('상태메시지'),
+              subtitle: Text(value.profileMessage ?? '상태메시지가 없습니다.'),
+              trailing: IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  // _showEditStatusDialog();
+                },
+              ),
             ),
-            title: const Text('이름'),
-            subtitle: Text(widget.my.name),
-            trailing: IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () {
-                // _showEditNameDialog();
-              },
+            const Divider(),
+            ListTile(
+              leading: const Icon(
+                Icons.phone_android_outlined,
+                size: 36,
+              ),
+              title: const Text('전화번호'),
+              subtitle: Text(value.phone),
             ),
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(
-              Icons.message,
-              size: 36,
-            ),
-            title: const Text('상태메시지'),
-            subtitle: Text(widget.my.profileMessage!),
-            trailing: IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () {
-                // _showEditStatusDialog();
-              },
-            ),
-          ),
-          const Divider(),
-          const ListTile(
-            leading: Icon(
-              Icons.phone_android_outlined,
-              size: 36,
-            ),
-            title: Text('전화번호'),
-            subtitle: Text('profiles[\'phonenumber\']'),
-          ),
-          const Divider(),
-        ],
+            const Divider(),
+          ],
+        ),
       ),
     );
   }
