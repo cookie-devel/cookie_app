@@ -13,7 +13,7 @@ SignUpFormModel _$SignUpFormModelFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       birthday: json['birthday'] as String,
       phoneNumber: json['phoneNumber'] as String,
-      profile: json['profile'],
+      profile: Profile.fromJson(json['profile'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SignUpFormModelToJson(SignUpFormModel instance) =>

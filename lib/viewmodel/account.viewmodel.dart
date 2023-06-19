@@ -1,6 +1,7 @@
 import 'package:cookie_app/model/account/account_info.dart';
 import 'package:cookie_app/repository/myinfo.repo.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
+import 'package:cookie_app/viewmodel/chat/room.viewmodel.dart';
 import 'package:flutter/material.dart';
 
 class PublicAccountViewModel extends BaseViewModel {
@@ -31,6 +32,9 @@ class PrivateAccountViewModel extends BaseViewModel {
       : const AssetImage('assets/images/user.jpg') as ImageProvider;
   String? get profileMessage => _model.profile.message;
   String get phone => _model.phone;
+  List<ChatRoomViewModel> get chatRooms => _model.chatRooms
+      .map((e) => ChatRoomViewModel(model: e))
+      .toList(growable: false);
 
   PublicAccountViewModel getFriend(int index) {
     return PublicAccountViewModel(model: _model.friends[index]);
@@ -45,12 +49,14 @@ class PrivateAccountViewModel extends BaseViewModel {
   final MyInfoRepository _storageRepo = MyInfoRepositoryStorageImpl();
   final MyInfoRepository _apiRepo = MyInfoRepositoryApiImpl();
 
-  Future<void> updateMyInfo() async {
+  Future<void> updateMyInfo({PrivateAccountModel? model}) async {
     setBusy(true);
-    var res = await _apiRepo.getInfo();
-    _model = await _apiRepo.getInfo();
-
-    // print(_model);
+    if (model != null) {
+      _model = model;
+    } else {
+      // _model = await _storageRepo.getInfo();
+      _model = await _apiRepo.getInfo();
+    }
 
     setBusy(false);
   }

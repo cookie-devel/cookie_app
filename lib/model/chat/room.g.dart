@@ -6,7 +6,8 @@ part of 'room.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-RoomModel _$RoomModelFromJson(Map<String, dynamic> json) => RoomModel(
+ChatRoomModel _$ChatRoomModelFromJson(Map<String, dynamic> json) =>
+    ChatRoomModel(
       id: json['id'] as String,
       name: json['name'] as String? ?? "Unknown Room",
       users: (json['users'] as List<dynamic>?)
@@ -20,7 +21,8 @@ RoomModel _$RoomModelFromJson(Map<String, dynamic> json) => RoomModel(
           const [],
     );
 
-Map<String, dynamic> _$RoomModelToJson(RoomModel instance) => <String, dynamic>{
+Map<String, dynamic> _$ChatRoomModelToJson(ChatRoomModel instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'users': instance.users,

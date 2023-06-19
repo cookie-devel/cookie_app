@@ -1,3 +1,4 @@
+import 'package:cookie_app/model/chat/room.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cookie_app/model/account/account_info.dart';
 import 'package:cookie_app/types/account/profile.dart';
@@ -11,6 +12,7 @@ class InfoResponse {
   String? phone;
   List<PublicAccountModel>? friendList;
   Profile? profile;
+  List<ChatRoomModel>? chatRooms;
 
   InfoResponse({
     this.userid,
@@ -32,6 +34,7 @@ class InfoResponse {
       phone: phone!,
       profile: profile!,
       friends: friendList == null ? [] : friendList!,
+      chatRooms: chatRooms == null ? [] : chatRooms!,
     );
   }
 }

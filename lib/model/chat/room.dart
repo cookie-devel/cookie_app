@@ -5,21 +5,21 @@ import 'package:json_annotation/json_annotation.dart';
 part 'room.g.dart';
 
 @JsonSerializable()
-class RoomModel {
+class ChatRoomModel {
   final String id;
   final String name;
   final List<PublicAccountModel> users;
   final List<MessageModel> messages;
 
-  RoomModel({
+  ChatRoomModel({
     required this.id,
     this.name = "Unknown Room",
     this.users = const [],
     this.messages = const [],
   });
 
-  factory RoomModel.fromJson(Map<String, dynamic> json) =>
-      _$RoomModelFromJson(json);
+  factory ChatRoomModel.fromJson(Map<String, dynamic> json) =>
+      _$ChatRoomModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$RoomModelToJson(this);
+  Map<String, dynamic> toJson() => _$ChatRoomModelToJson(this);
 }

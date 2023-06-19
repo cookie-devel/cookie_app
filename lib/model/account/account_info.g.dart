@@ -29,6 +29,9 @@ PrivateAccountModel _$PrivateAccountModelFromJson(Map<String, dynamic> json) =>
           .map((e) => PublicAccountModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       profile: Profile.fromJson(json['profile'] as Map<String, dynamic>),
+      chatRooms: (json['chatRooms'] as List<dynamic>)
+          .map((e) => ChatRoomModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$PrivateAccountModelToJson(
@@ -39,4 +42,5 @@ Map<String, dynamic> _$PrivateAccountModelToJson(
       'profile': instance.profile,
       'phone': instance.phone,
       'friends': instance.friends,
+      'chatRooms': instance.chatRooms,
     };
