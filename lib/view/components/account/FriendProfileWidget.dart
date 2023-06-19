@@ -71,21 +71,23 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
     return GestureDetector(
       onTap: () {
         if (widget.enableOnTap) {
-          if (widget.enableOnTap) {
-            _startAnimation();
-            showModalBottomSheet(
-              context: context,
-              useSafeArea: true,
-              backgroundColor: Colors.deepOrange.withOpacity(0.9),
-              builder: (BuildContext context) {
-                return ProfileWindow(user: widget.account);
-              },
-            );
+          _startAnimation();
+          showModalBottomSheet(
+            context: context,
+            useSafeArea: false,
+            isScrollControlled: true,
+            backgroundColor: Colors.deepOrange.withOpacity(0.9),
+            builder: (BuildContext context) {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height * 0.6,
+                child: ProfileWindow(user: widget.account),
+              );
+            },
+          );
 
-            Future.delayed(const Duration(milliseconds: 300), () {
-              _reverseAnimation();
-            });
-          }
+          Future.delayed(const Duration(milliseconds: 300), () {
+            _reverseAnimation();
+          });
         }
       },
       child: Column(

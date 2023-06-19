@@ -12,7 +12,7 @@ class PublicAccountViewModel extends BaseViewModel {
   ImageProvider get profileImage => _model.profile.imageURL != null
       ? NetworkImage(_model.profile.imageURL!)
       : const AssetImage('assets/images/user.jpg') as ImageProvider;
-  String? get profileMessage => _model.profile.message!;
+  String? get profileMessage => _model.profile.message;
 
   PublicAccountViewModel({
     required PublicAccountModel model,

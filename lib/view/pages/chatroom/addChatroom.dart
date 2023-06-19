@@ -1,12 +1,14 @@
-import 'package:cookie_app/schema/Room.dart';
+import 'package:cookie_app/model/account/account_info.dart';
+import 'package:cookie_app/types/account/profile.dart';
+import 'package:cookie_app/view/components/RoundedImage.dart';
 import 'package:cookie_app/view/components/cookie.appbar.dart';
+import 'package:cookie_app/view/components/dialog.dart';
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/view/pages/chatroom/chatroom.dart';
-import 'package:cookie_app/repository/myinfo.dart';
-import 'package:cookie_app/schema/User.dart';
-import 'package:cookie_app/schema/Message.dart';
+import 'package:provider/provider.dart';
 
 class FriendSelectionScreen extends StatefulWidget {
+  // final List<PublicAccountViewModel> friendsList;
   const FriendSelectionScreen({Key? key}) : super(key: key);
 
   @override
@@ -14,29 +16,22 @@ class FriendSelectionScreen extends StatefulWidget {
 }
 
 class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
-  List<dynamic>? friendsList = my.friendList;
+  // late List<PublicAccountViewModel> friendsList = [];
   Set<int> selectedIndexes = {};
   TextEditingController textEditingController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    List<PublicAccountViewModel> friendsList =
+        Provider.of<PrivateAccountViewModel>(context).friends;
     return Scaffold(
       appBar: CookieAppBar(
         title: '채팅방 추가',
         actions: [
-          AddChatroomAction(
+          CreateChatroomButton(
             roomTitle: textEditingController.text,
-            selectedFriendsList: _selectedFriendsList(),
-            onRoomTitleChanged: (newTitle) {
-              setState(() {
-                textEditingController.text = newTitle;
-              });
-            },
+            selectedFriendsList: [],
+            // selectedFriendsList: _selectedFriendsList(),
           )
         ],
       ),
@@ -68,24 +63,22 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
                 child: Column(
                   children: [
                     ExpansionTile(
-                      title: Text('친구 (${friendsList!.length})'),
+                      title: Text('친구 (${friendsList.length})'),
                       children: [
                         ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: friendsList!.length,
+                          itemCount: friendsList.length - 1,
                           itemBuilder: (BuildContext context, int index) {
-                            Map<String, dynamic> friend = friendsList![index];
+                            PublicAccountViewModel friend = friendsList[index];
                             return FriendTile(
                               friend: friend,
                               isSelected: selectedIndexes.contains(index),
                               onCheckboxChanged: (value) {
                                 setState(() {
-                                  if (value == true) {
-                                    selectedIndexes.add(index);
-                                  } else {
-                                    selectedIndexes.remove(index);
-                                  }
+                                  value == true
+                                      ? selectedIndexes.add(index)
+                                      : selectedIndexes.remove(index);
                                 });
                               },
                             );
@@ -103,15 +96,15 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
     );
   }
 
-  List _selectedFriendsList() {
-    List selectedList = [];
-    for (int index in selectedIndexes) {
-      if (index >= 0 && index < friendsList!.length) {
-        selectedList.add(friendsList![index]);
-      }
-    }
-    return selectedList;
-  }
+  // List _selectedFriendsList() {
+  //   List selectedList = [];
+  //   for (int index in selectedIndexes) {
+  //     if (index >= 0 && index < friendsList.length) {
+  //       selectedList.add(friendsList[index]);
+  //     }
+  //   }
+  //   return selectedList;
+  // }
 
   @override
   void dispose() {
@@ -122,7 +115,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
 }
 
 class FriendTile extends StatelessWidget {
-  final Map<String, dynamic> friend;
+  final PublicAccountViewModel friend;
   final bool isSelected;
   final ValueChanged<bool?>? onCheckboxChanged;
 
@@ -137,41 +130,19 @@ class FriendTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Container(
-        width: 40,
-        height: 40,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-        ),
-        child: Image(
-          image: my.profileImage,
-          fit: BoxFit.cover,
-          errorBuilder: (
-            BuildContext context,
-            Object error,
-            StackTrace? stackTrace,
-          ) {
-            return Container(
-              width: 40,
-              height: 40,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.blue,
-              ),
-              child: const Icon(
-                Icons.person,
-                color: Colors.white,
-                size: 24,
-              ),
-            );
-          },
-        ),
+        // width: 40,
+        // height: 40,
+        decoration: const BoxDecoration(shape: BoxShape.circle),
+        child: RoundedImage(image: friend.profileImage),
       ),
-      title: Text(friend["username"]),
-      subtitle: Text(
-        friend["profile"]["message"] ?? "",
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-      ),
+      title: const Text("username"),
+      subtitle: friend.profileMessage != null
+          ? Text(
+              friend.profileMessage!,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            )
+          : null,
       trailing: Checkbox(
         value: isSelected,
         onChanged: onCheckboxChanged,
@@ -180,118 +151,45 @@ class FriendTile extends StatelessWidget {
   }
 }
 
-class AddChatroomAction extends StatefulWidget {
-  final String roomTitle;
-  final List selectedFriendsList;
-  final Function(String) onRoomTitleChanged;
+class FriendEntry extends StatelessWidget {
+  const FriendEntry({super.key});
 
-  const AddChatroomAction({
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class CreateChatroomButton extends StatelessWidget {
+  final String roomTitle;
+  final List<PublicAccountViewModel> selectedFriendsList;
+
+  const CreateChatroomButton({
     Key? key,
     this.roomTitle = "",
     required this.selectedFriendsList,
-    required this.onRoomTitleChanged,
   }) : super(key: key);
 
   @override
-  State<AddChatroomAction> createState() => _AddChatroomActionState();
-}
-
-class _AddChatroomActionState extends State<AddChatroomAction> {
-  @override
   Widget build(BuildContext context) {
-    final scaffold = ScaffoldMessenger.of(context);
     return IconButton(
       icon: const Icon(Icons.check_box_outlined),
       onPressed: () {
-        widget.selectedFriendsList.isEmpty // 친구가 없을 때
-            ? scaffold.showSnackBar(
-                _snackBar(scaffold, '친구를 한 명 이상 추가해주세요.', '확인'),
-              )
-            : widget.roomTitle.isEmpty // 제목이 없을 때
-                ? scaffold.showSnackBar(
-                    _snackBar(scaffold, '채팅방 이름을 입력해주세요.', '확인'),
-                  )
-                : showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      title: Text(
-                        '${widget.roomTitle} (${widget.selectedFriendsList.length + 1}명)',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      content: const Text(
-                        '채팅방을 개설하겠습니까?',
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text(
-                            '취소',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            List<User> userList =
-                                widget.selectedFriendsList.map<User>((map) {
-                              return User.fromMap(map);
-                            }).toList();
+        // TODO: Handle Error cases
+        if (selectedFriendsList.isEmpty) throw Exception('친구를 한 명 이상 추가해주세요.');
+        if (roomTitle.isEmpty) throw Exception('채팅방 이름을 입력해주세요.');
 
-                            Message temp = Message(
-                              sender: userList[0],
-                              content: '안녕?',
-                              time: DateTime.now(),
-                            );
-
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                            Navigator.push(
-                              // TODO: chatrooms tab에도 추가
-                              // TODO: 채팅방 목록 데이터에도 추가
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ChatRoom(
-                                  room: Room(
-                                    id: '',
-                                    name: widget.roomTitle,
-                                    users: userList,
-                                    messages: [temp],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                          child: const Text('확인'),
-                        ),
-                      ],
-                    ),
-                  );
+        // TODO: Implement code to create & navigate to chatroom. Business Logics MUST be done from ViewModel.
+        showDialog(
+          context: context,
+          builder: (context) => Alert(
+            title: '$roomTitle (${selectedFriendsList.length + 1}명)',
+            content: '채팅방을 개설하겠습니까?',
+            onConfirm: () {},
+            onCancel: () {},
+          ),
+        );
       },
     );
   }
-
-  SnackBar _snackBar(
-    ScaffoldMessengerState scaffold,
-    String title,
-    String label,
-  ) =>
-      SnackBar(
-        content: Text(title),
-        duration: const Duration(seconds: 2),
-        action: SnackBarAction(
-          label: label,
-          onPressed: () {
-            scaffold.hideCurrentSnackBar();
-          },
-        ),
-      );
 }
