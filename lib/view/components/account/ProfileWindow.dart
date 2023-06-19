@@ -1,3 +1,5 @@
+import 'package:cookie_app/view/components/RoundedImage.dart';
+import 'package:cookie_app/view/components/box_decoration.dart';
 import 'package:cookie_app/view/components/fullscreen_image.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -12,193 +14,88 @@ class ProfileWindow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double pivotSize = MediaQuery.of(context).size.height * 0.19;
-    Widget divider = const Divider(thickness: 2);
-    return SizedBox.expand(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(height: pivotSize * 0.13),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => FullScreenImage(
-                    image: user.profileImage,
-                  ),
-                ),
-              );
-            },
-            child: Stack(
-              alignment: Alignment.center,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Profile Image
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    FullScreenImage(image: user.profileImage),
+              ),
+            );
+          },
+          child: RoundedImage(
+            image: user.profileImage,
+          ),
+        ),
+        CookieDecoratedContainer(
+          child: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: pivotSize,
-                  height: pivotSize,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
+                Text(
+                  user.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30.0,
                     color: Colors.white,
-                    border: Border.all(width: 1, color: Colors.white),
                   ),
                 ),
-                Container(
-                  width: pivotSize * 0.942,
-                  height: pivotSize * 0.942,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: Image(
-                    image: user.profileImage,
-                    fit: BoxFit.cover,
-                    errorBuilder: (
-                      BuildContext context,
-                      Object error,
-                      StackTrace? stackTrace,
-                    ) {
-                      return const Icon(Icons.person);
-                    },
+                Text(
+                  user.profileMessage ?? '',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 19.0,
+                    color: Colors.white,
                   ),
                 ),
               ],
-            ),
-          ),
-          SizedBox(height: pivotSize * 0.087),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-              scrollDirection: Axis.vertical,
+            )
+          ],
+        ),
+        CookieDecoratedContainer(
+          child: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                SizedBox(
-                  height: pivotSize * 1.5,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        flex: 100,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.orangeAccent,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 10.0,
-                                spreadRadius: 0.5,
-                                offset: Offset(0.5, 0.5),
-                              ),
-                            ],
-                          ),
-                          alignment: Alignment.topLeft,
-                          padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                user.name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 30.0,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              Text(
-                                user.profileMessage ?? '',
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 19.0,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.01,
-                      ),
-                      Expanded(
-                        flex: 45,
-                        child: Container(
-                          height: pivotSize * 0.45,
-                          decoration: BoxDecoration(
-                            color: Colors.orangeAccent,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 10.0,
-                                spreadRadius: 0.5,
-                                offset: Offset(0.5, 0.5),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  // TODO: ChatRoom room
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => ChatRoom(room: user),
-                                  //   ),
-                                  // );
-                                },
-                                icon: Icon(
-                                  Icons.chat_bubble_outline,
-                                  color: Colors.white,
-                                  size: pivotSize * 0.22,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.favorite_border_outlined,
-                                  color: Colors.white,
-                                  size: pivotSize * 0.22,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.cookie_outlined,
-                                  color: Colors.white,
-                                  size: pivotSize * 0.22,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                IconButton(
+                  onPressed: () {
+                    // TODO: ChatRoom room
+                  },
+                  icon: const Icon(
+                    Icons.chat_bubble_outline,
+                    color: Colors.white,
+                    // size: pivotSize * 0.22,
                   ),
                 ),
-                const SizedBox(height: 24),
-                divider,
-                const UserProfileTile(mainTitle: "생일", subTitle: '2000-01-01'),
-                divider,
-                const UserProfileTile(mainTitle: "거주지", subTitle: '경기 수원'),
-                divider,
-                const UserProfileTile(mainTitle: "나이", subTitle: '24'),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.favorite_border_outlined,
+                    color: Colors.white,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.cookie_outlined,
+                    color: Colors.white,
+                  ),
+                ),
               ],
-            ),
-          ),
-        ],
-      ),
+            )
+          ],
+        ),
+        const UserProfileTile(title: 'title', content: 'content')
+      ].map((e) => wrapped(e)).toList(),
     );
   }
 }
@@ -206,56 +103,41 @@ class ProfileWindow extends StatelessWidget {
 class UserProfileTile extends StatelessWidget {
   const UserProfileTile({
     super.key,
-    required this.mainTitle,
-    required this.subTitle,
+    required this.title,
+    required this.content,
   });
 
-  final String mainTitle;
-  final String subTitle;
+  final String title;
+  final String content;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.orangeAccent,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.white,
-          width: 2,
+    return CookieDecoratedContainer(
+      child: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18.0,
+            color: Colors.white,
+          ),
         ),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10.0,
-            spreadRadius: 0.5,
-            offset: Offset(0.5, 0.5),
+        Text(
+          content,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 26.0,
+            color: Colors.white,
           ),
-        ],
-      ),
-      alignment: Alignment.topLeft,
-      padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            mainTitle,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            subTitle,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 26.0,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
+}
+
+Container wrapped(child) {
+  return Container(
+    margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+    child: child,
+  );
 }

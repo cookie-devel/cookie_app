@@ -2,17 +2,16 @@ import 'package:cookie_app/view/components/chat/bubbles/myBubble.dart';
 import 'package:cookie_app/view/components/chat/bubbles/otherBubble.dart';
 import 'package:cookie_app/view/components/chat/connectionInfo.dart';
 import 'package:cookie_app/view/components/cookie.appbar.dart';
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
+import 'package:cookie_app/viewmodel/chat/room.viewmodel.dart';
+import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/handler/socket.io/socket.dart';
-
-import 'package:cookie_app/schema/Room.dart';
-import 'package:cookie_app/repository/myinfo.dart';
-import 'package:cookie_app/utils/themeProvider.dart';
+import 'package:cookie_app/socket.io/socket.dart';
 import 'package:provider/provider.dart';
 
 class ChatRoom extends StatefulWidget {
   // final User? room;
-  final Room room;
+  final ChatRoomViewModel room;
 
   const ChatRoom({
     Key? key,
@@ -77,7 +76,7 @@ class _ChatRoomState extends State<ChatRoom> {
                           itemCount: widget.room.messages.length,
                           itemBuilder: (BuildContext context, int index) {
                             final message = widget.room.messages[index];
-                            return message.sender.id == my.id
+                            return message.sender.id == Provider.of<PrivateAccountViewModel>(context).id
                                 ? MyBubble(content: message.content)
                                 : OtherBubble(
                                     user: message.sender,

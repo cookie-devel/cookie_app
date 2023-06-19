@@ -109,7 +109,7 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   Future<void> _initializeData() async {
     await _getSampleData();
-    _addMarkers();
+    // _addMarkers();
   }
 
   // 임시로 json 데이터 생성하여 가져옴
@@ -120,29 +120,29 @@ class _MapsWidgetState extends State<MapsWidget> {
     });
   }
 
-  Future<void> _addMarkers() async {
-    List<Marker> allMarkers = [];
-    List<Future<Marker>> markerFutures = [];
+  // Future<void> _addMarkers() async {
+  //   List<Marker> allMarkers = [];
+  //   List<Future<Marker>> markerFutures = [];
 
-    for (int i = 0; i < mapLog.length; i++) {
-      final User friendInfo = User.fromMap(mapLog[i]);
+  //   for (int i = 0; i < mapLog.length; i++) {
+  //     final PublicAccountViewModel friendInfo = User.fromMap(mapLog[i]);
 
-      final LatLng location = LatLng(
-        mapLog[i]["location"]["latitude"],
-        mapLog[i]["location"]["longitude"],
-      );
+  //     final LatLng location = LatLng(
+  //       mapLog[i]["location"]["latitude"],
+  //       mapLog[i]["location"]["longitude"],
+  //     );
 
-      Future<Marker> markerFuture = addMarker(context, friendInfo, location);
-      markerFutures.add(markerFuture);
-    }
+  //     Future<Marker> markerFuture = addMarker(context, friendInfo, location);
+  //     markerFutures.add(markerFuture);
+  //   }
 
-    List<Marker> mark = await Future.wait(markerFutures);
-    allMarkers.addAll(mark);
+  //   List<Marker> mark = await Future.wait(markerFutures);
+  //   allMarkers.addAll(mark);
 
-    setState(() {
-      markers.addAll(allMarkers);
-    });
-  }
+  //   setState(() {
+  //     markers.addAll(allMarkers);
+  //   });
+  // }
 
   // https://kanoos-stu.tistory.com/64
   Future<void> _locationPermission() async {
@@ -398,7 +398,7 @@ class _MapsWidgetState extends State<MapsWidget> {
                               ),
                             );
                             Navigator.pop(context);
-                            markerBottomSheet(context, User.fromMap(log));
+                            // markerBottomSheet(context, User.fromMap(log));
                           },
                         );
                       },

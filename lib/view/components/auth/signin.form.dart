@@ -1,5 +1,6 @@
 import 'package:cookie_app/view/components/CustomTextFormField.dart';
 import 'package:cookie_app/view/components/auth/submit_button.dart';
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/view/components/auth/validator.dart';
@@ -73,6 +74,7 @@ SubmitButton signInButton({
       await Provider.of<AuthViewModel>(context, listen: false).signIn(
         id: id.value!,
         pw: pw.value!,
+        privateAccountViewModel: Provider.of<PrivateAccountViewModel>(context, listen: false),
       );
       return null;
     },

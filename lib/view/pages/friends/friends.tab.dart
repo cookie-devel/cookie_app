@@ -19,17 +19,6 @@ class _FriendsGridState extends State<FriendsGrid>
     with AutomaticKeepAliveClientMixin<FriendsGrid> {
   @override
   bool get wantKeepAlive => true;
-  // List<dynamic> profiles = [];
-  // List<PublicAccountViewModel> friends = [];
-
-  Future<void> updateData() async {
-    // await widget.my.updateMyInfo();
-    await Provider.of<PrivateAccountViewModel>(context, listen: false)
-        .updateMyInfo();
-    // setState(() {
-    //   friends = widget.my.friends;
-    // });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,58 +31,55 @@ class _FriendsGridState extends State<FriendsGrid>
           FriendsAction(),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: updateData,
-        child: Provider.of<PrivateAccountViewModel>(context, listen: false)
-                .friends
-                .isNotEmpty
-            ? GridView.builder(
-                cacheExtent: 300,
-                itemCount:
-                    Provider.of<PrivateAccountViewModel>(context, listen: false)
-                        .friends
-                        .length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 0.8,
-                ),
-                itemBuilder: (BuildContext context, int index) {
-                  final PublicAccountViewModel friend =
-                      Provider.of<PrivateAccountViewModel>(
-                    context,
-                    listen: false,
-                  ).friends[index];
+      body: Consumer<PrivateAccountViewModel>(
+        builder: (context, value, child) => RefreshIndicator(
+          onRefresh: value.updateMyInfo,
+          child: !value.busy
+              ? value.friends.isNotEmpty
+                  ? GridView.builder(
+                      cacheExtent: 300,
+                      itemCount: value.friends.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 0.8,
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        final PublicAccountViewModel friend =
+                            value.friends[index];
 
-                  return Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: InkWell(
-                      onLongPress: () {
-                        Vibration.vibrate(duration: 40);
-                        setState(() {
-                          // _showDeleteConfirmationSnackBar(index);
-                        });
+                        return Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: InkWell(
+                            onLongPress: () {
+                              Vibration.vibrate(duration: 40);
+                              setState(() {
+                                // _showDeleteConfirmationSnackBar(index);
+                              });
+                            },
+                            child: FriendProfileWidget(
+                              account: friend,
+                            ),
+                          ),
+                        );
                       },
-                      child: FriendProfileWidget(
-                        account: friend,
-                      ),
-                    ),
-                  );
-                },
-              )
-            : Stack(
-                children: [
-                  ListView(),
-                  const Center(
-                    child: Text(
-                      '친구를 추가해보세요!',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                    )
+                  : Stack(
+                      children: [
+                        ListView(),
+                        const Center(
+                          child: Text(
+                            '친구를 추가해보세요!',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+              : const Center(child: CircularProgressIndicator()),
+        ),
       ),
     );
   }
@@ -107,9 +93,7 @@ class _FriendsGridState extends State<FriendsGrid>
         action: SnackBarAction(
           label: '삭제',
           onPressed: () {
-            setState(() {
-              // profiles.removeAt(index);
-            });
+            setState(() {});
             scaffold.hideCurrentSnackBar();
           },
         ),
