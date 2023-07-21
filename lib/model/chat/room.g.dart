@@ -10,6 +10,7 @@ ChatRoomModel _$ChatRoomModelFromJson(Map<String, dynamic> json) =>
     ChatRoomModel(
       id: json['id'] as String,
       name: json['name'] as String? ?? "Unknown Room",
+      image: json['image'] as String?,
       users: (json['users'] as List<dynamic>?)
               ?.map(
                   (e) => PublicAccountModel.fromJson(e as Map<String, dynamic>))
@@ -25,6 +26,7 @@ Map<String, dynamic> _$ChatRoomModelToJson(ChatRoomModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'image': instance.image,
       'users': instance.users,
       'messages': instance.messages,
     };

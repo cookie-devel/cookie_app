@@ -1,14 +1,11 @@
-import 'package:cookie_app/model/account/account_info.dart';
 import 'package:cookie_app/view/pages/chatroom/chatrooms.tab.dart';
 import 'package:cookie_app/view/pages/maps/maps.tab.dart';
-import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/view/pages/friends/friends.tab.dart';
 import 'package:cookie_app/view/pages/settings/settings.tab.dart';
 import 'package:cookie_app/view/pages/club/club.tab.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
 
 class MainWidget extends StatefulWidget {
   const MainWidget({super.key});
@@ -88,9 +85,9 @@ class _MainWidgetState extends State<MainWidget> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> widgetOptions = <Widget>[
-      FriendsGrid(),
-      ChatTabWidget(),
-      MapsWidget(),
+      const FriendsGrid(),
+      const ChatTabWidget(),
+      const MapsWidget(),
       const ClubGrid(),
       const SettingsWidget(),
     ];

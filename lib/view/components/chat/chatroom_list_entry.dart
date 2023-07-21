@@ -6,18 +6,18 @@ import 'package:provider/provider.dart';
 class ChatRoomListEntry extends StatelessWidget {
   final String name;
   final String message;
-  final String? image;
-  final DateTime? time;
+  final ImageProvider image;
+  final DateTime time;
   final int unread;
   final Widget navigate;
 
   const ChatRoomListEntry({
     Key? key,
-    this.name = "새 채팅방",
-    this.message = "채팅방 메시지",
-    this.image,
-    this.time,
-    this.unread = 48,
+    required this.name,
+    required this.message,
+    required this.image,
+    required this.time,
+    this.unread = 0,
     required this.navigate,
   }) : super(key: key);
 
@@ -129,11 +129,11 @@ class ChatRoomMessage extends StatelessWidget {
 }
 
 class ChatRoomImage extends StatelessWidget {
-  final String? image;
+  final ImageProvider image;
 
   const ChatRoomImage({
     Key? key,
-    this.image,
+    required this.image,
   }) : super(key: key);
 
   @override
@@ -144,10 +144,7 @@ class ChatRoomImage extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(22),
         image: DecorationImage(
-          image: image == null
-              ? const AssetImage("assets/images/cookie_logo.png")
-                  as ImageProvider
-              : NetworkImage(image!),
+          image: image,
           fit: BoxFit.cover,
         ),
         border: Border.all(width: 1, color: Colors.black45),

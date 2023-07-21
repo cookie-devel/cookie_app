@@ -10,7 +10,6 @@ import 'package:cookie_app/socket.io/socket.dart';
 import 'package:provider/provider.dart';
 
 class ChatRoom extends StatefulWidget {
-  // final User? room;
   final ChatRoomViewModel room;
 
   const ChatRoom({

@@ -4,10 +4,10 @@ part 'profile.g.dart';
 
 @JsonSerializable()
 class Profile {
-  String? imageURL;
+  String? image;
   String? message;
 
-  Profile({this.imageURL, this.message});
+  Profile({this.image, this.message});
 
   factory Profile.fromJson(Map<String, dynamic> json) =>
       _$ProfileFromJson(json);

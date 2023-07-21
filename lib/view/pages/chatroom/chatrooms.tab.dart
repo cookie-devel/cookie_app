@@ -3,8 +3,8 @@ import 'dart:math';
 
 import 'package:cookie_app/view/components/cookie.appbar.dart';
 import 'package:cookie_app/view/pages/chatroom/addChatroom.dart';
+import 'package:cookie_app/view/pages/chatroom/chatroom.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:cookie_app/viewmodel/chat/message.viewmodel.dart';
 import 'package:cookie_app/viewmodel/chat/room.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/view/components/chat/chatroom_list_entry.dart';
@@ -26,24 +26,20 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
       ),
       body: ListView.builder(
         padding: const EdgeInsets.fromLTRB(12, 0, 10, 0),
-        // itemCount:
-        //     Provider.of<PrivateAccountViewModel>(context).chatRooms.length,
+        itemCount:
+            Provider.of<PrivateAccountViewModel>(context).chatRooms.length,
         itemBuilder: (BuildContext context, int index) {
-          // ChatRoomViewModel chatRoom = Provider.of<PrivateAccountViewModel>(context).chatRooms[index];
+          ChatRoomViewModel chatRoom =
+              Provider.of<PrivateAccountViewModel>(context).chatRooms[index];
           return ChatRoomListEntry(
-            name: 'name',
-            image: 'https://picsum.photos/200',
-            message: 'message',
-            time: DateTime.now().add(-Duration(days: Random().nextInt(5 * 365))),
+            name: chatRoom.name,
+            image: chatRoom.image,
+            message: chatRoom.messages.last.content,
+            time: chatRoom.messages.last.time,
             unread: Random().nextInt(1000),
-            navigate: Container(),
-
-            // name: chatRoom.name,
-            // image: chatRoom.image,
-            // message: chatRoom.messages.last.content,
-            // time: chatRoom.messages.last.time,
-            // unread: Random().nextInt(1000),
-            // navigate: Container(),
+            navigate: ChatRoom(
+              room: chatRoom,
+            ),
           );
         },
       ),

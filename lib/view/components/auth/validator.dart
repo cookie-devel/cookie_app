@@ -34,7 +34,7 @@ String? validatePW(pw) {
   }
 }
 
-String? validatePWCheck(pw, pwCheck) {
+String? validatePWConfirm(pw, pwCheck) {
   if (pwCheck == null || pwCheck.isEmpty) {
     return '비밀번호 확인을 입력해주세요.';
   } else if (pw != pwCheck) {
