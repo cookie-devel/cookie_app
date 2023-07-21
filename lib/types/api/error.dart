@@ -9,8 +9,8 @@ class ErrorResponse implements Exception {
 
   factory ErrorResponse.fromJson(Map<String, dynamic> json) {
     return ErrorResponse(
-      name: json['name'] as String?,
-      message: json['message'] as String?,
+      name: json['name'].toString(),
+      message: json['message'].toString(),
     );
   }
 
@@ -19,5 +19,10 @@ class ErrorResponse implements Exception {
       'name': name,
       'message': message,
     };
+  }
+
+  @override
+  String toString() {
+    return message ?? 'Unknown Error';
   }
 }
