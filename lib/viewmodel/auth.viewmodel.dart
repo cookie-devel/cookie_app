@@ -48,16 +48,16 @@ class AuthViewModel extends BaseViewModel {
     }
   }
 
-  void signUp(SignUpFormModel signUpForm) async {
+  Future<void> signUp(SignUpFormModel signUpForm) async {
     setBusy(true);
     // Handle Signup
     try {
-      AuthAPI.postSignUp(signUpForm);
+      await AuthAPI.postSignUp(signUpForm);
     } catch (e) {
       rethrow;
+    } finally {
+      setBusy(false);
     }
-
-    setBusy(false);
   }
 
   void signOut() async {

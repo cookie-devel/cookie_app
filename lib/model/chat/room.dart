@@ -8,12 +8,14 @@ part 'room.g.dart';
 class ChatRoomModel {
   final String id;
   final String name;
+  final String? image;
   final List<PublicAccountModel> users;
   final List<MessageModel> messages;
 
   ChatRoomModel({
     required this.id,
     this.name = "Unknown Room",
+    this.image,
     this.users = const [],
     this.messages = const [],
   });

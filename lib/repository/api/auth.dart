@@ -48,11 +48,11 @@ class AuthAPI {
 
     // request.fields = signUpForm.toJson();
 
-    if (signUpForm.profile.imageURL != null) {
+    if (signUpForm.profile.image != null) {
       request.files.add(
         await MultipartFile.fromPath(
           'profile_image',
-          signUpForm.profile.imageURL!,
+          signUpForm.profile.image!,
         ),
       );
     }

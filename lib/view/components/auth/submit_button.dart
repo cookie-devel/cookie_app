@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SubmitButton extends StatelessWidget {
-  final Future<bool?> Function() onPressed;
+  final Future<void> Function() onPressed;
   final String text;
   final dynamic Function(dynamic)? onSuccess;
   final dynamic Function(dynamic, Object)? onFailure;
@@ -27,11 +27,14 @@ class SubmitButton extends StatelessWidget {
       ),
       onPressed: () async {
         try {
-          await onPressed();
-          if (context.mounted && onSuccess != null) onSuccess!(context);
+          onPressed().then(
+            (value) => onSuccess!(context),
+          );
         } catch (e) {
-          if (context.mounted && onFailure != null) onFailure!(context, e);
-          rethrow;
+          if (onFailure != null) {
+            onFailure!(context, e);
+          }
+          // rethrow;
         }
       },
       child: Text(

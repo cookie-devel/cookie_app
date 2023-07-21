@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
 class FriendsGrid extends StatefulWidget {
-  FriendsGrid({
+  const FriendsGrid({
     Key? key,
   }) : super(key: key);
 
