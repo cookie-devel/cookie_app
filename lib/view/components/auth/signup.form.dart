@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:cookie_app/types/account/profile.dart';
 import 'package:cookie_app/types/form/signup.dart';
 import 'package:cookie_app/view/components/auth/submit_button.dart';
-import 'package:cookie_app/view/components/error_message.dart';
+import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/components/profile_imgpicker.dart';
 import 'package:cookie_app/view/components/text_form_fields.dart';
 import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
