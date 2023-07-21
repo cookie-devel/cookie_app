@@ -4,7 +4,7 @@ class SubmitButton extends StatelessWidget {
   final Future<bool?> Function() onPressed;
   final String text;
   final dynamic Function(dynamic)? onSuccess;
-  final dynamic Function(dynamic)? onFailure;
+  final dynamic Function(dynamic, Object)? onFailure;
 
   const SubmitButton({
     super.key,
@@ -26,15 +26,12 @@ class SubmitButton extends StatelessWidget {
         ),
       ),
       onPressed: () async {
-        bool? result = await onPressed();
-        if (result == null) return;
-
-        if (context.mounted) {
-          if (result) {
-            if (onSuccess != null) onSuccess!(context);
-          } else {
-            if (onFailure != null) onFailure!(context);
-          }
+        try {
+          await onPressed();
+          if (context.mounted && onSuccess != null) onSuccess!(context);
+        } catch (e) {
+          if (context.mounted && onFailure != null) onFailure!(context, e);
+          rethrow;
         }
       },
       child: Text(
