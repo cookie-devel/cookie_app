@@ -1,5 +1,5 @@
 import 'package:cookie_app/view/components/auth/submit_button.dart';
-import 'package:cookie_app/view/components/error_message.dart';
+import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
 import 'package:flutter/material.dart';
