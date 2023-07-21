@@ -1,180 +1,92 @@
 import 'dart:io';
-
-import 'package:cookie_app/view/components/CustomTextFormField.dart';
+import 'package:cookie_app/types/account/profile.dart';
+import 'package:cookie_app/types/form/signup.dart';
 import 'package:cookie_app/view/components/auth/submit_button.dart';
-import 'package:cookie_app/view/components/auth/validator.dart';
+import 'package:cookie_app/view/components/error_message.dart';
+import 'package:cookie_app/view/components/profile_imgpicker.dart';
+import 'package:cookie_app/view/components/text_form_fields.dart';
+import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-// https://docs.flutter.dev/cookbook/forms/validation
-
-class IDField extends CustomTextFormField {
-  IDField({Key? key})
-      : super(
-          key: key,
-          labelText: "아이디",
-          validator: validateID,
-          autofillHints: [AutofillHints.newUsername],
-        );
-}
-
-class PWField extends CustomTextFormField {
-  PWField({Key? key})
-      : super(
-          key: key,
-          obscureText: true,
-          labelText: "비밀번호",
-          validator: validatePW,
-          autofillHints: [AutofillHints.newPassword],
-        );
-}
-
-class PWCheckField extends CustomTextFormField {
-  PWCheckField({Key? key, required PWField pwField})
-      : super(
-          key: key,
-          obscureText: true,
-          labelText: "비밀번호 확인",
-          validator: (pwCheck) {
-            return validatePWCheck(
-              pwField.controller.text,
-              pwCheck,
-            );
-          },
-          autofillHints: [AutofillHints.newPassword],
-        );
-}
-
-class NameField extends CustomTextFormField {
-  NameField({Key? key})
-      : super(
-          key: key,
-          labelText: "이름",
-          validator: validateName,
-          autofillHints: [AutofillHints.name],
-        );
-}
-
-class BirthdayField extends StatefulWidget {
-  BirthdayField({super.key});
-  String? value;
+class SignUpForm extends StatefulWidget {
+  const SignUpForm({Key? key}) : super(key: key);
 
   @override
-  State<BirthdayField> createState() => _BirthdayFieldState();
+  State<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _BirthdayFieldState extends State<BirthdayField> {
-  DateTime? _selectedDate;
+class _SignUpFormState extends State<SignUpForm> {
+  final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _pass = TextEditingController();
+
+  String? id;
+  String? pw;
+  String? name;
+  DateTime? birthday;
+  String? phoneNumber;
+  File? profileImg;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      readOnly: false,
-      controller: _dateController,
-      obscureText: false,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(90.0),
+    return Form(
+      key: _formKey,
+      child: AutofillGroup(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ProfileImagePicker(
+              profileImg: profileImg == null
+                  ? const AssetImage("assets/images/kz1.png") as ImageProvider
+                  : FileImage(profileImg!),
+              setImage: (img) => setState(() => profileImg = img),
+            ),
+            NewIDField(onSaved: (newValue) => id = newValue),
+            NewPWField(controller: _pass, onSaved: (newValue) => pw = newValue),
+            NewPWConfirmField(pwController: _pass),
+            NameField(onSaved: (newValue) => name = newValue),
+            BirthdayField(
+              onSaved: (newValue) => birthday = DateTime.parse(newValue!),
+            ),
+            PhoneNumberField(onSaved: (newValue) => phoneNumber = newValue),
+            SubmitButton(
+              onPressed: () async {
+                if (!_formKey.currentState!.validate()) return;
+                _formKey.currentState!.save();
+                await Provider.of<AuthViewModel>(context, listen: false).signUp(
+                  SignUpFormModel(
+                    id: id!,
+                    pw: pw!,
+                    name: name!,
+                    birthday: birthday.toString(),
+                    phoneNumber: phoneNumber!,
+                    profile: Profile(
+                      image: profileImg?.path,
+                      message: null,
+                    ),
+                  ),
+                );
+              },
+              text: '회원가입',
+              onSuccess: onSignUpSuccess,
+              onFailure: onSignUpFailure,
+            )
+          ].map(wrapped).toList(),
         ),
-        labelText: '생년월일',
-        suffixIcon: const Icon(Icons.calendar_today),
       ),
-      validator: validateBirthday,
-      onSaved: (newValue) {
-        widget.value = newValue;
-      },
-      onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
-        DatePicker.showDatePicker(
-          context,
-          showTitleActions: true,
-          locale: LocaleType.ko,
-          minTime: DateTime(1900, 1, 1),
-          maxTime: DateTime.now(),
-          onConfirm: (date) {
-            setState(() {
-              _selectedDate = date;
-            });
-            _dateController.text =
-                DateFormat('yyyy-MM-dd').format(_selectedDate!);
-          },
-          currentTime: DateTime(2000, 1, 1),
-        );
-      },
     );
   }
-}
 
-class PhoneNumberField extends CustomTextFormField {
-  PhoneNumberField({Key? key})
-      : super(
-          key: key,
-          labelText: "전화번호",
-          validator: validatePhoneNumber,
-          maxLength: 11,
-          autofillHints: [AutofillHints.telephoneNumber],
-          keyboardType: TextInputType.phone,
-        );
-}
+  onSignUpSuccess(context) {
+    showSnackBar(context: context, message: '회원가입이 완료되었습니다.');
+    Navigator.pop(context);
+  }
 
-SubmitButton signUpButton({
-  required BuildContext context,
-  required GlobalKey<FormState> formKey,
-  required IDField id,
-  required PWField pw,
-  required NameField nameField,
-  required BirthdayField birthdayField,
-  required PhoneNumberField phoneNumberField,
-  File? profileImg,
-  String? profileMsg,
-}) {
-  return SubmitButton(
-    onPressed: () async {
-      if (!formKey.currentState!.validate()) return null;
-      formKey.currentState!.save();
-      return null;
-      // await Provider.of<AuthViewModel>(context, listen: false).signUp(
-      // )
-
-      // return await handleSignUp(
-      //   signUpForm: SignUpFormModel(id: id, pw: pw, name: name, birthday: birthday, phoneNumber: phoneNumber, profile: ProfileModel(
-      //     imageURL: profileImg,
-      //     message: profileMsg,
-      //   ),)
-
-      //   id: id.value!,
-      //   pw: pw.value!,
-      //   name: nameField.value!,
-      //   birthday: birthdayField.value!,
-      //   phoneNumber: phoneNumberField.value!,
-      //   profile: {
-      //     'image': profileImg,
-      //     'message': profileMsg,
-      //   },
-      // );
-    },
-    text: '회원가입',
-    onSuccess: onSignUpSuccess,
-    onFailure: onSignUpFailure,
-  );
-}
-
-onSignUpSuccess(context) {
-  const snackBar = SnackBar(
-    content: Text('회원가입이 완료되었습니다.'),
-  );
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  Navigator.pop(context);
-}
-
-onSignUpFailure(context) {
-  const snackBar = SnackBar(
-    content: Text('회원가입에 실패하였습니다.'),
-  );
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  onSignUpFailure(context, e) {
+    showErrorSnackBar(context, '회원가입에 실패하였습니다. ${e.toString()}');
+  }
 }
 
 Container wrapped(child) {
