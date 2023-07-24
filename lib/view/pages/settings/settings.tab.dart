@@ -1,4 +1,3 @@
-import 'package:cookie_app/view/components/cookie.appbar.dart';
 import 'package:cookie_app/view/components/dialog.dart';
 import 'package:cookie_app/view/pages/settings/detail/MyProfile.page.dart';
 import 'package:cookie_app/view/pages/settings/detail/appTheme.page.dart';
@@ -12,7 +11,7 @@ class SettingsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CookieAppBar(title: '설정'),
+      appBar: AppBar(title: const Text('설정')),
       body: ListView.builder(
         itemCount: list.length,
         itemBuilder: (BuildContext context, int index) {

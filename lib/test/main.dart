@@ -1,7 +1,5 @@
 import 'package:cookie_app/view/components/RoundedImage.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/view/components/cookie.appbar.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() {
   runApp(const TestApp());
@@ -15,7 +13,7 @@ class TestApp extends StatelessWidget {
     return MaterialApp(
       themeMode: ThemeMode.light,
       home: Scaffold(
-        appBar: CookieAppBar(title: '테스트'),
+        appBar: AppBar(title: const Text('테스트')),
         body: const Center(
           child: RoundedImage(
             // image: AssetImage('assets/images/kz1.png'),

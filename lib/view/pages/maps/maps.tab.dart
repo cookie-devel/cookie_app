@@ -1,10 +1,7 @@
-import 'package:cookie_app/view/components/cookie.appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:cookie_app/view/components/loading.dart';
-import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:cookie_app/view/components/map/markerDesign.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart' as latlong;
 import 'package:permission_handler/permission_handler.dart';
@@ -60,7 +57,7 @@ class _MapsWidgetState extends State<MapsWidget> {
             : mapProvider.mapStyleLight;
 
         return Scaffold(
-          appBar: CookieAppBar(title: 'C🍪🍪KIE'),
+          appBar: AppBar(title: const Text('C🍪🍪KIE')),
           body: loading == false
               ? Stack(
                   children: [

@@ -1,7 +1,4 @@
-// import 'package:cookie_app/viewmodel/schema/Room.dart';
 import 'dart:math';
-
-import 'package:cookie_app/view/components/cookie.appbar.dart';
 import 'package:cookie_app/view/pages/chatroom/addChatroom.dart';
 import 'package:cookie_app/view/pages/chatroom/chatroom.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
@@ -20,8 +17,8 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CookieAppBar(
-        title: '채팅',
+      appBar: AppBar(
+        title: const Text('채팅'),
         actions: const [ChatroomAction()],
       ),
       body: ListView.builder(

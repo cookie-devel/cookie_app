@@ -1,4 +1,3 @@
-import 'package:cookie_app/view/components/cookie.appbar.dart';
 import 'package:cookie_app/view/pages/friends/friendsSheet.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +24,8 @@ class _FriendsGridState extends State<FriendsGrid>
     super.build(context);
 
     return Scaffold(
-      appBar: CookieAppBar(
-        title: '친구',
+      appBar: AppBar(
+        title: const Text('친구'),
         actions: const [
           FriendsAction(),
         ],

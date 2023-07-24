@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:cookie_app/view/components/cookie.appbar.dart';
-
 class ClubGrid extends StatefulWidget {
   const ClubGrid({Key? key}) : super(key: key);
 
@@ -18,7 +16,7 @@ class _ClubGridState extends State<ClubGrid> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CookieAppBar(title: '클럽'),
+      appBar: AppBar(title: const Text('클럽')),
       body: const Padding(
         padding: EdgeInsets.fromLTRB(10, 20, 10, 8),
       ),
