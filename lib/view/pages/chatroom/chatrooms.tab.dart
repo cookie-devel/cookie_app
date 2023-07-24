@@ -62,7 +62,7 @@ class ChatroomAction extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => FriendSelectionScreen(),
+            builder: (context) => const FriendSelectionScreen(),
           ),
         );
       },

@@ -70,7 +70,7 @@ List<SettingsListProp> list = [
   SettingsListProp(
     text: '프로필 관리',
     icon: Icons.person,
-    destination: MyProfileWidget(),
+    destination: const MyProfileWidget(),
   ),
   // SettingsListProp(
   //   text: '알림',
@@ -90,7 +90,7 @@ List<SettingsListProp> list = [
   SettingsListProp(
     text: '테마',
     icon: Icons.color_lens,
-    destination: ThemeSettingsPage(),
+    destination: const ThemeSettingsPage(),
   ),
   // SettingsListProp(
   //   text: '기타',

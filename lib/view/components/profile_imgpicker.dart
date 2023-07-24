@@ -9,7 +9,7 @@ class ProfileImagePicker extends StatelessWidget {
   final Function(File?)? setImage;
 
   const ProfileImagePicker(
-      {super.key, required this.profileImg, this.setImage});
+      {super.key, required this.profileImg, this.setImage,});
 
   @override
   Widget build(BuildContext context) {

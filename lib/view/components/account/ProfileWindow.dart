@@ -23,8 +23,7 @@ class ProfileWindow extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    FullScreenImage(image: user.profileImage),
+                builder: (context) => FullScreenImage(image: user.profileImage),
               ),
             );
           },

@@ -18,7 +18,7 @@ class TestApp extends StatelessWidget {
           child: RoundedImage(
             // image: AssetImage('assets/images/kz1.png'),
             image: NetworkImage(
-                "http://localhost:3000/uploads/minji57/minji57.profile.1687232627486.jpg"),
+                "http://localhost:3000/uploads/minji57/minji57.profile.1687232627486.jpg",),
           ),
         ),
       ),

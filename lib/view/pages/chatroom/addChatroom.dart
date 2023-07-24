@@ -27,7 +27,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
         actions: [
           CreateChatroomButton(
             roomTitle: textEditingController.text,
-            selectedFriendsList: [],
+            selectedFriendsList: const [],
             // selectedFriendsList: _selectedFriendsList(),
           )
         ],

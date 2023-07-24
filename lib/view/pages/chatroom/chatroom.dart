@@ -76,7 +76,7 @@ class _ChatRoomState extends State<ChatRoom> {
                             final message = widget.room.messages[index];
                             return message.sender.id ==
                                     Provider.of<PrivateAccountViewModel>(
-                                            context)
+                                            context,)
                                         .id
                                 ? MyBubble(content: message.content)
                                 : OtherBubble(
