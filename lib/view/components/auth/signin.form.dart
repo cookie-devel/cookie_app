@@ -34,7 +34,8 @@ class _SignInFormState extends State<SignInForm> {
               onPressed: () async {
                 if (!_formKey.currentState!.validate()) return;
                 _formKey.currentState!.save();
-                return await Provider.of<AuthViewModel>(context, listen: false).signIn(
+                return await Provider.of<AuthViewModel>(context, listen: false)
+                    .signIn(
                   id: id!,
                   pw: pw!,
                   privateAccountViewModel: Provider.of<PrivateAccountViewModel>(

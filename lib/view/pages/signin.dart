@@ -29,7 +29,7 @@ class SignInWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
-            SignInForm(),
+            const SignInForm(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
