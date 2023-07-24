@@ -28,7 +28,7 @@ class SubmitButton extends StatelessWidget {
       onPressed: () async {
         try {
           await onPressed();
-          if (context.mounted) onSuccess!(context);
+          if (context.mounted && onSuccess != null) onSuccess!(context);
         } catch (e) {
           if (onFailure != null) {
             onFailure!(context, e);
