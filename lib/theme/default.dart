@@ -1,3 +1,4 @@
+import 'package:cookie_app/theme/components/input.theme.dart';
 import 'package:flutter/material.dart';
 
 ThemeData defaultThemeData = ThemeData(
@@ -51,4 +52,5 @@ ThemeData defaultThemeData = ThemeData(
     backgroundColor: Colors.white,
     modalBarrierColor: Colors.transparent,
   ),
+  inputDecorationTheme: InputTheme.defaultInputDecorationTheme,
 );

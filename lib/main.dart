@@ -1,5 +1,5 @@
-import 'package:cookie_app/themes/dark.dart';
-import 'package:cookie_app/themes/default.dart';
+import 'package:cookie_app/theme/dark.dart';
+import 'package:cookie_app/theme/default.dart';
 import 'package:cookie_app/view/mainwidget.dart';
 import 'package:cookie_app/view/pages/signin.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';

@@ -8,9 +8,6 @@ class IDField extends TextFormField {
       : super(
           key: key,
           decoration: const InputDecoration(
-            //   border: OutlineInputBorder(
-            //     borderRadius: BorderRadius.circular(90.0),
-            //   ),
             labelText: "아이디",
           ),
           validator: validateID,
@@ -25,9 +22,6 @@ class PWField extends TextFormField {
           key: key,
           obscureText: true,
           decoration: const InputDecoration(
-            //   border: OutlineInputBorder(
-            //     borderRadius: BorderRadius.circular(90.0),
-            //   ),
             labelText: "비밀번호",
           ),
           validator: validatePW,
@@ -41,9 +35,6 @@ class NewIDField extends TextFormField {
       : super(
           key: key,
           decoration: const InputDecoration(
-            //   border: OutlineInputBorder(
-            //     borderRadius: BorderRadius.circular(90.0),
-            //   ),
             labelText: "아이디",
           ),
           validator: validateID,
@@ -59,9 +50,6 @@ class NewPWField extends TextFormField {
           controller: controller,
           obscureText: true,
           decoration: const InputDecoration(
-            //   border: OutlineInputBorder(
-            //     borderRadius: BorderRadius.circular(90.0),
-            //   ),
             labelText: "비밀번호",
           ),
           validator: validatePW,
@@ -76,9 +64,6 @@ class NewPWConfirmField extends TextFormField {
           key: key,
           obscureText: true,
           decoration: const InputDecoration(
-            //   border: OutlineInputBorder(
-            //     borderRadius: BorderRadius.circular(90.0),
-            //   ),
             labelText: "비밀번호 확인",
           ),
           validator: (value) => validatePWConfirm(pwController.text, value),
@@ -91,9 +76,6 @@ class NameField extends TextFormField {
       : super(
           key: key,
           decoration: const InputDecoration(
-            //   border: OutlineInputBorder(
-            //     borderRadius: BorderRadius.circular(90.0),
-            //   ),
             labelText: "이름",
           ),
           validator: validateName,
@@ -145,9 +127,6 @@ class PhoneNumberField extends TextFormField {
       : super(
           key: key,
           decoration: const InputDecoration(
-            //   border: OutlineInputBorder(
-            //     borderRadius: BorderRadius.circular(90.0),
-            //   ),
             labelText: "휴대폰 번호",
           ),
           validator: validatePhoneNumber,
