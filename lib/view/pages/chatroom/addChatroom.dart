@@ -1,7 +1,4 @@
-import 'package:cookie_app/model/account/account_info.dart';
-import 'package:cookie_app/types/account/profile.dart';
 import 'package:cookie_app/view/components/RoundedImage.dart';
-import 'package:cookie_app/view/components/cookie.appbar.dart';
 import 'package:cookie_app/view/components/dialog.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +22,8 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
     List<PublicAccountViewModel> friendsList =
         Provider.of<PrivateAccountViewModel>(context).friends;
     return Scaffold(
-      appBar: CookieAppBar(
-        title: '채팅방 추가',
+      appBar: AppBar(
+        title: const Text('채팅방 추가'),
         actions: [
           CreateChatroomButton(
             roomTitle: textEditingController.text,

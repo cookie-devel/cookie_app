@@ -1,4 +1,3 @@
-import 'package:cookie_app/view/components/cookie.appbar.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +20,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CookieAppBar(title: '프로필 관리'),
+      appBar: AppBar(title: const Text('프로필 관리')),
       body: Consumer<PrivateAccountViewModel>(
         builder: (context, value, child) => ListView(
           padding: const EdgeInsets.fromLTRB(5, 25, 5, 10),

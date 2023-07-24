@@ -1,4 +1,3 @@
-import 'package:cookie_app/view/components/cookie.appbar.dart';
 import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +10,7 @@ class ThemeSettingsPage extends StatelessWidget {
     final isDarkModeEnabled = themeProvider.isDarkModeEnabled;
 
     return Scaffold(
-      appBar: CookieAppBar(title: '테마'),
+      appBar: AppBar(title: const Text('테마')),
       body: Column(
         children: [
           ListTile(

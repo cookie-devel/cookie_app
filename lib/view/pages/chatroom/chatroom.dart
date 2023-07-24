@@ -1,7 +1,6 @@
 import 'package:cookie_app/view/components/chat/bubbles/myBubble.dart';
 import 'package:cookie_app/view/components/chat/bubbles/otherBubble.dart';
 import 'package:cookie_app/view/components/chat/connectionInfo.dart';
-import 'package:cookie_app/view/components/cookie.appbar.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/chat/room.viewmodel.dart';
 import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
@@ -56,8 +55,8 @@ class _ChatRoomState extends State<ChatRoom> {
           resizeToAvoidBottomInset: true,
           backgroundColor:
               !isDark ? const Color.fromARGB(247, 253, 253, 253) : Colors.black,
-          appBar: CookieAppBar(
-            title: widget.room.name,
+          appBar: AppBar(
+            title: Text(widget.room.name),
             actions: [connectionInfo()],
           ),
           body: Padding(
@@ -75,7 +74,10 @@ class _ChatRoomState extends State<ChatRoom> {
                           itemCount: widget.room.messages.length,
                           itemBuilder: (BuildContext context, int index) {
                             final message = widget.room.messages[index];
-                            return message.sender.id == Provider.of<PrivateAccountViewModel>(context).id
+                            return message.sender.id ==
+                                    Provider.of<PrivateAccountViewModel>(
+                                            context)
+                                        .id
                                 ? MyBubble(content: message.content)
                                 : OtherBubble(
                                     user: message.sender,

@@ -1,5 +1,4 @@
 import 'package:cookie_app/view/components/auth/signin.form.dart';
-import 'package:cookie_app/view/components/cookie.appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/view/pages/signup.dart';
 
@@ -10,7 +9,7 @@ class SignInWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: CookieAppBar(title: 'C🍪🍪KIE'),
+      appBar: AppBar(title: const Text('C🍪🍪KIE')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(10, 55, 10, 20),
         child: Column(
