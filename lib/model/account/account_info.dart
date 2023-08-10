@@ -19,6 +19,13 @@ class PublicAccountModel {
   factory PublicAccountModel.fromJson(Map<String, dynamic> json) =>
       _$PublicAccountModelFromJson(json);
 
+  factory PublicAccountModel.fromPrivate(PrivateAccountModel model) =>
+      PublicAccountModel(
+        userid: model.userid,
+        username: model.username,
+        profile: model.profile,
+      );
+
   Map<String, dynamic> toJson() => _$PublicAccountModelToJson(this);
 }
 
@@ -46,4 +53,5 @@ class PrivateAccountModel extends PublicAccountModel {
 
   @override
   Map<String, dynamic> toJson() => _$PrivateAccountModelToJson(this);
+  PublicAccountModel toPublic() => PublicAccountModel.fromPrivate(this);
 }
