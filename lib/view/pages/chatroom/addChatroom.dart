@@ -1,6 +1,7 @@
 import 'package:cookie_app/view/components/RoundedImage.dart';
 import 'package:cookie_app/view/components/dialog.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
+import 'package:cookie_app/viewmodel/friendlist.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +21,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     List<PublicAccountViewModel> friendsList =
-        Provider.of<PrivateAccountViewModel>(context).friends;
+        Provider.of<FriendsListViewModel>(context).friends;
     return Scaffold(
       appBar: AppBar(
         title: const Text('채팅방 추가'),

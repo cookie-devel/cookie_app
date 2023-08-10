@@ -1,28 +1,20 @@
 import 'package:cookie_app/view/pages/friends/friendsSheet.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
+import 'package:cookie_app/viewmodel/friendlist.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/view/components/account/FriendProfileWidget.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
-class FriendsGrid extends StatefulWidget {
+class FriendsGrid extends StatelessWidget {
   const FriendsGrid({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<FriendsGrid> createState() => _FriendsGridState();
-}
-
-class _FriendsGridState extends State<FriendsGrid>
-    with AutomaticKeepAliveClientMixin<FriendsGrid> {
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
   Widget build(BuildContext context) {
-    super.build(context);
-
+    // FIXME: EXCEPTION CAUGHT BY FOUNDATION LIBRARY
+    Provider.of<FriendsListViewModel>(context, listen: false).updateFriends();
     return Scaffold(
       appBar: AppBar(
         title: const Text('친구'),
@@ -30,9 +22,9 @@ class _FriendsGridState extends State<FriendsGrid>
           FriendsAction(),
         ],
       ),
-      body: Consumer<PrivateAccountViewModel>(
+      body: Consumer<FriendsListViewModel>(
         builder: (context, value, child) => RefreshIndicator(
-          onRefresh: value.updateMyInfo,
+          onRefresh: value.updateFriends,
           child: !value.busy
               ? value.friends.isNotEmpty
                   ? GridView.builder(
@@ -52,9 +44,7 @@ class _FriendsGridState extends State<FriendsGrid>
                           child: InkWell(
                             onLongPress: () {
                               Vibration.vibrate(duration: 40);
-                              setState(() {
-                                // _showDeleteConfirmationSnackBar(index);
-                              });
+                              _showDeleteConfirmationSnackBar(context, index);
                             },
                             child: FriendProfileWidget(
                               account: friend,
@@ -83,7 +73,7 @@ class _FriendsGridState extends State<FriendsGrid>
     );
   }
 
-  void _showDeleteConfirmationSnackBar(int index) {
+  void _showDeleteConfirmationSnackBar(BuildContext context, int index) {
     final scaffold = ScaffoldMessenger.of(context);
     scaffold.showSnackBar(
       SnackBar(
@@ -92,7 +82,6 @@ class _FriendsGridState extends State<FriendsGrid>
         action: SnackBarAction(
           label: '삭제',
           onPressed: () {
-            setState(() {});
             scaffold.hideCurrentSnackBar();
           },
         ),
