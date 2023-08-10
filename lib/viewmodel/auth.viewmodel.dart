@@ -1,13 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:cookie_app/model/jwt.dart';
+import 'package:cookie_app/types/api/auth/signin.dart';
 import 'package:cookie_app/types/jwt_payload.dart';
 import 'package:cookie_app/repository/api/auth.dart';
 import 'package:cookie_app/repository/storage/account.storage.dart';
-import 'package:cookie_app/types/api/account/signin.dart';
 import 'package:cookie_app/types/form/signin.dart';
 import 'package:cookie_app/types/form/signup.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
-import 'package:flutter/material.dart';
 
 class AuthViewModel extends BaseViewModel {
   bool _isSigned = false;

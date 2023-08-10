@@ -32,20 +32,18 @@ class PublicAccountModel {
 @JsonSerializable()
 class PrivateAccountModel extends PublicAccountModel {
   String phone;
-  List<PublicAccountModel> friends;
+  List<PublicAccountModel> friendList;
   List<ChatRoomModel> chatRooms;
 
   PrivateAccountModel({
     required super.userid,
     required super.username,
     required this.phone,
-    required this.friends,
+    required this.friendList,
     required super.profile,
     required this.chatRooms,
   }) {
-    friends.sort((a, b) {
-      return a.username.compareTo(b.username);
-    });
+    friendList.sort((a, b) => a.username.compareTo(b.username));
   }
 
   factory PrivateAccountModel.fromJson(Map<String, dynamic> json) =>

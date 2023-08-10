@@ -33,7 +33,7 @@ class InfoResponse {
       username: username!,
       phone: phone!,
       profile: profile!,
-      friends: friendList == null ? [] : friendList!,
+      friendList: friendList == null ? [] : friendList!,
       chatRooms: chatRooms == null ? [] : chatRooms!,
     );
   }

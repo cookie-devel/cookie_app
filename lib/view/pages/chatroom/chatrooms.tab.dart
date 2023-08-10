@@ -21,25 +21,25 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
         title: const Text('채팅'),
         actions: const [ChatroomAction()],
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.fromLTRB(12, 0, 10, 0),
-        itemCount:
-            Provider.of<PrivateAccountViewModel>(context).chatRooms.length,
-        itemBuilder: (BuildContext context, int index) {
-          ChatRoomViewModel chatRoom =
-              Provider.of<PrivateAccountViewModel>(context).chatRooms[index];
-          return ChatRoomListEntry(
-            name: chatRoom.name,
-            image: chatRoom.image,
-            message: chatRoom.messages.last.content,
-            time: chatRoom.messages.last.time,
-            unread: Random().nextInt(1000),
-            navigate: ChatRoom(
-              room: chatRoom,
-            ),
-          );
-        },
-      ),
+      // body: ListView.builder(
+      //   padding: const EdgeInsets.fromLTRB(12, 0, 10, 0),
+      //   itemCount:
+      //       Provider.of<PrivateAccountViewModel>(context).chatRooms.length,
+      //   itemBuilder: (BuildContext context, int index) {
+      //     ChatRoomViewModel chatRoom =
+      //         Provider.of<PrivateAccountViewModel>(context).chatRooms[index];
+      //     return ChatRoomListEntry(
+      //       name: chatRoom.name,
+      //       image: chatRoom.image,
+      //       message: chatRoom.messages.last.content,
+      //       time: chatRoom.messages.last.time,
+      //       unread: Random().nextInt(1000),
+      //       navigate: ChatRoom(
+      //         room: chatRoom,
+      //       ),
+      //     );
+      //   },
+      // ),
     );
   }
 

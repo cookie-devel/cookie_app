@@ -4,6 +4,7 @@ import 'package:cookie_app/view/mainwidget.dart';
 import 'package:cookie_app/view/pages/signin.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
+import 'package:cookie_app/viewmodel/friendlist.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -44,6 +45,9 @@ void main() async {
         ),
         ChangeNotifierProvider<AuthViewModel>(
           create: (_) => AuthViewModel(),
+        ),
+        ChangeNotifierProvider<FriendsListViewModel>(
+          create: (_) => FriendsListViewModel(),
         )
       ],
       child: const Cookie(),
