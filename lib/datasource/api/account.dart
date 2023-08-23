@@ -7,7 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AccountAPI {
   static Future<InfoResponse> getInfo({List<String>? fields}) async {
-    String token = (await JWTRepositoryStorageImpl().read())!;
+    String token = JWTRepository().token!;
     final uri = Uri(
       scheme: dotenv.env['API_SCHEME'],
       host: dotenv.env['API_HOST'],
