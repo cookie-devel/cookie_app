@@ -1,4 +1,4 @@
-import 'package:cookie_app/repository/storage/storage.dart';
+import 'package:cookie_app/datasource/storage/storage.dart';
 
 class AccountStorage extends BaseStorage {
   AccountStorage() : super('account.json');
