@@ -1,13 +1,13 @@
 #!/bin/bash
-# git diff --name-only --cached | xargs -l git add
 
-git stash -q --keep-index
+# git stash -q --keep-index
 
 dart fix --apply
 dart format lib --fix
+git diff --name-only --cached | xargs git add
 
-git add -u
-git stash pop -q
+# git add -u
+# git stash pop -q
 
 # Run Flutter analyze and check for errors
 # if ! output=$(flutter analyze); then
@@ -15,7 +15,7 @@ git stash pop -q
 #     echo "$output"
 #     exit 1
 # fi
-# 
+#
 # # Run Dart analyze and check for errors
 # if ! output=$(dart analyze); then
 #     echo "COMMIT REJECTED: Dart analyze found the following errors:"
