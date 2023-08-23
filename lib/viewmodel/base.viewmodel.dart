@@ -5,7 +5,9 @@ abstract class BaseViewModel extends ChangeNotifier {
   bool get busy => _busy;
 
   void setBusy(bool value) {
-    _busy = value;
-    notifyListeners();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _busy = value;
+        notifyListeners();
+      });
   }
 }
