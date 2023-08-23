@@ -2,51 +2,45 @@
     "success": true,
     "result": [
         {
-            "username": "김채원",
-            "profile": {
-                "image": "assets/images/cw1.png",
-                "message": "안녕하세요!"
+            "account": {
+                "username": "김채원",
+                "profile": {
+                    "image": "assets/images/cw1.png",
+                    "message": "안녕하세요!"
+                },
+                "userid": "Unknown1"
             },
-            "userid": "Unknown1",
-            "location": {
+            "position": {
                 "latitude": 37.2811339,
                 "longitude": 127.0455020
             }
         },
         {
-            "username": "홍은채",
-            "profile": {
-                "image": "assets/images/ec1.png",
-                "message": "안녕하세요."
+            "account": {
+                "username": "김채원",
+                "profile": {
+                    "image": "assets/images/cw1.png",
+                    "message": "안녕하세요!"
+                },
+                "userid": "Unknown1"
             },
-            "userid": "Unknown2",
-            "location": {
-                "latitude": 37.2822411,
-                "longitude": 127.0466999
-            }
-        },
-        {
-            "username": "허윤진",
-            "profile": {
-                "image": "assets/images/yj1.png",
-                "message": "안녕하세요."
-            },
-            "userid": "Unknown2",
-            "location": {
-                "latitude": 37.2833289,
+            "position": {
+                "latitude": 37.2832339,
                 "longitude": 127.0455020
             }
         },
         {
-            "username": "카즈하",
-            "profile": {
-                "image": "assets/images/kz1.png",
-                "message": "안녕하세요."
+            "account": {
+                "username": "김채원",
+                "profile": {
+                    "image": "assets/images/cw1.png",
+                    "message": "안녕하세요!"
+                },
+                "userid": "Unknown1"
             },
-            "userid": "Unknown2",
-            "location": {
-                "latitude": 37.2842411,
-                "longitude": 127.0435222
+            "position": {
+                "latitude": 37.2311339,
+                "longitude": 127.0555020
             }
         }
     ]
