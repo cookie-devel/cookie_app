@@ -37,8 +37,8 @@ void main() async {
         ChangeNotifierProvider<ThemeProvider>(
           create: (_) => ThemeProvider(),
         ),
-        ChangeNotifierProvider<MapViewModel>(
-          create: (_) => MapViewModel(),
+        ChangeNotifierProvider<MapProvider>(
+          create: (_) => MapProvider(),
         ),
         ChangeNotifierProvider<PrivateAccountViewModel>(
           create: (_) => PrivateAccountViewModel(),
