@@ -13,7 +13,6 @@ class FriendsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // FIXME: EXCEPTION CAUGHT BY FOUNDATION LIBRARY
     Provider.of<FriendsListViewModel>(context, listen: false).updateFriends();
     return Scaffold(
       appBar: AppBar(
