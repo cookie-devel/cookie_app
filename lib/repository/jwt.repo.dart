@@ -1,26 +1,46 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:cookie_app/datasource/storage/jwt.storage.dart';
+import 'package:cookie_app/types/jwt_payload.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
-abstract class JWTRepository {
-  @protected
-  static const String _key = 'access_token';
-  @protected
-  static const FlutterSecureStorage _secureStorage = FlutterSecureStorage();
-  Future<String?> read();
-}
+class JWTRepository {
+  // Singleton Instance
+  static final JWTRepository _jwtRepo = JWTRepository._internal();
+  factory JWTRepository() {
+    return _jwtRepo;
+  }
+  JWTRepository._internal();
 
-class JWTRepositoryStorageImpl extends JWTRepository {
-  @override
-  Future<String?> read() async {
-    return await JWTRepository._secureStorage.read(key: JWTRepository._key);
+  String? _token;
+  JWTPayload? _payload;
+
+  get token => _token;
+  get payload {
+    if (_token == null) {
+      throw Exception('JWT token is null');
+    } else if (isExpired()) {
+      throw Exception('JWT token is expired');
+    }
+    return _payload;
   }
 
-  Future<void> write(String token) async {
-    await JWTRepository._secureStorage
-        .write(key: JWTRepository._key, value: token);
+  final JWTStorage _jwtStorage = JWTStorage();
+
+  void setToken(String? token) async {
+    _token = token;
+    _payload = token != null ? JWTPayload.fromJWT(token) : null;
+    await _jwtStorage.write(token);
   }
 
-  Future<void> delete() async {
-    await JWTRepository._secureStorage.delete(key: JWTRepository._key);
+  bool isExpired() {
+    if (_token == null) {
+      throw Exception('JWT token is null');
+    }
+    return JwtDecoder.isExpired(_token!);
+  }
+
+  Future<void> flush() async {
+    _token = null;
+    _payload = null;
+    return await _jwtStorage.delete();
   }
 }
