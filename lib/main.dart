@@ -22,14 +22,6 @@ void main() async {
 
   // Load Data
   await dotenv.load();
-  Future.delayed(const Duration(milliseconds: 1000));
-  // bool autoSignIn = !(await JWT.isExpired());
-  // bool autoSignIn = !JWTModel.fromJWT((await JWTRepositoryStorageImpl().read())!).isExpired();
-
-  // if (autoSignIn) {
-  //   // await my.loadFromStorage();
-  //   await socketHandler.connect();
-  // }
 
   runApp(
     MultiProvider(

@@ -1,8 +1,10 @@
 import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:logging/logging.dart';
 
 class SocketHandler {
+  final log = Logger('SocketHandler');
   SocketHandler._privateConstructor();
   static final SocketHandler _instance = SocketHandler._privateConstructor();
 
@@ -21,7 +23,7 @@ class SocketHandler {
 
   connect() async {
     socket.auth = {'token': await JWTRepositoryStorageImpl().read()};
-    print('socket auth: ${socket.auth}');
+    log.info('socket auth: ${socket.auth}');
 
     registerDefaultEventHandlers();
     socket.connect();
@@ -33,21 +35,21 @@ class SocketHandler {
 
   registerDefaultEventHandlers() {
     socket.onConnect((data) {
-      print('socket connected; id: ${socket.id}');
+      log.info('socket connected; id: ${socket.id}');
     });
 
-    socket.on("connect_error", (data) => print('socket error: $data'));
+    socket.on("connect_error", (data) => log.warning('socket error: $data'));
 
     socket.on("users", (data) {
-      print('socket users: $data');
+      log.info('socket users: $data');
     });
 
     socket.on("user connected", (data) {
-      print('socket user connected: $data');
+      log.info('socket user connected: $data');
     });
 
     socket.on("user disconnected", (data) {
-      print('socket user disconnected: $data');
+      log.info('socket user disconnected: $data');
     });
 
     // socket.on("session", (data) {
@@ -65,7 +67,7 @@ class SocketHandler {
     //   var to = data["to"];
     // });
 
-    socket.onDisconnect((data) => print('socket disconnected: $data'));
+    socket.onDisconnect((data) => log.info('socket disconnected: $data'));
   }
 
   static final __sendMessageCallbacks = [];

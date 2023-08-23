@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:logging/logging.dart';
 
 class MapProvider with ChangeNotifier {
+  Logger logger = Logger('MapProvider');
   String _mapStyleLight = '';
   String _mapStyleDark = '';
   LatLng _currentLocation = const LatLng(37.5665, 126.9780);
@@ -35,7 +37,7 @@ class MapProvider with ChangeNotifier {
   void setCurrentLocation(LatLng location) {
     _currentLocation = location;
     notifyListeners();
-    print("mapProvider = $_currentLocation");
+    logger.info("mapProvider = $_currentLocation");
   }
 
   Future<void> _getSampleData() async {
