@@ -52,11 +52,11 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<ThemeProvider, MapProvider>(
-      builder: (context, themeProvider, mapProvider, _) {
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, _) {
         String mapStyle = themeProvider.isDarkModeEnabled
-            ? mapProvider.mapStyleDark
-            : mapProvider.mapStyleLight;
+            ? themeProvider.mapStyleDark
+            : themeProvider.mapStyleLight;
 
         return Scaffold(
           appBar: AppBar(title: const Text('C🍪🍪KIE')),
