@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:cookie_app/view/components/loading.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:latlong2/latlong.dart' as latlong;
+import 'package:latlong2/latlong.dart' as l2;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
-import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
@@ -23,11 +21,11 @@ class MapsWidget extends StatefulWidget {
 class _MapsWidgetState extends State<MapsWidget> {
   final logger = Logger('_MapsWidgetState');
   bool loading = true;
-  List<dynamic> mapLog = [];
+  late List mapData = [];
+  late GoogleMapController mapController;
   List<Marker> markers = <Marker>[];
   LatLng _currentLocation = const LatLng(37.5665, 126.9780);
-  late GoogleMapController mapController;
-  final latlong.Distance distance = const latlong.Distance();
+  final l2.Distance distance = const l2.Distance();
   int selectedSortOption = 1;
   Timer? _timer;
   late MapProvider _mapProvider;
@@ -35,9 +33,7 @@ class _MapsWidgetState extends State<MapsWidget> {
   @override
   void initState() {
     super.initState();
-    _mapProvider = Provider.of<MapProvider>(context, listen: false);
     _locationPermission();
-    _initializeData();
     _getUserLocation();
     startLocationUpdates();
   }
@@ -52,11 +48,13 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(
-      builder: (context, themeProvider, _) {
+    return Consumer2<ThemeProvider, MapProvider>(
+      builder: (context, themeProvider, mapProvider, _) {
         String mapStyle = themeProvider.isDarkModeEnabled
             ? themeProvider.mapStyleDark
             : themeProvider.mapStyleLight;
+
+        mapData = mapProvider.mapLog;
 
         return Scaffold(
           appBar: AppBar(title: const Text('C🍪🍪KIE')),
@@ -106,29 +104,16 @@ class _MapsWidgetState extends State<MapsWidget> {
     _timer?.cancel();
   }
 
-  Future<void> _initializeData() async {
-    await _getSampleData();
-    // _addMarkers();
-  }
-
-  // 임시로 json 데이터 생성하여 가져옴
-  Future<void> _getSampleData() async {
-    String jsonString = await rootBundle.loadString('assets/data/map.json');
-    setState(() {
-      mapLog = json.decode(jsonString)["result"];
-    });
-  }
-
   // Future<void> _addMarkers() async {
   //   List<Marker> allMarkers = [];
   //   List<Future<Marker>> markerFutures = [];
 
-  //   for (int i = 0; i < mapLog.length; i++) {
-  //     final PublicAccountViewModel friendInfo = User.fromMap(mapLog[i]);
+  //   for (int i = 0; i < mapData.length; i++) {
+  //     final PublicAccountViewModel friendInfo = User.fromMap(mapData[i]);
 
   //     final LatLng location = LatLng(
-  //       mapLog[i]["location"]["latitude"],
-  //       mapLog[i]["location"]["longitude"],
+  //       mapData[i]["location"]["latitude"],
+  //       mapData[i]["location"]["longitude"],
   //     );
 
   //     Future<Marker> markerFuture = addMarker(context, friendInfo, location);
@@ -192,9 +177,9 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   // 두 좌표 간 거리계산
   String _calDistance(LatLng myLocation, LatLng friendLocation) {
-    final latLong1 = latlong.LatLng(myLocation.latitude, myLocation.longitude);
+    final latLong1 = l2.LatLng(myLocation.latitude, myLocation.longitude);
     final latLong2 =
-        latlong.LatLng(friendLocation.latitude, friendLocation.longitude);
+        l2.LatLng(friendLocation.latitude, friendLocation.longitude);
     final dist = distance(latLong1, latLong2);
 
     final double distanceInMeters = dist < 1000 ? dist : dist / 1000;
@@ -240,7 +225,7 @@ class _MapsWidgetState extends State<MapsWidget> {
       speedDialChild(
         "친구찾기",
         Icons.person_search_rounded,
-        () => _friendLocationBottomSheet(mapLog: mapLog),
+        () => _friendLocationBottomSheet(mapLog: mapData),
       ),
       speedDialChild(
         "쿠키",
