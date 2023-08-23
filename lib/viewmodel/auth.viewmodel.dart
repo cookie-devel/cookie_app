@@ -8,8 +8,10 @@ import 'package:cookie_app/types/form/signin.dart';
 import 'package:cookie_app/types/form/signup.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
+import 'package:logging/logging.dart';
 
 class AuthViewModel extends BaseViewModel {
+  final logger = Logger('AuthViewModel');
   bool _isSigned = false;
   bool get isSigned => _isSigned;
 
@@ -68,7 +70,7 @@ class AuthViewModel extends BaseViewModel {
       AccountStorage().deleteData();
       _isSigned = false;
     } catch (e) {
-      print('Error signing out: $e');
+      logger.warning('Error signing out: $e');
     }
 
     setBusy(false);

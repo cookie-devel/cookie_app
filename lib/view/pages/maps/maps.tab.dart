@@ -11,6 +11,7 @@ import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
+import 'package:logging/logging.dart';
 
 class MapsWidget extends StatefulWidget {
   const MapsWidget({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class MapsWidget extends StatefulWidget {
 }
 
 class _MapsWidgetState extends State<MapsWidget> {
+  final logger = Logger('_MapsWidgetState');
   bool loading = true;
   List<dynamic> mapLog = [];
   List<Marker> markers = <Marker>[];
@@ -176,10 +178,10 @@ class _MapsWidgetState extends State<MapsWidget> {
         _currentLocation = LatLng(position.latitude, position.longitude);
         loading = false;
         _mapProvider.setCurrentLocation(_currentLocation);
-        print("currentLocation = $_currentLocation");
+        logger.info("currentLocation = $_currentLocation");
       });
     } catch (e) {
-      print("Failed to get user location: $e");
+      logger.warning("Failed to get user location: $e");
     }
   }
 
