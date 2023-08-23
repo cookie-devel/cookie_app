@@ -1,3 +1,5 @@
+import 'package:cookie_app/datasource/storage/jwt.storage.dart';
+import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:cookie_app/theme/dark.dart';
 import 'package:cookie_app/theme/default.dart';
 import 'package:cookie_app/view/mainwidget.dart';
@@ -54,7 +56,16 @@ class Cookie extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FlutterNativeSplash.remove();
+    JWTStorage().read().then((value) {
+      if (value != null) {
+        JWTRepository().setToken(value);
+        Provider.of<AuthViewModel>(context, listen: false).jwtSignIn(
+          token: value,
+        );
+      }
+      FlutterNativeSplash.remove();
+    });
+
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, _) {
         final isDarkModeEnabled = themeProvider.isDarkModeEnabled;
