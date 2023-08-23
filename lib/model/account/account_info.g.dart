@@ -35,8 +35,7 @@ PrivateAccountModel _$PrivateAccountModelFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$PrivateAccountModelToJson(
-  PrivateAccountModel instance,
-) =>
+        PrivateAccountModel instance) =>
     <String, dynamic>{
       'userid': instance.userid,
       'username': instance.username,
