@@ -1,5 +1,5 @@
+import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/model/jwt.dart';
 import 'package:cookie_app/types/api/auth/signin.dart';
 import 'package:cookie_app/types/jwt_payload.dart';
 import 'package:cookie_app/datasource/api/auth.dart';
@@ -15,8 +15,8 @@ class AuthViewModel extends BaseViewModel {
   bool _isSigned = false;
   bool get isSigned => _isSigned;
 
-  final JWTModel _jwtModel = JWTModel();
-  JWTPayload get jwtPayload => _jwtModel.getPayload();
+  final JWTRepository _jwtRepository = JWTRepository();
+  JWTPayload get jwtPayload => _jwtRepository.payload;
 
   bool validate(GlobalKey<FormState> formKey) {
     return formKey.currentState!.validate();
@@ -37,7 +37,7 @@ class AuthViewModel extends BaseViewModel {
         ),
       );
 
-      _jwtModel.save(response.access_token);
+      _jwtRepository.setToken(response.access_token);
       privateAccountViewModel.updateMyInfo(
         model: response.account.toPrivateAccount(),
       );
@@ -66,7 +66,7 @@ class AuthViewModel extends BaseViewModel {
     setBusy(true);
 
     try {
-      await _jwtModel.delete();
+      await _jwtRepository.flush();
       AccountStorage().deleteData();
       _isSigned = false;
     } catch (e) {
