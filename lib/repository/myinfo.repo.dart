@@ -23,9 +23,9 @@ class MyInfoRepositoryApiImpl implements MyInfoRepository {
 class MyInfoRepositoryImpl implements MyInfoRepository {
   @override
   Future<PrivateAccountModel> getInfo() async {
-    final _repository = await AccountStorage().isExist()
+    final repository = await AccountStorage().isExist()
         ? MyInfoRepositoryStorageImpl()
         : MyInfoRepositoryApiImpl();
-    return _repository.getInfo();
+    return repository.getInfo();
   }
 }
