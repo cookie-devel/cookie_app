@@ -1,5 +1,5 @@
-import 'package:cookie_app/repository/api/account.dart';
-import 'package:cookie_app/repository/storage/account.storage.dart';
+import 'package:cookie_app/datasource/api/account.dart';
+import 'package:cookie_app/datasource/storage/account.storage.dart';
 import 'package:cookie_app/model/account/account_info.dart';
 
 abstract class MyInfoRepository {
