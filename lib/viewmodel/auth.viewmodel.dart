@@ -22,6 +22,13 @@ class AuthViewModel extends BaseViewModel {
     return formKey.currentState!.validate();
   }
 
+  void jwtSignIn({
+    required String token,
+  }) {
+    _jwtRepository.setToken(token);
+    _isSigned = !_jwtRepository.isExpired();
+  }
+
   Future<void> signIn({
     required String id,
     required String pw,

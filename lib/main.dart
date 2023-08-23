@@ -58,7 +58,6 @@ class Cookie extends StatelessWidget {
   Widget build(BuildContext context) {
     JWTStorage().read().then((value) {
       if (value != null) {
-        JWTRepository().setToken(value);
         Provider.of<AuthViewModel>(context, listen: false).jwtSignIn(
           token: value,
         );
