@@ -1,3 +1,4 @@
+import 'package:cookie_app/datasource/storage/account.storage.dart';
 import 'package:cookie_app/model/chat/room.dart';
 import 'package:cookie_app/types/account/profile.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -48,6 +49,17 @@ class PrivateAccountModel extends PublicAccountModel {
 
   factory PrivateAccountModel.fromJson(Map<String, dynamic> json) =>
       _$PrivateAccountModelFromJson(json);
+
+  static Future<PrivateAccountModel?> fromStorage(
+      {required AccountStorage storage}) async {
+    if (await storage.exists() == false) {
+      return null;
+    } else if ((await storage.readJSON()).isEmpty) {
+      return null;
+    }
+
+    return PrivateAccountModel.fromJson(await storage.readJSON());
+  }
 
   @override
   Map<String, dynamic> toJson() => _$PrivateAccountModelToJson(this);

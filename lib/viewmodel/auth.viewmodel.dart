@@ -1,7 +1,7 @@
+import 'package:cookie_app/model/account/account_info.dart';
 import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/types/api/auth/signin.dart';
-import 'package:cookie_app/types/jwt_payload.dart';
 import 'package:cookie_app/datasource/api/auth.dart';
 import 'package:cookie_app/datasource/storage/account.storage.dart';
 import 'package:cookie_app/types/form/signin.dart';
@@ -15,18 +15,26 @@ class AuthViewModel extends BaseViewModel {
   bool _isSigned = false;
   bool get isSigned => _isSigned;
 
-  final JWTRepository _jwtRepository = JWTRepository();
-  JWTPayload get jwtPayload => _jwtRepository.payload;
-
   bool validate(GlobalKey<FormState> formKey) {
     return formKey.currentState!.validate();
   }
 
-  void jwtSignIn({
+  Future<bool> jwtSignIn({
     required String token,
-  }) {
-    _jwtRepository.setToken(token);
-    _isSigned = !_jwtRepository.isExpired();
+    required PrivateAccountViewModel privateAccountViewModel,
+  }) async {
+    _isSigned = await JWTRepository.setToken(token);
+    PrivateAccountModel? model =
+        await PrivateAccountModel.fromStorage(storage: AccountStorage());
+    if (model == null) return false;
+
+    assert(model.userid == JWTRepository.payload!.userid);
+
+    privateAccountViewModel.updateMyInfo(
+      model: model,
+    );
+
+    return true;
   }
 
   Future<void> signIn({
@@ -44,12 +52,11 @@ class AuthViewModel extends BaseViewModel {
         ),
       );
 
-      _jwtRepository.setToken(response.access_token);
       privateAccountViewModel.updateMyInfo(
         model: response.account.toPrivateAccount(),
       );
 
-      _isSigned = true;
+      _isSigned = await JWTRepository.setToken(response.access_token);
     } catch (e) {
       rethrow;
     } finally {
@@ -73,7 +80,7 @@ class AuthViewModel extends BaseViewModel {
     setBusy(true);
 
     try {
-      await _jwtRepository.flush();
+      await JWTRepository.flush();
       AccountStorage().deleteData();
       _isSigned = false;
     } catch (e) {

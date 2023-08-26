@@ -3,9 +3,6 @@ import 'dart:convert';
 
 import 'package:path_provider/path_provider.dart';
 
-// FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-// final Storage accountStorage = Storage("account.json");
-
 abstract class BaseStorage {
   String filename;
   BaseStorage(this.filename);
@@ -60,7 +57,7 @@ abstract class BaseStorage {
     }
   }
 
-  Future<bool> isExist() async {
+  Future<bool> exists() async {
     try {
       final file = await _localFile;
       return await file.exists();

@@ -1,5 +1,4 @@
 import 'package:cookie_app/datasource/storage/jwt.storage.dart';
-import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:cookie_app/theme/dark.dart';
 import 'package:cookie_app/theme/default.dart';
 import 'package:cookie_app/view/mainwidget.dart';
@@ -56,10 +55,13 @@ class Cookie extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    JWTStorage().read().then((value) {
+    // FIXME: Maybe we should make something like CacheManager
+    JWTStorage.read().then((value) {
       if (value != null) {
         Provider.of<AuthViewModel>(context, listen: false).jwtSignIn(
           token: value,
+          privateAccountViewModel:
+              Provider.of<PrivateAccountViewModel>(context, listen: false),
         );
       }
       FlutterNativeSplash.remove();

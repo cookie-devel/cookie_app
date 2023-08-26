@@ -6,7 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 
 Future<GetFriendsResponse> apiGetFriends() async {
-  String token = JWTRepository().token!;
+  String token = JWTRepository.token!;
   final uri = Uri(
     scheme: dotenv.env['API_SCHEME'],
     host: dotenv.env['API_HOST'],
