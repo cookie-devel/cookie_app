@@ -22,7 +22,7 @@ class SocketHandler {
   );
 
   connect() async {
-    socket.auth = {'token': await JWTRepository().token!};
+    socket.auth = {'token': JWTRepository.token!};
     log.info('socket auth: ${socket.auth}');
 
     registerDefaultEventHandlers();
