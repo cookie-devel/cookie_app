@@ -50,8 +50,9 @@ class PrivateAccountModel extends PublicAccountModel {
   factory PrivateAccountModel.fromJson(Map<String, dynamic> json) =>
       _$PrivateAccountModelFromJson(json);
 
-  static Future<PrivateAccountModel?> fromStorage(
-      {required AccountStorage storage}) async {
+  static Future<PrivateAccountModel?> fromStorage({
+    required AccountStorage storage,
+  }) async {
     if (await storage.exists() == false) {
       return null;
     } else if ((await storage.readJSON()).isEmpty) {
