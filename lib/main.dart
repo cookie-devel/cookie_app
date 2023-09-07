@@ -5,6 +5,7 @@ import 'package:cookie_app/view/mainwidget.dart';
 import 'package:cookie_app/view/pages/signin.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
+import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
 import 'package:cookie_app/viewmodel/friendlist.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -13,6 +14,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:provider/provider.dart';
 import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   // Preserve Splash Screen
@@ -23,27 +25,31 @@ void main() async {
 
   // Load Data
   await dotenv.load();
-
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<ThemeProvider>(
-          create: (_) => ThemeProvider(),
-        ),
-        ChangeNotifierProvider<MapProvider>(
-          create: (_) => MapProvider(),
-        ),
-        ChangeNotifierProvider<PrivateAccountViewModel>(
-          create: (_) => PrivateAccountViewModel(),
-        ),
-        ChangeNotifierProvider<AuthViewModel>(
-          create: (_) => AuthViewModel(),
-        ),
-        ChangeNotifierProvider<FriendsListViewModel>(
-          create: (_) => FriendsListViewModel(),
-        )
-      ],
-      child: const Cookie(),
+  initializeDateFormatting().then(
+    (_) => runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<ThemeProvider>(
+            create: (_) => ThemeProvider(),
+          ),
+          ChangeNotifierProvider<MapProvider>(
+            create: (_) => MapProvider(),
+          ),
+          ChangeNotifierProvider<PrivateAccountViewModel>(
+            create: (_) => PrivateAccountViewModel(),
+          ),
+          ChangeNotifierProvider<AuthViewModel>(
+            create: (_) => AuthViewModel(),
+          ),
+          ChangeNotifierProvider<FriendsListViewModel>(
+            create: (_) => FriendsListViewModel(),
+          ),
+          ChangeNotifierProvider<ChatViewModel>(
+            create: (_) => ChatViewModel(),
+          ),
+        ],
+        child: const Cookie(),
+      ),
     ),
   );
 }

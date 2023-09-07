@@ -33,7 +33,7 @@ class ChatRoomListEntry extends StatelessWidget {
         );
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         child: SizedBox(
           height: 68,
           child: Row(
@@ -58,7 +58,9 @@ class ChatRoomListEntry extends StatelessWidget {
                 children: [
                   ChatRoomTime(time: time),
                   const SizedBox(height: 8),
-                  ChatRoomUnreadBadge(unread: unread),
+                  unread == 0
+                      ? const SizedBox()
+                      : ChatRoomUnreadBadge(unread: unread),
                 ],
               ),
             ],
@@ -205,11 +207,7 @@ class ChatRoomUnreadBadge extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                unread == 0
-                    ? ""
-                    : unread.toString().length > 3
-                        ? "999+"
-                        : unread.toString(),
+                unread.toString().length > 3 ? "999+" : unread.toString(),
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
