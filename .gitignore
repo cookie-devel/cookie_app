@@ -47,3 +47,5 @@ app.*.map.json
 
 ios/Build
 .env
+
+/lib/test
