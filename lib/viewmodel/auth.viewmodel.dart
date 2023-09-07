@@ -42,7 +42,7 @@ class AuthViewModel extends BaseViewModel {
     required String pw,
     required PrivateAccountViewModel privateAccountViewModel,
   }) async {
-    setBusy(true);
+    setLoadState(busy: true, loaded: false);
     // Handle Signin
     try {
       SignInResponse response = await AuthAPI.postSignIn(
@@ -57,36 +57,37 @@ class AuthViewModel extends BaseViewModel {
       );
 
       _isSigned = await JWTRepository.setToken(response.access_token);
+      setLoadState(busy: false, loaded: true);
     } catch (e) {
+      setLoadState(busy: false, loaded: false);
       rethrow;
-    } finally {
-      setBusy(false);
     }
   }
 
   Future<void> signUp(SignUpFormModel signUpForm) async {
-    setBusy(true);
+    setLoadState(busy: true, loaded: false);
     // Handle Signup
     try {
       await AuthAPI.postSignUp(signUpForm);
+      setLoadState(busy: false, loaded: true);
     } catch (e) {
+      setLoadState(busy: false, loaded: false);
       rethrow;
-    } finally {
-      setBusy(false);
     }
   }
 
   void signOut() async {
-    setBusy(true);
+    setLoadState(busy: true, loaded: false);
 
     try {
       await JWTRepository.flush();
       AccountStorage().deleteData();
       _isSigned = false;
+      setLoadState(busy: false, loaded: true);
     } catch (e) {
+      setLoadState(busy: false, loaded: false);
       logger.warning('Error signing out: $e');
+      rethrow;
     }
-
-    setBusy(false);
   }
 }
