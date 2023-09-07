@@ -43,15 +43,18 @@ class PrivateAccountViewModel extends BaseViewModel {
   ImageProvider get profileImage => _model.profile.image != null
       ? NetworkImage(_model.profile.image!)
       : const AssetImage('assets/images/user.jpg') as ImageProvider;
-  // : IconImageProvider(Icons.abc) as ImageProvider;
   String? get profileMessage => _model.profile.message;
   String get phone => _model.phone;
 
   final MyInfoRepository _repo = MyInfoRepositoryStorageImpl();
 
   Future<void> updateMyInfo({PrivateAccountModel? model}) async {
-    setBusy(true);
-    _model = model ?? await _repo.getInfo();
-    setBusy(false);
+    setLoadState(busy: true, loaded: false);
+    try {
+      _model = model ?? await _repo.getInfo();
+      setLoadState(busy: false, loaded: true);
+    } catch (e) {
+      setLoadState(busy: false, loaded: false);
+    }
   }
 }

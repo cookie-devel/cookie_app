@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 
 abstract class BaseViewModel extends ChangeNotifier {
-  bool _busy = false;
-  bool get busy => _busy;
+  bool loaded = false;
+  bool busy = false;
 
-  void setBusy(bool value) {
+  void setLoadState({
+    bool? loaded,
+    bool? busy,
+  }) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _busy = value;
+      if (loaded != null) this.loaded = loaded;
+      if (busy != null) this.busy = busy;
       notifyListeners();
     });
   }

@@ -9,13 +9,18 @@ class FriendsListViewModel extends BaseViewModel {
   List<PublicAccountViewModel> get friends => _friends;
 
   Future<void> updateFriends() async {
-    setBusy(true);
+    setLoadState(busy: true, loaded: false);
 
-    _friends = (await _repo.getInfo())
-        .friendList
-        .map((e) => PublicAccountViewModel(model: e))
-        .toList();
+    try {
+      _friends = (await _repo.getInfo())
+          .friendList
+          .map((e) => PublicAccountViewModel(model: e))
+          .toList();
 
-    setBusy(false);
+      setLoadState(busy: false, loaded: true);
+    } catch (e) {
+      setLoadState(busy: false, loaded: false);
+      rethrow;
+    }
   }
 }
