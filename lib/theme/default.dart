@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 
 ThemeData defaultThemeData = ThemeData(
   brightness: Brightness.light,
+  colorScheme: const ColorScheme.light(
+    primary: Colors.orangeAccent,
+    secondary: Colors.orangeAccent,
+  ),
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.orangeAccent,
     iconTheme: IconThemeData(color: Colors.white),
