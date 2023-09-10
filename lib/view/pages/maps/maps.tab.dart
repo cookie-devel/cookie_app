@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:logging/logging.dart';
+import 'package:cookie_app/types/map/mapPosition_info.dart';
 
 class MapsWidget extends StatefulWidget {
   const MapsWidget({Key? key}) : super(key: key);
@@ -17,24 +18,24 @@ class MapsWidget extends StatefulWidget {
 }
 
 class _MapsWidgetState extends State<MapsWidget> {
-  final logger = Logger('_MapsWidgetState');
   late List mapData = [];
   late GoogleMapController mapController;
-  List<Marker> markers = <Marker>[];
+  late MapProvider _mapProvider;
   final l2.Distance distance = const l2.Distance();
+  final logger = Logger('_MapsWidgetState');
+  List<Marker> markers = <Marker>[];
   int selectedSortOption = 1;
-  late MapProvider mapProvider;
 
   @override
   void initState() {
     super.initState();
-    mapProvider = MapProvider();
+    _mapProvider = MapProvider();
   }
 
   @override
   void dispose() {
     mapController.dispose();
-    mapProvider.dispose();
+    _mapProvider.dispose();
     markers.clear();
     super.dispose();
   }
@@ -94,8 +95,8 @@ class _MapsWidgetState extends State<MapsWidget> {
   //     final PublicAccountViewModel friendInfo = User.fromMap(mapData[i]);
 
   //     final LatLng location = LatLng(
-  //       mapData[i]["location"]["latitude"],
-  //       mapData[i]["location"]["longitude"],
+  //       mapData[i].latitude,
+  //       mapData[i].longitude,
   //     );
 
   //     Future<Marker> markerFuture = addMarker(context, friendInfo, location);
@@ -191,7 +192,7 @@ class _MapsWidgetState extends State<MapsWidget> {
   // speedDial => 현위치
   void _moveToCurrentLocation() {
     mapController
-        .animateCamera(CameraUpdate.newLatLng(mapProvider.currentLocation));
+        .animateCamera(CameraUpdate.newLatLng(_mapProvider.currentLocation));
   }
 
   // speedDial => 친구찾기
@@ -287,23 +288,23 @@ class _MapsWidgetState extends State<MapsWidget> {
                       itemCount: mapLog.length,
                       padding: const EdgeInsets.fromLTRB(5, 4, 10, 4),
                       itemBuilder: (BuildContext context, int index) {
-                        final Map<String, dynamic> log = mapLog[index];
+                        final MapPosition log = mapLog[index];
                         return ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.transparent,
-                            backgroundImage:
-                                AssetImage(log["profile"]["image"]),
-                          ),
+                          leading: const CircleAvatar(
+                              // backgroundColor: Colors.transparent,
+                              // backgroundImage:
+                              //     AssetImage(log.userid),
+                              ),
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(log["username"]),
+                              // Text(log["username"]),
                               Text(
                                 _calDistance(
-                                  mapProvider.currentLocation,
+                                  _mapProvider.currentLocation,
                                   LatLng(
-                                    log["location"]["latitude"],
-                                    log["location"]["longitude"],
+                                    log.latitude,
+                                    log.longitude,
                                   ),
                                 ),
                                 style: const TextStyle(
@@ -316,8 +317,8 @@ class _MapsWidgetState extends State<MapsWidget> {
                           onTap: () {
                             _moveToFriendLocation(
                               LatLng(
-                                log["location"]["latitude"],
-                                log["location"]["longitude"],
+                                log.latitude,
+                                log.longitude,
                               ),
                             );
                             Navigator.pop(context);
@@ -337,8 +338,4 @@ class _MapsWidgetState extends State<MapsWidget> {
   }
 }
 
-/*
-reference
- https://snazzymaps.com/explore?text=&sort=popular&tag=&color= [google map theme]
-
-*/
+// https://snazzymaps.com/explore?text=&sort=popular&tag=&color= [google map theme]
