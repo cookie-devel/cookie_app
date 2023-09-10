@@ -1,4 +1,4 @@
-package com.example.cookie_app
+package com.cookiedev.cookie_app
 
 import io.flutter.embedding.android.FlutterActivity
 
