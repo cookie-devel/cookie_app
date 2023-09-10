@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "992759219555",
+    "project_id": "cookie-fire",
+    "storage_bucket": "cookie-fire.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:992759219555:android:66914dfb5ac67501ddff56",
+        "android_client_info": {
+          "package_name": "com.example.cookie_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "992759219555-oj3iuv52pjlj9er02dcnkasfq5d9dkrt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoeICY5HvrqRjJtyvlnD3mu_mrCYFVI9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "992759219555-oj3iuv52pjlj9er02dcnkasfq5d9dkrt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

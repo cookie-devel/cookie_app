@@ -1,4 +1,5 @@
 import 'package:cookie_app/datasource/storage/jwt.storage.dart';
+import 'package:cookie_app/firebase_options.dart';
 import 'package:cookie_app/theme/dark.dart';
 import 'package:cookie_app/theme/default.dart';
 import 'package:cookie_app/view/mainwidget.dart';
@@ -15,11 +16,13 @@ import 'package:provider/provider.dart';
 import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   // Preserve Splash Screen
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   timeago.setLocaleMessages('ko', timeago.KoMessages());
 
