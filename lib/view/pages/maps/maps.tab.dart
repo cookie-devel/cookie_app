@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:cookie_app/view/components/loading.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart' as l2;
-import 'package:permission_handler/permission_handler.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
 import 'package:provider/provider.dart';
@@ -20,29 +18,24 @@ class MapsWidget extends StatefulWidget {
 
 class _MapsWidgetState extends State<MapsWidget> {
   final logger = Logger('_MapsWidgetState');
-  bool loading = true;
   late List mapData = [];
   late GoogleMapController mapController;
   List<Marker> markers = <Marker>[];
-  LatLng _currentLocation = const LatLng(37.5665, 126.9780);
   final l2.Distance distance = const l2.Distance();
   int selectedSortOption = 1;
-  Timer? _timer;
-  late MapProvider _mapProvider;
+  late MapProvider mapProvider;
 
   @override
   void initState() {
     super.initState();
-    _locationPermission();
-    _getUserLocation();
-    startLocationUpdates();
+    mapProvider = MapProvider();
   }
 
   @override
   void dispose() {
     mapController.dispose();
+    mapProvider.dispose();
     markers.clear();
-    stopLocationUpdates();
     super.dispose();
   }
 
@@ -58,7 +51,7 @@ class _MapsWidgetState extends State<MapsWidget> {
 
         return Scaffold(
           appBar: AppBar(title: const Text('C🍪🍪KIE')),
-          body: loading == false
+          body: mapProvider.loading == false
               ? Stack(
                   children: [
                     GoogleMap(
@@ -76,8 +69,8 @@ class _MapsWidgetState extends State<MapsWidget> {
                       mapType: MapType.normal,
                       markers: Set.from(markers),
                       initialCameraPosition: CameraPosition(
-                        target: _currentLocation,
-                        zoom: 15.2,
+                        target: mapProvider.currentLocation,
+                        zoom: 18.0,
                       ),
                     ),
                     Positioned(
@@ -91,17 +84,6 @@ class _MapsWidgetState extends State<MapsWidget> {
         );
       },
     );
-  }
-
-  void startLocationUpdates() {
-    stopLocationUpdates();
-    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
-      _getUserLocation();
-    });
-  }
-
-  void stopLocationUpdates() {
-    _timer?.cancel();
   }
 
   // Future<void> _addMarkers() async {
@@ -127,48 +109,6 @@ class _MapsWidgetState extends State<MapsWidget> {
   //     markers.addAll(allMarkers);
   //   });
   // }
-
-  // https://kanoos-stu.tistory.com/64
-  Future<void> _locationPermission() async {
-    final PermissionStatus requestStatus = await Permission.location.request();
-    final PermissionStatus status = await Permission.location.status;
-
-    if (requestStatus.isGranted && status.isLimited) {
-      final bool isLocationServiceEnabled =
-          await Permission.locationWhenInUse.serviceStatus.isEnabled;
-
-      if (isLocationServiceEnabled) {
-        _getUserLocation();
-      } else {
-        // TODO: 위치 서비스가 꺼져 있는 경우 처리할 내용 추가
-      }
-    } else if (requestStatus.isPermanentlyDenied ||
-        status.isPermanentlyDenied) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        openAppSettings();
-      });
-    } else if (status.isRestricted) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        openAppSettings();
-      });
-    }
-  }
-
-  Future<void> _getUserLocation() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-      setState(() {
-        _currentLocation = LatLng(position.latitude, position.longitude);
-        loading = false;
-        _mapProvider.setCurrentLocation(_currentLocation);
-        logger.info("currentLocation = $_currentLocation");
-      });
-    } catch (e) {
-      logger.warning("Failed to get user location: $e");
-    }
-  }
 
   // 해당 location으로 camera 이동
   void _moveToFriendLocation(LatLng location) {
@@ -250,7 +190,7 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   // speedDial => 현위치
   void _moveToCurrentLocation() {
-    mapController.animateCamera(CameraUpdate.newLatLng(_currentLocation));
+    mapController.animateCamera(CameraUpdate.newLatLng(mapProvider.currentLocation));
   }
 
   // speedDial => 친구찾기
@@ -292,7 +232,6 @@ class _MapsWidgetState extends State<MapsWidget> {
                             IconButton(
                               onPressed: () {
                                 setModalState(() {
-                                  _currentLocation = _currentLocation;
                                 });
                               },
                               icon: const Icon(
@@ -361,7 +300,7 @@ class _MapsWidgetState extends State<MapsWidget> {
                               Text(log["username"]),
                               Text(
                                 _calDistance(
-                                  _currentLocation,
+                                  mapProvider.currentLocation,
                                   LatLng(
                                     log["location"]["latitude"],
                                     log["location"]["longitude"],
