@@ -7,8 +7,8 @@ import 'package:geolocator/geolocator.dart';
 
 class MapProvider with ChangeNotifier {
   Logger logger = Logger('MapProvider');
-  LatLng _currentLocation = const LatLng(37.5665, 126.9780);
-  List<MapPosition> _mapLog = [];
+  late LatLng _currentLocation;
+  late List<MapPosition> _mapLog = [];
   bool _loading = true;
 
   LatLng get currentLocation => _currentLocation;
@@ -32,6 +32,7 @@ class MapProvider with ChangeNotifier {
     //TODO: get data from server
     _mapLog = [];
     notifyListeners();
+    logger.info("mapLog = $_mapLog");
   }
 
   Future<void> _locationPermission() async {
