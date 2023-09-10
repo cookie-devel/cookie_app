@@ -190,7 +190,8 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   // speedDial => 현위치
   void _moveToCurrentLocation() {
-    mapController.animateCamera(CameraUpdate.newLatLng(mapProvider.currentLocation));
+    mapController
+        .animateCamera(CameraUpdate.newLatLng(mapProvider.currentLocation));
   }
 
   // speedDial => 친구찾기
@@ -231,8 +232,7 @@ class _MapsWidgetState extends State<MapsWidget> {
                             ),
                             IconButton(
                               onPressed: () {
-                                setModalState(() {
-                                });
+                                setModalState(() {});
                               },
                               icon: const Icon(
                                 Icons.replay,

@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'mapPosition_info.g.dart';
 
 @JsonSerializable()
-class MapPosition{
+class MapPosition {
   String userid;
   double latitude;
   double longitude;
@@ -14,7 +14,7 @@ class MapPosition{
     required this.longitude,
   });
 
-  factory MapPosition.fromJson(Map<String, dynamic> json) => _$MapPositionFromJson(json);
+  factory MapPosition.fromJson(Map<String, dynamic> json) =>
+      _$MapPositionFromJson(json);
   Map<String, dynamic> toJson() => _$MapPositionToJson(this);
-
 }

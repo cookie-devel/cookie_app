@@ -1,10 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:cookie_app/view/components/chat/connectionInfo.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:http/http.dart' as http;
@@ -34,7 +31,7 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  List<types.Message> _messages = [];
+  final List<types.Message> _messages = [];
   final _user = const types.User(
     id: '82091008-a484-4a89-ae75-a22bf8d6f3ac',
   );
@@ -221,21 +218,22 @@ class _ChatPageState extends State<ChatPage> {
         ),
         body: Chat(
           theme: DefaultChatTheme(
-              // inputPadding: EdgeInsets.all(24),
-              inputBackgroundColor: Colors.orangeAccent,
-              inputTextStyle: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-              ),
-              inputTextDecoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.orangeAccent,
-                  ),
-                  borderRadius: BorderRadius.circular(1),
+            // inputPadding: EdgeInsets.all(24),
+            inputBackgroundColor: Colors.orangeAccent,
+            inputTextStyle: const TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+            ),
+            inputTextDecoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.orangeAccent,
                 ),
+                borderRadius: BorderRadius.circular(1),
               ),
-              inputTextColor: Colors.black),
+            ),
+            inputTextColor: Colors.black,
+          ),
           messages: _messages,
           onAttachmentPressed: _handleAttachmentPressed,
           onMessageTap: _handleMessageTap,

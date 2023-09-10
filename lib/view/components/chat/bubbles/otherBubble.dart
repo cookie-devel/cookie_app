@@ -89,7 +89,7 @@ class OtherBubble extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ],

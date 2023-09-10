@@ -12,11 +12,16 @@ class ThemeProvider with ChangeNotifier {
   bool _isDarkModeEnabled = false;
   String _mapStyleLight = '';
   String _mapStyleDark = '';
-  
+
   bool get isDarkModeEnabled => _isDarkModeEnabled;
+  set isDarkModeEnabled(bool value) {
+    _isDarkModeEnabled = value;
+    notifyListeners();
+  }
+
   String get mapStyleLight => _mapStyleLight;
   String get mapStyleDark => _mapStyleDark;
-  
+
   ThemeProvider() {
     _loadFromStorage();
     _loadLightMapStyle();
@@ -37,7 +42,7 @@ class ThemeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-    // 밝은 지도 테마 load
+  // 밝은 지도 테마 load
   void _loadLightMapStyle() async {
     final string = await rootBundle.loadString('assets/data/mapStyle.json');
     _mapStyleLight = string;
