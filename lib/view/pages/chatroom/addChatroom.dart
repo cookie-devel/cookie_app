@@ -30,7 +30,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
             roomTitle: textEditingController.text,
             selectedFriendsList: const [],
             // selectedFriendsList: _selectedFriendsList(),
-          )
+          ),
         ],
       ),
       body: Padding(

@@ -57,7 +57,7 @@ class ProfileWindow extends StatelessWidget {
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
         CookieDecoratedContainer(
@@ -90,10 +90,10 @@ class ProfileWindow extends StatelessWidget {
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
-        const UserProfileTile(title: 'title', content: 'content')
+        const UserProfileTile(title: 'title', content: 'content'),
       ].map((e) => wrapped(e)).toList(),
     );
   }

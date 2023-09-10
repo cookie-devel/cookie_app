@@ -158,7 +158,7 @@ class _ChatRoomState extends State<ChatRoom> {
               ),
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
-            )
+            ),
           ],
         ),
       );

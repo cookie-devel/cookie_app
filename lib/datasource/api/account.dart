@@ -18,7 +18,7 @@ class AccountAPI {
       uri,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': 'Bearer $token'
+        'authorization': 'Bearer $token',
       },
     );
 

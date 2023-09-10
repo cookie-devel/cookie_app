@@ -13,7 +13,7 @@ showSnackBar({
           const SizedBox(width: 10),
           Flexible(
             child: Text(message),
-          )
+          ),
         ],
       ),
     ),

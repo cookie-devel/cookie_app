@@ -136,7 +136,7 @@ class BottomSheetInside extends StatelessWidget {
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),

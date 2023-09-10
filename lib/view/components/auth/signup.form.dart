@@ -72,7 +72,7 @@ class _SignUpFormState extends State<SignUpForm> {
               text: '회원가입',
               onSuccess: onSignUpSuccess,
               onFailure: onSignUpFailure,
-            )
+            ),
           ].map(wrapped).toList(),
         ),
       ),

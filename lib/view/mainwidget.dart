@@ -85,11 +85,11 @@ class _MainWidgetState extends State<MainWidget> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> widgetOptions = <Widget>[
-      const FriendsGrid(),
+      const FriendsTab(),
       const ChatTabWidget(),
       const MapsWidget(),
       const ClubGrid(),
-      const SettingsWidget(),
+      SettingsWidget(),
     ];
 
     return WillPopScope(
