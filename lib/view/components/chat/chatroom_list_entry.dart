@@ -81,18 +81,13 @@ class ChatRoomName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // // TODO: implement build
-    // throw UnimplementedError();
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, _) {
-        final isDark = themeProvider.isDarkModeEnabled;
         return Text(
           name,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w600,
-            color:
-                !isDark ? const Color.fromARGB(221, 42, 42, 42) : Colors.white,
           ),
         );
       },
@@ -112,15 +107,12 @@ class ChatRoomMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, _) {
-        final isDark = themeProvider.isDarkModeEnabled;
         return Text(
           message,
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
-            color: !isDark
-                ? const Color.fromARGB(221, 100, 100, 100)
-                : Colors.white60,
+            color: themeProvider.theme.colorScheme.onSecondary,
           ),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
@@ -188,34 +180,19 @@ class ChatRoomUnreadBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, _) {
-        final isDark = themeProvider.isDarkModeEnabled;
-        return Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 8,
-            vertical: 4,
-          ),
-          decoration: BoxDecoration(
-            color:
-                !isDark ? const Color.fromARGB(255, 255, 99, 159) : Colors.grey,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
+        return Badge(
+          largeSize: 21,
+          label: Text(
+            unread.toString().length > 3 ? "999+" : unread.toString(),
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
               color: Colors.white,
-              width: 0,
+              letterSpacing: -0.5,
             ),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                unread.toString().length > 3 ? "999+" : unread.toString(),
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          backgroundColor: const Color.fromARGB(255, 255, 99, 159),
         );
       },
     );

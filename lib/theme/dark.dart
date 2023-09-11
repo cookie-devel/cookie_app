@@ -1,7 +1,14 @@
+import 'package:cookie_app/theme/components/input.theme.dart';
 import 'package:flutter/material.dart';
 
 ThemeData darkThemeData = ThemeData(
   brightness: Brightness.dark,
+  colorScheme: const ColorScheme.dark(
+    primary: Colors.black,
+    secondary: Colors.orangeAccent,
+    onPrimary: Colors.white,
+    onSecondary: Colors.grey,
+  ),
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.black,
     iconTheme: IconThemeData(color: Colors.white),
@@ -51,4 +58,5 @@ ThemeData darkThemeData = ThemeData(
     backgroundColor: Colors.black,
     modalBarrierColor: Colors.transparent,
   ),
+  inputDecorationTheme: InputTheme.defaultInputDecorationTheme,
 );
