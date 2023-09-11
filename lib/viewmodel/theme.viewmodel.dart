@@ -1,66 +1,42 @@
-import 'package:cookie_app/datasource/storage/theme.storage.dart';
+import 'package:cookie_app/theme/dark.dart';
+import 'package:cookie_app/theme/default.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:shared_preferences/shared_preferences.dart';
 
 /*
  다크모드/라이트모드를 설정하는 Provider
 */
-
-final themeStorage = ThemeStorage();
-
 class ThemeProvider with ChangeNotifier {
-  bool _isDarkModeEnabled = false;
-  String _mapStyleLight = '';
-  String _mapStyleDark = '';
+  bool _isDarkMode = false;
+  String _mapStyle = '';
 
-  bool get isDarkModeEnabled => _isDarkModeEnabled;
-  set isDarkModeEnabled(bool value) {
-    _isDarkModeEnabled = value;
-    notifyListeners();
-  }
-
-  String get mapStyleLight => _mapStyleLight;
-  String get mapStyleDark => _mapStyleDark;
+  bool get isDarkMode => _isDarkMode;
+  String get mapStyle => _mapStyle;
+  ThemeData get theme => _isDarkMode ? darkThemeData : defaultThemeData;
 
   ThemeProvider() {
     _loadFromStorage();
-    _loadLightMapStyle();
-    _loadDarkMapStyle();
   }
 
   void _loadFromStorage() async {
-    Map<String, dynamic> data = await themeStorage.readJSON();
-    if (data.containsKey("darktheme")) {
-      _isDarkModeEnabled = data["darktheme"];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey("darktheme")) {
+      setDarkMode(prefs.getBool("darktheme")!);
     }
-    notifyListeners();
   }
 
-  void toggleDarkMode() {
-    _isDarkModeEnabled = !_isDarkModeEnabled;
+  void setDarkMode(bool value) async {
+    _isDarkMode = value;
+    _mapStyle = await rootBundle.loadString(
+      value ? 'assets/data/mapStyleDark.json' : 'assets/data/mapStyle.json',
+    );
     _update();
     notifyListeners();
   }
 
-  // 밝은 지도 테마 load
-  void _loadLightMapStyle() async {
-    final string = await rootBundle.loadString('assets/data/mapStyle.json');
-    _mapStyleLight = string;
-    notifyListeners();
-  }
-
-  // 어두운 지도 테마 load
-  void _loadDarkMapStyle() async {
-    final string = await rootBundle.loadString('assets/data/mapStyleDark.json');
-    _mapStyleDark = string;
-    notifyListeners();
-  }
-
   void _update() async {
-    await themeStorage.writeJSON(
-      {
-        "darktheme": _isDarkModeEnabled,
-      },
-    );
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("darktheme", _isDarkMode);
   }
 }

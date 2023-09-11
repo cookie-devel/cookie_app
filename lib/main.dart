@@ -1,7 +1,5 @@
 import 'package:cookie_app/datasource/storage/jwt.storage.dart';
 import 'package:cookie_app/firebase_options.dart';
-import 'package:cookie_app/theme/dark.dart';
-import 'package:cookie_app/theme/default.dart';
 import 'package:cookie_app/view/mainwidget.dart';
 import 'package:cookie_app/view/pages/signin.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
@@ -78,14 +76,13 @@ class Cookie extends StatelessWidget {
 
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, _) {
-        final isDarkModeEnabled = themeProvider.isDarkModeEnabled;
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: _title,
           home: Provider.of<AuthViewModel>(context, listen: true).isSigned
               ? const MainWidget()
               : const SignInWidget(),
-          theme: isDarkModeEnabled ? darkThemeData : defaultThemeData,
+          theme: context.watch<ThemeProvider>().theme,
         );
       },
     );

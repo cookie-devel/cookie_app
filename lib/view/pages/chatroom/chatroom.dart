@@ -50,7 +50,7 @@ class _ChatRoomState extends State<ChatRoom> {
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, _) {
-        final isDark = themeProvider.isDarkModeEnabled;
+        final isDark = themeProvider.isDarkMode;
         return Scaffold(
           resizeToAvoidBottomInset: true,
           backgroundColor:

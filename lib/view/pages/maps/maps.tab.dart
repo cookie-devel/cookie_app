@@ -44,9 +44,7 @@ class _MapsWidgetState extends State<MapsWidget> {
   Widget build(BuildContext context) {
     return Consumer2<ThemeProvider, MapProvider>(
       builder: (context, themeProvider, mapProvider, _) {
-        String mapStyle = themeProvider.isDarkModeEnabled
-            ? themeProvider.mapStyleDark
-            : themeProvider.mapStyleLight;
+        String mapStyle = themeProvider.mapStyle;
 
         mapData = mapProvider.mapLog;
 

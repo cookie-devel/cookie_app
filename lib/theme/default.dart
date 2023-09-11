@@ -5,7 +5,7 @@ ThemeData defaultThemeData = ThemeData(
   brightness: Brightness.light,
   colorScheme: const ColorScheme.light(
     primary: Colors.orangeAccent,
-    secondary: Colors.orangeAccent,
+    secondary: Colors.orange,
   ),
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.orangeAccent,
