@@ -8,23 +8,15 @@ class ConnectionInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<SocketHandler>(
-      builder: (context, socket, child) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Icon(
-              socket.connected ? Icons.check_circle : Icons.warning,
-              color: socket.connected ? Colors.green : Colors.red,
-              size: 16.0,
+      builder: (context, socket, child) => socket.connected
+          ? Container()
+          : const Tooltip(
+              message: 'Server Socket Not Connected',
+              child: Icon(
+                Icons.sync_problem,
+                color: Colors.red,
+              ),
             ),
-            Text(
-              socket.connected ? '연결' : '연결 안됨',
-              style: const TextStyle(fontSize: 16.0),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
