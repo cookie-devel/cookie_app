@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CookieDecoratedContainer extends StatelessWidget {
-  List<Widget> child;
-  CookieDecoratedContainer({
+  final List<Widget> child;
+  const CookieDecoratedContainer({
     super.key,
     required this.child,
   });
