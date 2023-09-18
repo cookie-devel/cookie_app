@@ -16,9 +16,13 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('채팅'),
-        leadingWidth: 80,
         leading: const ConnectionInfo(),
-        actions: const [ChatroomAction()],
+        actions: const [
+          SizedBox(
+            width: 56.0,
+            child: ChatroomAction(),
+          ),
+        ],
       ),
       body: ListView.separated(
         separatorBuilder: (context, index) => const Divider(
