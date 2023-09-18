@@ -1,5 +1,6 @@
 import 'package:cookie_app/datasource/storage/jwt.storage.dart';
 import 'package:cookie_app/firebase_options.dart';
+import 'package:cookie_app/socket.io/socket.handler.dart';
 import 'package:cookie_app/view/mainwidget.dart';
 import 'package:cookie_app/view/pages/signin.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
@@ -9,6 +10,7 @@ import 'package:cookie_app/viewmodel/friendlist.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:logging/logging.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:provider/provider.dart';
 import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
@@ -17,6 +19,11 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
+  Logger.root.level = Level.ALL; // defaults to Level.INFO
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
+
   // Preserve Splash Screen
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -48,6 +55,9 @@ void main() async {
           ChangeNotifierProvider<ChatViewModel>(
             create: (_) => ChatViewModel(),
           ),
+          ChangeNotifierProvider<SocketHandler>(
+            create: (_) => SocketHandler(),
+          ),
         ],
         child: const Cookie(),
       ),
@@ -70,6 +80,7 @@ class Cookie extends StatelessWidget {
           privateAccountViewModel:
               Provider.of<PrivateAccountViewModel>(context, listen: false),
         );
+        Provider.of<SocketHandler>(context, listen: false).connect();
       }
       FlutterNativeSplash.remove();
     });

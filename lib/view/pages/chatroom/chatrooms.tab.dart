@@ -1,4 +1,5 @@
 import 'package:cookie_app/view/components/chat/chatroom_list_entry.dart';
+import 'package:cookie_app/view/components/chat/connection_info.dart';
 import 'package:cookie_app/view/pages/chatroom/addChatroom.dart';
 import 'package:cookie_app/view/pages/chatroom/chatpage.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,8 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('채팅'),
+        leadingWidth: 80,
+        leading: const ConnectionInfo(),
         actions: const [ChatroomAction()],
       ),
       body: ListView.separated(

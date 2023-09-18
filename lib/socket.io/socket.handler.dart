@@ -1,25 +1,34 @@
 import 'package:cookie_app/repository/jwt.repo.dart';
+import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logging/logging.dart';
 
-class SocketHandler {
+class SocketHandler extends ChangeNotifier {
   final log = Logger('SocketHandler');
+
+  // Singleton
   SocketHandler._privateConstructor();
   static final SocketHandler _instance = SocketHandler._privateConstructor();
-
   factory SocketHandler() {
     return _instance;
   }
 
-  static IO.Socket socket = IO.io(
-    dotenv.env['BASE_URI'],
+  IO.Socket socket = IO.io(
+    Uri(
+      scheme: dotenv.env['API_SCHEME'],
+      host: dotenv.env['API_HOST'],
+      port: int.parse(dotenv.env['API_PORT']!),
+    ).toString(),
     IO.OptionBuilder()
         .setTransports(['websocket'])
         .disableAutoConnect()
         .enableReconnection()
         .build(),
   );
+
+  bool _connected = false;
+  bool get connected => _connected;
 
   connect() async {
     socket.auth = {'token': JWTRepository.token!};
@@ -29,48 +38,37 @@ class SocketHandler {
     socket.connect();
   }
 
-  final disconnect = socket.disconnect;
-
   registerHandshakeHandler() {}
 
   registerDefaultEventHandlers() {
     socket.onConnect((data) {
-      log.info('socket connected; id: ${socket.id}');
+      _connected = socket.connected;
+      socket.connected
+          ? log.info('socket connected')
+          : log.warning('socket not connected');
+      notifyListeners();
     });
-
     socket.on("connect_error", (data) => log.warning('socket error: $data'));
 
-    socket.on("users", (data) {
-      log.info('socket users: $data');
+    socket.on("new_room", (data) => {});
+
+    socket.on("join_room", (data) => {});
+
+    socket.on("invite_room", (data) => {});
+
+    socket.on("leave_room", (data) => {});
+
+    socket.on("chat", (data) => {});
+
+    socket.onDisconnect((data) {
+      _connected = false;
+      notifyListeners();
+
+      log.info('socket disconnected: $data');
     });
-
-    socket.on("user connected", (data) {
-      log.info('socket user connected: $data');
-    });
-
-    socket.on("user disconnected", (data) {
-      log.info('socket user disconnected: $data');
-    });
-
-    // socket.on("session", (data) {
-    //   // String sessionID = data['sessionID'];
-    //   String userID = data['userID'];
-
-    //   // socket.auth['sessionID'] = sessionID;
-    //   // secureStorage.write(key: 'sessionID', value: sessionID);
-
-    //   // print('socket session: $sessionID $userID');
-    // });
-
-    // socket.on("private message", (data) {
-    //   var content = data["content"];
-    //   var to = data["to"];
-    // });
-
-    socket.onDisconnect((data) => log.info('socket disconnected: $data'));
   }
 
-  static final __sendMessageCallbacks = [];
+  final __sendMessageCallbacks = [];
   registerSendMessageEvent(next) {
     __sendMessageCallbacks.add(next);
     socket.on("chat message", (data) {
