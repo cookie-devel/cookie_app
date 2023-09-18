@@ -1,6 +1,5 @@
 import 'package:cookie_app/view/components/chat/bubbles/myBubble.dart';
 import 'package:cookie_app/view/components/chat/bubbles/otherBubble.dart';
-import 'package:cookie_app/view/components/chat/connectionInfo.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/chat/room.viewmodel.dart';
 import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
