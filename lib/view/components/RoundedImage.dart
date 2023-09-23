@@ -17,7 +17,6 @@ class RoundedImage extends StatelessWidget {
       width: imageSize,
       height: imageSize,
       decoration: BoxDecoration(
-        color: const Color(0xff7c94b6),
         image: DecorationImage(
           image: image,
           fit: BoxFit.cover,
