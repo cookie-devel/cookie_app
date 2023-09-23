@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FriendSelectionScreen extends StatefulWidget {
-  // final List<PublicAccountViewModel> friendsList;
   const FriendSelectionScreen({Key? key}) : super(key: key);
 
   @override
@@ -14,8 +13,7 @@ class FriendSelectionScreen extends StatefulWidget {
 }
 
 class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
-  // late List<PublicAccountViewModel> friendsList = [];
-  Set<int> selectedIndexes = {};
+  Set<PublicAccountViewModel> selectedFriends = {};
   TextEditingController textEditingController = TextEditingController();
 
   @override
@@ -26,19 +24,21 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
       appBar: AppBar(
         title: const Text('채팅방 추가'),
         actions: [
-          CreateChatroomButton(
-            roomTitle: textEditingController.text,
-            selectedFriendsList: const [],
-            // selectedFriendsList: _selectedFriendsList(),
+          SizedBox(
+            width: 56.0,
+            child: CreateChatroomButton(
+              roomTitle: textEditingController.text,
+              selectedFriendsList: selectedFriends,
+            ),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 28, 12, 12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextFormField(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            margin: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+            child: TextFormField(
               controller: textEditingController,
               onChanged: (newTitle) {
                 final cursorPosition = textEditingController.selection;
@@ -55,59 +55,55 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    ExpansionTile(
-                      title: Text('친구 (${friendsList.length})'),
-                      children: [
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: friendsList.length - 1,
-                          itemBuilder: (BuildContext context, int index) {
-                            PublicAccountViewModel friend = friendsList[index];
-                            return FriendTile(
-                              friend: friend,
-                              isSelected: selectedIndexes.contains(index),
-                              onCheckboxChanged: (value) {
-                                setState(() {
-                                  value == true
-                                      ? selectedIndexes.add(index)
-                                      : selectedIndexes.remove(index);
-                                });
-                              },
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
+          ),
+          Container(
+            margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Row(
+              children: [
+                const Text('친구'),
+                const SizedBox(width: 10),
+                Text(
+                  '${selectedFriends.length}명',
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
                 ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: ListView.separated(
+                separatorBuilder: (context, index) =>
+                    const Divider(color: Colors.grey),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: friendsList.length - 1,
+                itemBuilder: (BuildContext context, int index) {
+                  PublicAccountViewModel friend = friendsList[index];
+                  return FriendTile(
+                    friend: friend,
+                    isSelected: selectedFriends.contains(friend),
+                    onCheckboxChanged: (value) {
+                      setState(() {
+                        value == true
+                            ? selectedFriends.add(friend)
+                            : selectedFriends.remove(friend);
+                      });
+                    },
+                  );
+                },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  // List _selectedFriendsList() {
-  //   List selectedList = [];
-  //   for (int index in selectedIndexes) {
-  //     if (index >= 0 && index < friendsList.length) {
-  //       selectedList.add(friendsList[index]);
-  //     }
-  //   }
-  //   return selectedList;
-  // }
-
   @override
   void dispose() {
     textEditingController.dispose();
-    selectedIndexes.clear();
     super.dispose();
   }
 }
@@ -127,13 +123,12 @@ class FriendTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Container(
-        // width: 40,
-        // height: 40,
-        decoration: const BoxDecoration(shape: BoxShape.circle),
-        child: RoundedImage(image: friend.profileImage),
+      // dense: true,
+      leading: RoundedImage(
+        image: friend.profileImage,
+        imageSize: 50.0,
       ),
-      title: const Text("username"),
+      title: Text(friend.name),
       subtitle: friend.profileMessage != null
           ? Text(
               friend.profileMessage!,
@@ -149,18 +144,9 @@ class FriendTile extends StatelessWidget {
   }
 }
 
-class FriendEntry extends StatelessWidget {
-  const FriendEntry({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
 class CreateChatroomButton extends StatelessWidget {
   final String roomTitle;
-  final List<PublicAccountViewModel> selectedFriendsList;
+  final Set<PublicAccountViewModel> selectedFriendsList;
 
   const CreateChatroomButton({
     Key? key,
@@ -171,7 +157,7 @@ class CreateChatroomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: const Icon(Icons.check_box_outlined),
+      icon: const Icon(Icons.check),
       onPressed: () {
         // TODO: Handle Error cases
         if (selectedFriendsList.isEmpty) throw Exception('친구를 한 명 이상 추가해주세요.');

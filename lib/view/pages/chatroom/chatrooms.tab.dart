@@ -2,7 +2,10 @@ import 'package:cookie_app/view/components/chat/chatroom_list_entry.dart';
 import 'package:cookie_app/view/components/chat/connection_info.dart';
 import 'package:cookie_app/view/pages/chatroom/addChatroom.dart';
 import 'package:cookie_app/view/pages/chatroom/chatpage.dart';
+import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
+import 'package:cookie_app/viewmodel/chat/room.viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ChatTabWidget extends StatefulWidget {
   const ChatTabWidget({super.key});
@@ -24,40 +27,40 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
           ),
         ],
       ),
-      body: ListView.separated(
-        separatorBuilder: (context, index) => const Divider(
-          height: 1,
-        ),
-        itemCount: 10,
-        itemBuilder: (BuildContext context, int index) {
-          return ChatRoomListEntry(
-            name: 'name',
-            image: const AssetImage('assets/images/cookie_logo.png'),
-            message: 'message',
-            time: DateTime.now(),
-            navigate: const ChatPage(),
-            unread: 10,
-          );
-        },
-      ),
-      // body: Consumer<ChatViewModel>(
-      //   builder: (context, model, child) => ListView.separated(
-      //     separatorBuilder: (context, index) => const Divider(
-      //       height: 1,
-      //     ),
-      //     itemCount: model.roomViewModel.length,
-      //     itemBuilder: (BuildContext context, int index) {
-      //       ChatRoomViewModel chatRoom = model.roomViewModel[index];
-      //       return ChatRoomListEntry(
-      //         name: chatRoom.name,
-      //         image: chatRoom.image,
-      //         message: chatRoom.messages.last.content,
-      //         time: chatRoom.messages.last.time,
-      //         navigate: const ChatPage(),
-      //       );
-      //     },
+      // body: ListView.separated(
+      //   separatorBuilder: (context, index) => const Divider(
+      //     height: 1,
       //   ),
+      //   itemCount: 10,
+      //   itemBuilder: (BuildContext context, int index) {
+      //     return ChatRoomListEntry(
+      //       name: 'name',
+      //       image: const AssetImage('assets/images/cookie_logo.png'),
+      //       message: 'message',
+      //       time: DateTime.now(),
+      //       navigate: const ChatPage(),
+      //       unread: 10,
+      //     );
+      //   },
       // ),
+      body: Consumer<ChatViewModel>(
+        builder: (context, model, child) => ListView.separated(
+          separatorBuilder: (context, index) => const Divider(
+            height: 1,
+          ),
+          itemCount: model.roomViewModel.length,
+          itemBuilder: (BuildContext context, int index) {
+            ChatRoomViewModel chatRoom = model.roomViewModel[index];
+            return ChatRoomListEntry(
+              name: chatRoom.name,
+              image: chatRoom.image,
+              message: chatRoom.messages.last.content,
+              time: chatRoom.messages.last.time,
+              navigate: const ChatPage(),
+            );
+          },
+        ),
+      ),
     );
   }
 
