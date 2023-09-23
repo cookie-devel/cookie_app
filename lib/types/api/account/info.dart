@@ -7,19 +7,20 @@ part 'info.g.dart';
 
 @JsonSerializable()
 class InfoResponse {
-  String? userid;
-  String? username;
+  String? id;
+  String? name;
   String? phone;
   List<PublicAccountModel>? friendList;
   Profile? profile;
   List<ChatRoomModel>? chatRooms;
 
   InfoResponse({
-    this.userid,
-    this.username,
+    this.id,
+    this.name,
     this.phone,
     this.friendList,
     this.profile,
+    this.chatRooms,
   });
 
   factory InfoResponse.fromJson(Map<String, dynamic> json) =>
@@ -29,8 +30,8 @@ class InfoResponse {
 
   PrivateAccountModel toPrivateAccount() {
     return PrivateAccountModel(
-      userid: userid!,
-      username: username!,
+      id: id!,
+      name: name!,
       phone: phone!,
       profile: profile!,
       friendList: friendList == null ? [] : friendList!,

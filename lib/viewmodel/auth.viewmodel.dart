@@ -28,7 +28,7 @@ class AuthViewModel extends BaseViewModel {
         await PrivateAccountModel.fromStorage(storage: AccountStorage());
     if (model == null) return false;
 
-    assert(model.userid == JWTRepository.payload!.userid);
+    assert(model.id == JWTRepository.payload!.userid);
 
     privateAccountViewModel.updateMyInfo(
       model: model,

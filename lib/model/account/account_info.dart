@@ -7,13 +7,13 @@ part 'account_info.g.dart';
 
 @JsonSerializable()
 class PublicAccountModel {
-  String userid;
-  String username;
+  String id;
+  String name;
   Profile profile;
 
   PublicAccountModel({
-    required this.userid,
-    required this.username,
+    required this.id,
+    required this.name,
     required this.profile,
   });
 
@@ -22,8 +22,8 @@ class PublicAccountModel {
 
   factory PublicAccountModel.fromPrivate(PrivateAccountModel model) =>
       PublicAccountModel(
-        userid: model.userid,
-        username: model.username,
+        id: model.id,
+        name: model.name,
         profile: model.profile,
       );
 
@@ -37,14 +37,14 @@ class PrivateAccountModel extends PublicAccountModel {
   List<ChatRoomModel> chatRooms;
 
   PrivateAccountModel({
-    required super.userid,
-    required super.username,
+    required super.id,
+    required super.name,
     required this.phone,
     required this.friendList,
     required super.profile,
     required this.chatRooms,
   }) {
-    friendList.sort((a, b) => a.username.compareTo(b.username));
+    friendList.sort((a, b) => a.name.compareTo(b.name));
   }
 
   factory PrivateAccountModel.fromJson(Map<String, dynamic> json) =>
