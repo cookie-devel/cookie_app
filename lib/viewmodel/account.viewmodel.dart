@@ -8,8 +8,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class PublicAccountViewModel extends BaseViewModel {
   late PublicAccountModel _model;
 
-  String get id => _model.userid;
-  String get name => _model.username;
+  String get id => _model.id;
+  String get name => _model.name;
   ImageProvider get profileImage => _model.profile.image != null
       ? NetworkImage(
           Uri(
@@ -38,8 +38,8 @@ class PrivateAccountViewModel extends BaseViewModel {
   @protected
   late PrivateAccountModel _model;
 
-  String get id => _model.userid;
-  String get name => _model.username;
+  String get id => _model.id;
+  String get name => _model.name;
   ImageProvider get profileImage => _model.profile.image != null
       ? NetworkImage(_model.profile.image!)
       : const AssetImage('assets/images/user.jpg') as ImageProvider;

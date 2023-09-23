@@ -13,8 +13,7 @@ ChatRoomModel _$ChatRoomModelFromJson(Map<String, dynamic> json) =>
       image: json['image'] as String?,
       users: (json['users'] as List<dynamic>?)
               ?.map(
-                (e) => PublicAccountModel.fromJson(e as Map<String, dynamic>),
-              )
+                  (e) => PublicAccountModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
       messages: (json['messages'] as List<dynamic>?)
