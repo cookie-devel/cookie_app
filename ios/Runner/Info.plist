@@ -62,7 +62,7 @@
 	<string>Can I have location always?</string>
 	<key>UIBackgroundModes</key>
 	<array>
-	<string>location</string>
+		<string>location</string>
 	</array>
 	<!-- End of Location Permission -->
 </dict>
