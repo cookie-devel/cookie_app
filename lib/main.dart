@@ -1,6 +1,5 @@
 import 'package:cookie_app/datasource/storage/jwt.storage.dart';
 import 'package:cookie_app/firebase_options.dart';
-import 'package:cookie_app/socket.io/socket.handler.dart';
 import 'package:cookie_app/view/mainwidget.dart';
 import 'package:cookie_app/view/pages/signin.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
@@ -55,9 +54,6 @@ void main() async {
           ChangeNotifierProvider<ChatViewModel>(
             create: (_) => ChatViewModel(),
           ),
-          ChangeNotifierProvider<SocketHandler>(
-            create: (_) => SocketHandler(),
-          ),
         ],
         child: const Cookie(),
       ),
@@ -80,7 +76,7 @@ class Cookie extends StatelessWidget {
           privateAccountViewModel:
               Provider.of<PrivateAccountViewModel>(context, listen: false),
         );
-        Provider.of<SocketHandler>(context, listen: false).connect();
+        Provider.of<ChatViewModel>(context, listen: false).connect();
       }
       FlutterNativeSplash.remove();
     });

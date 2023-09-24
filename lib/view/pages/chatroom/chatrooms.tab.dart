@@ -19,7 +19,11 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('채팅'),
-        leading: const ConnectionInfo(),
+        leading: Consumer<ChatViewModel>(
+          builder: (context, model, child) => ConnectionInfo(
+            connected: model.connected,
+          ),
+        ),
         actions: const [
           SizedBox(
             width: 56.0,
