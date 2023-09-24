@@ -79,7 +79,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
                     const Divider(color: Colors.grey),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: friendsList.length - 1,
+                itemCount: friendsList.length,
                 itemBuilder: (BuildContext context, int index) {
                   PublicAccountViewModel friend = friendsList[index];
                   return FriendTile(
