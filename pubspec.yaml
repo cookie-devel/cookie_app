@@ -69,6 +69,8 @@ dependencies:
   uuid: ^4.0.0
   firebase_core: ^2.15.1
   firebase_messaging: ^14.6.7
+  background_locator_2: ^2.0.6
+  location_permissions: ^4.0.1
 
 dev_dependencies:
   flutter_test:
