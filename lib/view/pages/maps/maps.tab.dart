@@ -10,6 +10,18 @@ import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:logging/logging.dart';
 import 'package:cookie_app/types/map/mapPosition_info.dart';
 
+import 'dart:isolate';
+import 'dart:ui';
+
+import 'package:background_locator_2/background_locator.dart';
+import 'package:background_locator_2/location_dto.dart';
+import 'package:background_locator_2/settings/android_settings.dart';
+import 'package:background_locator_2/settings/ios_settings.dart';
+import 'package:background_locator_2/settings/locator_settings.dart';
+import 'package:location_permissions/location_permissions.dart';
+import 'package:cookie_app/view/pages/maps/location_callback_handler.dart';
+import 'package:cookie_app/repository/location_service_repo.dart';
+
 class MapsWidget extends StatefulWidget {
   const MapsWidget({Key? key}) : super(key: key);
 
@@ -18,26 +30,90 @@ class MapsWidget extends StatefulWidget {
 }
 
 class _MapsWidgetState extends State<MapsWidget> {
-  late List mapData = [];
+  late List<MapPosition> mapData = [];
   late GoogleMapController mapController;
-  late MapProvider _mapProvider;
   final l2.Distance distance = const l2.Distance();
   final logger = Logger('_MapsWidgetState');
   List<Marker> markers = <Marker>[];
   int selectedSortOption = 1;
 
+  ReceivePort port = ReceivePort();
+
+  bool? isRunning;
+  LocationDto? lastLocation;
+  bool isInit = false;
+
   @override
   void initState() {
     super.initState();
-    _mapProvider = MapProvider();
+    if (IsolateNameServer.lookupPortByName(
+          LocationServiceRepository.isolateName,
+        ) !=
+        null) {
+      IsolateNameServer.removePortNameMapping(
+        LocationServiceRepository.isolateName,
+      );
+    }
+
+    IsolateNameServer.registerPortWithName(
+      port.sendPort,
+      LocationServiceRepository.isolateName,
+    );
+
+    port.listen(
+      (dynamic data) async {
+        await update(data);
+      },
+    );
+    initPlatformState();
+    isInit = true;
   }
 
   @override
   void dispose() {
     mapController.dispose();
-    _mapProvider.dispose();
     markers.clear();
     super.dispose();
+  }
+
+  Future<void> update(dynamic data) async {
+    print("update");
+    LocationDto? locationDto =
+        (data != null) ? LocationDto.fromJson(data) : null;
+    await _updateNotificationText(locationDto!);
+
+    // ignore: use_build_context_synchronously
+    Provider.of<MapProvider>(context, listen: false)
+        .setCurrentLocation(locationDto.latitude, locationDto.longitude);
+
+    setState(() {
+      if (data != null) {
+        lastLocation = locationDto;
+      }
+    });
+  }
+
+  Future<void> _updateNotificationText(LocationDto data) async {
+    // ignore: unnecessary_null_comparison
+    if (data == null) {
+      return;
+    }
+
+    await BackgroundLocator.updateNotificationText(
+        title: "new location received",
+        msg: "${DateTime.now()}",
+        bigMsg: "${data.latitude}, ${data.longitude}");
+  }
+
+  Future<void> initPlatformState() async {
+    print('Initializing...');
+    await BackgroundLocator.initialize();
+    print('Initialization done');
+    final _isRunning = await BackgroundLocator.isServiceRunning();
+    setState(() {
+      isRunning = _isRunning;
+    });
+    print('Running ${isRunning.toString()}');
   }
 
   @override
@@ -45,12 +121,12 @@ class _MapsWidgetState extends State<MapsWidget> {
     return Consumer2<ThemeProvider, MapProvider>(
       builder: (context, themeProvider, mapProvider, _) {
         String mapStyle = themeProvider.mapStyle;
-
-        mapData = mapProvider.mapLog;
+        // ignore: unused_local_variable
+        List mapData = mapProvider.mapLog;
 
         return Scaffold(
           appBar: AppBar(title: const Text('C🍪🍪KIE')),
-          body: mapProvider.loading == false
+          body: isInit == true
               ? Stack(
                   children: [
                     GoogleMap(
@@ -67,10 +143,20 @@ class _MapsWidgetState extends State<MapsWidget> {
                       },
                       mapType: MapType.normal,
                       markers: Set.from(markers),
-                      initialCameraPosition: CameraPosition(
-                        target: mapProvider.currentLocation,
-                        zoom: 18.0,
-                      ),
+                      initialCameraPosition: lastLocation != null
+                          ? CameraPosition(
+                              target: LatLng(
+                                lastLocation!.latitude,
+                                lastLocation!.longitude,
+                              ),
+                              zoom: 18.0,
+                            )
+                          : CameraPosition(
+                              // 기본값 설정 또는 에러 처리
+                              target:
+                                  LatLng(37.7749, -122.4194), // 예시로 적어 둔 것입니다.
+                              zoom: 18.0,
+                            ),
                     ),
                     Positioned(
                       bottom: 16,
@@ -82,6 +168,88 @@ class _MapsWidgetState extends State<MapsWidget> {
               : const LoadingScreen(),
         );
       },
+    );
+  }
+
+  void onStop() async {
+    print("stop");
+    await BackgroundLocator.unRegisterLocationUpdate();
+    // ignore: no_leading_underscores_for_local_identifiers
+    final _isRunning = await BackgroundLocator.isServiceRunning();
+    setState(() {
+      isRunning = _isRunning;
+    });
+  }
+
+  void _onStart() async {
+    print("start");
+    if (await _checkLocationPermission()) {
+      await _startLocator();
+      // ignore: no_leading_underscores_for_local_identifiers
+      final _isRunning = await BackgroundLocator.isServiceRunning();
+      setState(() {
+        isRunning = _isRunning;
+        lastLocation = null;
+      });
+    } else {
+      // show error
+    }
+  }
+
+  Future<bool> _checkLocationPermission() async {
+    final access = await LocationPermissions().checkPermissionStatus();
+    switch (access) {
+      case PermissionStatus.unknown:
+      case PermissionStatus.denied:
+      case PermissionStatus.restricted:
+        final permission = await LocationPermissions().requestPermissions(
+          permissionLevel: LocationPermissionLevel.locationAlways,
+        );
+        if (permission == PermissionStatus.granted) {
+          return true;
+        } else {
+          return false;
+        }
+
+      case PermissionStatus.granted:
+        return true;
+
+      default:
+        return false;
+    }
+  }
+
+  Future<void> _startLocator() async {
+    Map<String, dynamic> data = {'countInit': 1};
+    return await BackgroundLocator.registerLocationUpdate(
+      LocationCallbackHandler.callback,
+      initCallback: LocationCallbackHandler.initCallback,
+      initDataCallback: data,
+      disposeCallback: LocationCallbackHandler.disposeCallback,
+      // ignore: prefer_const_constructors
+      iosSettings: IOSSettings(
+        accuracy: LocationAccuracy.NAVIGATION,
+        distanceFilter: 0,
+        stopWithTerminate: true,
+      ),
+      autoStop: false,
+      // ignore: prefer_const_constructors
+      androidSettings: AndroidSettings(
+        accuracy: LocationAccuracy.NAVIGATION,
+        interval: 5,
+        distanceFilter: 0,
+        client: LocationClient.google,
+        // ignore: prefer_const_constructors
+        androidNotificationSettings: AndroidNotificationSettings(
+          notificationChannelName: 'Location tracking',
+          notificationTitle: 'Start Location Tracking',
+          notificationMsg: 'Track location in background',
+          notificationBigMsg:
+              'Background location is on to keep the app up-tp-date with your location. This is required for main features to work properly when the app is not running.',
+          notificationIconColor: Colors.grey,
+          notificationTapCallback: LocationCallbackHandler.notificationCallback,
+        ),
+      ),
     );
   }
 
@@ -160,6 +328,7 @@ class _MapsWidgetState extends State<MapsWidget> {
         "현위치",
         Icons.location_searching_sharp,
         _moveToCurrentLocation,
+        // _moveToCurrentLocation,
       ),
       speedDialChild(
         "친구찾기",
@@ -170,6 +339,16 @@ class _MapsWidgetState extends State<MapsWidget> {
         "쿠키",
         Icons.cookie,
         () {},
+      ),
+      speedDialChild(
+        "위치 켜기",
+        Icons.wifi_rounded,
+        () => _onStart(),
+      ),
+      speedDialChild(
+        "위치 끄기",
+        Icons.wifi_off_rounded,
+        () => onStop(),
       ),
     ];
 
@@ -189,8 +368,9 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   // speedDial => 현위치
   void _moveToCurrentLocation() {
-    mapController
-        .animateCamera(CameraUpdate.newLatLng(_mapProvider.currentLocation));
+    LatLng position =
+        Provider.of<MapProvider>(context, listen: false).currentLocation;
+    mapController.animateCamera(CameraUpdate.newLatLng(position));
   }
 
   // speedDial => 친구찾기
@@ -299,7 +479,9 @@ class _MapsWidgetState extends State<MapsWidget> {
                               // Text(log["username"]),
                               Text(
                                 _calDistance(
-                                  _mapProvider.currentLocation,
+                                  Provider.of<MapProvider>(context,
+                                          listen: false)
+                                      .currentLocation,
                                   LatLng(
                                     log.latitude,
                                     log.longitude,
