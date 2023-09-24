@@ -60,6 +60,13 @@ class ChatViewModel extends ChangeNotifier {
   List<ChatRoomViewModel> _roomViewModel = [];
   List<ChatRoomViewModel> get roomViewModel => _roomViewModel;
 
+  void requestCreateRoom(String name, List<String> userIDs) {
+    socket.emit('create_room', {
+      'name': name,
+      'userIDs': userIDs,
+    });
+  }
+
   void addRoom(ChatRoomViewModel room) {
     // TODO: add room to server
     _roomViewModel.add(room);

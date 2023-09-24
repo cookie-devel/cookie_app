@@ -172,11 +172,10 @@ class CreateChatroomButton extends StatelessWidget {
             content: '채팅방을 개설하겠습니까?',
             onConfirm: () {
               Provider.of<ChatViewModel>(context, listen: false)
-                  .socket
-                  .emit("create_room", {
-                'title': roomTitle,
-                'members': selectedFriendsList.map((e) => e.id).toList(),
-              });
+                  .requestCreateRoom(
+                roomTitle,
+                selectedFriendsList.map((e) => e.id).toList(),
+              );
               Navigator.pop(context);
             },
             onCancel: () {
