@@ -20,6 +20,7 @@ import 'package:firebase_core/firebase_core.dart';
 void main() async {
   Logger.root.level = Level.INFO; // defaults to Level.INFO
   Logger.root.onRecord.listen((record) {
+    // ignore: avoid_print
     print('${record.level.name}: ${record.time}: ${record.message}');
   });
 

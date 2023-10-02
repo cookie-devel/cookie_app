@@ -21,7 +21,7 @@ class ImageSelectionDialog {
                     final picker = ImagePicker();
                     final pickedFile =
                         await picker.pickImage(source: ImageSource.gallery);
-                    if (pickedFile != null) {
+                    if (context.mounted && pickedFile != null) {
                       _imageFile = File(pickedFile.path);
                       Navigator.pop(context);
                     }
@@ -34,7 +34,7 @@ class ImageSelectionDialog {
                     final picker = ImagePicker();
                     final pickedFile =
                         await picker.pickImage(source: ImageSource.camera);
-                    if (pickedFile != null) {
+                    if (context.mounted && pickedFile != null) {
                       _imageFile = File(pickedFile.path);
                       Navigator.pop(context);
                     }

@@ -1,10 +1,10 @@
 import 'package:cookie_app/view/components/loading.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
-import 'package:cookie_app/view/pages/friends/friendsSheet.dart';
+import 'package:cookie_app/view/pages/friends/friends_sheet.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/friendlist.viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/view/components/account/FriendProfileWidget.dart';
+import 'package:cookie_app/view/components/account/friend_profile.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
@@ -29,7 +29,7 @@ class _FriendsTabState extends State<FriendsTab>
         showSnackBar(context: context, message: '친구 목록을 업데이트했습니다.');
       }
     } catch (e) {
-      showErrorSnackBar(context, e.toString());
+      if (context.mounted) showErrorSnackBar(context, e.toString());
     }
   }
 

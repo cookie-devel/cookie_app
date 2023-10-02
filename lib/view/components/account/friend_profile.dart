@@ -1,7 +1,7 @@
-import 'package:cookie_app/view/components/RoundedImage.dart';
+import 'package:cookie_app/view/components/account/profile_window.dart';
+import 'package:cookie_app/view/components/rounded_image.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/view/components/account/ProfileWindow.dart';
 
 class FriendProfileWidget extends StatefulWidget {
   final PublicAccountViewModel account;
