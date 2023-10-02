@@ -4,6 +4,19 @@ import 'package:cookie_app/types/api/account/info.dart';
 part 'signin.g.dart';
 
 @JsonSerializable()
+class SignInRequest {
+  String id;
+  String pw;
+
+  SignInRequest({required this.id, required this.pw});
+
+  factory SignInRequest.fromJson(Map<String, dynamic> json) =>
+      _$SignInRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SignInRequestToJson(this);
+}
+
+@JsonSerializable()
 class SignInResponse {
   InfoResponse account;
   String access_token;
