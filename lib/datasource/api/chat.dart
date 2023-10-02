@@ -8,7 +8,8 @@ import 'package:logging/logging.dart';
 class ChatAPI {
   static Logger log = Logger('ChatAPI');
   static Future<CreateRoomResponse> postCreateRoom(
-      CreateRoomRequest request,) async {
+    CreateRoomRequest request,
+  ) async {
     Response res = await post(
       Uri(
         scheme: dotenv.env['API_SCHEME'],
@@ -20,8 +21,8 @@ class ChatAPI {
         'Authorization': 'Bearer ${JWTRepository.token}',
       },
       body: {
-        'name': name,
-        'userIDs': userIDs,
+        'name': request.name,
+        'members': request.members,
       },
     );
 

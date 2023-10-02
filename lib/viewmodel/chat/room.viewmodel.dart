@@ -8,6 +8,7 @@ class ChatRoomViewModel extends BaseViewModel {
   late ChatRoomModel _model;
 
   String get id => _model.id;
+  DateTime get createdAt => _model.createdAt;
   String get name => _model.name;
   ImageProvider get image => _model.image != null
       ? NetworkImage(_model.image!)
