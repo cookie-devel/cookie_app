@@ -1,5 +1,6 @@
 import 'package:cookie_app/view/components/dialog.dart';
 import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
+import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
 import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,8 +34,10 @@ class SettingsWidget extends StatelessWidget {
               builder: (context) => Alert(
                 title: "로그아웃",
                 content: "로그아웃 하시겠습니까?",
-                onConfirm:
-                    Provider.of<AuthViewModel>(context, listen: false).signOut,
+                onConfirm: () {
+                  context.read<AuthViewModel>().signOut();
+                  context.read<ChatViewModel>().disconnect();
+                },
                 onCancel: () => {},
               ),
             );

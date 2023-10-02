@@ -18,7 +18,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
-  Logger.root.level = Level.ALL; // defaults to Level.INFO
+  Logger.root.level = Level.INFO; // defaults to Level.INFO
   Logger.root.onRecord.listen((record) {
     print('${record.level.name}: ${record.time}: ${record.message}');
   });
@@ -71,27 +71,21 @@ class Cookie extends StatelessWidget {
     // FIXME: Maybe we should make something like CacheManager
     JWTStorage.read().then((value) {
       if (value != null) {
-        Provider.of<AuthViewModel>(context, listen: false).jwtSignIn(
-          token: value,
-          privateAccountViewModel:
-              Provider.of<PrivateAccountViewModel>(context, listen: false),
-        );
-        Provider.of<ChatViewModel>(context, listen: false).connect();
+        context.read<AuthViewModel>().jwtSignIn(
+              token: value,
+              privateAccountViewModel: context.read<PrivateAccountViewModel>(),
+            );
       }
       FlutterNativeSplash.remove();
     });
 
-    return Consumer<ThemeProvider>(
-      builder: (context, themeProvider, _) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: _title,
-          home: Provider.of<AuthViewModel>(context, listen: true).isSigned
-              ? const MainWidget()
-              : const SignInWidget(),
-          theme: context.watch<ThemeProvider>().theme,
-        );
-      },
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: _title,
+      home: context.watch<AuthViewModel>().isSigned
+          ? const MainWidget()
+          : const SignInWidget(),
+      theme: context.watch<ThemeProvider>().theme,
     );
   }
 }

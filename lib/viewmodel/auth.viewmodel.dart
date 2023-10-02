@@ -1,4 +1,3 @@
-import 'package:cookie_app/model/account/account_info.dart';
 import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/types/api/auth/signin.dart';
@@ -24,15 +23,22 @@ class AuthViewModel extends BaseViewModel {
     required PrivateAccountViewModel privateAccountViewModel,
   }) async {
     _isSigned = await JWTRepository.setToken(token);
-    PrivateAccountModel? model =
-        await PrivateAccountModel.fromStorage(storage: AccountStorage());
-    if (model == null) return false;
+    if (!_isSigned) return false;
+    notifyListeners();
 
-    assert(model.id == JWTRepository.payload!.userid);
+    // FIXME: Load PrivateAccountViewModel from cache
 
-    privateAccountViewModel.updateMyInfo(
-      model: model,
-    );
+    // PrivateAccountModel? model =
+    //     await PrivateAccountModel.fromStorage(storage: AccountStorage());
+    // logger.shout('model: $model');
+    // if (model == null) return false;
+    // notifyListeners();
+
+    // assert(model.id == JWTRepository.payload!.userid);
+
+    // await privateAccountViewModel.updateMyInfo(
+    //   model: model,
+    // );
 
     return true;
   }
