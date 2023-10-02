@@ -7,6 +7,7 @@ part 'room.g.dart';
 @JsonSerializable()
 class ChatRoomModel {
   final String id;
+  final DateTime createdAt;
   final String name;
   final String? image;
   final List<PublicAccountModel> users;
@@ -15,6 +16,7 @@ class ChatRoomModel {
   ChatRoomModel({
     required this.id,
     this.name = "Unknown Room",
+    required this.createdAt,
     this.image,
     this.users = const [],
     this.messages = const [],

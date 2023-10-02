@@ -1,9 +1,19 @@
+import 'package:cookie_app/datasource/api/chat.dart';
+import 'package:cookie_app/model/chat/room.dart';
 import 'package:cookie_app/repository/jwt.repo.dart';
+import 'package:cookie_app/types/api/chat/create_room.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/viewmodel/chat/room.viewmodel.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logging/logging.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+
+enum ChatEvent {
+  join_room,
+  invite_room,
+  leave_room,
+  chat,
+}
 
 class ChatViewModel extends ChangeNotifier {
   final log = Logger('ChatViewModel');
@@ -20,26 +30,24 @@ class ChatViewModel extends ChangeNotifier {
         .enableReconnection()
         .build(),
   );
+
   bool _connected = false;
   bool get connected => _connected;
 
-  void connect() {
+  Function get connect => socket.connect;
+  Function get disconnect => socket.disconnect;
+
+  ChatViewModel() {
+    // Registering event handlers
+    // Try Hot-Restart if event handlers are registered multiple times
     socket.auth = {'token': JWTRepository.token!};
 
-    // Registering event handlers
     socket.onConnect(_onConnectionChange);
     socket.onDisconnect(_onConnectionChange);
-    socket.on("create_room", _onCreateRoom);
-    socket.on("join_room", _onJoinRoom);
-    socket.on("invite_room", _onInviteRoom);
-    socket.on("leave_room", _onLeaveRoom);
-    socket.on("chat", _onChat);
-
-    socket.connect();
-  }
-
-  void disconnect() {
-    socket.disconnect();
+    socket.on(ChatEvent.join_room.name, _onJoinRoom);
+    socket.on(ChatEvent.invite_room.name, _onInviteRoom);
+    socket.on(ChatEvent.leave_room.name, _onLeaveRoom);
+    socket.on(ChatEvent.chat.name, _onChat);
   }
 
   void _onConnectionChange(_) {
@@ -50,40 +58,52 @@ class ChatViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _onCreateRoom(_) {}
-  void _onJoinRoom(_) {}
+  void _onJoinRoom(data) {
+    // _roomViewModel.add(
+    //   ChatRoomViewModel(
+    //     model: ChatRoomModel(
+    //       id: data['id'],
+    //       name: data['name'],
+    //       image: data['image'],
+    //       users: data['users'],
+    //       messages: data['messages'],
+    //     ),
+    //   ),
+    // );
+  }
+
   void _onInviteRoom(_) {}
   void _onLeaveRoom(_) {}
   void _onChat(_) {}
 
-  ChatViewModel();
-  List<ChatRoomViewModel> _roomViewModel = [];
+  final List<ChatRoomViewModel> _roomViewModel = [
+    // Sample Data
+    ChatRoomViewModel(
+      model: ChatRoomModel(
+        id: 'test',
+        createdAt: DateTime.utc(2023, 8, 25),
+      ),
+    ),
+  ];
   List<ChatRoomViewModel> get roomViewModel => _roomViewModel;
 
-  void requestCreateRoom(String name, List<String> userIDs) {
-    socket.emit('create_room', {
-      'name': name,
-      'userIDs': userIDs,
-    });
-  }
+  void createRoom(String name, List<String> userIDs) async {
+    CreateRoomResponse res = await ChatAPI.postCreateRoom(
+      CreateRoomRequest(
+        name: name,
+        members: userIDs,
+      ),
+    );
 
-  void addRoom(ChatRoomViewModel room) {
-    // TODO: add room to server
-    _roomViewModel.add(room);
-  }
-
-  void removeRoom(ChatRoomViewModel room) {
-    // TODO: remove room to server
-    _roomViewModel.remove(room);
-  }
-
-  void updateRoom(ChatRoomViewModel room) {
-    // TODO: update room from server
-    _roomViewModel[_roomViewModel.indexOf(room)] = room;
-  }
-
-  void updateRooms(List<ChatRoomViewModel> rooms) {
-    // TODO: update rooms from server
-    _roomViewModel = rooms;
+    _roomViewModel.add(
+      ChatRoomViewModel(
+        model: ChatRoomModel(
+          id: res.id,
+          createdAt: res.createdAt,
+          name: res.name,
+          users: res.members,
+        ),
+      ),
+    );
   }
 }

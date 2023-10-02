@@ -31,46 +31,29 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
           ),
         ],
       ),
-      // body: ListView.separated(
-      //   separatorBuilder: (context, index) => const Divider(
-      //     height: 1,
-      //   ),
-      //   itemCount: 10,
-      //   itemBuilder: (BuildContext context, int index) {
-      //     return ChatRoomListEntry(
-      //       name: 'name',
-      //       image: const AssetImage('assets/images/cookie_logo.png'),
-      //       message: 'message',
-      //       time: DateTime.now(),
-      //       navigate: const ChatPage(),
-      //       unread: 10,
-      //     );
-      //   },
-      // ),
-      body: Consumer<ChatViewModel>(
-        builder: (context, model, child) => ListView.separated(
-          separatorBuilder: (context, index) => const Divider(
-            height: 1,
-          ),
-          itemCount: model.roomViewModel.length,
-          itemBuilder: (BuildContext context, int index) {
-            ChatRoomViewModel chatRoom = model.roomViewModel[index];
-            return ChatRoomListEntry(
-              name: chatRoom.name,
-              image: chatRoom.image,
-              message: chatRoom.messages.last.content,
-              time: chatRoom.messages.last.time,
-              navigate: const ChatPage(),
-            );
-          },
+      body: ListView.separated(
+        separatorBuilder: (context, index) => const Divider(
+          height: 1,
         ),
+        itemCount: context.watch<ChatViewModel>().roomViewModel.length,
+        itemBuilder: (BuildContext context, int index) {
+          ChatRoomViewModel chatRoom =
+              context.watch<ChatViewModel>().roomViewModel[index];
+
+          return ChatRoomListEntry(
+            name: chatRoom.name,
+            image: chatRoom.image,
+            message: chatRoom.messages.isNotEmpty
+                ? chatRoom.messages.last.content
+                : "Empty Message",
+            time: chatRoom.messages.isNotEmpty
+                ? chatRoom.messages.last.time
+                : chatRoom.createdAt,
+            navigate: const ChatPage(),
+          );
+        },
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }
 
