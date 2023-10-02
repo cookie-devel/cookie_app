@@ -1,6 +1,6 @@
-import 'package:cookie_app/view/components/RoundedImage.dart';
 import 'package:cookie_app/view/components/box_decoration.dart';
 import 'package:cookie_app/view/components/fullscreen_image.dart';
+import 'package:cookie_app/view/components/rounded_image.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
 

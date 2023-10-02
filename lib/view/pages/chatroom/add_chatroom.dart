@@ -1,5 +1,5 @@
-import 'package:cookie_app/view/components/RoundedImage.dart';
 import 'package:cookie_app/view/components/dialog.dart';
+import 'package:cookie_app/view/components/rounded_image.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/pages/chatroom/chatpage.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
@@ -183,9 +183,7 @@ class CreateChatroomButton extends StatelessWidget {
             onConfirm: () {
               List<String> roomMates =
                   selectedFriendsList.map((e) => e.id).toList();
-              context
-                  .read<ChatViewModel>()
-                  .requestCreateRoom(roomTitle, roomMates);
+              context.read<ChatViewModel>().createRoom(roomTitle, roomMates);
 
               Navigator.pop(context); // Pop Alert Dialog
               Navigator.pop(context); // Pop FriendSelectionScreen
