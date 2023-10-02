@@ -34,15 +34,12 @@ class _SignInFormState extends State<SignInForm> {
               onPressed: () async {
                 if (!_formKey.currentState!.validate()) return;
                 _formKey.currentState!.save();
-                return await Provider.of<AuthViewModel>(context, listen: false)
-                    .signIn(
-                  id: id!,
-                  pw: pw!,
-                  privateAccountViewModel: Provider.of<PrivateAccountViewModel>(
-                    context,
-                    listen: false,
-                  ),
-                );
+                return await context.read<AuthViewModel>().signIn(
+                      id: id!,
+                      pw: pw!,
+                      privateAccountViewModel:
+                          context.read<PrivateAccountViewModel>(),
+                    );
               },
               text: '로그인',
               onFailure: (context, e) =>
