@@ -1,11 +1,10 @@
 import 'dart:convert';
+import 'package:cookie_app/types/api/auth/signup.dart';
 import 'package:http/http.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:cookie_app/types/api/auth/exists.dart';
 import 'package:cookie_app/types/api/auth/signin.dart';
 import 'package:cookie_app/types/api/error.dart';
-import 'package:cookie_app/types/form/signin.dart';
-import 'package:cookie_app/types/form/signup.dart';
 
 class AuthAPI {
   static Future<ExistsResponse> getExistance(
@@ -37,7 +36,7 @@ class AuthAPI {
     return ExistsResponse.fromJson(json.decode(res.body));
   }
 
-  static Future<SignInResponse> postSignIn(SignInFormModel signin) async {
+  static Future<SignInResponse> postSignIn(SignInRequest signin) async {
     final uri = Uri(
       scheme: dotenv.env['API_SCHEME'],
       host: dotenv.env['API_HOST'],
@@ -60,7 +59,7 @@ class AuthAPI {
     return SignInResponse.fromJson(json.decode(res.body));
   }
 
-  static Future<void> postSignUp(SignUpFormModel signUpForm) async {
+  static Future<void> postSignUp(SignUpRequest signUpForm) async {
     final uri = Uri(
       scheme: dotenv.env['API_SCHEME'],
       host: dotenv.env['API_HOST'],

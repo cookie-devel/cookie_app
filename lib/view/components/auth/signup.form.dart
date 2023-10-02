@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:cookie_app/types/account/profile.dart';
-import 'package:cookie_app/types/form/signup.dart';
+import 'package:cookie_app/types/api/auth/signup.dart';
 import 'package:cookie_app/view/components/auth/submit_button.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/components/profile_imgpicker.dart';
@@ -56,7 +56,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 if (!_formKey.currentState!.validate()) return;
                 _formKey.currentState!.save();
                 await context.read<AuthViewModel>().signUp(
-                      SignUpFormModel(
+                      SignUpRequest(
                         id: id!,
                         pw: pw!,
                         name: name!,

@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'signup.g.dart';
 
 @JsonSerializable()
-class SignUpFormModel {
+class SignUpRequest {
   final String id;
   final String pw;
   final String name;
@@ -12,7 +12,7 @@ class SignUpFormModel {
   final String phoneNumber;
   final Profile profile;
 
-  SignUpFormModel({
+  SignUpRequest({
     required this.id,
     required this.pw,
     required this.name,
@@ -21,8 +21,8 @@ class SignUpFormModel {
     required this.profile,
   });
 
-  factory SignUpFormModel.fromJson(Map<String, dynamic> json) =>
-      _$SignUpFormModelFromJson(json);
+  factory SignUpRequest.fromJson(Map<String, dynamic> json) =>
+      _$SignUpRequestFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SignUpFormModelToJson(this);
+  Map<String, dynamic> toJson() => _$SignUpRequestToJson(this);
 }

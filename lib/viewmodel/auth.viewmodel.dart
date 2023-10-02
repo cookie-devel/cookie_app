@@ -1,10 +1,9 @@
 import 'package:cookie_app/repository/jwt.repo.dart';
+import 'package:cookie_app/types/api/auth/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/types/api/auth/signin.dart';
 import 'package:cookie_app/datasource/api/auth.dart';
 import 'package:cookie_app/datasource/storage/account.storage.dart';
-import 'package:cookie_app/types/form/signin.dart';
-import 'package:cookie_app/types/form/signup.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 import 'package:logging/logging.dart';
@@ -52,7 +51,7 @@ class AuthViewModel extends BaseViewModel {
     // Handle Signin
     try {
       SignInResponse response = await AuthAPI.postSignIn(
-        SignInFormModel(
+        SignInRequest(
           id: id,
           pw: pw,
         ),
@@ -70,7 +69,7 @@ class AuthViewModel extends BaseViewModel {
     }
   }
 
-  Future<void> signUp(SignUpFormModel signUpForm) async {
+  Future<void> signUp(SignUpRequest signUpForm) async {
     setLoadState(busy: true, loaded: false);
     // Handle Signup
     try {
