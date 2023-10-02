@@ -1,5 +1,7 @@
 import 'package:cookie_app/view/components/RoundedImage.dart';
 import 'package:cookie_app/view/components/dialog.dart';
+import 'package:cookie_app/view/components/snackbar.dart';
+import 'package:cookie_app/view/pages/chatroom/chatpage.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
 import 'package:cookie_app/viewmodel/friendlist.viewmodel.dart';
@@ -20,7 +22,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     List<PublicAccountViewModel> friendsList =
-        Provider.of<FriendsListViewModel>(context).friends;
+        context.watch<FriendsListViewModel>().friends;
     return Scaffold(
       appBar: AppBar(
         title: const Text('채팅방 추가'),
@@ -161,25 +163,36 @@ class CreateChatroomButton extends StatelessWidget {
       icon: const Icon(Icons.check),
       onPressed: () {
         // TODO: Handle Error cases
-        if (selectedFriendsList.isEmpty) throw Exception('친구를 한 명 이상 추가해주세요.');
-        if (roomTitle.isEmpty) throw Exception('채팅방 이름을 입력해주세요.');
+        try {
+          if (selectedFriendsList.isEmpty) {
+            throw Exception('친구를 한 명 이상 추가해주세요.');
+          } else if (roomTitle.isEmpty) {
+            throw Exception('채팅방 이름을 입력해주세요.');
+          }
+        } catch (e) {
+          showErrorSnackBar(context, e.toString());
+          rethrow;
+        }
 
         // TODO: Implement code to create & navigate to chatroom. Business Logics MUST be done from ViewModel.
         showDialog(
           context: context,
-          builder: (context) => Alert(
+          builder: (BuildContext context) => Alert(
             title: '$roomTitle (${selectedFriendsList.length + 1}명)',
             content: '채팅방을 개설하겠습니까?',
             onConfirm: () {
-              Provider.of<ChatViewModel>(context, listen: false)
-                  .requestCreateRoom(
-                roomTitle,
-                selectedFriendsList.map((e) => e.id).toList(),
+              List<String> roomMates =
+                  selectedFriendsList.map((e) => e.id).toList();
+              context
+                  .read<ChatViewModel>()
+                  .requestCreateRoom(roomTitle, roomMates);
+
+              Navigator.pop(context); // Pop Alert Dialog
+              Navigator.pop(context); // Pop FriendSelectionScreen
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ChatPage()),
               );
-              Navigator.pop(context);
-            },
-            onCancel: () {
-              Navigator.pop(context);
             },
           ),
         );

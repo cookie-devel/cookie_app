@@ -55,19 +55,19 @@ class _SignUpFormState extends State<SignUpForm> {
               onPressed: () async {
                 if (!_formKey.currentState!.validate()) return;
                 _formKey.currentState!.save();
-                await Provider.of<AuthViewModel>(context, listen: false).signUp(
-                  SignUpFormModel(
-                    id: id!,
-                    pw: pw!,
-                    name: name!,
-                    birthday: birthday.toString(),
-                    phoneNumber: phoneNumber!,
-                    profile: Profile(
-                      image: profileImg?.path,
-                      message: null,
-                    ),
-                  ),
-                );
+                await context.read<AuthViewModel>().signUp(
+                      SignUpFormModel(
+                        id: id!,
+                        pw: pw!,
+                        name: name!,
+                        birthday: birthday.toString(),
+                        phoneNumber: phoneNumber!,
+                        profile: Profile(
+                          image: profileImg?.path,
+                          message: null,
+                        ),
+                      ),
+                    );
               },
               text: '회원가입',
               onSuccess: onSignUpSuccess,

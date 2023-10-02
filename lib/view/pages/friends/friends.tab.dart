@@ -24,8 +24,7 @@ class _FriendsTabState extends State<FriendsTab>
 
   Future<void> handleUpdateFriends() async {
     try {
-      await Provider.of<FriendsListViewModel>(context, listen: false)
-          .updateFriends();
+      await context.read<FriendsListViewModel>().updateFriends();
       if (context.mounted) {
         showSnackBar(context: context, message: '친구 목록을 업데이트했습니다.');
       }

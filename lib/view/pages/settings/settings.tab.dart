@@ -17,8 +17,7 @@ class SettingsWidget extends StatelessWidget {
           title: const Text('다크 모드'),
           leading: const Icon(Icons.color_lens),
           trailing: Switch(
-            onChanged:
-                Provider.of<ThemeProvider>(context, listen: false).setDarkMode,
+            onChanged: context.read<ThemeProvider>().setDarkMode,
             value: context.watch<ThemeProvider>().isDarkMode,
           ),
         ),
@@ -35,10 +34,10 @@ class SettingsWidget extends StatelessWidget {
                 title: "로그아웃",
                 content: "로그아웃 하시겠습니까?",
                 onConfirm: () {
-                  context.read<AuthViewModel>().signOut();
                   context.read<ChatViewModel>().disconnect();
+                  context.read<AuthViewModel>().signOut();
+                  Navigator.of(context).pop();
                 },
-                onCancel: () => {},
               ),
             );
           },
