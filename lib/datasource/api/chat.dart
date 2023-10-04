@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
 
+@Deprecated("use socket.io create_room event instead")
 class ChatAPI {
   static Logger log = Logger('ChatAPI');
   static Future<CreateRoomResponse> postCreateRoom(
