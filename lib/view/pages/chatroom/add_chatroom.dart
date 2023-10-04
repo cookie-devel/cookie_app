@@ -1,7 +1,6 @@
 import 'package:cookie_app/view/components/dialog.dart';
 import 'package:cookie_app/view/components/rounded_image.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
-import 'package:cookie_app/view/pages/chatroom/chatpage.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
 import 'package:cookie_app/viewmodel/friendlist.viewmodel.dart';
@@ -181,16 +180,12 @@ class CreateChatroomButton extends StatelessWidget {
             title: '$roomTitle (${selectedFriendsList.length + 1}명)',
             content: '채팅방을 개설하겠습니까?',
             onConfirm: () {
-              List<String> roomMates =
-                  selectedFriendsList.map((e) => e.id).toList();
-              context.read<ChatViewModel>().createRoom(roomTitle, roomMates);
-
               Navigator.pop(context); // Pop Alert Dialog
               Navigator.pop(context); // Pop FriendSelectionScreen
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ChatPage()),
-              );
+              context.read<ChatViewModel>().createRoom(
+                    roomTitle,
+                    selectedFriendsList.map((e) => e.id).toList(),
+                  );
             },
           ),
         );

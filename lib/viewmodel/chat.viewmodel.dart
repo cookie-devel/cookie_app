@@ -1,7 +1,8 @@
-import 'package:cookie_app/datasource/api/chat.dart';
 import 'package:cookie_app/model/chat/room.dart';
 import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:cookie_app/types/api/chat/create_room.dart';
+import 'package:cookie_app/view/navigation_service.dart';
+import 'package:cookie_app/view/pages/chatroom/chatpage.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/viewmodel/chat/room.viewmodel.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -9,6 +10,7 @@ import 'package:logging/logging.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 enum ChatEvent {
+  create_room,
   join_room,
   invite_room,
   leave_room,
@@ -44,6 +46,7 @@ class ChatViewModel extends ChangeNotifier {
 
     socket.onConnect(_onConnectionChange);
     socket.onDisconnect(_onConnectionChange);
+    socket.on(ChatEvent.create_room.name, _onCreateRoom);
     socket.on(ChatEvent.join_room.name, _onJoinRoom);
     socket.on(ChatEvent.invite_room.name, _onInviteRoom);
     socket.on(ChatEvent.leave_room.name, _onLeaveRoom);
@@ -58,21 +61,35 @@ class ChatViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _onJoinRoom(data) {
-    // _roomViewModel.add(
-    //   ChatRoomViewModel(
-    //     model: ChatRoomModel(
-    //       id: data['id'],
-    //       name: data['name'],
-    //       image: data['image'],
-    //       users: data['users'],
-    //       messages: data['messages'],
-    //     ),
-    //   ),
-    // );
+  void _onCreateRoom(data) {
+    ChatRoomModel model = ChatRoomModel.fromJson(data);
+    log.info("create_room: $model");
+    _roomViewModel.add(
+      ChatRoomViewModel(model: model),
+    );
+    notifyListeners();
+
+    BuildContext context = NavigationService.navigatorKey.currentContext!;
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ChatPage()),
+    );
   }
 
-  void _onInviteRoom(_) {}
+  void _onJoinRoom(data) {
+    ChatRoomModel model = ChatRoomModel.fromJson(data);
+    log.info("join_room: $model");
+    _roomViewModel.add(
+      ChatRoomViewModel(model: model),
+    );
+    notifyListeners();
+  }
+
+  void _onInviteRoom(id) {
+    log.info("invite_room: $id");
+    socket.emit(ChatEvent.join_room.name, id);
+  }
+
   void _onLeaveRoom(_) {}
   void _onChat(_) {}
 
@@ -87,23 +104,13 @@ class ChatViewModel extends ChangeNotifier {
   ];
   List<ChatRoomViewModel> get roomViewModel => _roomViewModel;
 
-  void createRoom(String name, List<String> userIDs) async {
-    CreateRoomResponse res = await ChatAPI.postCreateRoom(
+  void createRoom(String name, List<String> members) {
+    socket.emit(
+      ChatEvent.create_room.name,
       CreateRoomRequest(
         name: name,
-        members: userIDs,
-      ),
-    );
-
-    _roomViewModel.add(
-      ChatRoomViewModel(
-        model: ChatRoomModel(
-          id: res.id,
-          createdAt: res.createdAt,
-          name: res.name,
-          users: res.members,
-        ),
-      ),
+        members: members,
+      ).toJson(),
     );
   }
 }

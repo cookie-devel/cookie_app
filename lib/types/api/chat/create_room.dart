@@ -5,7 +5,6 @@ part 'create_room.g.dart';
 
 @JsonSerializable()
 class CreateRoomRequest {
-  // TODO
   String name;
   List<String> members;
 
@@ -21,7 +20,6 @@ class CreateRoomRequest {
 
 @JsonSerializable()
 class CreateRoomResponse {
-  // TODO
   String id;
   DateTime createdAt;
   String name;
