@@ -164,8 +164,7 @@ Future<void> markerBottomSheet(
 
 Future<Marker> addMarker(
   BuildContext context,
-  PublicAccountViewModel user,
-  LatLng location, {
+  PublicAccountViewModel user, {
   int size = 100,
   Color color = Colors.deepOrangeAccent,
   double width = 4,
@@ -179,7 +178,10 @@ Future<Marker> addMarker(
   return Marker(
     markerId: MarkerId(user.name.toString()),
     icon: BitmapDescriptor.fromBytes(markIcons),
-    position: location,
+    position: LatLng(
+      user.location?.latitude as double,
+      user.location?.longitude as double,
+    ),
     onTap: () {
       markerBottomSheet(context, user);
     },
