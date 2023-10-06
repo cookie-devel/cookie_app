@@ -23,12 +23,13 @@ class ProfileWindow extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => FullScreenImage(image: user.profileImage),
+                builder: (context) =>
+                    FullScreenImage(image: user.profile.image),
               ),
             );
           },
           child: RoundedImage(
-            image: user.profileImage,
+            image: user.profile.image,
           ),
         ),
         CookieDecoratedContainer(
@@ -47,7 +48,7 @@ class ProfileWindow extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  user.profileMessage ?? '',
+                  user.profile.message ?? '',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(

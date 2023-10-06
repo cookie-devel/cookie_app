@@ -127,13 +127,13 @@ class FriendTile extends StatelessWidget {
     return ListTile(
       // dense: true,
       leading: RoundedImage(
-        image: friend.profileImage,
+        image: friend.profile.image,
         imageSize: 50.0,
       ),
       title: Text(friend.name),
-      subtitle: friend.profileMessage != null
+      subtitle: friend.profile.message != null
           ? Text(
-              friend.profileMessage!,
+              friend.profile.message!,
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
             )
