@@ -26,7 +26,7 @@ class BottomSheetInside extends StatelessWidget {
                   shape: BoxShape.circle,
                   border: Border.all(width: 2.0, color: Colors.white),
                   image: DecorationImage(
-                    image: user.profileImage,
+                    image: user.profile.image,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -93,7 +93,7 @@ class BottomSheetInside extends StatelessWidget {
                     const SizedBox(height: 8),
                     Flexible(
                       child: Text(
-                        '${user.profileMessage!}\n',
+                        '${user.profile.message!}\n',
                         style: const TextStyle(
                           fontSize: 14,
                           color: Colors.white,
@@ -170,7 +170,7 @@ Future<Marker> addMarker(
   double width = 4,
 }) async {
   Uint8List markIcons = await getRoundedImage(
-    user.profileImage,
+    user.profile.image,
     width: size,
     borderColor: color,
     borderWidth: width,

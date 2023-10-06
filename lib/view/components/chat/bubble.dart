@@ -91,7 +91,7 @@ class OtherBubble extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   image: DecorationImage(
-                    image: user.profileImage,
+                    image: user.profile.image,
                     fit: BoxFit.cover,
                   ),
                   border: Border.all(width: 0.5, color: Colors.black45),

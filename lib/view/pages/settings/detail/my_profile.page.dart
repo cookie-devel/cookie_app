@@ -31,7 +31,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                 shape: BoxShape.circle,
               ),
               child: Image(
-                image: value.profileImage,
+                image: value.profile.image,
                 fit: BoxFit.cover,
                 errorBuilder: (
                   BuildContext context,
@@ -64,7 +64,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                 size: 36,
               ),
               title: const Text('상태메시지'),
-              subtitle: Text(value.profileMessage ?? '상태메시지가 없습니다.'),
+              subtitle: Text(value.profile.message ?? '상태메시지가 없습니다.'),
               trailing: IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {

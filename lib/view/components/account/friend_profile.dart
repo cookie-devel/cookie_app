@@ -96,7 +96,7 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
             position: _animation,
             child: RoundedImage(
               imageSize: imageSize,
-              image: widget.account.profileImage,
+              image: widget.account.profile.image,
             ),
           ),
           if (widget.displayName) const SizedBox(height: 8),
