@@ -1,5 +1,5 @@
 import 'package:cookie_app/model/account/account_info.dart';
-import 'package:cookie_app/repository/myinfo.repo.dart';
+import 'package:cookie_app/repository/info.repo.dart';
 import 'package:cookie_app/types/account/profile.dart';
 import 'package:cookie_app/view/components/icon_imageprovider.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
@@ -55,7 +55,7 @@ class PublicAccountViewModel extends AccountViewModel<PublicAccountModel> {
 class PrivateAccountViewModel extends AccountViewModel<PrivateAccountModel> {
   String get phone => _model.phone;
 
-  final MyInfoRepository _repo = MyInfoRepositoryStorageImpl();
+  final InfoRepository _repo = InfoRepositoryStorageImpl();
 
   Future<void> updateMyInfo({PrivateAccountModel? model}) async {
     setLoadState(busy: true, loaded: false);

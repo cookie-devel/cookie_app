@@ -1,9 +1,9 @@
-import 'package:cookie_app/repository/myinfo.repo.dart';
+import 'package:cookie_app/repository/info.repo.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 
 class FriendsListViewModel extends BaseViewModel {
-  final MyInfoRepository _repo = MyInfoRepositoryImpl();
+  final InfoRepository _repo = InfoRepositoryImpl();
 
   List<PublicAccountViewModel> _friends = [];
   List<PublicAccountViewModel> get friends => _friends;

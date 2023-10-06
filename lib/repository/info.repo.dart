@@ -2,30 +2,30 @@ import 'package:cookie_app/datasource/api/account.dart';
 import 'package:cookie_app/datasource/storage/account.storage.dart';
 import 'package:cookie_app/model/account/account_info.dart';
 
-abstract class MyInfoRepository {
+abstract class InfoRepository {
   Future<PrivateAccountModel> getInfo();
 }
 
-class MyInfoRepositoryStorageImpl implements MyInfoRepository {
+class InfoRepositoryStorageImpl implements InfoRepository {
   @override
   Future<PrivateAccountModel> getInfo() async {
     return PrivateAccountModel.fromJson(await AccountStorage().readJSON());
   }
 }
 
-class MyInfoRepositoryApiImpl implements MyInfoRepository {
+class InfoRepositoryApiImpl implements InfoRepository {
   @override
   Future<PrivateAccountModel> getInfo() async {
     return (await AccountAPI.getInfo()).toPrivateAccount();
   }
 }
 
-class MyInfoRepositoryImpl implements MyInfoRepository {
+class InfoRepositoryImpl implements InfoRepository {
   @override
   Future<PrivateAccountModel> getInfo() async {
     final repository = await AccountStorage().exists()
-        ? MyInfoRepositoryStorageImpl()
-        : MyInfoRepositoryApiImpl();
+        ? InfoRepositoryStorageImpl()
+        : InfoRepositoryApiImpl();
     return repository.getInfo();
   }
 }
