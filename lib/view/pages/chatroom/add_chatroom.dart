@@ -3,7 +3,7 @@ import 'package:cookie_app/view/components/rounded_image.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
-import 'package:cookie_app/viewmodel/friendlist.viewmodel.dart';
+import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,8 +20,8 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<PublicAccountViewModel> friendsList =
-        context.watch<FriendsListViewModel>().friends;
+    List<PublicAccountViewModel> friendList =
+        context.watch<FriendsViewModel>().friendList;
     return Scaffold(
       appBar: AppBar(
         title: const Text('채팅방 추가'),
@@ -80,9 +80,9 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
                     const Divider(color: Colors.grey),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: friendsList.length,
+                itemCount: friendList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  PublicAccountViewModel friend = friendsList[index];
+                  PublicAccountViewModel friend = friendList[index];
                   return FriendTile(
                     friend: friend,
                     isSelected: selectedFriends.contains(friend),
