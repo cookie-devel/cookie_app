@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'location_info.g.dart';
 
 @JsonSerializable()
-class LocationModel{
+class LocationModel {
   String id;
   double latitude;
   double longitude;
@@ -14,8 +14,8 @@ class LocationModel{
     required this.longitude,
   });
 
-  factory LocationModel.fromJson(Map<String, dynamic> json) => _$LocationModelFromJson(json);
+  factory LocationModel.fromJson(Map<String, dynamic> json) =>
+      _$LocationModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$LocationModelToJson(this);
-  
 }

@@ -86,6 +86,7 @@ dev_dependencies:
   build_runner: ^2.3.3
   lint_staged: ^0.4.2
   husky: ^0.1.6
+  import_sorter: ^4.6.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -132,3 +133,8 @@ flutter:
 
 lint_staged:
   "lib/**.dart": dart format --fix && dart fix --apply
+
+import_sorter:
+  comments: false
+  ignored_files:
+    - lib/*.g.dart

@@ -1,11 +1,13 @@
+import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
+
 import 'package:cookie_app/view/components/dialog.dart';
 import 'package:cookie_app/view/components/rounded_image.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
 import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class FriendSelectionScreen extends StatefulWidget {
   const FriendSelectionScreen({Key? key}) : super(key: key);

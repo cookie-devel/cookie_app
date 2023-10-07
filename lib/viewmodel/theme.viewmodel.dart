@@ -1,8 +1,10 @@
-import 'package:cookie_app/theme/dark.dart';
-import 'package:cookie_app/theme/default.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:cookie_app/theme/dark.dart';
+import 'package:cookie_app/theme/default.dart';
 
 /*
  다크모드/라이트모드를 설정하는 Provider

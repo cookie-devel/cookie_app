@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:timeago/timeago.dart' as timeago;
-import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
+
 import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
+
+import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
 
 class ChatRoomListEntry extends StatelessWidget {
   final String name;

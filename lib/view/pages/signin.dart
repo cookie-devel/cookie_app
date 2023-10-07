@@ -1,5 +1,6 @@
-import 'package:cookie_app/view/components/auth/signin.form.dart';
 import 'package:flutter/material.dart';
+
+import 'package:cookie_app/view/components/auth/signin.form.dart';
 import 'package:cookie_app/view/pages/signup.dart';
 
 class SignInWidget extends StatelessWidget {

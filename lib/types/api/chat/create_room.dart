@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+
 import 'package:cookie_app/model/account/account_info.dart';
 
 part 'create_room.g.dart';

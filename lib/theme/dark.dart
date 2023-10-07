@@ -1,5 +1,6 @@
-import 'package:cookie_app/theme/components/input.theme.dart';
 import 'package:flutter/material.dart';
+
+import 'package:cookie_app/theme/components/input.theme.dart';
 
 ThemeData darkThemeData = ThemeData(
   brightness: Brightness.dark,

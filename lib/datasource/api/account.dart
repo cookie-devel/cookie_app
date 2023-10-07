@@ -1,9 +1,11 @@
 import 'dart:convert';
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
+
+import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:cookie_app/types/api/account/info.dart';
 import 'package:cookie_app/types/api/error.dart';
-import 'package:cookie_app/repository/jwt.repo.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AccountAPI {
   static Future<InfoResponse> getInfo({List<String>? fields}) async {

@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
+
 import 'package:cookie_app/view/components/box_decoration.dart';
 import 'package:cookie_app/view/components/fullscreen_image.dart';
 import 'package:cookie_app/view/components/rounded_image.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:flutter/material.dart';
 
 // 프로필 창 class
 class ProfileWindow extends StatelessWidget {

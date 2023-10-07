@@ -1,13 +1,16 @@
 import 'dart:io';
+
+import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
+
 import 'package:cookie_app/types/account/profile.dart';
 import 'package:cookie_app/types/api/auth/signup.dart';
 import 'package:cookie_app/view/components/auth/submit_button.dart';
-import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/components/profile_imgpicker.dart';
+import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/components/text_form_fields.dart';
 import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({Key? key}) : super(key: key);

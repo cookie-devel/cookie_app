@@ -1,11 +1,13 @@
+import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
+
 import 'package:cookie_app/view/components/chat/chatroom_list_entry.dart';
 import 'package:cookie_app/view/components/chat/connection_info.dart';
 import 'package:cookie_app/view/pages/chatroom/add_chatroom.dart';
 import 'package:cookie_app/view/pages/chatroom/chatpage.dart';
 import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
 import 'package:cookie_app/viewmodel/chat/room.viewmodel.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ChatTabWidget extends StatefulWidget {
   const ChatTabWidget({super.key});

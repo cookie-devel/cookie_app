@@ -1,26 +1,27 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:cookie_app/view/components/loading.dart';
-import 'package:latlong2/latlong.dart' as l2;
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
-import 'package:provider/provider.dart';
-import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
-import 'package:logging/logging.dart';
-import 'package:cookie_app/types/map/mapPosition_info.dart';
-
 import 'dart:isolate';
 import 'dart:ui';
+
+import 'package:flutter/material.dart';
 
 import 'package:background_locator_2/background_locator.dart';
 import 'package:background_locator_2/location_dto.dart';
 import 'package:background_locator_2/settings/android_settings.dart';
 import 'package:background_locator_2/settings/ios_settings.dart';
 import 'package:background_locator_2/settings/locator_settings.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart' as l2;
 import 'package:location_permissions/location_permissions.dart';
-import 'package:cookie_app/view/pages/maps/location_callback_handler.dart';
+import 'package:logging/logging.dart';
+import 'package:provider/provider.dart';
+
 import 'package:cookie_app/repository/location_service.repo.dart';
+import 'package:cookie_app/types/map/mapPosition_info.dart';
+import 'package:cookie_app/view/components/loading.dart';
+import 'package:cookie_app/view/pages/maps/location_callback_handler.dart';
+import 'package:cookie_app/viewmodel/map.viewmodel.dart';
+import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
 
 class MapsWidget extends StatefulWidget {
   const MapsWidget({Key? key}) : super(key: key);
