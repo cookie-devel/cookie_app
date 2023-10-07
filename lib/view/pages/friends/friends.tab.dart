@@ -2,7 +2,7 @@ import 'package:cookie_app/view/components/loading.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/pages/friends/friends_sheet.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:cookie_app/viewmodel/friendlist.viewmodel.dart';
+import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:cookie_app/view/components/account/friend_profile.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +24,7 @@ class _FriendsTabState extends State<FriendsTab>
 
   Future<void> handleUpdateFriends() async {
     try {
-      await context.read<FriendsListViewModel>().updateFriends();
+      await context.read<FriendsViewModel>().updateFriends();
       if (context.mounted) {
         showSnackBar(context: context, message: '친구 목록을 업데이트했습니다.');
       }
@@ -47,7 +47,7 @@ class _FriendsTabState extends State<FriendsTab>
         title: const Text('친구'),
         actions: const [FriendsAction()],
       ),
-      body: Consumer<FriendsListViewModel>(
+      body: Consumer<FriendsViewModel>(
         builder: (context, value, child) => RefreshIndicator(
           onRefresh: () => handleUpdateFriends(),
           child: value.busy
@@ -68,7 +68,7 @@ class _FriendsTabState extends State<FriendsTab>
 }
 
 class FriendsGrid extends StatelessWidget {
-  final FriendsListViewModel friendsListViewModel;
+  final FriendsViewModel friendsListViewModel;
   final void Function() handleRefresh;
   const FriendsGrid({
     super.key,
@@ -78,17 +78,17 @@ class FriendsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return friendsListViewModel.friends.isNotEmpty
+    return friendsListViewModel.friendList.isNotEmpty
         ? GridView.builder(
             cacheExtent: 300,
-            itemCount: friendsListViewModel.friends.length,
+            itemCount: friendsListViewModel.friendList.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               childAspectRatio: 0.8,
             ),
             itemBuilder: (BuildContext context, int index) {
               final PublicAccountViewModel friend =
-                  friendsListViewModel.friends[index];
+                  friendsListViewModel.friendList[index];
 
               return Padding(
                 padding: const EdgeInsets.all(18.0),
