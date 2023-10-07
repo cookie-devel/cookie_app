@@ -8,17 +8,20 @@ import 'package:cookie_app/viewmodel/chat/room.viewmodel.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logging/logging.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
-enum ChatEvent {
-  create_room,
-  join_room,
-  invite_room,
-  leave_room,
-  chat,
+class ChatEvents {
+  static const createRoom = 'create_room';
+  static const joinRoom = 'join_room';
+  static const inviteRoom = 'invite_room';
+  static const leaveRoom = 'leave_room';
+  static const chat = 'chat';
 }
 
 class ChatViewModel extends ChangeNotifier {
   final log = Logger('ChatViewModel');
+  BuildContext context = NavigationService.navigatorKey.currentContext!;
+
   final Socket socket = io(
     Uri(
       scheme: dotenv.env['API_SCHEME'],
@@ -46,13 +49,14 @@ class ChatViewModel extends ChangeNotifier {
 
     socket.onConnect(_onConnectionChange);
     socket.onDisconnect(_onConnectionChange);
-    socket.on(ChatEvent.create_room.name, _onCreateRoom);
-    socket.on(ChatEvent.join_room.name, _onJoinRoom);
-    socket.on(ChatEvent.invite_room.name, _onInviteRoom);
-    socket.on(ChatEvent.leave_room.name, _onLeaveRoom);
-    socket.on(ChatEvent.chat.name, _onChat);
+    socket.on(ChatEvents.createRoom, _onCreateRoom);
+    socket.on(ChatEvents.joinRoom, _onJoinRoom);
+    socket.on(ChatEvents.inviteRoom, _onInviteRoom);
+    socket.on(ChatEvents.leaveRoom, _onLeaveRoom);
+    socket.on(ChatEvents.chat, _onChat);
   }
 
+  // Socket Incoming Event Handlers
   void _onConnectionChange(_) {
     _connected = socket.connected;
     socket.connected
@@ -64,53 +68,49 @@ class ChatViewModel extends ChangeNotifier {
   void _onCreateRoom(data) {
     ChatRoomModel model = ChatRoomModel.fromJson(data);
     log.info("create_room: $model");
-    _roomViewModel.add(
-      ChatRoomViewModel(model: model),
-    );
-    notifyListeners();
+    var roomvm = _addRoom(model);
 
-    BuildContext context = NavigationService.navigatorKey.currentContext!;
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const ChatPage()),
+      MaterialPageRoute(builder: (context) => ChatPage(room: roomvm.chatRoom)),
     );
   }
 
   void _onJoinRoom(data) {
     ChatRoomModel model = ChatRoomModel.fromJson(data);
     log.info("join_room: $model");
-    _roomViewModel.add(
-      ChatRoomViewModel(model: model),
-    );
-    notifyListeners();
+    _addRoom(model);
   }
 
   void _onInviteRoom(id) {
     log.info("invite_room: $id");
-    socket.emit(ChatEvent.join_room.name, id);
+    socket.emit(ChatEvents.joinRoom, id);
   }
 
   void _onLeaveRoom(_) {}
   void _onChat(_) {}
 
-  final List<ChatRoomViewModel> _roomViewModel = [
-    // Sample Data
-    ChatRoomViewModel(
-      model: ChatRoomModel(
-        id: 'test',
-        createdAt: DateTime.utc(2023, 8, 25),
-      ),
-    ),
-  ];
-  List<ChatRoomViewModel> get roomViewModel => _roomViewModel;
-
+  // Socket Outgoing Event Handlers
   void createRoom(String name, List<String> members) {
     socket.emit(
-      ChatEvent.create_room.name,
+      ChatEvents.createRoom,
       CreateRoomRequest(
         name: name,
         members: members,
       ).toJson(),
     );
+  }
+
+  final List<ChatRoomViewModel> _rooms = [];
+  List<ChatRoomViewModel> get rooms => _rooms;
+  List<types.Room> get chatRooms =>
+      _rooms.map((room) => room.chatRoom).toList();
+
+  ChatRoomViewModel _addRoom(ChatRoomModel model) {
+    ChatRoomViewModel roomViewModel = ChatRoomViewModel(model: model);
+    _rooms.add(roomViewModel);
+    notifyListeners();
+
+    return roomViewModel;
   }
 }

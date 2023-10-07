@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -10,21 +10,15 @@ import 'package:mime/mime.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
-
-void main() {
-  runApp(
-    MaterialApp(
-      home: const ChatPage(),
-      theme: ThemeData(
-        primaryColor: Colors.blue,
-        fontFamily: 'Avenir',
-      ),
-    ),
-  );
-}
+import 'package:provider/provider.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
+  final types.Room room;
+
+  const ChatPage({
+    super.key,
+    required this.room,
+  });
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -32,13 +26,12 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final List<types.Message> _messages = [];
-  final _user = const types.User(
-    id: '82091008-a484-4a89-ae75-a22bf8d6f3ac',
-  );
+  late final types.User _user;
 
   @override
   void initState() {
     super.initState();
+    _user = context.read<PrivateAccountViewModel>().chatUser;
     _loadMessages();
   }
 
@@ -199,16 +192,7 @@ class _ChatPageState extends State<ChatPage> {
     _addMessage(textMessage);
   }
 
-  void _loadMessages() async {
-    // final response = await rootBundle.loadString('assets/messages.json');
-    // final messages = (jsonDecode(response) as List)
-    //     .map((e) => types.Message.fromJson(e as Map<String, dynamic>))
-    //     .toList();
-
-    // setState(() {
-    //   _messages = messages;
-    // });
-  }
+  void _loadMessages() {}
 
   @override
   Widget build(BuildContext context) => Scaffold(
