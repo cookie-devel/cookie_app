@@ -19,10 +19,12 @@ class SignInRequest {
 @JsonSerializable()
 class SignInResponse {
   InfoResponse account;
+  // ignore: non_constant_identifier_names
   String access_token;
 
   SignInResponse({
     required this.account,
+    // ignore: non_constant_identifier_names
     required this.access_token,
   });
 
