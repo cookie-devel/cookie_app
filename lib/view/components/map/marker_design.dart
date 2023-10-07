@@ -179,8 +179,9 @@ Future<Marker> addMarker(
     markerId: MarkerId(user.name.toString()),
     icon: BitmapDescriptor.fromBytes(markIcons),
     position: LatLng(
-      user.location?.latitude as double,
-      user.location?.longitude as double,
+      0,0,
+      // user.location?.latitude as double,
+      // user.location?.longitude as double,
     ),
     onTap: () {
       markerBottomSheet(context, user);
