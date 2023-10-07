@@ -4,7 +4,7 @@ import 'package:cookie_app/types/account/profile.dart';
 import 'package:cookie_app/view/components/icon_imageprovider.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ProfileViewModel extends BaseViewModel {
@@ -37,9 +37,9 @@ abstract class AccountViewModel<T extends PublicAccountModel>
   String get id => _model.id;
   String get name => _model.name;
   ProfileViewModel get profile => ProfileViewModel(model: _model.profile);
-  // chatuser
+
   // Type for flutter_chat_types
-  User get chatuser => User(
+  types.User get chatUser => types.User(
         id: _model.id,
         firstName: _model.name,
         imageUrl: _model.profile.image,
