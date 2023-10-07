@@ -7,6 +7,7 @@ part of 'message.dart';
 // **************************************************************************
 
 MessageModel _$MessageModelFromJson(Map<String, dynamic> json) => MessageModel(
+      id: json['id'] as String,
       sender:
           PublicAccountModel.fromJson(json['sender'] as Map<String, dynamic>),
       content: json['content'] as String,
@@ -15,6 +16,7 @@ MessageModel _$MessageModelFromJson(Map<String, dynamic> json) => MessageModel(
 
 Map<String, dynamic> _$MessageModelToJson(MessageModel instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'sender': instance.sender,
       'content': instance.content,
       'time': instance.time.toIso8601String(),

@@ -5,11 +5,13 @@ part 'message.g.dart';
 
 @JsonSerializable()
 class MessageModel {
+  final String id;
   final PublicAccountModel sender;
   final String content;
   final DateTime time;
 
   MessageModel({
+    required this.id,
     required this.sender,
     required this.content,
     required this.time,
