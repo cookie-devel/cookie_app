@@ -35,10 +35,10 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
         separatorBuilder: (context, index) => const Divider(
           height: 1,
         ),
-        itemCount: context.watch<ChatViewModel>().roomViewModel.length,
+        itemCount: context.watch<ChatViewModel>().chatRooms.length,
         itemBuilder: (BuildContext context, int index) {
           ChatRoomViewModel chatRoom =
-              context.watch<ChatViewModel>().roomViewModel[index];
+              context.watch<ChatViewModel>().rooms[index];
 
           return ChatRoomListEntry(
             name: chatRoom.name,
@@ -49,7 +49,9 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
             time: chatRoom.messages.isNotEmpty
                 ? chatRoom.messages.last.time
                 : chatRoom.createdAt,
-            navigate: const ChatPage(),
+            navigate: ChatPage(
+              room: chatRoom.chatRoom,
+            ),
           );
         },
       ),
