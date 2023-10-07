@@ -6,7 +6,7 @@ import 'dart:ui';
 import 'package:background_locator_2/location_dto.dart';
 
 class LocationServiceRepository {
-  static LocationServiceRepository _instance = LocationServiceRepository._();
+  static final LocationServiceRepository _instance = LocationServiceRepository._();
 
   LocationServiceRepository._();
 
@@ -75,16 +75,10 @@ class LocationServiceRepository {
   }
 
   static String formatDateLog(DateTime date) {
-    return date.hour.toString() +
-        ":" +
-        date.minute.toString() +
-        ":" +
-        date.second.toString();
+    return "${date.hour}:${date.minute}:${date.second}";
   }
 
   static String formatLog(LocationDto locationDto) {
-    return dp(locationDto.latitude, 4).toString() +
-        " " +
-        dp(locationDto.longitude, 4).toString();
+    return "${dp(locationDto.latitude, 4)} ${dp(locationDto.longitude, 4)}";
   }
 }

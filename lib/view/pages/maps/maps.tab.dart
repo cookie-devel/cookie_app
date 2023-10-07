@@ -20,7 +20,7 @@ import 'package:background_locator_2/settings/ios_settings.dart';
 import 'package:background_locator_2/settings/locator_settings.dart';
 import 'package:location_permissions/location_permissions.dart';
 import 'package:cookie_app/view/pages/maps/location_callback_handler.dart';
-import 'package:cookie_app/repository/location_service_repo.dart';
+import 'package:cookie_app/repository/location_service.repo.dart';
 
 class MapsWidget extends StatefulWidget {
   const MapsWidget({Key? key}) : super(key: key);
@@ -77,14 +77,16 @@ class _MapsWidgetState extends State<MapsWidget> {
   }
 
   Future<void> update(dynamic data) async {
-    print("update");
+    logger.info("update");
     LocationDto? locationDto =
         (data != null) ? LocationDto.fromJson(data) : null;
     await _updateNotificationText(locationDto!);
 
-    // ignore: use_build_context_synchronously
-    Provider.of<MapProvider>(context, listen: false)
-        .setCurrentLocation(locationDto.latitude, locationDto.longitude);
+    if (context.mounted) {
+      context
+          .read<MapProvider>()
+          .setCurrentLocation(locationDto.latitude, locationDto.longitude);
+    }
 
     setState(() {
       if (data != null) {
@@ -94,26 +96,24 @@ class _MapsWidgetState extends State<MapsWidget> {
   }
 
   Future<void> _updateNotificationText(LocationDto data) async {
-    // ignore: unnecessary_null_comparison
-    if (data == null) {
-      return;
-    }
-
     await BackgroundLocator.updateNotificationText(
-        title: "new location received",
-        msg: "${DateTime.now()}",
-        bigMsg: "${data.latitude}, ${data.longitude}");
+      title: "new location received",
+      msg: "${DateTime.now()}",
+      bigMsg: "${data.latitude}, ${data.longitude}",
+    );
   }
 
   Future<void> initPlatformState() async {
-    print('Initializing...');
+    logger.info('Initializing...');
     await BackgroundLocator.initialize();
-    print('Initialization done');
-    final _isRunning = await BackgroundLocator.isServiceRunning();
-    setState(() {
-      isRunning = _isRunning;
+    logger.info('Initialization done');
+
+    await BackgroundLocator.isServiceRunning().then((value) {
+      setState(() {
+        isRunning = value;
+      });
+      logger.info('Running ${isRunning.toString()}');
     });
-    print('Running ${isRunning.toString()}');
   }
 
   @override
@@ -151,7 +151,7 @@ class _MapsWidgetState extends State<MapsWidget> {
                               ),
                               zoom: 18.0,
                             )
-                          : CameraPosition(
+                          : const CameraPosition(
                               // 기본값 설정 또는 에러 처리
                               target:
                                   LatLng(37.7749, -122.4194), // 예시로 적어 둔 것입니다.
@@ -172,24 +172,26 @@ class _MapsWidgetState extends State<MapsWidget> {
   }
 
   void onStop() async {
-    print("stop");
+    logger.info("stop");
     await BackgroundLocator.unRegisterLocationUpdate();
-    // ignore: no_leading_underscores_for_local_identifiers
-    final _isRunning = await BackgroundLocator.isServiceRunning();
-    setState(() {
-      isRunning = _isRunning;
+    await BackgroundLocator.isServiceRunning().then((value) {
+      setState(() {
+        isRunning = value;
+      });
+      logger.info('Running ${isRunning.toString()}');
     });
   }
 
   void _onStart() async {
-    print("start");
+    logger.info("start");
     if (await _checkLocationPermission()) {
       await _startLocator();
-      // ignore: no_leading_underscores_for_local_identifiers
-      final _isRunning = await BackgroundLocator.isServiceRunning();
-      setState(() {
-        isRunning = _isRunning;
-        lastLocation = null;
+      await BackgroundLocator.isServiceRunning().then((value) {
+        setState(() {
+          isRunning = value;
+          lastLocation = null;
+        });
+        logger.info('Running ${isRunning.toString()}');
       });
     } else {
       // show error
@@ -368,8 +370,7 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   // speedDial => 현위치
   void _moveToCurrentLocation() {
-    LatLng position =
-        Provider.of<MapProvider>(context, listen: false).currentLocation;
+    LatLng position = context.read<MapProvider>().currentLocation;
     mapController.animateCamera(CameraUpdate.newLatLng(position));
   }
 
@@ -479,9 +480,10 @@ class _MapsWidgetState extends State<MapsWidget> {
                               // Text(log["username"]),
                               Text(
                                 _calDistance(
-                                  Provider.of<MapProvider>(context,
-                                          listen: false)
-                                      .currentLocation,
+                                  Provider.of<MapProvider>(
+                                    context,
+                                    listen: false,
+                                  ).currentLocation,
                                   LatLng(
                                     log.latitude,
                                     log.longitude,
