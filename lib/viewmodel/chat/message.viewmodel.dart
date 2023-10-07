@@ -1,11 +1,20 @@
 import 'package:cookie_app/model/chat/message.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class MessageViewModel extends BaseViewModel {
   late MessageModel _messageModel;
   MessageViewModel({required MessageModel model}) : super() {
     _messageModel = model;
+  }
+
+  types.Message get chatMessage {
+    return types.TextMessage(
+      id: _messageModel.id,
+      author: PublicAccountViewModel(model: _messageModel.sender).chatUser,
+      text: _messageModel.content,
+    );
   }
 
   PublicAccountViewModel get sender =>
