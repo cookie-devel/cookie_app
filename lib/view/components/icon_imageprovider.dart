@@ -21,6 +21,7 @@ class IconImageProvider extends ImageProvider<IconImageProvider> {
       SynchronousFuture<IconImageProvider>(this);
 
   @override
+  // ignore: deprecated_member_use
   ImageStreamCompleter load(IconImageProvider key, DecoderCallback decode) =>
       OneFrameImageStreamCompleter(_loadAsync(key));
 
