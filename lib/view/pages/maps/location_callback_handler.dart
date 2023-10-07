@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:background_locator_2/location_dto.dart';
-import 'package:cookie_app/repository/map/location_service.repo.dart';
+import 'package:cookie_app/repository/location_service.repo.dart';
 
 @pragma('vm:entry-point')
 class LocationCallbackHandler {
