@@ -1,7 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
 import 'package:cookie_app/datasource/storage/account.storage.dart';
 import 'package:cookie_app/model/chat/room.dart';
 import 'package:cookie_app/types/account/profile.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 part 'account_info.g.dart';
 

@@ -1,6 +1,7 @@
-import 'package:cookie_app/model/chat/room.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 import 'package:cookie_app/model/account/account_info.dart';
+import 'package:cookie_app/model/chat/room.dart';
 import 'package:cookie_app/types/account/profile.dart';
 
 part 'info.g.dart';

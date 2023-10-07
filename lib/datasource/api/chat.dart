@@ -1,9 +1,11 @@
 import 'dart:convert';
-import 'package:cookie_app/repository/jwt.repo.dart';
-import 'package:cookie_app/types/api/chat/create_room.dart';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
+
+import 'package:cookie_app/repository/jwt.repo.dart';
+import 'package:cookie_app/types/api/chat/create_room.dart';
 
 @Deprecated("use socket.io create_room event instead")
 class ChatAPI {

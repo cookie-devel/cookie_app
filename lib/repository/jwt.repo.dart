@@ -1,7 +1,8 @@
-import 'package:cookie_app/datasource/storage/jwt.storage.dart';
-import 'package:cookie_app/types/jwt_payload.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:logging/logging.dart';
+
+import 'package:cookie_app/datasource/storage/jwt.storage.dart';
+import 'package:cookie_app/types/jwt_payload.dart';
 
 class JWTRepository {
   static final Logger _log = Logger('JWTRepository');

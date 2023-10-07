@@ -1,6 +1,8 @@
-import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
+
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
 class MyProfileWidget extends StatefulWidget {
   const MyProfileWidget({

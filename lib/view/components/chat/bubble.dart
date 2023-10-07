@@ -1,6 +1,7 @@
-import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
+
 import 'package:cookie_app/view/components/long_press_copyable_text.dart';
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
 class MyBubble extends StatelessWidget {
   final String content;

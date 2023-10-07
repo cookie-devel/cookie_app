@@ -1,13 +1,15 @@
-import 'package:cookie_app/view/pages/chatroom/chatrooms.tab.dart';
-import 'package:cookie_app/view/pages/maps/maps.tab.dart';
-import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/view/pages/friends/friends.tab.dart';
-import 'package:cookie_app/view/pages/settings/settings.tab.dart';
-import 'package:cookie_app/view/pages/club/club.tab.dart';
+
 import 'package:badges/badges.dart' as badges;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+
+import 'package:cookie_app/view/pages/chatroom/chatrooms.tab.dart';
+import 'package:cookie_app/view/pages/club/club.tab.dart';
+import 'package:cookie_app/view/pages/friends/friends.tab.dart';
+import 'package:cookie_app/view/pages/maps/maps.tab.dart';
+import 'package:cookie_app/view/pages/settings/settings.tab.dart';
+import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
 
 class MainWidget extends StatefulWidget {
   const MainWidget({super.key});

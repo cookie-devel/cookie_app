@@ -1,7 +1,9 @@
 import 'dart:io';
+
+import 'package:flutter/material.dart';
+
 import 'package:cookie_app/view/components/image_selection.dart';
 import 'package:cookie_app/view/components/rounded_image.dart';
-import 'package:flutter/material.dart';
 
 class ProfileImagePicker extends StatelessWidget {
   final ImageProvider profileImg;

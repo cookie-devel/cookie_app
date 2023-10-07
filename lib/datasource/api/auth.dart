@@ -1,9 +1,11 @@
 import 'dart:convert';
-import 'package:cookie_app/types/api/auth/signup.dart';
-import 'package:http/http.dart';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart';
+
 import 'package:cookie_app/types/api/auth/exists.dart';
 import 'package:cookie_app/types/api/auth/signin.dart';
+import 'package:cookie_app/types/api/auth/signup.dart';
 import 'package:cookie_app/types/api/error.dart';
 
 class AuthAPI {

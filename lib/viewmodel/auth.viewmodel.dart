@@ -1,12 +1,14 @@
-import 'package:cookie_app/repository/jwt.repo.dart';
-import 'package:cookie_app/types/api/auth/signup.dart';
 import 'package:flutter/material.dart';
-import 'package:cookie_app/types/api/auth/signin.dart';
+
+import 'package:logging/logging.dart';
+
 import 'package:cookie_app/datasource/api/auth.dart';
 import 'package:cookie_app/datasource/storage/account.storage.dart';
+import 'package:cookie_app/repository/jwt.repo.dart';
+import 'package:cookie_app/types/api/auth/signin.dart';
+import 'package:cookie_app/types/api/auth/signup.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
-import 'package:logging/logging.dart';
 
 class AuthViewModel extends BaseViewModel {
   final logger = Logger('AuthViewModel');

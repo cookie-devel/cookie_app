@@ -1,5 +1,6 @@
-import 'package:cookie_app/types/account/profile.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import 'package:cookie_app/types/account/profile.dart';
 
 part 'signup.g.dart';
 

@@ -1,12 +1,14 @@
+import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
+import 'package:vibration/vibration.dart';
+
+import 'package:cookie_app/view/components/account/friend_profile.dart';
 import 'package:cookie_app/view/components/loading.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/pages/friends/friends_sheet.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
-import 'package:flutter/material.dart';
-import 'package:cookie_app/view/components/account/friend_profile.dart';
-import 'package:provider/provider.dart';
-import 'package:vibration/vibration.dart';
 
 class FriendsTab extends StatefulWidget {
   const FriendsTab({

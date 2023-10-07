@@ -1,14 +1,16 @@
+import 'package:flutter/material.dart';
+
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:logging/logging.dart';
+import 'package:socket_io_client/socket_io_client.dart';
+
 import 'package:cookie_app/model/chat/room.dart';
 import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:cookie_app/types/api/chat/create_room.dart';
 import 'package:cookie_app/view/navigation_service.dart';
 import 'package:cookie_app/view/pages/chatroom/chatpage.dart';
-import 'package:flutter/material.dart';
 import 'package:cookie_app/viewmodel/chat/room.viewmodel.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:logging/logging.dart';
-import 'package:socket_io_client/socket_io_client.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class ChatEvents {
   static const createRoom = 'create_room';

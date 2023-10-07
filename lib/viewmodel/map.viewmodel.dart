@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:logging/logging.dart';
+
 import 'package:cookie_app/types/map/mapPosition_info.dart';
-import 'dart:async';
 
 class MapProvider with ChangeNotifier {
   Logger logger = Logger('MapProvider');

@@ -1,8 +1,11 @@
-import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:flutter/material.dart';
-import 'package:cookie_app/view/components/map/image_process.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
+
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'package:cookie_app/view/components/map/image_process.dart';
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
 class BottomSheetInside extends StatelessWidget {
   final PublicAccountViewModel user;
@@ -178,8 +181,8 @@ Future<Marker> addMarker(
   return Marker(
     markerId: MarkerId(user.name.toString()),
     icon: BitmapDescriptor.fromBytes(markIcons),
-    position: LatLng(
-      0,0,
+    position: const LatLng(
+      0, 0,
       // user.location?.latitude as double,
       // user.location?.longitude as double,
     ),

@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+
 import 'package:cookie_app/types/api/account/info.dart';
 
 part 'signin.g.dart';

@@ -1,11 +1,13 @@
+import 'package:flutter/material.dart';
+
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import 'package:cookie_app/model/account/account_info.dart';
 import 'package:cookie_app/repository/info.repo.dart';
 import 'package:cookie_app/types/account/profile.dart';
 import 'package:cookie_app/view/components/icon_imageprovider.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ProfileViewModel extends BaseViewModel {
   final Profile _model;

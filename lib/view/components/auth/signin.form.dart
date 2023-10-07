@@ -1,10 +1,12 @@
+import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
+
 import 'package:cookie_app/view/components/auth/submit_button.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
+import 'package:cookie_app/view/components/text_form_fields.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:cookie_app/view/components/text_form_fields.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({Key? key}) : super(key: key);
