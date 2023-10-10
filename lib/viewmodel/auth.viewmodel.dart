@@ -11,7 +11,8 @@ import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 
 class AuthViewModel extends BaseViewModel {
-  final logger = Logger('AuthViewModel');
+  Logger log = Logger('AuthViewModel');
+
   bool _isSigned = false;
   bool get isSigned => _isSigned;
 
@@ -24,22 +25,11 @@ class AuthViewModel extends BaseViewModel {
     required PrivateAccountViewModel privateAccountViewModel,
   }) async {
     _isSigned = await JWTRepository.setToken(token);
-    if (!_isSigned) return false;
     notifyListeners();
+    if (!_isSigned) return false;
 
-    // FIXME: Load PrivateAccountViewModel from cache
-
-    // PrivateAccountModel? model =
-    //     await PrivateAccountModel.fromStorage(storage: AccountStorage());
-    // logger.shout('model: $model');
-    // if (model == null) return false;
-    // notifyListeners();
-
-    // assert(model.id == JWTRepository.payload!.userid);
-
-    // await privateAccountViewModel.updateMyInfo(
-    //   model: model,
-    // );
+    SignInResponse response = await AuthAPI.getSignIn();
+    privateAccountViewModel.model = response.account.toPrivateAccount();
 
     return true;
   }
@@ -59,9 +49,7 @@ class AuthViewModel extends BaseViewModel {
         ),
       );
 
-      privateAccountViewModel.updateMyInfo(
-        model: response.account.toPrivateAccount(),
-      );
+      privateAccountViewModel.model = response.account.toPrivateAccount();
 
       _isSigned = await JWTRepository.setToken(response.access_token);
       setLoadState(busy: false, loaded: true);
@@ -93,7 +81,7 @@ class AuthViewModel extends BaseViewModel {
       setLoadState(busy: false, loaded: true);
     } catch (e) {
       setLoadState(busy: false, loaded: false);
-      logger.warning('Error signing out: $e');
+      log.warning('Error signing out: $e');
       rethrow;
     }
   }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 
@@ -36,6 +37,27 @@ class AuthAPI {
     }
 
     return ExistsResponse.fromJson(json.decode(res.body));
+  }
+
+  static Future<SignInResponse> getSignIn() async {
+    final uri = Uri(
+      scheme: dotenv.env['API_SCHEME'],
+      host: dotenv.env['API_HOST'],
+      port: int.parse(dotenv.env['API_PORT']!),
+      path: '/auth/signin',
+    );
+    Response res = await get(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${JWTRepository.token}',
+      },
+    );
+
+    if (res.statusCode != 200) {
+      throw ErrorResponse.fromJson(json.decode(res.body));
+    }
+    return SignInResponse.fromJson(json.decode(res.body));
   }
 
   static Future<SignInResponse> postSignIn(SignInRequest signin) async {

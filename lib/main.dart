@@ -65,14 +65,20 @@ void main() async {
   );
 }
 
-class Cookie extends StatelessWidget {
+class Cookie extends StatefulWidget {
   const Cookie({super.key});
 
   static const String _title = 'Cookie';
 
   @override
-  Widget build(BuildContext context) {
-    // FIXME: Maybe we should make something like CacheManager
+  State<Cookie> createState() => _CookieState();
+}
+
+class _CookieState extends State<Cookie> {
+  @override
+  void initState() {
+    super.initState();
+
     JWTStorage.read().then((value) {
       if (value != null) {
         context.read<AuthViewModel>().jwtSignIn(
@@ -82,10 +88,13 @@ class Cookie extends StatelessWidget {
       }
       FlutterNativeSplash.remove();
     });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: _title,
+      title: Cookie._title,
       navigatorKey: NavigationService.navigatorKey,
       home: context.watch<AuthViewModel>().isSigned
           ? const MainWidget()
