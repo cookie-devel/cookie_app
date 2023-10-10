@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:cookie_app/types/map/mapPosition_info.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -8,7 +9,7 @@ import 'package:cookie_app/view/components/map/image_process.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
 class BottomSheetInside extends StatelessWidget {
-  final PublicAccountViewModel user;
+  final MarkerInfo user;
   const BottomSheetInside({
     Key? key,
     required this.user,
@@ -29,7 +30,7 @@ class BottomSheetInside extends StatelessWidget {
                   shape: BoxShape.circle,
                   border: Border.all(width: 2.0, color: Colors.white),
                   image: DecorationImage(
-                    image: user.profile.image,
+                    image: user.info.profile.image as ImageProvider<Object>,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -67,7 +68,7 @@ class BottomSheetInside extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Text(
-                            user.name,
+                            user.info.name.toString(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 24,
@@ -96,7 +97,7 @@ class BottomSheetInside extends StatelessWidget {
                     const SizedBox(height: 8),
                     Flexible(
                       child: Text(
-                        '${user.profile.message!}\n',
+                        '${user.info.profile.message!}\n',
                         style: const TextStyle(
                           fontSize: 14,
                           color: Colors.white,
@@ -153,7 +154,7 @@ class BottomSheetInside extends StatelessWidget {
 
 Future<void> markerBottomSheet(
   BuildContext context,
-  PublicAccountViewModel user,
+  MarkerInfo user,
 ) {
   return showModalBottomSheet(
     context: context,
@@ -167,24 +168,23 @@ Future<void> markerBottomSheet(
 
 Future<Marker> addMarker(
   BuildContext context,
-  PublicAccountViewModel user, {
+  MarkerInfo user, {
   int size = 100,
   Color color = Colors.deepOrangeAccent,
   double width = 4,
 }) async {
   Uint8List markIcons = await getRoundedImage(
-    user.profile.image,
+    user.info.profile.image as ImageProvider<Object>,
     width: size,
     borderColor: color,
     borderWidth: width,
   );
   return Marker(
-    markerId: MarkerId(user.name.toString()),
+    markerId: MarkerId(user.info.name.toString()),
     icon: BitmapDescriptor.fromBytes(markIcons),
-    position: const LatLng(
-      0, 0,
-      // user.location?.latitude as double,
-      // user.location?.longitude as double,
+    position: LatLng(
+      user.latitude,
+      user.longitude,
     ),
     onTap: () {
       markerBottomSheet(context, user);

@@ -2,8 +2,9 @@ import 'dart:async';
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:cookie_app/view/components/map/marker_design.dart';
+import 'package:cookie_app/view/navigation_service.dart';
 import 'package:flutter/material.dart';
-
 import 'package:background_locator_2/background_locator.dart';
 import 'package:background_locator_2/location_dto.dart';
 import 'package:background_locator_2/settings/android_settings.dart';
@@ -31,10 +32,10 @@ class MapsWidget extends StatefulWidget {
 }
 
 class _MapsWidgetState extends State<MapsWidget> {
-  late List<MapPosition> mapData = [];
   late GoogleMapController mapController;
   final l2.Distance distance = const l2.Distance();
   final logger = Logger('_MapsWidgetState');
+
   List<Marker> markers = <Marker>[];
   int selectedSortOption = 1;
 
@@ -47,6 +48,7 @@ class _MapsWidgetState extends State<MapsWidget> {
   @override
   void initState() {
     super.initState();
+    _addMarkers();
     if (IsolateNameServer.lookupPortByName(
           LocationServiceRepository.isolateName,
         ) !=
@@ -256,29 +258,26 @@ class _MapsWidgetState extends State<MapsWidget> {
     );
   }
 
-  // Future<void> _addMarkers() async {
-  //   List<Marker> allMarkers = [];
-  //   List<Future<Marker>> markerFutures = [];
+  BuildContext context = NavigationService.navigatorKey.currentContext!;
+  Future<void> _addMarkers() async {
+    List<Marker> tempMarkers = [];
+    final List<MarkerInfo> mapData =
+        Provider.of<MapProvider>(context, listen: false).mapLog;
 
-  //   for (int i = 0; i < mapData.length; i++) {
-  //     final PublicAccountViewModel friendInfo = User.fromMap(mapData[i]);
+    for (int i = 0; i < mapData.length; i++) {
+      final MarkerInfo log = mapData[i];
 
-  //     final LatLng location = LatLng(
-  //       mapData[i].latitude,
-  //       mapData[i].longitude,
-  //     );
+      final Marker marker = await addMarker(
+        context,
+        log,
+      );
+      tempMarkers.add(marker);
+    }
 
-  //     Future<Marker> markerFuture = addMarker(context, friendInfo, location);
-  //     markerFutures.add(markerFuture);
-  //   }
-
-  //   List<Marker> mark = await Future.wait(markerFutures);
-  //   allMarkers.addAll(mark);
-
-  //   setState(() {
-  //     markers.addAll(allMarkers);
-  //   });
-  // }
+    setState(() {
+      markers = tempMarkers;
+    });
+  }
 
   // 해당 location으로 camera 이동
   void _moveToFriendLocation(LatLng location) {
@@ -333,11 +332,11 @@ class _MapsWidgetState extends State<MapsWidget> {
         _moveToCurrentLocation,
         // _moveToCurrentLocation,
       ),
-      speedDialChild(
-        "친구찾기",
-        Icons.person_search_rounded,
-        () => _friendLocationBottomSheet(mapLog: mapData),
-      ),
+      // speedDialChild(
+      //   "친구찾기",
+      //   Icons.person_search_rounded,
+      //   () => _friendLocationBottomSheet(mapLog: ),
+      // ),
       speedDialChild(
         "쿠키",
         Icons.cookie,
@@ -468,7 +467,7 @@ class _MapsWidgetState extends State<MapsWidget> {
                       itemCount: mapLog.length,
                       padding: const EdgeInsets.fromLTRB(5, 4, 10, 4),
                       itemBuilder: (BuildContext context, int index) {
-                        final MapPosition log = mapLog[index];
+                        final MapInfoResponse log = mapLog[index];
                         return ListTile(
                           leading: const CircleAvatar(
                               // backgroundColor: Colors.transparent,
