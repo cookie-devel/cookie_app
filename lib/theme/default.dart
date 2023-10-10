@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cookie_app/theme/components/input.theme.dart';
 
 ThemeData defaultThemeData = ThemeData(
+  useMaterial3: true,
   brightness: Brightness.light,
   colorScheme: const ColorScheme.light(
     primary: Colors.orangeAccent,

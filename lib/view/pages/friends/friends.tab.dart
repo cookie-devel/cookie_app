@@ -5,7 +5,6 @@ import 'package:vibration/vibration.dart';
 
 import 'package:cookie_app/view/components/account/friend_profile.dart';
 import 'package:cookie_app/view/components/loading.dart';
-import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/pages/friends/friends_sheet.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
@@ -19,31 +18,10 @@ class FriendsTab extends StatefulWidget {
   State<FriendsTab> createState() => _FriendsTabState();
 }
 
-class _FriendsTabState extends State<FriendsTab>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
-  Future<void> handleUpdateFriends() async {
-    try {
-      await context.read<FriendsViewModel>().updateFriends();
-      if (context.mounted) {
-        showSnackBar(context: context, message: '친구 목록을 업데이트했습니다.');
-      }
-    } catch (e) {
-      if (context.mounted) showErrorSnackBar(context, e.toString());
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    handleUpdateFriends();
-  }
-
+class _FriendsTabState extends State<FriendsTab> {
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    var handleUpdateFriends = context.read<FriendsViewModel>().updateFriends;
     return Scaffold(
       appBar: AppBar(
         title: const Text('친구'),
@@ -153,6 +131,8 @@ class Message extends StatelessWidget {
               const SizedBox(height: 20),
               FloatingActionButton(
                 onPressed: handleRefresh,
+                tooltip: 'Refresh',
+                shape: const CircleBorder(),
                 child: const Icon(Icons.refresh),
               ),
             ],
