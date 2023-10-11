@@ -1,6 +1,6 @@
-import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/view/components/badge.dart';
@@ -78,33 +78,33 @@ class _MainWidgetState extends State<MainWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return DoubleBackToCloseApp(
-      snackBar: const SnackBar(content: Text('뒤로 버튼을 한번 더 누르면 종료됩니다.')),
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          title: Text(_pages[_selectedIndex].title),
-          actions: _pages[_selectedIndex].actions,
-        ),
-        body: _pages[_selectedIndex].page,
-        bottomNavigationBar: NavigationBar(
-          onDestinationSelected: (i) => setState(() => _selectedIndex = i),
-          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-          destinations: _pages.map((e) {
-            return NavigationDestination(
-              selectedIcon: BadgedIcon(
-                icon: e.icon,
-                // label: '',
-              ),
-              icon: BadgedIcon(
-                icon: e.iconOutline,
-                label: '',
-              ),
-              label: e.title,
-            );
-          }).toList(),
-          selectedIndex: _selectedIndex,
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        title: Text(_pages[_selectedIndex].title),
+        actions: _pages[_selectedIndex].actions,
+      ),
+      body: DoubleBackToCloseApp(
+        snackBar: const SnackBar(content: Text('뒤로 버튼을 한번 더 누르면 종료됩니다.')),
+        child: _pages[_selectedIndex].page,
+      ),
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (i) => setState(() => _selectedIndex = i),
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        destinations: _pages.map((e) {
+          return NavigationDestination(
+            selectedIcon: BadgedIcon(
+              icon: e.icon,
+              // label: '',
+            ),
+            icon: BadgedIcon(
+              icon: e.iconOutline,
+              label: '',
+            ),
+            label: e.title,
+          );
+        }).toList(),
+        selectedIndex: _selectedIndex,
       ),
     );
   }
