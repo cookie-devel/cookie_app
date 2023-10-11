@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/view/components/chat/chatroom_list_entry.dart';
-import 'package:cookie_app/view/components/chat/connection_info.dart';
 import 'package:cookie_app/view/pages/chatroom/add_chatroom.dart';
 import 'package:cookie_app/view/pages/chatroom/chatpage.dart';
 import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
@@ -18,45 +17,29 @@ class ChatTabWidget extends StatefulWidget {
 class _ChatTabWidgetState extends State<ChatTabWidget> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('채팅'),
-        leading: Consumer<ChatViewModel>(
-          builder: (context, model, child) => ConnectionInfo(
-            connected: model.connected,
-          ),
-        ),
-        actions: const [
-          SizedBox(
-            width: 56.0,
-            child: ChatroomAction(),
-          ),
-        ],
+    return ListView.separated(
+      separatorBuilder: (context, index) => const Divider(
+        height: 1,
       ),
-      body: ListView.separated(
-        separatorBuilder: (context, index) => const Divider(
-          height: 1,
-        ),
-        itemCount: context.watch<ChatViewModel>().chatRooms.length,
-        itemBuilder: (BuildContext context, int index) {
-          ChatRoomViewModel chatRoom =
-              context.watch<ChatViewModel>().rooms[index];
+      itemCount: context.watch<ChatViewModel>().chatRooms.length,
+      itemBuilder: (BuildContext context, int index) {
+        ChatRoomViewModel chatRoom =
+            context.watch<ChatViewModel>().rooms[index];
 
-          return ChatRoomListEntry(
-            name: chatRoom.name,
-            image: chatRoom.image,
-            message: chatRoom.messages.isNotEmpty
-                ? chatRoom.messages.last.content
-                : "Empty Message",
-            time: chatRoom.messages.isNotEmpty
-                ? chatRoom.messages.last.time
-                : chatRoom.createdAt,
-            navigate: ChatPage(
-              room: chatRoom.chatRoom,
-            ),
-          );
-        },
-      ),
+        return ChatRoomListEntry(
+          name: chatRoom.name,
+          image: chatRoom.image,
+          message: chatRoom.messages.isNotEmpty
+              ? chatRoom.messages.last.content
+              : "Empty Message",
+          time: chatRoom.messages.isNotEmpty
+              ? chatRoom.messages.last.time
+              : chatRoom.createdAt,
+          navigate: ChatPage(
+            room: chatRoom.chatRoom,
+          ),
+        );
+      },
     );
   }
 }

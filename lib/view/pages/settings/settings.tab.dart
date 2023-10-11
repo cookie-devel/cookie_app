@@ -48,13 +48,11 @@ class SettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('설정')),
-      body: ListView.separated(
-        itemCount: itemBuilders.length,
-        separatorBuilder: (context, index) => const Divider(height: 1),
-        itemBuilder: (context, index) => itemBuilders[index](context),
-      ),
+    return ListView.separated(
+      itemCount: itemBuilders.length,
+      separatorBuilder: (context, index) =>
+          const Divider(height: 1, thickness: 0.1),
+      itemBuilder: (context, index) => itemBuilders[index](context),
     );
   }
 }

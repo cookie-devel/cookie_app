@@ -1,12 +1,11 @@
 import 'dart:typed_data';
 
-import 'package:cookie_app/types/map/mapPosition_info.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'package:cookie_app/types/map/mapPosition_info.dart';
 import 'package:cookie_app/view/components/map/image_process.dart';
-import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
 class BottomSheetInside extends StatelessWidget {
   final MarkerInfo user;

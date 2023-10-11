@@ -2,9 +2,8 @@ import 'dart:async';
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:cookie_app/view/components/map/marker_design.dart';
-import 'package:cookie_app/view/navigation_service.dart';
 import 'package:flutter/material.dart';
+
 import 'package:background_locator_2/background_locator.dart';
 import 'package:background_locator_2/location_dto.dart';
 import 'package:background_locator_2/settings/android_settings.dart';
@@ -20,6 +19,8 @@ import 'package:provider/provider.dart';
 import 'package:cookie_app/repository/location_service.repo.dart';
 import 'package:cookie_app/types/map/mapPosition_info.dart';
 import 'package:cookie_app/view/components/loading.dart';
+import 'package:cookie_app/view/components/map/marker_design.dart';
+import 'package:cookie_app/view/navigation_service.dart';
 import 'package:cookie_app/view/pages/maps/location_callback_handler.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
@@ -127,49 +128,46 @@ class _MapsWidgetState extends State<MapsWidget> {
         // ignore: unused_local_variable
         List mapData = mapProvider.mapLog;
 
-        return Scaffold(
-          appBar: AppBar(title: const Text('C🍪🍪KIE')),
-          body: isInit == true
-              ? Stack(
-                  children: [
-                    GoogleMap(
-                      myLocationButtonEnabled: false, // 내위치 버튼
-                      compassEnabled: true, // 나침반 버튼
-                      myLocationEnabled: true, // 본인 마커
-                      zoomControlsEnabled: false, // 축소확대 버튼
-                      minMaxZoomPreference:
-                          const MinMaxZoomPreference(14, 20), // 줌 제한
-                      mapToolbarEnabled: false, // 길찾기 버튼
-                      onMapCreated: (GoogleMapController controller) {
-                        mapController = controller;
-                        mapController.setMapStyle(mapStyle);
-                      },
-                      mapType: MapType.normal,
-                      markers: Set.from(markers),
-                      initialCameraPosition: lastLocation != null
-                          ? CameraPosition(
-                              target: LatLng(
-                                lastLocation!.latitude,
-                                lastLocation!.longitude,
-                              ),
-                              zoom: 18.0,
-                            )
-                          : const CameraPosition(
-                              // 기본값 설정 또는 에러 처리
-                              target:
-                                  LatLng(37.7749, -122.4194), // 예시로 적어 둔 것입니다.
-                              zoom: 18.0,
+        return isInit == true
+            ? Stack(
+                children: [
+                  GoogleMap(
+                    myLocationButtonEnabled: false, // 내위치 버튼
+                    compassEnabled: true, // 나침반 버튼
+                    myLocationEnabled: true, // 본인 마커
+                    zoomControlsEnabled: false, // 축소확대 버튼
+                    minMaxZoomPreference:
+                        const MinMaxZoomPreference(14, 20), // 줌 제한
+                    mapToolbarEnabled: false, // 길찾기 버튼
+                    onMapCreated: (GoogleMapController controller) {
+                      mapController = controller;
+                      mapController.setMapStyle(mapStyle);
+                    },
+                    mapType: MapType.normal,
+                    markers: Set.from(markers),
+                    initialCameraPosition: lastLocation != null
+                        ? CameraPosition(
+                            target: LatLng(
+                              lastLocation!.latitude,
+                              lastLocation!.longitude,
                             ),
-                    ),
-                    Positioned(
-                      bottom: 16,
-                      right: 16,
-                      child: _floatingButtons(),
-                    ),
-                  ],
-                )
-              : const LoadingScreen(),
-        );
+                            zoom: 18.0,
+                          )
+                        : const CameraPosition(
+                            // 기본값 설정 또는 에러 처리
+                            target:
+                                LatLng(37.7749, -122.4194), // 예시로 적어 둔 것입니다.
+                            zoom: 18.0,
+                          ),
+                  ),
+                  Positioned(
+                    bottom: 16,
+                    right: 16,
+                    child: _floatingButtons(),
+                  ),
+                ],
+              )
+            : const LoadingScreen();
       },
     );
   }
@@ -258,6 +256,7 @@ class _MapsWidgetState extends State<MapsWidget> {
     );
   }
 
+  @override
   BuildContext context = NavigationService.navigatorKey.currentContext!;
   Future<void> _addMarkers() async {
     List<Marker> tempMarkers = [];

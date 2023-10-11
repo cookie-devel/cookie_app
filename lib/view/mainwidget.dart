@@ -1,14 +1,16 @@
-import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+import 'package:cookie_app/view/components/badge.dart';
 import 'package:cookie_app/view/pages/chatroom/chatrooms.tab.dart';
 import 'package:cookie_app/view/pages/friends/friends.tab.dart';
+import 'package:cookie_app/view/pages/friends/friends_sheet.dart';
 import 'package:cookie_app/view/pages/maps/maps.tab.dart';
 import 'package:cookie_app/view/pages/settings/settings.tab.dart';
 import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
+import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 
 class MainWidget extends StatefulWidget {
   const MainWidget({super.key});
@@ -17,13 +19,52 @@ class MainWidget extends StatefulWidget {
   State<MainWidget> createState() => _MainWidgetState();
 }
 
+class Page {
+  final String title;
+  final IconData icon;
+  final IconData iconOutline;
+  final Widget page;
+  final List<Widget>? actions;
+  final String? badge;
+
+  const Page({
+    required this.title,
+    required this.icon,
+    required this.iconOutline,
+    required this.page,
+    this.badge,
+    this.actions,
+  });
+}
+
 class _MainWidgetState extends State<MainWidget> {
-  final List<Widget> widgetOptions = <Widget>[
-    const FriendsTab(),
-    const ChatTabWidget(),
-    const MapsWidget(),
-    // const ClubGrid(),
-    SettingsWidget(),
+  final List<Page> _pages = [
+    const Page(
+      title: '친구',
+      icon: Icons.people,
+      iconOutline: Icons.people_outline,
+      page: FriendsTab(),
+      actions: [FriendsAction()],
+    ),
+    const Page(
+      title: '채팅',
+      icon: Icons.chat_bubble,
+      iconOutline: Icons.chat_bubble_outline,
+      page: ChatTabWidget(),
+      actions: [ChatroomAction()],
+    ),
+    const Page(
+      title: 'C🍪🍪KIE',
+      icon: Icons.cookie,
+      iconOutline: Icons.cookie_outlined,
+      page: MapsWidget(),
+    ),
+    Page(
+      title: '설정',
+      icon: Icons.settings,
+      iconOutline: Icons.settings_outlined,
+      page: SettingsWidget(),
+    ),
   ];
 
   @override
@@ -35,72 +76,33 @@ class _MainWidgetState extends State<MainWidget> {
 
   int _selectedIndex = 0;
 
-  DateTime? currentBackPressTime;
-  Future<bool> _onWillPop() async {
-    final currentTime = DateTime.now();
-    final backButtonInterval = currentBackPressTime == null
-        ? const Duration(milliseconds: 1500)
-        : currentTime.difference(currentBackPressTime!);
-
-    if (backButtonInterval >= const Duration(milliseconds: 1500)) {
-      currentBackPressTime = currentTime;
-      Fluttertoast.showToast(
-        msg: '\'뒤로\' 버튼을 다시 누르면 종료됩니다.',
-        toastLength: Toast.LENGTH_SHORT,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black.withOpacity(0.2),
-        textColor: Colors.white,
-      );
-      return false;
-    }
-    return true;
-  }
-
-  Widget badgedIcon({required Icon icon, String? label}) {
-    if (label == null) {
-      return icon;
-    } else if (label.isEmpty) {
-      return Badge(child: icon);
-    } else {
-      return Badge(label: Text(label), child: icon);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return DoubleBackToCloseApp(
+      snackBar: const SnackBar(content: Text('뒤로 버튼을 한번 더 누르면 종료됩니다.')),
       child: Scaffold(
-        body: widgetOptions[_selectedIndex],
+        appBar: AppBar(
+          centerTitle: false,
+          title: Text(_pages[_selectedIndex].title),
+          actions: _pages[_selectedIndex].actions,
+        ),
+        body: _pages[_selectedIndex].page,
         bottomNavigationBar: NavigationBar(
-          shadowColor: Colors.grey.withOpacity(0.1),
           onDestinationSelected: (i) => setState(() => _selectedIndex = i),
-          destinations: [
-            NavigationDestination(
-              selectedIcon:
-                  badgedIcon(icon: const Icon(Icons.people), label: '12'),
-              icon: badgedIcon(icon: const Icon(Icons.people_outline)),
-              label: '친구',
-            ),
-            NavigationDestination(
-              icon: badgedIcon(icon: const Icon(Icons.chat_bubble), label: ''),
-              label: '채팅',
-            ),
-            const NavigationDestination(
-              icon: Icon(Icons.cookie),
-              label: '쿠키',
-            ),
-            // const NavigationDestination(
-            //   icon: Icon(Icons.sports_basketball),
-            //   label: '클럽',
-            // ),
-            const NavigationDestination(
-              icon: Badge(
-                child: Icon(Icons.settings),
+          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          destinations: _pages.map((e) {
+            return NavigationDestination(
+              selectedIcon: BadgedIcon(
+                icon: e.icon,
+                // label: '',
               ),
-              label: '설정',
-            ),
-          ],
+              icon: BadgedIcon(
+                icon: e.iconOutline,
+                label: '',
+              ),
+              label: e.title,
+            );
+          }).toList(),
           selectedIndex: _selectedIndex,
         ),
       ),
