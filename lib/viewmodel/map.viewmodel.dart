@@ -1,15 +1,16 @@
-
-import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
-import 'package:cookie_app/types/map/mapPosition_info.dart';
-import 'package:cookie_app/model/account/account_info.dart';
-import 'package:cookie_app/view/navigation_service.dart';
-import 'package:cookie_app/repository/jwt.repo.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:logging/logging.dart';
+import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+
+import 'package:cookie_app/model/account/account_info.dart';
+import 'package:cookie_app/repository/jwt.repo.dart';
+import 'package:cookie_app/types/map/mapPosition_info.dart';
+import 'package:cookie_app/view/navigation_service.dart';
+import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 
 class MapEvents {
   static const getPosition = 'get_position';
@@ -87,7 +88,7 @@ class MapProvider with ChangeNotifier {
     final List<MapInfoResponse> info =
         data.map((e) => MapInfoResponse.fromJson(e)).toList();
 
-    final List<MarkerInfo> _mapLog = info
+    final List<MarkerInfo> mapLog = info
         .map(
           (e) => MarkerInfo(
             info: Provider.of<FriendsViewModel>(context, listen: false)
