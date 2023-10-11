@@ -5,7 +5,6 @@ import 'package:vibration/vibration.dart';
 
 import 'package:cookie_app/view/components/account/friend_profile.dart';
 import 'package:cookie_app/view/components/loading.dart';
-import 'package:cookie_app/view/pages/friends/friends_sheet.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 
@@ -22,26 +21,20 @@ class _FriendsTabState extends State<FriendsTab> {
   @override
   Widget build(BuildContext context) {
     var handleUpdateFriends = context.read<FriendsViewModel>().updateFriends;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('친구'),
-        actions: const [FriendsAction()],
-      ),
-      body: Consumer<FriendsViewModel>(
-        builder: (context, value, child) => RefreshIndicator(
-          onRefresh: () => handleUpdateFriends(),
-          child: value.busy
-              ? const LoadingScreen()
-              : value.loaded
-                  ? FriendsGrid(
-                      friendsListViewModel: value,
-                      handleRefresh: handleUpdateFriends,
-                    )
-                  : Message(
-                      msg: '친구 목록을 불러오는 중 오류가 발생했습니다.',
-                      handleRefresh: handleUpdateFriends,
-                    ),
-        ),
+    return Consumer<FriendsViewModel>(
+      builder: (context, value, child) => RefreshIndicator(
+        onRefresh: () => handleUpdateFriends(),
+        child: value.busy
+            ? const LoadingScreen()
+            : value.loaded
+                ? FriendsGrid(
+                    friendsListViewModel: value,
+                    handleRefresh: handleUpdateFriends,
+                  )
+                : Message(
+                    msg: '친구 목록을 불러오는 중 오류가 발생했습니다.',
+                    handleRefresh: handleUpdateFriends,
+                  ),
       ),
     );
   }
