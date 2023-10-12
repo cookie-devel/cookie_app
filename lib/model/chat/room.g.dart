@@ -12,9 +12,8 @@ ChatRoomModel _$ChatRoomModelFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String? ?? "Unknown Room",
       createdAt: DateTime.parse(json['createdAt'] as String),
       image: json['image'] as String?,
-      users: (json['users'] as List<dynamic>?)
-              ?.map(
-                  (e) => PublicAccountModel.fromJson(e as Map<String, dynamic>))
+      members: (json['members'] as List<dynamic>?)
+              ?.map((e) => e as String)
               .toList() ??
           const [],
       messages: (json['messages'] as List<dynamic>?)
@@ -29,6 +28,6 @@ Map<String, dynamic> _$ChatRoomModelToJson(ChatRoomModel instance) =>
       'createdAt': instance.createdAt.toIso8601String(),
       'name': instance.name,
       'image': instance.image,
-      'users': instance.users,
+      'members': instance.members,
       'messages': instance.messages,
     };
