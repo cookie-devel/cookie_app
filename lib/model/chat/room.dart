@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:cookie_app/model/account/account_info.dart';
 import 'package:cookie_app/model/chat/message.dart';
 
 part 'room.g.dart';
@@ -11,7 +10,7 @@ class ChatRoomModel {
   final DateTime createdAt;
   final String name;
   final String? image;
-  final List<PublicAccountModel> users;
+  final List<String> members;
   final List<MessageModel> messages;
 
   ChatRoomModel({
@@ -19,7 +18,7 @@ class ChatRoomModel {
     this.name = "Unknown Room",
     required this.createdAt,
     this.image,
-    this.users = const [],
+    this.members = const [],
     this.messages = const [],
   });
 

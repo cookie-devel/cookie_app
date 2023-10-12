@@ -4,7 +4,6 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:cookie_app/model/account/account_info.dart';
-import 'package:cookie_app/repository/info.repo.dart';
 import 'package:cookie_app/types/account/profile.dart';
 import 'package:cookie_app/view/components/icon_imageprovider.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
@@ -57,15 +56,5 @@ class PublicAccountViewModel extends AccountViewModel<PublicAccountModel> {
 class PrivateAccountViewModel extends AccountViewModel<PrivateAccountModel> {
   String get phone => _model.phone;
 
-  final InfoRepository _repo = InfoRepositoryStorageImpl();
-
-  Future<void> updateMyInfo({PrivateAccountModel? model}) async {
-    setLoadState(busy: true, loaded: false);
-    try {
-      _model = model ?? await _repo.getInfo();
-      setLoadState(busy: false, loaded: true);
-    } catch (e) {
-      setLoadState(busy: false, loaded: false);
-    }
-  }
+  set model(PrivateAccountModel model) => _model = model;
 }
