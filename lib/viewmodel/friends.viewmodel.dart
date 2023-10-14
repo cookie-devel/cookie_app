@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/repository/info.repo.dart';
+import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
-import 'package:cookie_app/view/navigation_service.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 
