@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
-showSnackBar(BuildContext context, String message, {Icon? icon}) {
+showSnackBar({
+  required BuildContext context,
+  Icon? icon,
+  required String message,
+}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Row(
@@ -18,11 +22,11 @@ showSnackBar(BuildContext context, String message, {Icon? icon}) {
 
 showErrorSnackBar(BuildContext context, String message) {
   showSnackBar(
-    context,
-    message,
+    context: context,
     icon: const Icon(
       Icons.error_outline,
       color: Colors.red,
     ),
+    message: message,
   );
 }

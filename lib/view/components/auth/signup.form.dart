@@ -83,7 +83,7 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   onSignUpSuccess(context) {
-    showSnackBar(context, '회원가입이 완료되었습니다.');
+    showSnackBar(context: context, message: '회원가입이 완료되었습니다.');
     Navigator.pop(context);
   }
 
