@@ -17,108 +17,87 @@ class FriendsTab extends StatefulWidget {
   State<FriendsTab> createState() => _FriendsTabState();
 }
 
-class _FriendsTabState extends State<FriendsTab>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
-  final GlobalKey<RefreshIndicatorState> _refreshKey =
-      GlobalKey<RefreshIndicatorState>();
-  late Future<void> _initFriendsData;
-
-  @override
-  void initState() {
-    super.initState();
-    _initFriendsData = context.read<FriendsViewModel>().updateFriends();
-  }
-
+class _FriendsTabState extends State<FriendsTab> {
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     FriendsViewModel friendsViewModel = context.read<FriendsViewModel>();
     return FutureBuilder(
-      future: friendsViewModel.friendList,
+      future: friendsViewModel.updateFriends(),
       builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-            return RefreshIndicator(
-              key: _refreshKey,
-              onRefresh: friendsViewModel.updateFriends,
-              child: Message(
-                msg: '친구 목록을 불러오세요.',
-                handleRefresh: friendsViewModel.updateFriends,
-              ),
-            );
-          case ConnectionState.active:
-          case ConnectionState.waiting:
-            return const LoadingScreen();
-          case ConnectionState.done:
-            if (snapshot.hasError) {
-              return RefreshIndicator(
-                key: _refreshKey,
-                onRefresh: () => Future(() {
-                  setState(() {});
-                }),
-                child: Message(
-                  msg: '친구 목록을 불러오는 중 오류가 발생했습니다.',
-                  handleRefresh: friendsViewModel.updateFriends,
-                ),
-              );
-            }
-            if (snapshot.data!.isEmpty) {
-              return RefreshIndicator(
-                key: _refreshKey,
-                onRefresh: friendsViewModel.updateFriends,
-                child: Message(
-                  msg: '친구를 추가해보세요!',
-                  handleRefresh: friendsViewModel.updateFriends,
-                ),
-              );
-            } else {
-              return RefreshIndicator(
-                key: _refreshKey,
-                onRefresh: friendsViewModel.updateFriends,
-                child: FriendsGrid(
-                  friendList: snapshot.data!,
-                ),
-              );
-            }
+        if (snapshot.hasError) {
+          return Message(
+            msg: '친구 목록을 불러오는 중 오류가 발생했습니다.',
+            handleRefresh: friendsViewModel.updateFriends,
+          );
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          return FriendsGrid(
+            friendsListViewModel: friendsViewModel,
+            handleRefresh: friendsViewModel.updateFriends,
+          );
+        } else {
+          return const LoadingScreen();
         }
       },
     );
+
+    // return Consumer<FriendsViewModel>(
+    //   builder: (context, value, child) => RefreshIndicator(
+    //     onRefresh: () => handleUpdateFriends(),
+    //     child: value.busy
+    //         ? const LoadingScreen()
+    //         : value.loaded
+    //             ? FriendsGrid(
+    //                 friendsListViewModel: value,
+    //                 handleRefresh: handleUpdateFriends,
+    //               )
+    //             : Message(
+    //                 msg: '친구 목록을 불러오는 중 오류가 발생했습니다.',
+    //                 handleRefresh: handleUpdateFriends,
+    //               ),
+    //   ),
+    // );
   }
 }
 
 class FriendsGrid extends StatelessWidget {
-  final List<PublicAccountViewModel> friendList;
+  final FriendsViewModel friendsListViewModel;
+  final void Function() handleRefresh;
   const FriendsGrid({
     super.key,
-    required this.friendList,
+    required this.friendsListViewModel,
+    required this.handleRefresh,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      cacheExtent: 300,
-      itemCount: friendList.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 0.8,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        final PublicAccountViewModel friend = friendList[index];
-        return Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: InkWell(
-            onLongPress: () {
-              Vibration.vibrate(duration: 40);
-              _showDeleteConfirmationSnackBar(context, index);
+    return friendsListViewModel.friendList.isNotEmpty
+        ? GridView.builder(
+            cacheExtent: 300,
+            itemCount: friendsListViewModel.friendList.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 0.8,
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              final PublicAccountViewModel friend =
+                  friendsListViewModel.friendList[index];
+
+              return Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: InkWell(
+                  onLongPress: () {
+                    Vibration.vibrate(duration: 40);
+                    _showDeleteConfirmationSnackBar(context, index);
+                  },
+                  child: FriendProfileWidget(account: friend),
+                ),
+              );
             },
-            child: FriendProfileWidget(account: friend),
-          ),
-        );
-      },
-    );
+          )
+        : Message(
+            msg: '친구를 추가해보세요!',
+            handleRefresh: handleRefresh,
+          );
   }
 
   void _showDeleteConfirmationSnackBar(BuildContext context, int index) {
@@ -145,31 +124,33 @@ class Message extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) => SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: constraints.maxHeight),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
+    return Stack(
+      children: [
+        ListView(),
+        Center(
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              Center(
+                child: Text(
                   msg,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                const SizedBox(height: 20),
-                IconButton(
-                  onPressed: handleRefresh,
-                  tooltip: 'Refresh',
-                  icon: const Icon(Icons.refresh),
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 20),
+              FloatingActionButton(
+                onPressed: handleRefresh,
+                tooltip: 'Refresh',
+                shape: const CircleBorder(),
+                child: const Icon(Icons.refresh),
+              ),
+            ],
           ),
         ),
-      ),
+      ],
     );
   }
 }
