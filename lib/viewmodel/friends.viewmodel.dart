@@ -8,34 +8,51 @@ import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 class FriendsViewModel extends ChangeNotifier {
   final InfoRepository _repo = InfoRepositoryImpl();
 
-  Map<String, PublicAccountViewModel> _friendMap = {};
-  List<PublicAccountViewModel> get friendList => _friendMap.values.toList();
-  Map<String, PublicAccountViewModel> get friendMap => _friendMap;
+  Future<Map<String, PublicAccountViewModel>> _friendMap;
+  Future<List<PublicAccountViewModel>> get friendList async =>
+      (await _friendMap).values.toList();
+  Future<Map<String, PublicAccountViewModel>> get friendMap => _friendMap;
 
-  PublicAccountViewModel getFriend(String id) {
-    if (!_friendMap.containsKey(id)) {
+  FriendsViewModel()
+      : _friendMap = InfoRepositoryApiImpl()
+            .getInfo()
+            .then(
+              (value) => value.friendList
+                  .map((e) => PublicAccountViewModel(model: e))
+                  .map((e) => MapEntry(e.id, e)),
+            )
+            .then((fmap) => Map.fromEntries(fmap));
+
+  Future<PublicAccountViewModel> getFriend(String id) async {
+    Map<String, PublicAccountViewModel> friendMap = await _friendMap;
+
+    if (!friendMap.containsKey(id)) {
       throw Exception('Friend not found');
     }
 
-    return _friendMap[id]!;
+    return friendMap[id]!;
   }
 
   BuildContext context = NavigationService.navigatorKey.currentContext!;
 
   Future<Map<String, PublicAccountViewModel>> updateFriends() async {
-    try {
-      _friendMap = Map.fromEntries(
-        (await _repo.getInfo())
-            .friendList
-            .map((e) => PublicAccountViewModel(model: e))
-            .toList()
-            .map((e) => MapEntry(e.id, e)),
-      );
-      if (context.mounted) showSnackBar(context, '친구 목록을 업데이트했습니다.');
-      return _friendMap;
-    } catch (e) {
-      if (context.mounted) showErrorSnackBar(context, e.toString());
-      rethrow;
-    }
+    return _friendMap = _repo
+        .getInfo()
+        .onError((error, stackTrace) {
+          showErrorSnackBar(context, error.toString());
+          throw error!;
+          // return Future.error(error!);
+        })
+        .then(
+          (value) => value.friendList
+              .map((e) => PublicAccountViewModel(model: e))
+              .map((e) => MapEntry(e.id, e)),
+        )
+        .then((fmap) {
+          showSnackBar(context, '친구 목록을 업데이트했습니다.');
+          return Map.fromEntries(fmap);
+        });
+    // .then(() => showSnackBar(context, '친구 목록을 업데이트했습니다.'))
+    // .then(() => notifyListeners());
   }
 }
