@@ -20,42 +20,23 @@ class FriendsTab extends StatefulWidget {
 class _FriendsTabState extends State<FriendsTab> {
   @override
   Widget build(BuildContext context) {
-    FriendsViewModel friendsViewModel = context.read<FriendsViewModel>();
-    return FutureBuilder(
-      future: friendsViewModel.updateFriends(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Message(
-            msg: '친구 목록을 불러오는 중 오류가 발생했습니다.',
-            handleRefresh: friendsViewModel.updateFriends,
-          );
-        } else if (snapshot.connectionState == ConnectionState.done) {
-          return FriendsGrid(
-            friendsListViewModel: friendsViewModel,
-            handleRefresh: friendsViewModel.updateFriends,
-          );
-        } else {
-          return const LoadingScreen();
-        }
-      },
+    var handleUpdateFriends = context.read<FriendsViewModel>().updateFriends;
+    return Consumer<FriendsViewModel>(
+      builder: (context, value, child) => RefreshIndicator(
+        onRefresh: () => handleUpdateFriends(),
+        child: value.busy
+            ? const LoadingScreen()
+            : value.loaded
+                ? FriendsGrid(
+                    friendsListViewModel: value,
+                    handleRefresh: handleUpdateFriends,
+                  )
+                : Message(
+                    msg: '친구 목록을 불러오는 중 오류가 발생했습니다.',
+                    handleRefresh: handleUpdateFriends,
+                  ),
+      ),
     );
-
-    // return Consumer<FriendsViewModel>(
-    //   builder: (context, value, child) => RefreshIndicator(
-    //     onRefresh: () => handleUpdateFriends(),
-    //     child: value.busy
-    //         ? const LoadingScreen()
-    //         : value.loaded
-    //             ? FriendsGrid(
-    //                 friendsListViewModel: value,
-    //                 handleRefresh: handleUpdateFriends,
-    //               )
-    //             : Message(
-    //                 msg: '친구 목록을 불러오는 중 오류가 발생했습니다.',
-    //                 handleRefresh: handleUpdateFriends,
-    //               ),
-    //   ),
-    // );
   }
 }
 

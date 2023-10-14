@@ -18,9 +18,9 @@ import 'package:provider/provider.dart';
 
 import 'package:cookie_app/repository/location_service.repo.dart';
 import 'package:cookie_app/types/map/mapPosition_info.dart';
-import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/components/loading.dart';
 import 'package:cookie_app/view/components/map/marker_design.dart';
+import 'package:cookie_app/view/navigation_service.dart';
 import 'package:cookie_app/view/pages/maps/location_callback_handler.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:cookie_app/viewmodel/theme.viewmodel.dart';

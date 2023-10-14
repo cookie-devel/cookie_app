@@ -9,7 +9,7 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:cookie_app/model/account/account_info.dart';
 import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:cookie_app/types/map/mapPosition_info.dart';
-import 'package:cookie_app/utils/navigation_service.dart';
+import 'package:cookie_app/view/navigation_service.dart';
 import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 
 class MapEvents {

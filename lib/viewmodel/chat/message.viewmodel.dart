@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 import 'package:cookie_app/model/chat/message.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
+import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 
-class MessageViewModel extends ChangeNotifier {
+class MessageViewModel extends BaseViewModel {
   late MessageModel _messageModel;
   MessageViewModel({required MessageModel model}) : super() {
     _messageModel = model;
