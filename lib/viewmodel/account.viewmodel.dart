@@ -6,9 +6,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:cookie_app/model/account/account_info.dart';
 import 'package:cookie_app/types/account/profile.dart';
 import 'package:cookie_app/view/components/icon_imageprovider.dart';
-import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 
-class ProfileViewModel extends BaseViewModel {
+class ProfileViewModel extends ChangeNotifier {
   final Profile _model;
 
   ProfileViewModel({required Profile model}) : _model = model;
@@ -32,7 +31,7 @@ class ProfileViewModel extends BaseViewModel {
 }
 
 abstract class AccountViewModel<T extends PublicAccountModel>
-    extends BaseViewModel {
+    extends ChangeNotifier {
   late T _model;
 
   String get id => _model.id;

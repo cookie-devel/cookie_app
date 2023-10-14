@@ -4,13 +4,12 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/model/chat/room.dart';
-import 'package:cookie_app/view/navigation_service.dart';
+import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 import 'package:cookie_app/viewmodel/chat/message.viewmodel.dart';
 import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 
-class ChatRoomViewModel extends BaseViewModel {
+class ChatRoomViewModel extends ChangeNotifier {
   final ChatRoomModel _model;
 
   ChatRoomViewModel({required ChatRoomModel model}) : _model = model;
