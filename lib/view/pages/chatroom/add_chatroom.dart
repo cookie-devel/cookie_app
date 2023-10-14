@@ -22,8 +22,6 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<PublicAccountViewModel> friendList =
-        context.watch<FriendsViewModel>().friendList;
     return Scaffold(
       appBar: AppBar(
         title: const Text('채팅방 추가'),
@@ -77,26 +75,29 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
           ),
           Expanded(
             child: SingleChildScrollView(
-              child: ListView.separated(
-                separatorBuilder: (context, index) =>
-                    const Divider(color: Colors.grey),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: friendList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  PublicAccountViewModel friend = friendList[index];
-                  return FriendTile(
-                    friend: friend,
-                    isSelected: selectedFriends.contains(friend),
-                    onCheckboxChanged: (value) {
-                      setState(() {
-                        value == true
-                            ? selectedFriends.add(friend)
-                            : selectedFriends.remove(friend);
-                      });
-                    },
-                  );
-                },
+              child: FutureBuilder(
+                future: context.watch<FriendsViewModel>().friendList,
+                builder: (context, snapshot) => ListView.separated(
+                  separatorBuilder: (context, index) =>
+                      const Divider(color: Colors.grey),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    PublicAccountViewModel friend = snapshot.data![index];
+                    return FriendTile(
+                      friend: friend,
+                      isSelected: selectedFriends.contains(friend),
+                      onCheckboxChanged: (value) {
+                        setState(() {
+                          value == true
+                              ? selectedFriends.add(friend)
+                              : selectedFriends.remove(friend);
+                        });
+                      },
+                    );
+                  },
+                ),
               ),
             ),
           ),
