@@ -28,9 +28,7 @@ class FriendsViewModel extends BaseViewModel {
   Future<void> updateFriends() async {
     try {
       await context.read<FriendsViewModel>()._updateFriends();
-      if (context.mounted) {
-        showSnackBar(context: context, message: '친구 목록을 업데이트했습니다.');
-      }
+      if (context.mounted) showSnackBar(context, '친구 목록을 업데이트했습니다.');
     } catch (e) {
       if (context.mounted) showErrorSnackBar(context, e.toString());
     }

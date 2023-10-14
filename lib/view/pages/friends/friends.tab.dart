@@ -105,33 +105,31 @@ class Message extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        ListView(),
-        Center(
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              Center(
-                child: Text(
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
                   msg,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 20),
                 ),
-              ),
-              const SizedBox(height: 20),
-              FloatingActionButton(
-                onPressed: handleRefresh,
-                tooltip: 'Refresh',
-                shape: const CircleBorder(),
-                child: const Icon(Icons.refresh),
-              ),
-            ],
+                const SizedBox(height: 20),
+                IconButton(
+                  onPressed: handleRefresh,
+                  tooltip: 'Refresh',
+                  icon: const Icon(Icons.refresh),
+                ),
+              ],
+            ),
           ),
         ),
-      ],
+      ),
     );
   }
 }
