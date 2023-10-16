@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -92,14 +93,17 @@ class ChatViewModel extends ChangeNotifier {
   }
 
   void _onLeaveRoom(_) {}
+
+  int count = 0;
   void _onChat(res) {
     log.info(res);
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        content: Text(res.toString()),
-      ),
-    );
+    // showDialog(
+    //   context: context,
+    //   builder: (context) => AlertDialog(
+    //     content: Text(res.toString()),
+    //   ),
+    // );
+
     ChatResponse data = ChatResponse.fromJson(res);
 
     String roomID = data.room;
@@ -122,18 +126,14 @@ class ChatViewModel extends ChangeNotifier {
         break;
       case MessageType.text:
         TextMessage message = data.payload as TextMessage;
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(message.author.id),
-            icon: const Icon(Icons.message),
-            content: Text('[$roomID] ${message.text}'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
-              ),
-            ],
+        AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: count++,
+            channelKey: 'chat_channel',
+            title: message.author.id,
+            body: message.text,
+            groupKey: roomID,
+            summary: 'New Message',
           ),
         );
         break;
