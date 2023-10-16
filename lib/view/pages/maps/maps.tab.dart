@@ -42,7 +42,7 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   ReceivePort port = ReceivePort();
 
-  bool? isRunning;
+  bool isRunning = false;
   LocationDto? lastLocation;
   bool isInit = false;
 
@@ -88,7 +88,7 @@ class _MapsWidgetState extends State<MapsWidget> {
 
     if (context.mounted) {
       context
-          .read<MapProvider>()
+          .read<MapViewModel>()
           .setCurrentLocation(locationDto.latitude, locationDto.longitude);
     }
 
@@ -100,9 +100,13 @@ class _MapsWidgetState extends State<MapsWidget> {
   }
 
   Future<void> _updateNotificationText(LocationDto data) async {
+    final DateTime now = DateTime.now();
+    final String hour = now.hour.toString().padLeft(2, '0');
+    final String minute = now.minute.toString().padLeft(2, '0');
+    final String second = now.second.toString().padLeft(2, '0');
     await BackgroundLocator.updateNotificationText(
-      title: "new location received",
-      msg: "${DateTime.now()}",
+      title: "위치 정보를 수신하고 있어요",
+      msg: "${hour}:${minute}:${second}",
       bigMsg: "${data.latitude}, ${data.longitude}",
     );
   }
@@ -122,11 +126,12 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<ThemeProvider, MapProvider>(
+    return Consumer2<ThemeProvider, MapViewModel>(
       builder: (context, themeProvider, mapProvider, _) {
         String mapStyle = themeProvider.mapStyle;
         // ignore: unused_local_variable
         List mapData = mapProvider.mapLog;
+        final currentLocation = mapProvider.currentLocation;
 
         return isInit == true
             ? Stack(
@@ -153,10 +158,8 @@ class _MapsWidgetState extends State<MapsWidget> {
                             ),
                             zoom: 18.0,
                           )
-                        : const CameraPosition(
-                            // 기본값 설정 또는 에러 처리
-                            target:
-                                LatLng(37.7749, -122.4194), // 예시로 적어 둔 것입니다.
+                        : CameraPosition(
+                            target: currentLocation,
                             zoom: 18.0,
                           ),
                   ),
@@ -229,27 +232,24 @@ class _MapsWidgetState extends State<MapsWidget> {
       initCallback: LocationCallbackHandler.initCallback,
       initDataCallback: data,
       disposeCallback: LocationCallbackHandler.disposeCallback,
-      // ignore: prefer_const_constructors
-      iosSettings: IOSSettings(
+      iosSettings: const IOSSettings(
         accuracy: LocationAccuracy.NAVIGATION,
         distanceFilter: 0,
         stopWithTerminate: true,
       ),
       autoStop: false,
-      // ignore: prefer_const_constructors
-      androidSettings: AndroidSettings(
+      androidSettings: const AndroidSettings(
         accuracy: LocationAccuracy.NAVIGATION,
         interval: 5,
         distanceFilter: 0,
         client: LocationClient.google,
-        // ignore: prefer_const_constructors
         androidNotificationSettings: AndroidNotificationSettings(
           notificationChannelName: 'Location tracking',
           notificationTitle: 'Start Location Tracking',
           notificationMsg: 'Track location in background',
           notificationBigMsg:
               'Background location is on to keep the app up-tp-date with your location. This is required for main features to work properly when the app is not running.',
-          notificationIconColor: Colors.grey,
+          notificationIconColor: Colors.orangeAccent,
           notificationTapCallback: LocationCallbackHandler.notificationCallback,
         ),
       ),
@@ -261,7 +261,7 @@ class _MapsWidgetState extends State<MapsWidget> {
   Future<void> _addMarkers() async {
     List<Marker> tempMarkers = [];
     final List<MarkerInfo> mapData =
-        Provider.of<MapProvider>(context, listen: false).mapLog;
+        Provider.of<MapViewModel>(context, listen: false).mapLog;
 
     for (int i = 0; i < mapData.length; i++) {
       final MarkerInfo log = mapData[i];
@@ -320,11 +320,11 @@ class _MapsWidgetState extends State<MapsWidget> {
     }
 
     final List<SpeedDialChild> speedDialChildren = [
-      speedDialChild(
-        "설정",
-        Icons.settings_sharp,
-        () {},
-      ),
+      // speedDialChild(
+      //   "설정",
+      //   Icons.settings_sharp,
+      //   () {},
+      // ),
       speedDialChild(
         "현위치",
         Icons.location_searching_sharp,
@@ -341,16 +341,15 @@ class _MapsWidgetState extends State<MapsWidget> {
         Icons.cookie,
         () {},
       ),
-      speedDialChild(
-        "위치 켜기",
-        Icons.wifi_rounded,
-        () => _onStart(),
-      ),
-      speedDialChild(
+      isRunning ? speedDialChild(
         "위치 끄기",
         Icons.wifi_off_rounded,
         () => onStop(),
-      ),
+      ): speedDialChild(
+        "위치 켜기",
+        Icons.wifi_rounded,
+        () => _onStart(),
+      )
     ];
 
     return SpeedDial(
@@ -369,7 +368,7 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   // speedDial => 현위치
   void _moveToCurrentLocation() {
-    LatLng position = context.read<MapProvider>().currentLocation;
+    LatLng position = context.read<MapViewModel>().currentLocation;
     mapController.animateCamera(CameraUpdate.newLatLng(position));
   }
 
@@ -479,7 +478,7 @@ class _MapsWidgetState extends State<MapsWidget> {
                               // Text(log["username"]),
                               Text(
                                 _calDistance(
-                                  Provider.of<MapProvider>(
+                                  Provider.of<MapViewModel>(
                                     context,
                                     listen: false,
                                   ).currentLocation,

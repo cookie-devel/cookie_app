@@ -13,19 +13,21 @@ import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 
 class MapEvents {
-  static const getPosition = 'get_position';
   static const sendPosition = 'send_position';
+  static const getPosition = 'get_position';
 }
 
-class MapProvider with ChangeNotifier {
-  Logger logger = Logger('MapProvider');
+class MapViewModel with ChangeNotifier {
+  BuildContext context = NavigationService.navigatorKey.currentContext!;
+  Logger logger = Logger('MapViewModel');
 
+  // socket
   final Socket socket = io(
     Uri(
       scheme: dotenv.env['API_SCHEME'],
       host: dotenv.env['API_HOST'],
       port: int.parse(dotenv.env['API_PORT']!),
-      path: '/map',
+      path: '/location',
     ).toString(),
     OptionBuilder()
         .setTransports(['websocket'])
@@ -33,35 +35,40 @@ class MapProvider with ChangeNotifier {
         .enableReconnection()
         .build(),
   );
-
+  Function get connect => socket.connect;
+  Function get disconnect => socket.disconnect;
+  
+  // socket connection
   bool _connected = false;
   bool get connected => _connected;
 
-  Function get connect => socket.connect;
-  Function get disconnect => socket.disconnect;
-
-  final List<MarkerInfo> _mapLog = [];
-  LatLng _currentLocation = const LatLng(0, 0);
-  bool _loading = true;
-
+  // map log
+  List<MarkerInfo> _mapLog = [];
   List<MarkerInfo> get mapLog => _mapLog;
+
+  // current location
+  LatLng _currentLocation = const LatLng(37.282053, 127.043546);
   LatLng get currentLocation => _currentLocation;
+
+  // map loading
+  bool _loading = true;
   bool get loading => _loading;
 
-  MapProvider() {
+  MapViewModel() {
     socket.auth = {'token': JWTRepository.token!};
 
     socket.onConnect(_onConnectionChange);
     socket.onDisconnect(_onConnectionChange);
-    socket.on(MapEvents.getPosition, _onGetPosition);
     socket.on(MapEvents.sendPosition, _onSendPosition);
+    socket.on(MapEvents.getPosition, _onGetPosition);
   }
 
+  // set current location
   void setCurrentLocation(double latitude, double longitude) {
     _currentLocation = LatLng(latitude, longitude);
     _loading = false;
     notifyListeners();
-    logger.info("mapProvider = $_currentLocation");
+    logger.info("MapViewModel = $_currentLocation");
   }
 
   // Socket Incoming Event Handlers
@@ -73,31 +80,51 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // Socket Outgoing Event Handlers
   void _onSendPosition(_) {
     logger.info("send_position");
-    socket.emit(MapEvents.sendPosition, {
-      'latitude': _currentLocation.latitude,
-      'longitude': _currentLocation.longitude,
-    });
+    socket.emit(
+      MapEvents.sendPosition,
+      MapInfoRequest(
+        latitude: _currentLocation.latitude,
+        longitude: _currentLocation.longitude,
+      ).toJson(),
+    );
   }
 
-  BuildContext context = NavigationService.navigatorKey.currentContext!;
+  // Socket Incoming Event Handlers
   void _onGetPosition(data) {
     logger.info("get_position: $data");
 
-    final List<MapInfoResponse> info =
-        data.map((e) => MapInfoResponse.fromJson(e)).toList();
+    final MapInfoResponse info = MapInfoResponse.fromJson(data);
+    
+    String userid = info.userid;
+    PublicAccountModel? friendInfo =
+        Provider.of<FriendsViewModel>(context, listen: false).getFriend(userid)
+            as PublicAccountModel?;
 
-    final List<MarkerInfo> mapLog = info
-        .map(
-          (e) => MarkerInfo(
-            info: Provider.of<FriendsViewModel>(context, listen: false)
-                .getFriend(e.userid) as PublicAccountModel,
-            latitude: e.latitude,
-            longitude: e.longitude,
-          ),
-        )
-        .toList();
+    bool userExists = _mapLog.any((element) => element.info.id == userid);
+
+    if (userExists) {
+      _mapLog = _mapLog.map((element) {
+        if (element.info.id == userid) {
+          return MarkerInfo(
+            info: friendInfo!,
+            latitude: info.latitude,
+            longitude: info.longitude,
+          );
+        }
+        return element;
+      }).toList();
+    } else {
+      _mapLog.add(
+        MarkerInfo(
+          info: friendInfo!,
+          latitude: info.latitude,
+          longitude: info.longitude,
+        ),
+      );
+    }
     notifyListeners();
   }
 }
