@@ -73,6 +73,7 @@ dependencies:
   location_permissions: ^4.0.1
   flutter_cache_manager: ^3.3.1
   double_back_to_close_app: ^2.1.0
+  awesome_notifications: ^0.8.2
 
 dev_dependencies:
   flutter_test:
