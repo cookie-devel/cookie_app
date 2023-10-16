@@ -33,19 +33,22 @@ class _SignInFormState extends State<SignInForm> {
             IDField(onSaved: (newValue) => id = newValue!),
             PWField(onSaved: (newValue) => pw = newValue!),
             SubmitButton(
-              onPressed: () async {
+              onPressed: () {
                 if (!_formKey.currentState!.validate()) return;
                 _formKey.currentState!.save();
-                return await context.read<AuthViewModel>().signIn(
+                context
+                    .read<AuthViewModel>()
+                    .signIn(
                       id: id!,
                       pw: pw!,
                       privateAccountViewModel:
                           context.read<PrivateAccountViewModel>(),
-                    );
+                    )
+                    .catchError((e) {
+                  showErrorSnackBar(context, '로그인에 실패하였습니다. ${e.toString()}');
+                });
               },
               text: '로그인',
-              onFailure: (context, e) =>
-                  showErrorSnackBar(context, '로그인에 실패하였습니다. ${e.toString()}'),
             ),
           ].map(wrapped).toList(),
         ),

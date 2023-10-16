@@ -55,10 +55,12 @@ class _SignUpFormState extends State<SignUpForm> {
             ),
             PhoneNumberField(onSaved: (newValue) => phoneNumber = newValue),
             SubmitButton(
-              onPressed: () async {
+              onPressed: () {
                 if (!_formKey.currentState!.validate()) return;
                 _formKey.currentState!.save();
-                await context.read<AuthViewModel>().signUp(
+                context
+                    .read<AuthViewModel>()
+                    .signUp(
                       SignUpRequest(
                         id: id!,
                         pw: pw!,
@@ -70,13 +72,14 @@ class _SignUpFormState extends State<SignUpForm> {
                           message: null,
                         ),
                       ),
-                    );
+                    )
+                    .then((_) => onSignUpSuccess(context))
+                    .catchError((e) => onSignUpFailure(context, e));
               },
               text: '회원가입',
-              onSuccess: onSignUpSuccess,
-              onFailure: onSignUpFailure,
             ),
           ].map(wrapped).toList(),
+          // ],
         ),
       ),
     );
