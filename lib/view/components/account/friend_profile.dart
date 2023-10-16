@@ -69,7 +69,8 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
 
     const fontSize = 14.0;
 
-    return GestureDetector(
+    return InkWell(
+      overlayColor: MaterialStateProperty.all(Colors.transparent),
       onTap: () {
         if (widget.enableOnTap) {
           _startAnimation();
