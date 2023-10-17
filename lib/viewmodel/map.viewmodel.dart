@@ -1,3 +1,4 @@
+import 'package:cookie_app/types/account/profile.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -13,8 +14,7 @@ import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 
 class MapEvents {
-  static const sendPosition = 'send_position';
-  static const getPosition = 'get_position';
+  static const position = 'position';
 }
 
 class MapViewModel with ChangeNotifier {
@@ -35,12 +35,13 @@ class MapViewModel with ChangeNotifier {
         .enableReconnection()
         .build(),
   );
-  Function get connect => socket.connect;
-  Function get disconnect => socket.disconnect;
-  
+
   // socket connection
   bool _connected = false;
   bool get connected => _connected;
+
+  Function get connect => socket.connect;
+  Function get disconnect => socket.disconnect;
 
   // map log
   List<MarkerInfo> _mapLog = [];
@@ -59,8 +60,7 @@ class MapViewModel with ChangeNotifier {
 
     socket.onConnect(_onConnectionChange);
     socket.onDisconnect(_onConnectionChange);
-    socket.on(MapEvents.sendPosition, _onSendPosition);
-    socket.on(MapEvents.getPosition, _onGetPosition);
+    socket.on(MapEvents.position, _onPosition);
   }
 
   // set current location
@@ -80,11 +80,9 @@ class MapViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  // Socket Outgoing Event Handlers
-  void _onSendPosition(_) {
-    logger.info("send_position");
+  void position() {
     socket.emit(
-      MapEvents.sendPosition,
+      MapEvents.position,
       MapInfoRequest(
         latitude: _currentLocation.latitude,
         longitude: _currentLocation.longitude,
@@ -92,12 +90,10 @@ class MapViewModel with ChangeNotifier {
     );
   }
 
-  // Socket Incoming Event Handlers
-  void _onGetPosition(data) {
-    logger.info("get_position: $data");
+  void _onPosition(data) {
+    logger.info("position: $data");
 
     final MapInfoResponse info = MapInfoResponse.fromJson(data);
-    
     String userid = info.userid;
     PublicAccountModel? friendInfo =
         Provider.of<FriendsViewModel>(context, listen: false).getFriend(userid)

@@ -49,7 +49,6 @@ class _MapsWidgetState extends State<MapsWidget> {
   @override
   void initState() {
     super.initState();
-    _addMarkers();
     if (IsolateNameServer.lookupPortByName(
           LocationServiceRepository.isolateName,
         ) !=
@@ -67,10 +66,12 @@ class _MapsWidgetState extends State<MapsWidget> {
     port.listen(
       (dynamic data) async {
         await update(data);
+        context.read<MapViewModel>().position();
       },
     );
     initPlatformState();
     isInit = true;
+    _addMarkers();
   }
 
   @override
@@ -132,7 +133,7 @@ class _MapsWidgetState extends State<MapsWidget> {
         // ignore: unused_local_variable
         List mapData = mapProvider.mapLog;
         final currentLocation = mapProvider.currentLocation;
-
+        print("marker_??: ${mapProvider.mapLog}");
         return isInit == true
             ? Stack(
                 children: [
@@ -149,6 +150,7 @@ class _MapsWidgetState extends State<MapsWidget> {
                       mapController.setMapStyle(mapStyle);
                     },
                     mapType: MapType.normal,
+                    // markers: Set.from(markers),
                     markers: Set.from(markers),
                     initialCameraPosition: lastLocation != null
                         ? CameraPosition(
@@ -262,7 +264,7 @@ class _MapsWidgetState extends State<MapsWidget> {
     List<Marker> tempMarkers = [];
     final List<MarkerInfo> mapData =
         Provider.of<MapViewModel>(context, listen: false).mapLog;
-
+    print("map_mapLog: $mapData");
     for (int i = 0; i < mapData.length; i++) {
       final MarkerInfo log = mapData[i];
 
