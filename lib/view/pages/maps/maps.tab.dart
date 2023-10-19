@@ -23,7 +23,7 @@ import 'package:cookie_app/view/components/loading.dart';
 import 'package:cookie_app/view/components/map/marker_design.dart';
 import 'package:cookie_app/view/pages/maps/location_callback_handler.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
-import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
+import 'package:cookie_app/viewmodel/theme.provider.dart';
 
 class MapsWidget extends StatefulWidget {
   const MapsWidget({Key? key}) : super(key: key);
@@ -107,7 +107,7 @@ class _MapsWidgetState extends State<MapsWidget> {
     final String second = now.second.toString().padLeft(2, '0');
     await BackgroundLocator.updateNotificationText(
       title: "위치 정보를 수신하고 있어요",
-      msg: "${hour}:${minute}:${second}",
+      msg: "$hour:$minute:$second",
       bigMsg: "${data.latitude}, ${data.longitude}",
     );
   }
@@ -343,15 +343,17 @@ class _MapsWidgetState extends State<MapsWidget> {
         Icons.cookie,
         () {},
       ),
-      isRunning ? speedDialChild(
-        "위치 끄기",
-        Icons.wifi_off_rounded,
-        () => onStop(),
-      ): speedDialChild(
-        "위치 켜기",
-        Icons.wifi_rounded,
-        () => _onStart(),
-      )
+      isRunning
+          ? speedDialChild(
+              "위치 끄기",
+              Icons.wifi_off_rounded,
+              () => onStop(),
+            )
+          : speedDialChild(
+              "위치 켜기",
+              Icons.wifi_rounded,
+              () => _onStart(),
+            ),
     ];
 
     return SpeedDial(

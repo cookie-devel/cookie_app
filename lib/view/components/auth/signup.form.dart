@@ -10,7 +10,7 @@ import 'package:cookie_app/view/components/auth/submit_button.dart';
 import 'package:cookie_app/view/components/profile_imgpicker.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/components/text_form_fields.dart';
-import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
+import 'package:cookie_app/viewmodel/auth.provider.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({Key? key}) : super(key: key);

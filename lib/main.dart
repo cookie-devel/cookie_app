@@ -17,11 +17,11 @@ import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/mainwidget.dart';
 import 'package:cookie_app/view/pages/signin.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
+import 'package:cookie_app/viewmodel/auth.provider.dart';
 import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
 import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
-import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
+import 'package:cookie_app/viewmodel/theme.provider.dart';
 
 void main() async {
   Logger.root.level = Level.INFO; // defaults to Level.INFO
