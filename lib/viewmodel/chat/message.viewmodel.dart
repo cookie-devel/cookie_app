@@ -4,7 +4,7 @@ import 'package:cookie_app/model/chat/message.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 
-class MessageViewModel extends BaseViewModel {
+class MessageViewModel extends BaseChangeNotifier {
   late MessageModel _messageModel;
   MessageViewModel({required MessageModel model}) : super() {
     _messageModel = model;

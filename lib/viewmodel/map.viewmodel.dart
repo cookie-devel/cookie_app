@@ -1,4 +1,3 @@
-import 'package:cookie_app/types/account/profile.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -8,9 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import 'package:cookie_app/model/account/account_info.dart';
-import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:cookie_app/types/map/mapPosition_info.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
+import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
 import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 
 class MapEvents {
@@ -56,7 +55,8 @@ class MapViewModel with ChangeNotifier {
   bool get loading => _loading;
 
   MapViewModel() {
-    socket.auth = {'token': JWTRepository.token!};
+    // socket.auth = {'token': JWTRepository.token!};
+    socket.auth = {'token': context.read<AuthProvider>().token};
 
     socket.onConnect(_onConnectionChange);
     socket.onDisconnect(_onConnectionChange);

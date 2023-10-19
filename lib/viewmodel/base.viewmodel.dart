@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 
-abstract class BaseViewModel extends ChangeNotifier {
-  bool loaded = false;
-  bool busy = false;
+abstract class BaseChangeNotifier extends ChangeNotifier {
+  ConnectionState connectionState = ConnectionState.none;
 
-  void setLoadState({
-    bool? loaded,
-    bool? busy,
-  }) {
+  void setConnectionState(ConnectionState connectionState) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (loaded != null) this.loaded = loaded;
-      if (busy != null) this.busy = busy;
+      this.connectionState = connectionState;
       notifyListeners();
     });
   }

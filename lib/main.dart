@@ -11,6 +11,8 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:cookie_app/datasource/storage/jwt.storage.dart';
 import 'package:cookie_app/firebase_options.dart';
+import 'package:cookie_app/model/account/account_info.dart';
+import 'package:cookie_app/types/api/account/info.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/mainwidget.dart';
 import 'package:cookie_app/view/pages/signin.dart';
@@ -53,31 +55,14 @@ void main() async {
 
   // Load Data
   await dotenv.load();
-  initializeDateFormatting().then(
-    (_) => runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider<ThemeProvider>(
-            create: (_) => ThemeProvider(),
-          ),
-          ChangeNotifierProvider<MapViewModel>(
-            create: (_) => MapViewModel(),
-          ),
-          ChangeNotifierProvider<PrivateAccountViewModel>(
-            create: (_) => PrivateAccountViewModel(),
-          ),
-          ChangeNotifierProvider<AuthViewModel>(
-            create: (_) => AuthViewModel(),
-          ),
-          ChangeNotifierProvider<FriendsViewModel>(
-            create: (_) => FriendsViewModel(),
-          ),
-          ChangeNotifierProvider<ChatViewModel>(
-            create: (_) => ChatViewModel(),
-          ),
-        ],
-        child: const Cookie(),
-      ),
+  await initializeDateFormatting();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+      ],
+      child: const Cookie(),
     ),
   );
 }
@@ -92,6 +77,7 @@ class Cookie extends StatefulWidget {
 }
 
 class _CookieState extends State<Cookie> {
+  PrivateAccountModel? model;
   @override
   void initState() {
     super.initState();
@@ -102,30 +88,53 @@ class _CookieState extends State<Cookie> {
       }
     });
 
-    JWTStorage.read().then((value) {
-      if (value != null) {
-        context.read<AuthViewModel>().jwtSignIn(
-              token: value,
-              privateAccountViewModel: context.read<PrivateAccountViewModel>(),
-            );
-      }
+    loadJWT().then((_) {
       FlutterNativeSplash.remove();
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: Cookie._title,
-      navigatorKey: NavigationService.navigatorKey,
-      home: context.watch<AuthViewModel>().isSigned
-          ? const MainWidget()
-          : const SignInWidget(),
-      theme: context.watch<ThemeProvider>().theme,
-    );
+  Future<void> loadJWT() async {
+    String? token = await JWTStorage.read();
+    if (context.mounted && token != null) {
+      InfoResponse res =
+          await context.read<AuthProvider>().jwtSignIn(token: token);
+      setState(() {
+        model = res.toPrivateAccount();
+      });
+    }
   }
-}
 
-// reference
-// https://pub.dev/packages/badges [badges widget]
+  @override
+  Widget build(BuildContext context) =>
+      context.watch<AuthProvider>().token == null
+          ? MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: Cookie._title,
+              theme: context.watch<ThemeProvider>().theme,
+              navigatorKey: SignAppNavigationService.navigatorKey,
+              home: const SignInWidget(),
+            )
+          : MultiProvider(
+              providers: [
+                ChangeNotifierProvider<PrivateAccountViewModel>(
+                  create: (_) => PrivateAccountViewModel(model: model),
+                ),
+                ChangeNotifierProvider<FriendsViewModel>(
+                  create: (_) => FriendsViewModel(),
+                ),
+                ChangeNotifierProvider<ChatViewModel>(
+                  create: (_) => ChatViewModel(),
+                ),
+                ChangeNotifierProvider<MapViewModel>(
+                  create: (_) => MapViewModel(),
+                ),
+              ],
+              child: MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: Cookie._title,
+                theme: context.watch<ThemeProvider>().theme,
+                navigatorKey: NavigationService.navigatorKey,
+                home: const MainWidget(),
+              ),
+            );
+}

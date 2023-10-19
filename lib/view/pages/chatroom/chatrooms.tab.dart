@@ -17,14 +17,14 @@ class ChatTabWidget extends StatefulWidget {
 class _ChatTabWidgetState extends State<ChatTabWidget> {
   @override
   Widget build(BuildContext context) {
+    List<ChatRoomViewModel> chatRooms = context.watch<ChatViewModel>().rooms;
     return ListView.separated(
       separatorBuilder: (context, index) => const Divider(
         height: 1,
       ),
-      itemCount: context.watch<ChatViewModel>().chatRooms.length,
+      itemCount: context.watch<ChatViewModel>().rooms.length,
       itemBuilder: (BuildContext context, int index) {
-        ChatRoomViewModel chatRoom =
-            context.watch<ChatViewModel>().rooms[index];
+        ChatRoomViewModel chatRoom = chatRooms[index];
 
         return ChatRoomListEntry(
           name: chatRoom.name,

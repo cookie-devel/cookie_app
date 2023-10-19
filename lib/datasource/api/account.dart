@@ -2,14 +2,18 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 
-import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:cookie_app/types/api/account/info.dart';
 import 'package:cookie_app/types/api/error.dart';
+import 'package:cookie_app/utils/navigation_service.dart';
+import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
 
 class AccountAPI {
   static Future<InfoResponse> getInfo({List<String>? fields}) async {
-    String token = JWTRepository.token!;
+    String token = NavigationService.navigatorKey.currentContext!
+        .read<AuthProvider>()
+        .token!;
     final uri = Uri(
       scheme: dotenv.env['API_SCHEME'],
       host: dotenv.env['API_HOST'],

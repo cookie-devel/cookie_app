@@ -4,42 +4,41 @@ import 'package:logging/logging.dart';
 
 import 'package:cookie_app/datasource/api/auth.dart';
 import 'package:cookie_app/datasource/storage/account.storage.dart';
-import 'package:cookie_app/repository/jwt.repo.dart';
+import 'package:cookie_app/types/api/account/info.dart';
 import 'package:cookie_app/types/api/auth/signin.dart';
 import 'package:cookie_app/types/api/auth/signup.dart';
-import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 
-class AuthViewModel extends BaseViewModel {
-  Logger log = Logger('AuthViewModel');
+class AuthProvider extends BaseChangeNotifier {
+  Logger log = Logger('AuthProvider');
 
-  bool _isSigned = false;
-  bool get isSigned => _isSigned;
+  String? token;
 
   bool validate(GlobalKey<FormState> formKey) {
     return formKey.currentState!.validate();
   }
 
-  Future<bool> jwtSignIn({
+  Future<InfoResponse> jwtSignIn({
     required String token,
-    required PrivateAccountViewModel privateAccountViewModel,
   }) async {
-    _isSigned = await JWTRepository.setToken(token);
-    notifyListeners();
-    if (!_isSigned) return false;
-
-    SignInResponse response = await AuthAPI.getSignIn();
-    privateAccountViewModel.model = response.account.toPrivateAccount();
-
-    return true;
+    try {
+      setConnectionState(ConnectionState.waiting);
+      SignInResponse res = await AuthAPI.getSignIn(token);
+      this.token = res.access_token;
+      setConnectionState(ConnectionState.done);
+      return res.account;
+    } catch (e) {
+      rethrow;
+    } finally {
+      setConnectionState(ConnectionState.done);
+    }
   }
 
   Future<void> signIn({
     required String id,
     required String pw,
-    required PrivateAccountViewModel privateAccountViewModel,
   }) async {
-    setLoadState(busy: true, loaded: false);
+    setConnectionState(ConnectionState.waiting);
     // Handle Signin
     try {
       SignInResponse response = await AuthAPI.postSignIn(
@@ -48,39 +47,32 @@ class AuthViewModel extends BaseViewModel {
           pw: pw,
         ),
       );
-
-      privateAccountViewModel.model = response.account.toPrivateAccount();
-
-      _isSigned = await JWTRepository.setToken(response.access_token);
-      setLoadState(busy: false, loaded: true);
+      token = response.access_token;
     } catch (e) {
-      setLoadState(busy: false, loaded: false);
       rethrow;
+    } finally {
+      setConnectionState(ConnectionState.done);
     }
   }
 
   Future<void> signUp(SignUpRequest signUpForm) async {
-    setLoadState(busy: true, loaded: false);
+    setConnectionState(ConnectionState.waiting);
     // Handle Signup
     try {
       await AuthAPI.postSignUp(signUpForm);
-      setLoadState(busy: false, loaded: true);
     } catch (e) {
-      setLoadState(busy: false, loaded: false);
       rethrow;
+    } finally {
+      setConnectionState(ConnectionState.done);
     }
   }
 
   void signOut() async {
-    setLoadState(busy: true, loaded: false);
-
     try {
-      await JWTRepository.flush();
       AccountStorage().deleteData();
-      _isSigned = false;
-      setLoadState(busy: false, loaded: true);
+      token = null;
+      notifyListeners();
     } catch (e) {
-      setLoadState(busy: false, loaded: false);
       log.warning('Error signing out: $e');
       rethrow;
     }
