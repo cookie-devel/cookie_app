@@ -18,7 +18,7 @@ Map<String, dynamic> _$ChatRequestToJson(ChatRequest instance) =>
     };
 
 ChatResponse _$ChatResponseFromJson(Map<String, dynamic> json) => ChatResponse(
-      room: json['room'] as String,
+      roomId: json['roomId'] as String,
       sender: json['sender'] as String,
       timestamp: DateTime.parse(json['timestamp'] as String),
       payload: Message.fromJson(json['payload'] as Map<String, dynamic>),
@@ -26,7 +26,7 @@ ChatResponse _$ChatResponseFromJson(Map<String, dynamic> json) => ChatResponse(
 
 Map<String, dynamic> _$ChatResponseToJson(ChatResponse instance) =>
     <String, dynamic>{
-      'room': instance.room,
+      'roomId': instance.roomId,
       'sender': instance.sender,
       'timestamp': instance.timestamp.toIso8601String(),
       'payload': instance.payload,

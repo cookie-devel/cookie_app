@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
+import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
 
 class ChatPage extends StatefulWidget {
   final types.Room room;
@@ -193,6 +194,7 @@ class _ChatPageState extends State<ChatPage> {
     );
 
     _addMessage(textMessage);
+    context.read<ChatViewModel>().sendTextChat(widget.room, textMessage);
   }
 
   void _loadMessages() {}

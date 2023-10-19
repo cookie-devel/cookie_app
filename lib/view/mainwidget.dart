@@ -11,13 +11,7 @@ import 'package:cookie_app/view/pages/maps/maps.tab.dart';
 import 'package:cookie_app/view/pages/settings/settings.tab.dart';
 import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
 import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
-
-class MainWidget extends StatefulWidget {
-  const MainWidget({super.key});
-
-  @override
-  State<MainWidget> createState() => _MainWidgetState();
-}
+import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 
 class Page {
   final String title;
@@ -37,7 +31,24 @@ class Page {
   });
 }
 
+class MainWidget extends StatefulWidget {
+  const MainWidget({
+    super.key,
+  });
+
+  @override
+  State<MainWidget> createState() => _MainWidgetState();
+}
+
 class _MainWidgetState extends State<MainWidget> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ChatViewModel>().connect();
+    context.read<MapViewModel>().connect();
+    context.read<FriendsViewModel>().updateFriends();
+  }
+
   final List<Page> _pages = [
     const Page(
       title: '친구',
@@ -66,13 +77,6 @@ class _MainWidgetState extends State<MainWidget> {
       page: SettingsWidget(),
     ),
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<ChatViewModel>().connect();
-    context.read<FriendsViewModel>().updateFriends();
-  }
 
   int _selectedIndex = 0;
 

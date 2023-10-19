@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -5,14 +6,15 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logging/logging.dart';
+import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import 'package:cookie_app/model/chat/room.dart';
-import 'package:cookie_app/repository/jwt.repo.dart';
 import 'package:cookie_app/types/socket/chat/chat.dart';
 import 'package:cookie_app/types/socket/chat/create_room.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/pages/chatroom/chatpage.dart';
+import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
 import 'package:cookie_app/viewmodel/chat/room.viewmodel.dart';
 
 class ChatEvents {
@@ -23,7 +25,7 @@ class ChatEvents {
   static const chat = 'chat';
 }
 
-class ChatViewModel extends ChangeNotifier {
+class ChatViewModel extends ChangeNotifier with DiagnosticableTreeMixin {
   final log = Logger('ChatViewModel');
   BuildContext context = NavigationService.navigatorKey.currentContext!;
 
@@ -50,7 +52,7 @@ class ChatViewModel extends ChangeNotifier {
   ChatViewModel() {
     // Registering event handlers
     // Try Hot-Restart if event handlers are registered multiple times
-    socket.auth = {'token': JWTRepository.token!};
+    socket.auth = {'token': context.read<AuthProvider>().token};
 
     socket.onConnect(_onConnectionChange);
     socket.onDisconnect(_onConnectionChange);
@@ -97,16 +99,10 @@ class ChatViewModel extends ChangeNotifier {
   int count = 0;
   void _onChat(res) {
     log.info(res);
-    // showDialog(
-    //   context: context,
-    //   builder: (context) => AlertDialog(
-    //     content: Text(res.toString()),
-    //   ),
-    // );
 
     ChatResponse data = ChatResponse.fromJson(res);
 
-    String roomID = data.room;
+    String roomId = data.roomId;
 
     switch (data.payload.type) {
       case MessageType.audio:
@@ -132,7 +128,7 @@ class ChatViewModel extends ChangeNotifier {
             channelKey: 'chat_channel',
             title: message.author.id,
             body: message.text,
-            groupKey: roomID,
+            groupKey: roomId,
             summary: 'New Message',
           ),
         );
@@ -157,7 +153,22 @@ class ChatViewModel extends ChangeNotifier {
     );
   }
 
-  void sendChat(data) {
+  void sendTextChat(Room room, TextMessage message) {
+    Map<String, dynamic> data = {
+      "roomId": room.id,
+      "payload": {
+        "author": {
+          "id": message.author.id,
+          "role": "user",
+        },
+        "id": message.id,
+        "text": message.text,
+        "type": "text",
+      },
+    };
+
+    // TextMessage()
+
     socket.emit(ChatEvents.chat, data);
   }
 

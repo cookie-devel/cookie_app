@@ -8,7 +8,7 @@ import 'package:cookie_app/types/account/profile.dart';
 import 'package:cookie_app/view/components/icon_imageprovider.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 
-class ProfileViewModel extends BaseViewModel {
+class ProfileViewModel extends BaseChangeNotifier {
   final Profile _model;
 
   ProfileViewModel({required Profile model}) : _model = model;
@@ -32,7 +32,7 @@ class ProfileViewModel extends BaseViewModel {
 }
 
 abstract class AccountViewModel<T extends PublicAccountModel>
-    extends BaseViewModel {
+    extends BaseChangeNotifier {
   late T _model;
 
   String get id => _model.id;
@@ -55,6 +55,10 @@ class PublicAccountViewModel extends AccountViewModel<PublicAccountModel> {
 
 class PrivateAccountViewModel extends AccountViewModel<PrivateAccountModel> {
   String get phone => _model.phone;
+
+  PrivateAccountViewModel({required model}) {
+    _model = model;
+  }
 
   set model(PrivateAccountModel model) => _model = model;
 }

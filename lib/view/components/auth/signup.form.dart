@@ -59,7 +59,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 if (!_formKey.currentState!.validate()) return;
                 _formKey.currentState!.save();
                 context
-                    .read<AuthViewModel>()
+                    .read<AuthProvider>()
                     .signUp(
                       SignUpRequest(
                         id: id!,

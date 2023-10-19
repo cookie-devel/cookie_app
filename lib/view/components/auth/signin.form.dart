@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:cookie_app/view/components/auth/submit_button.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/components/text_form_fields.dart';
-import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
 
 class SignInForm extends StatefulWidget {
@@ -37,12 +36,10 @@ class _SignInFormState extends State<SignInForm> {
                 if (!_formKey.currentState!.validate()) return;
                 _formKey.currentState!.save();
                 context
-                    .read<AuthViewModel>()
+                    .read<AuthProvider>()
                     .signIn(
                       id: id!,
                       pw: pw!,
-                      privateAccountViewModel:
-                          context.read<PrivateAccountViewModel>(),
                     )
                     .catchError((e) {
                   showErrorSnackBar(context, '로그인에 실패하였습니다. ${e.toString()}');

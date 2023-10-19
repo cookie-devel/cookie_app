@@ -20,22 +20,26 @@ class FriendsTab extends StatefulWidget {
 class _FriendsTabState extends State<FriendsTab> {
   @override
   Widget build(BuildContext context) {
-    var handleUpdateFriends = context.read<FriendsViewModel>().updateFriends;
-    return Consumer<FriendsViewModel>(
-      builder: (context, value, child) => RefreshIndicator(
-        onRefresh: () => handleUpdateFriends(),
-        child: value.busy
-            ? const LoadingScreen()
-            : value.loaded
-                ? FriendsGrid(
-                    friendsListViewModel: value,
-                    handleRefresh: handleUpdateFriends,
-                  )
-                : Message(
-                    msg: '친구 목록을 불러오는 중 오류가 발생했습니다.',
-                    handleRefresh: handleUpdateFriends,
-                  ),
-      ),
+    FriendsViewModel fvmr = context.read<FriendsViewModel>();
+    FriendsViewModel fvmw = context.read<FriendsViewModel>();
+
+    return RefreshIndicator(
+      onRefresh: context.read<FriendsViewModel>().updateFriends,
+      child: context.watch<FriendsViewModel>().connectionState ==
+              ConnectionState.waiting
+          ? const LoadingScreen()
+          : FriendsGrid(
+              friendsListViewModel: context.watch<FriendsViewModel>(),
+              handleRefresh: context.read<FriendsViewModel>().updateFriends,
+            ),
+      // child: value.busy
+      //     ? const LoadingScreen()
+      //     : value.loaded
+      //         ?
+      //         : Message(
+      //             msg: '친구 목록을 불러오는 중 오류가 발생했습니다.',
+      //             handleRefresh: handleUpdateFriends,
+      //           ),
     );
   }
 }

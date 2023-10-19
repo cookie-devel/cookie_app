@@ -10,7 +10,7 @@ import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 import 'package:cookie_app/viewmodel/chat/message.viewmodel.dart';
 import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 
-class ChatRoomViewModel extends BaseViewModel {
+class ChatRoomViewModel extends BaseChangeNotifier {
   final ChatRoomModel _model;
 
   ChatRoomViewModel({required ChatRoomModel model}) : _model = model;

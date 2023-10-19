@@ -21,13 +21,13 @@ class ChatRequest {
 
 @JsonSerializable()
 class ChatResponse {
-  final String room;
+  final String roomId;
   final String sender;
   final DateTime timestamp;
   final Message payload;
 
   ChatResponse({
-    required this.room,
+    required this.roomId,
     required this.sender,
     required this.timestamp,
     required this.payload,

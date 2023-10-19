@@ -1,6 +1,5 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'package:provider/provider.dart';
 
 import 'package:cookie_app/repository/info.repo.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
@@ -8,7 +7,7 @@ import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 
-class FriendsViewModel extends BaseViewModel {
+class FriendsViewModel extends BaseChangeNotifier with DiagnosticableTreeMixin {
   final InfoRepository _repo = InfoRepositoryImpl();
 
   Map<String, PublicAccountViewModel> _friendMap = {};
@@ -27,7 +26,7 @@ class FriendsViewModel extends BaseViewModel {
 
   Future<void> updateFriends() async {
     try {
-      await context.read<FriendsViewModel>()._updateFriends();
+      await _updateFriends();
       if (context.mounted) showSnackBar(context, '친구 목록을 업데이트했습니다.');
     } catch (e) {
       if (context.mounted) showErrorSnackBar(context, e.toString());
@@ -35,9 +34,8 @@ class FriendsViewModel extends BaseViewModel {
   }
 
   Future<void> _updateFriends() async {
-    setLoadState(busy: true, loaded: false);
-
     try {
+      setConnectionState(ConnectionState.waiting);
       _friendMap = Map.fromEntries(
         (await _repo.getInfo())
             .friendList
@@ -45,11 +43,10 @@ class FriendsViewModel extends BaseViewModel {
             .toList()
             .map((e) => MapEntry(e.id, e)),
       );
-
-      setLoadState(busy: false, loaded: true);
     } catch (e) {
-      setLoadState(busy: false, loaded: false);
       rethrow;
+    } finally {
+      setConnectionState(ConnectionState.done);
     }
   }
 }
