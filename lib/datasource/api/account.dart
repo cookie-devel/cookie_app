@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:cookie_app/types/api/account/info.dart';
 import 'package:cookie_app/types/api/error.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
-import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
+import 'package:cookie_app/viewmodel/auth.provider.dart';
 
 class AccountAPI {
   static Future<InfoResponse> getInfo({List<String>? fields}) async {

@@ -14,7 +14,7 @@ import 'package:cookie_app/types/socket/chat/chat.dart';
 import 'package:cookie_app/types/socket/chat/create_room.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/pages/chatroom/chatpage.dart';
-import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
+import 'package:cookie_app/viewmodel/auth.provider.dart';
 import 'package:cookie_app/viewmodel/chat/room.viewmodel.dart';
 
 class ChatEvents {

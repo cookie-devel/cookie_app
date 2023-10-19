@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/view/components/dialog.dart';
-import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
+import 'package:cookie_app/viewmodel/auth.provider.dart';
 import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
-import 'package:cookie_app/viewmodel/theme.viewmodel.dart';
+import 'package:cookie_app/viewmodel/theme.provider.dart';
 
 class SettingsWidget extends StatelessWidget {
   SettingsWidget({Key? key}) : super(key: key);
