@@ -4,7 +4,7 @@ import 'package:cookie_app/view/components/auth/signin.form.dart';
 import 'package:cookie_app/view/pages/signup.dart';
 
 class SignInWidget extends StatelessWidget {
-  const SignInWidget({Key? key}) : super(key: key);
+  const SignInWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
