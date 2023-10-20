@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cookie_app/view/components/auth/signup.form.dart';
 
 class SignUpWidget extends StatelessWidget {
-  const SignUpWidget({Key? key}) : super(key: key);
+  const SignUpWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

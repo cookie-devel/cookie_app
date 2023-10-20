@@ -132,7 +132,7 @@ class _MapsWidgetState extends State<MapsWidget> {
         // ignore: unused_local_variable
         List mapData = mapProvider.mapLog;
         final currentLocation = mapProvider.currentLocation;
-        print("marker_??: ${mapProvider.mapLog}");
+        logger.t("marker_??: ${mapProvider.mapLog}");
         return isInit == true
             ? Stack(
                 children: [
@@ -263,7 +263,7 @@ class _MapsWidgetState extends State<MapsWidget> {
     List<Marker> tempMarkers = [];
     final List<MarkerInfo> mapData =
         Provider.of<MapViewModel>(context, listen: false).mapLog;
-    print("map_mapLog: $mapData");
+    logger.t("map_mapLog: $mapData");
     for (int i = 0; i < mapData.length; i++) {
       final MarkerInfo log = mapData[i];
 
