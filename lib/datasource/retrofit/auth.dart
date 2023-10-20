@@ -2,17 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
 
+import 'package:cookie_app/datasource/retrofit/account.dart';
 import 'package:cookie_app/types/account/profile.dart';
-import 'package:cookie_app/types/api/account/info.dart';
-
-// import 'package:cookie_app/types/api/error.dart';
-// import 'package:cookie_app/types/api/auth/exists.dart';
-// import 'package:cookie_app/types/api/auth/signin.dart';
-// import 'package:cookie_app/types/api/auth/signup.dart';
 
 part 'auth.g.dart';
 
-@RestApi(baseUrl: "http://localhost:3000/account")
+@RestApi(baseUrl: "http://localhost:3000/auth")
 abstract class AuthRestClient {
   factory AuthRestClient(Dio dio, {String baseUrl}) = _AuthRestClient;
   @GET("/exists")
@@ -63,8 +58,8 @@ class ExistsResponse extends ErrorResponse {
   factory ExistsResponse.fromJson(Map<String, dynamic> json) =>
       _$ExistsResponseFromJson(json);
 
-@override
-    Map<String, dynamic> toJson() => _$ExistsResponseToJson(this);
+  @override
+  Map<String, dynamic> toJson() => _$ExistsResponseToJson(this);
 }
 
 @JsonSerializable()
@@ -77,8 +72,8 @@ class SignInRequest extends ErrorResponse {
   factory SignInRequest.fromJson(Map<String, dynamic> json) =>
       _$SignInRequestFromJson(json);
 
-@override
-    Map<String, dynamic> toJson() => _$SignInRequestToJson(this);
+  @override
+  Map<String, dynamic> toJson() => _$SignInRequestToJson(this);
 }
 
 @JsonSerializable()
@@ -96,8 +91,8 @@ class SignInResponse extends ErrorResponse {
   factory SignInResponse.fromJson(Map<String, dynamic> json) =>
       _$SignInResponseFromJson(json);
 
-@override
-    Map<String, dynamic> toJson() => _$SignInResponseToJson(this);
+  @override
+  Map<String, dynamic> toJson() => _$SignInResponseToJson(this);
 }
 
 @JsonSerializable()

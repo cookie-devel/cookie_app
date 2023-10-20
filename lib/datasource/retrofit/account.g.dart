@@ -53,12 +53,12 @@ Map<String, dynamic> _$InfoResponseToJson(InfoResponse instance) =>
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _AccountRestClient implements AccountRestClient {
-  _AccountRestClient(
+class _RestClient implements RestClient {
+  _RestClient(
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://localhost:3000/account';
+    baseUrl ??= 'http://localhost:3000';
   }
 
   final Dio _dio;
@@ -79,7 +79,7 @@ class _AccountRestClient implements AccountRestClient {
     )
             .compose(
               _dio.options,
-              '/info',
+              '/account/info',
               queryParameters: queryParameters,
               data: _data,
             )

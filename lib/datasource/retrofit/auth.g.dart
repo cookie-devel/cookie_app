@@ -97,7 +97,7 @@ class _AuthRestClient implements AuthRestClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://localhost:3000/account';
+    baseUrl ??= 'http://localhost:3000/auth';
   }
 
   final Dio _dio;

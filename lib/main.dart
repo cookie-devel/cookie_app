@@ -9,10 +9,11 @@ import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import 'package:cookie_app/datasource/retrofit/account.dart';
+import 'package:cookie_app/datasource/retrofit/client.dart';
 import 'package:cookie_app/datasource/storage/jwt.storage.dart';
 import 'package:cookie_app/firebase_options.dart';
 import 'package:cookie_app/model/account/account_info.dart';
-import 'package:cookie_app/types/api/account/info.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/mainwidget.dart';
 import 'package:cookie_app/view/pages/signin.dart';
@@ -22,6 +23,8 @@ import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
 import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:cookie_app/viewmodel/theme.provider.dart';
+
+// import 'package:cookie_app/types/api/account/info.dart';
 
 void main() async {
   Logger.root.level = Level.INFO; // defaults to Level.INFO
@@ -88,9 +91,10 @@ class _CookieState extends State<Cookie> {
       }
     });
 
-    loadJWT().then((_) {
-      FlutterNativeSplash.remove();
-    });
+    loadJWT()
+        .then((_) {})
+        .onError((error, stackTrace) => null)
+        .whenComplete(() => FlutterNativeSplash.remove());
   }
 
   Future<void> loadJWT() async {
@@ -116,6 +120,10 @@ class _CookieState extends State<Cookie> {
             )
           : MultiProvider(
               providers: [
+                Provider<ApiClient>(
+                  create: (_) =>
+                      ApiClient(context.watch<AuthProvider>().token!),
+                ),
                 ChangeNotifierProvider<PrivateAccountViewModel>(
                   create: (_) => PrivateAccountViewModel(model: model),
                 ),
