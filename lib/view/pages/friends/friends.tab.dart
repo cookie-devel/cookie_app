@@ -10,8 +10,8 @@ import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 
 class FriendsTab extends StatefulWidget {
   const FriendsTab({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<FriendsTab> createState() => _FriendsTabState();
@@ -20,26 +20,25 @@ class FriendsTab extends StatefulWidget {
 class _FriendsTabState extends State<FriendsTab> {
   @override
   Widget build(BuildContext context) {
-    FriendsViewModel fvmr = context.read<FriendsViewModel>();
-    FriendsViewModel fvmw = context.read<FriendsViewModel>();
+    FriendsViewModel viewModel = context.read<FriendsViewModel>();
+    ConnectionState connectionState =
+        context.watch<FriendsViewModel>().connectionState;
 
-    return RefreshIndicator(
-      onRefresh: context.read<FriendsViewModel>().updateFriends,
-      child: context.watch<FriendsViewModel>().connectionState ==
-              ConnectionState.waiting
-          ? const LoadingScreen()
-          : FriendsGrid(
-              friendsListViewModel: context.watch<FriendsViewModel>(),
-              handleRefresh: context.read<FriendsViewModel>().updateFriends,
-            ),
-      // child: value.busy
-      //     ? const LoadingScreen()
-      //     : value.loaded
-      //         ?
-      //         : Message(
-      //             msg: '친구 목록을 불러오는 중 오류가 발생했습니다.',
-      //             handleRefresh: handleUpdateFriends,
-      //           ),
+    if (connectionState == ConnectionState.none)
+      viewModel.updateFriends();
+    else if (connectionState == ConnectionState.waiting)
+      return const LoadingScreen();
+    else if (connectionState == ConnectionState.done)
+      return RefreshIndicator(
+        onRefresh: viewModel.updateFriends,
+        child: FriendsGrid(
+          friendsListViewModel: context.watch<FriendsViewModel>(),
+          handleRefresh: viewModel.updateFriends,
+        ),
+      );
+    return Message(
+      msg: '친구 목록을 불러오세요',
+      handleRefresh: viewModel.updateFriends,
     );
   }
 }
