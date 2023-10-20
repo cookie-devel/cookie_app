@@ -13,11 +13,11 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:latlong2/latlong.dart' as l2;
 import 'package:location_permissions/location_permissions.dart';
-import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/repository/location_service.repo.dart';
 import 'package:cookie_app/types/map/mapPosition_info.dart';
+import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/components/loading.dart';
 import 'package:cookie_app/view/components/map/marker_design.dart';
@@ -26,7 +26,7 @@ import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:cookie_app/viewmodel/theme.provider.dart';
 
 class MapsWidget extends StatefulWidget {
-  const MapsWidget({Key? key}) : super(key: key);
+  const MapsWidget({super.key});
 
   @override
   State<MapsWidget> createState() => _MapsWidgetState();
@@ -35,7 +35,6 @@ class MapsWidget extends StatefulWidget {
 class _MapsWidgetState extends State<MapsWidget> {
   late GoogleMapController mapController;
   final l2.Distance distance = const l2.Distance();
-  final logger = Logger('_MapsWidgetState');
 
   List<Marker> markers = <Marker>[];
   int selectedSortOption = 1;
@@ -82,7 +81,7 @@ class _MapsWidgetState extends State<MapsWidget> {
   }
 
   Future<void> update(dynamic data) async {
-    logger.info("update");
+    logger.t("update");
     LocationDto? locationDto =
         (data != null) ? LocationDto.fromJson(data) : null;
     await _updateNotificationText(locationDto!);
@@ -113,15 +112,15 @@ class _MapsWidgetState extends State<MapsWidget> {
   }
 
   Future<void> initPlatformState() async {
-    logger.info('Initializing...');
+    logger.t('Initializing...');
     await BackgroundLocator.initialize();
-    logger.info('Initialization done');
+    logger.t('Initialization done');
 
     await BackgroundLocator.isServiceRunning().then((value) {
       setState(() {
         isRunning = value;
       });
-      logger.info('Running ${isRunning.toString()}');
+      logger.t('Running ${isRunning.toString()}');
     });
   }
 
@@ -178,18 +177,18 @@ class _MapsWidgetState extends State<MapsWidget> {
   }
 
   void onStop() async {
-    logger.info("stop");
+    logger.t("stop");
     await BackgroundLocator.unRegisterLocationUpdate();
     await BackgroundLocator.isServiceRunning().then((value) {
       setState(() {
         isRunning = value;
       });
-      logger.info('Running ${isRunning.toString()}');
+      logger.t('Running ${isRunning.toString()}');
     });
   }
 
   void _onStart() async {
-    logger.info("start");
+    logger.t("start");
     if (await _checkLocationPermission()) {
       await _startLocator();
       await BackgroundLocator.isServiceRunning().then((value) {
@@ -197,7 +196,7 @@ class _MapsWidgetState extends State<MapsWidget> {
           isRunning = value;
           lastLocation = null;
         });
-        logger.info('Running ${isRunning.toString()}');
+        logger.t('Running ${isRunning.toString()}');
       });
     } else {
       // show error
