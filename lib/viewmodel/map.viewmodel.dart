@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import 'package:cookie_app/model/account/account_info.dart';
 import 'package:cookie_app/types/map/mapPosition_info.dart';
+import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/viewmodel/auth.provider.dart';
 import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
@@ -18,7 +18,6 @@ class MapEvents {
 
 class MapViewModel with ChangeNotifier {
   BuildContext context = NavigationService.navigatorKey.currentContext!;
-  Logger logger = Logger('MapViewModel');
 
   // socket
   final Socket socket = io(
@@ -68,15 +67,15 @@ class MapViewModel with ChangeNotifier {
     _currentLocation = LatLng(latitude, longitude);
     _loading = false;
     notifyListeners();
-    logger.info("MapViewModel = $_currentLocation");
+    logger.t("MapViewModel = $_currentLocation");
   }
 
   // Socket Incoming Event Handlers
   void _onConnectionChange(_) {
     _connected = socket.connected;
     socket.connected
-        ? logger.info('socket connected')
-        : logger.warning('socket not connected');
+        ? logger.t('socket connected')
+        : logger.w('socket not connected');
     notifyListeners();
   }
 
@@ -91,7 +90,7 @@ class MapViewModel with ChangeNotifier {
   }
 
   void _onPosition(data) {
-    logger.info("position: $data");
+    logger.t("position: $data");
 
     final MapInfoResponse info = MapInfoResponse.fromJson(data);
     String userid = info.userid;

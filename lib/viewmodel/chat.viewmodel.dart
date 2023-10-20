@@ -5,13 +5,13 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import 'package:cookie_app/model/chat/room.dart';
 import 'package:cookie_app/types/socket/chat/chat.dart';
 import 'package:cookie_app/types/socket/chat/create_room.dart';
+import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/pages/chatroom/chatpage.dart';
 import 'package:cookie_app/viewmodel/auth.provider.dart';
@@ -26,7 +26,6 @@ class ChatEvents {
 }
 
 class ChatViewModel extends ChangeNotifier with DiagnosticableTreeMixin {
-  final log = Logger('ChatViewModel');
   BuildContext context = NavigationService.navigatorKey.currentContext!;
 
   final Socket socket = io(
@@ -63,14 +62,14 @@ class ChatViewModel extends ChangeNotifier with DiagnosticableTreeMixin {
   void _onConnectionChange(_) {
     _connected = socket.connected;
     socket.connected
-        ? log.info('socket connected')
-        : log.warning('socket not connected');
+        ? logger.t('socket connected')
+        : logger.w('socket not connected');
     notifyListeners();
   }
 
   void _onCreateRoom(data) {
     ChatRoomModel model = ChatRoomModel.fromJson(data);
-    log.info("create_room: $model");
+    logger.t("create_room: $model");
     var roomvm = _addRoom(model);
 
     Navigator.push(
@@ -81,12 +80,12 @@ class ChatViewModel extends ChangeNotifier with DiagnosticableTreeMixin {
 
   void _onJoinRoom(data) {
     ChatRoomModel model = ChatRoomModel.fromJson(data);
-    log.info("join_room: $model");
+    logger.t("join_room: $model");
     _addRoom(model);
   }
 
   void _onInviteRoom(id) {
-    log.info("invite_room: $id");
+    logger.t("invite_room: $id");
     socket.emit(ChatEvents.joinRoom, id);
   }
 
@@ -94,7 +93,7 @@ class ChatViewModel extends ChangeNotifier with DiagnosticableTreeMixin {
 
   int count = 0;
   void _onChat(res) {
-    log.info(res);
+    logger.t(res);
 
     ChatResponse data = ChatResponse.fromJson(res);
 
