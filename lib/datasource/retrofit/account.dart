@@ -8,11 +8,11 @@ import 'package:cookie_app/types/account/profile.dart';
 
 part 'account.g.dart';
 
-@RestApi(baseUrl: "http://localhost:3000/account")
-abstract class AccountRestClient {
-  factory AccountRestClient(Dio dio, {String baseUrl}) = _AccountRestClient;
+@RestApi(baseUrl: "http://localhost:3000")
+abstract class RestClient {
+  factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
-  @GET("/info")
+  @GET("/account/info")
   Future<InfoResponse> getInfo();
 }
 
@@ -50,8 +50,8 @@ class InfoResponse extends ErrorResponse {
   factory InfoResponse.fromJson(Map<String, dynamic> json) =>
       _$InfoResponseFromJson(json);
 
- @override
-   Map<String, dynamic> toJson() => _$InfoResponseToJson(this);
+  @override
+  Map<String, dynamic> toJson() => _$InfoResponseToJson(this);
 
   PrivateAccountModel toPrivateAccount() {
     return PrivateAccountModel(

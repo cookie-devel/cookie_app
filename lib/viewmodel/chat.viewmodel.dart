@@ -36,11 +36,7 @@ class ChatViewModel extends ChangeNotifier with DiagnosticableTreeMixin {
       port: int.parse(dotenv.env['API_PORT']!),
       path: '/chat',
     ).toString(),
-    OptionBuilder()
-        .setTransports(['websocket'])
-        .disableAutoConnect()
-        .enableReconnection()
-        .build(),
+    OptionBuilder().setTransports(['websocket']).enableReconnection().build(),
   );
 
   bool _connected = false;
@@ -166,8 +162,6 @@ class ChatViewModel extends ChangeNotifier with DiagnosticableTreeMixin {
         "type": "text",
       },
     };
-
-    // TextMessage()
 
     socket.emit(ChatEvents.chat, data);
   }
