@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:cookie_app/datasource/retrofit/auth.dart';
+import 'package:cookie_app/datasource/api/auth.dart';
 import 'package:cookie_app/types/account/profile.dart';
 import 'package:cookie_app/view/components/auth/submit_button.dart';
 import 'package:cookie_app/view/components/profile_imgpicker.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/components/text_form_fields.dart';
-import 'package:cookie_app/viewmodel/auth.provider.dart';
+import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
 
 class SignUpForm extends StatefulWidget {
-  const SignUpForm({Key? key}) : super(key: key);
+  const SignUpForm({super.key});
 
   @override
   State<SignUpForm> createState() => _SignUpFormState();
@@ -56,23 +56,23 @@ class _SignUpFormState extends State<SignUpForm> {
             PhoneNumberField(onSaved: (newValue) => phoneNumber = newValue),
             SubmitButton(
               onPressed: () {
-                if (!_formKey.currentState!.validate()) return;
-                _formKey.currentState!.save();
+                SignUpRequest signUpForm = SignUpRequest(
+                  userid: id!,
+                  password: pw!,
+                  username: name!,
+                  birthday: birthday.toString(),
+                  phone: phoneNumber!,
+                  profile: Profile(
+                    image: profileImg?.path,
+                    message: null,
+                  ),
+                );
+                if (_formKey.currentState!.validate())
+                  _formKey.currentState!.save();
+
                 context
-                    .read<AuthProvider>()
-                    .signUp(
-                      SignUpRequest(
-                        id: id!,
-                        pw: pw!,
-                        name: name!,
-                        birthday: birthday.toString(),
-                        phoneNumber: phoneNumber!,
-                        profile: Profile(
-                          image: profileImg?.path,
-                          message: null,
-                        ),
-                      ),
-                    )
+                    .read<AuthViewModel>()
+                    .handleSignUp(_formKey.currentState!, signUpForm)
                     .then((_) => onSignUpSuccess(context))
                     .catchError((e) => onSignUpFailure(context, e));
               },

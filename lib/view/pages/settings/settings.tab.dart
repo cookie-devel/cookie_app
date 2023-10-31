@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:cookie_app/service/auth.service.dart';
 import 'package:cookie_app/view/components/dialog.dart';
-import 'package:cookie_app/viewmodel/auth.provider.dart';
 import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
 import 'package:cookie_app/viewmodel/theme.provider.dart';
 
 class SettingsWidget extends StatelessWidget {
-  SettingsWidget({Key? key}) : super(key: key);
+  SettingsWidget({super.key});
 
   final List<ListTile Function(BuildContext)> itemBuilders = [
     (context) => const ListTile(
@@ -37,7 +37,7 @@ class SettingsWidget extends StatelessWidget {
                 content: "로그아웃 하시겠습니까?",
                 onConfirm: () {
                   context.read<ChatViewModel>().disconnect();
-                  context.read<AuthProvider>().signOut();
+                  context.read<AuthService>().signOut();
                   Navigator.of(context).pop();
                 },
               ),
