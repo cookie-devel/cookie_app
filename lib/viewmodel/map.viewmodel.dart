@@ -6,10 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import 'package:cookie_app/model/account/account_info.dart';
+import 'package:cookie_app/service/auth.service.dart';
 import 'package:cookie_app/types/map/mapPosition_info.dart';
 import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
-import 'package:cookie_app/viewmodel/auth.provider.dart';
 import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 
 class MapEvents {
@@ -21,12 +21,7 @@ class MapViewModel with ChangeNotifier {
 
   // socket
   final Socket socket = io(
-    Uri(
-      scheme: dotenv.env['API_SCHEME'],
-      host: dotenv.env['API_HOST'],
-      port: int.parse(dotenv.env['API_PORT']!),
-      path: '/location',
-    ).toString(),
+    '${dotenv.env['BASE_URI']}/location',
     OptionBuilder()
         .setTransports(['websocket'])
         .disableAutoConnect()
@@ -55,7 +50,7 @@ class MapViewModel with ChangeNotifier {
 
   MapViewModel() {
     // socket.auth = {'token': JWTRepository.token!};
-    socket.auth = {'token': context.read<AuthProvider>().token};
+    socket.auth = {'token': context.read<AuthService>().token};
 
     socket.onConnect(_onConnectionChange);
     socket.onDisconnect(_onConnectionChange);

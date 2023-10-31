@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
+
 import 'package:cookie_app/datasource/api/account.dart';
-import 'package:cookie_app/datasource/storage/account.storage.dart';
-import 'package:cookie_app/model/account/account_info.dart';
+import 'package:cookie_app/datasource/storage/account.stot_info.dart';
+import 'package:c
 
 abstract class InfoRepository {
   Future<PrivateAccountModel> getInfo();
@@ -16,7 +18,13 @@ class InfoRepositoryStorageImpl implements InfoRepository {
 class InfoRepositoryApiImpl implements InfoRepository {
   @override
   Future<PrivateAccountModel> getInfo() async {
-    return (await AccountAPI.getInfo()).toPrivateAccount();
+    // return (await NavigationService.context
+    //         ?.read<ApiClient>()
+    //         .client
+    //         .getInfo())!
+    //     .toPrivateAccount();
+    // return (await AccountAPI.getInfo()).toPrivateAccount();
+    return (await RestClient(Dio()).getInfo()).toPrivateAccount();
   }
 }
 

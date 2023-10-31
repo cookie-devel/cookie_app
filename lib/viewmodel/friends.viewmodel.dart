@@ -5,9 +5,13 @@ import 'package:cookie_app/repository/info.repo.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:cookie_app/viewmodel/base.viewmodel.dart';
 
-class FriendsViewModel extends BaseChangeNotifier with DiagnosticableTreeMixin {
+// import 'package:cookie_app/repository/info.repo.dart';
+
+class FriendsViewModel extends ChangeNotifier with DiagnosticableTreeMixin {
+  ConnectionState _connectionState = ConnectionState.none;
+  ConnectionState get connectionState => _connectionState;
+
   final InfoRepository _repo = InfoRepositoryImpl();
 
   Map<String, PublicAccountViewModel> _friendMap = {};
@@ -35,7 +39,7 @@ class FriendsViewModel extends BaseChangeNotifier with DiagnosticableTreeMixin {
 
   Future<void> _updateFriends() async {
     try {
-      setConnectionState(ConnectionState.waiting);
+      _connectionState = ConnectionState.waiting;
       _friendMap = Map.fromEntries(
         (await _repo.getInfo())
             .friendList
@@ -46,7 +50,7 @@ class FriendsViewModel extends BaseChangeNotifier with DiagnosticableTreeMixin {
     } catch (e) {
       rethrow;
     } finally {
-      setConnectionState(ConnectionState.done);
+      _connectionState = ConnectionState.done;
     }
   }
 }

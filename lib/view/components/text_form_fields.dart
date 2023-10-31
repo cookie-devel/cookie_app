@@ -6,49 +6,42 @@ import 'package:intl/intl.dart';
 import 'package:cookie_app/view/components/auth/validator.dart';
 
 class IDField extends TextFormField {
-  IDField({Key? key, required onSaved})
+  IDField({super.key, super.onSaved})
       : super(
-          key: key,
           decoration: const InputDecoration(
             labelText: "아이디",
           ),
           validator: validateID,
           autofillHints: [AutofillHints.username],
-          onSaved: onSaved,
         );
 }
 
 class PWField extends TextFormField {
-  PWField({Key? key, required onSaved})
+  PWField({super.key, super.onSaved})
       : super(
-          key: key,
           obscureText: true,
           decoration: const InputDecoration(
             labelText: "비밀번호",
           ),
           validator: validatePW,
           autofillHints: [AutofillHints.password],
-          onSaved: onSaved,
         );
 }
 
 class NewIDField extends TextFormField {
-  NewIDField({Key? key, required onSaved})
+  NewIDField({super.key, super.onSaved})
       : super(
-          key: key,
           decoration: const InputDecoration(
             labelText: "아이디",
           ),
           validator: validateID,
           autofillHints: [AutofillHints.newUsername],
-          onSaved: onSaved,
         );
 }
 
 class NewPWField extends TextFormField {
-  NewPWField({Key? key, required controller, required onSaved})
+  NewPWField({super.key, required controller, super.onSaved})
       : super(
-          key: key,
           controller: controller,
           obscureText: true,
           decoration: const InputDecoration(
@@ -56,14 +49,12 @@ class NewPWField extends TextFormField {
           ),
           validator: validatePW,
           autofillHints: [AutofillHints.newPassword],
-          onSaved: onSaved,
         );
 }
 
 class NewPWConfirmField extends TextFormField {
-  NewPWConfirmField({Key? key, required TextEditingController pwController})
+  NewPWConfirmField({super.key, required TextEditingController pwController})
       : super(
-          key: key,
           obscureText: true,
           decoration: const InputDecoration(
             labelText: "비밀번호 확인",
@@ -74,15 +65,13 @@ class NewPWConfirmField extends TextFormField {
 }
 
 class NameField extends TextFormField {
-  NameField({Key? key, required onSaved})
+  NameField({super.key, super.onSaved})
       : super(
-          key: key,
           decoration: const InputDecoration(
             labelText: "이름",
           ),
           validator: validateName,
           autofillHints: [AutofillHints.name],
-          onSaved: onSaved,
         );
 }
 
@@ -125,15 +114,13 @@ class BirthdayField extends StatelessWidget {
 }
 
 class PhoneNumberField extends TextFormField {
-  PhoneNumberField({Key? key, required onSaved})
+  PhoneNumberField({super.key, super.onSaved})
       : super(
-          key: key,
           decoration: const InputDecoration(
             labelText: "휴대폰 번호",
           ),
           validator: validatePhoneNumber,
           maxLength: 11,
           autofillHints: [AutofillHints.telephoneNumber],
-          onSaved: onSaved,
         );
 }

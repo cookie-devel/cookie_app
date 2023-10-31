@@ -8,23 +8,22 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-import 'package:cookie_app/datasource/retrofit/account.dart';
-import 'package:cookie_app/datasource/retrofit/client.dart';
+import 'package:cookie_app/datasource/api/account.dart';
 import 'package:cookie_app/datasource/storage/jwt.storage.dart';
 import 'package:cookie_app/firebase_options.dart';
 import 'package:cookie_app/model/account/account_info.dart';
+import 'package:cookie_app/service/account.service.dart';
+import 'package:cookie_app/service/auth.service.dart';
 import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/mainwidget.dart';
 import 'package:cookie_app/view/pages/signin.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:cookie_app/viewmodel/auth.provider.dart';
+import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
 import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
 import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:cookie_app/viewmodel/theme.provider.dart';
-
-// import 'package:cookie_app/types/api/account/info.dart';
 
 void main() async {
   // Preserve Splash Screen
@@ -53,10 +52,11 @@ void main() async {
   // Load Data
   await dotenv.load();
   await initializeDateFormatting();
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => AuthService()),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
       ],
       child: const Cookie(),
@@ -88,56 +88,64 @@ class _CookieState extends State<Cookie> {
 
     loadJWT().then((_) {}).onError((error, stackTrace) {
       logger.w(error.toString());
-      // logger.warning(error.toString());
     }).whenComplete(() => FlutterNativeSplash.remove());
   }
 
   Future<void> loadJWT() async {
     String? token = await JWTStorage.read();
-    if (context.mounted && token != null) {
-      InfoResponse res =
-          await context.read<AuthProvider>().jwtSignIn(token: token);
-      setState(() {
-        model = res.toPrivateAccount();
-      });
+    if (token == null) return;
+    if (context.mounted) {
+      InfoResponse res;
+      try {
+        res = await context.read<AuthService>().jwtSignIn(token: token);
+        setState(() {
+          model = res.toPrivateAccount();
+        });
+      } catch (e) {
+        logger.w(e.toString());
+      }
     }
   }
 
   @override
-  Widget build(BuildContext context) =>
-      context.watch<AuthProvider>().token == null
-          ? MaterialApp(
+  Widget build(BuildContext context) {
+    String? token = context.watch<AuthService>().token;
+    return token == null
+        ? Provider<AuthViewModel>(
+            create: (_) => AuthViewModel(context.read<AuthService>()),
+            builder: (context, child) => MaterialApp(
               debugShowCheckedModeBanner: false,
               title: Cookie._title,
               theme: context.watch<ThemeProvider>().theme,
               navigatorKey: SignAppNavigationService.navigatorKey,
               home: const SignInWidget(),
-            )
-          : MultiProvider(
-              providers: [
-                Provider<ApiClient>(
-                  create: (_) =>
-                      ApiClient(context.watch<AuthProvider>().token!),
-                ),
-                ChangeNotifierProvider<PrivateAccountViewModel>(
-                  create: (_) => PrivateAccountViewModel(model: model),
-                ),
-                ChangeNotifierProvider<FriendsViewModel>(
-                  create: (_) => FriendsViewModel(),
-                ),
-                ChangeNotifierProvider<ChatViewModel>(
-                  create: (_) => ChatViewModel(),
-                ),
-                ChangeNotifierProvider<MapViewModel>(
-                  create: (_) => MapViewModel(),
-                ),
-              ],
-              child: MaterialApp(
-                debugShowCheckedModeBanner: false,
-                title: Cookie._title,
-                theme: context.watch<ThemeProvider>().theme,
-                navigatorKey: NavigationService.navigatorKey,
-                home: const MainWidget(),
+            ),
+          )
+        : MultiProvider(
+            providers: [
+              Provider<AccountService>(
+                create: (_) => AccountService(token),
               ),
-            );
+              ChangeNotifierProvider<PrivateAccountViewModel>(
+                create: (_) => PrivateAccountViewModel(model: model),
+              ),
+              ChangeNotifierProvider<FriendsViewModel>(
+                create: (_) => FriendsViewModel(),
+              ),
+              ChangeNotifierProvider<ChatViewModel>(
+                create: (_) => ChatViewModel(),
+              ),
+              ChangeNotifierProvider<MapViewModel>(
+                create: (_) => MapViewModel(),
+              ),
+            ],
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: Cookie._title,
+              theme: context.watch<ThemeProvider>().theme,
+              navigatorKey: NavigationService.navigatorKey,
+              home: const MainWidget(),
+            ),
+          );
+  }
 }
