@@ -1,36 +1,65 @@
-import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:retrofit/retrofit.dart';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart';
-import 'package:provider/provider.dart';
+import 'package:cookie_app/model/account/account_info.dart';
+import 'package:cookie_app/model/chat/room.dart';
+import 'package:cookie_app/types/account/profile.dart';
 
-import 'package:cookie_app/types/api/account/info.dart';
-import 'package:cookie_app/types/api/error.dart';
-import 'package:cookie_app/utils/navigation_service.dart';
-import 'package:cookie_app/viewmodel/auth.provider.dart';
+part 'account.g.dart';
 
-class AccountAPI {
-  static Future<InfoResponse> getInfo({List<String>? fields}) async {
-    String token = NavigationService.navigatorKey.currentContext!
-        .read<AuthProvider>()
-        .token!;
-    final uri = Uri(
-      scheme: dotenv.env['API_SCHEME'],
-      host: dotenv.env['API_HOST'],
-      port: int.parse(dotenv.env['API_PORT']!),
-      path: '/account/info',
+@RestApi(baseUrl: "http://localhost:3000")
+abstract class RestClient {
+  factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
+
+  @GET("/account/info")
+  Future<InfoResponse> getInfo();
+}
+
+@JsonSerializable()
+class ErrorResponse {
+  String? name;
+  String? message;
+
+  ErrorResponse({this.name, this.message});
+
+  factory ErrorResponse.fromJson(Map<String, dynamic> json) =>
+      _$ErrorResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ErrorResponseToJson(this);
+}
+
+@JsonSerializable()
+class InfoResponse {
+  String? id;
+  String? name;
+  String? phone;
+  List<PublicAccountModel>? friendList;
+  Profile? profile;
+  List<ChatRoomModel>? chatRooms;
+
+  InfoResponse({
+    this.id,
+    this.name,
+    this.phone,
+    this.friendList,
+    this.profile,
+    this.chatRooms,
+  });
+
+  factory InfoResponse.fromJson(Map<String, dynamic> json) =>
+      _$InfoResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$InfoResponseToJson(this);
+
+  PrivateAccountModel toPrivateAccount() {
+    return PrivateAccountModel(
+      id: id!,
+      name: name!,
+      phone: phone!,
+      profile: profile!,
+      friendList: friendList == null ? [] : friendList!,
+      chatRooms: chatRooms == null ? [] : chatRooms!,
     );
-    Response res = await get(
-      uri,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': 'Bearer $token',
-      },
-    );
-
-    if (res.statusCode != 200) {
-      throw ErrorResponse.fromJson(json.decode(res.body));
-    }
-    return InfoResponse.fromJson(json.decode(res.body));
   }
 }
