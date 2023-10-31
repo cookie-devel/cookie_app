@@ -8,81 +8,55 @@ part of 'auth.dart';
 
 ErrorResponse _$ErrorResponseFromJson(Map<String, dynamic> json) =>
     ErrorResponse(
-      errName: json['errName'] as String?,
-      errMessage: json['errMessage'] as String?,
+      name: json['name'] as String?,
+      message: json['message'] as String?,
     );
 
 Map<String, dynamic> _$ErrorResponseToJson(ErrorResponse instance) =>
     <String, dynamic>{
-      'errName': instance.errName,
-      'errMessage': instance.errMessage,
+      'name': instance.name,
+      'message': instance.message,
     };
 
 ExistsResponse _$ExistsResponseFromJson(Map<String, dynamic> json) =>
     ExistsResponse(
       result: json['result'] as bool,
       message: json['message'] as String,
-    )
-      ..errName = json['errName'] as String?
-      ..errMessage = json['errMessage'] as String?;
+    );
 
 Map<String, dynamic> _$ExistsResponseToJson(ExistsResponse instance) =>
     <String, dynamic>{
-      'errName': instance.errName,
-      'errMessage': instance.errMessage,
       'result': instance.result,
       'message': instance.message,
-    };
-
-SignInRequest _$SignInRequestFromJson(Map<String, dynamic> json) =>
-    SignInRequest(
-      id: json['id'] as String,
-      pw: json['pw'] as String,
-    )
-      ..errName = json['errName'] as String?
-      ..errMessage = json['errMessage'] as String?;
-
-Map<String, dynamic> _$SignInRequestToJson(SignInRequest instance) =>
-    <String, dynamic>{
-      'errName': instance.errName,
-      'errMessage': instance.errMessage,
-      'id': instance.id,
-      'pw': instance.pw,
     };
 
 SignInResponse _$SignInResponseFromJson(Map<String, dynamic> json) =>
     SignInResponse(
       account: InfoResponse.fromJson(json['account'] as Map<String, dynamic>),
-      access_token: json['access_token'] as String,
-    )
-      ..errName = json['errName'] as String?
-      ..errMessage = json['errMessage'] as String?;
+    );
 
 Map<String, dynamic> _$SignInResponseToJson(SignInResponse instance) =>
     <String, dynamic>{
-      'errName': instance.errName,
-      'errMessage': instance.errMessage,
       'account': instance.account,
-      'access_token': instance.access_token,
     };
 
 SignUpRequest _$SignUpRequestFromJson(Map<String, dynamic> json) =>
     SignUpRequest(
-      id: json['id'] as String,
-      pw: json['pw'] as String,
-      name: json['name'] as String,
+      userid: json['userid'] as String,
+      password: json['password'] as String,
+      username: json['username'] as String,
       birthday: json['birthday'] as String,
-      phoneNumber: json['phoneNumber'] as String,
+      phone: json['phone'] as String,
       profile: Profile.fromJson(json['profile'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SignUpRequestToJson(SignUpRequest instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'pw': instance.pw,
-      'name': instance.name,
+      'userid': instance.userid,
+      'password': instance.password,
+      'username': instance.username,
       'birthday': instance.birthday,
-      'phoneNumber': instance.phoneNumber,
+      'phone': instance.phone,
       'profile': instance.profile,
     };
 
@@ -105,10 +79,10 @@ class _AuthRestClient implements AuthRestClient {
   String? baseUrl;
 
   @override
-  Future<ExistsResponse> getExistance(
+  Future<ExistsResponse> getExistance({
     String? userid,
     String? phone,
-  ) async {
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'userid': userid,
@@ -139,12 +113,17 @@ class _AuthRestClient implements AuthRestClient {
   }
 
   @override
-  Future<HttpResponse<SignInResponse>> postSignIn(SignInRequest signin) async {
+  Future<HttpResponse<SignInResponse>> postSignIn({
+    required String userid,
+    required String password,
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(signin.toJson());
+    final _data = {
+      'userid': userid,
+      'password': password,
+    };
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<HttpResponse<SignInResponse>>(Options(
       method: 'POST',
@@ -197,12 +176,12 @@ class _AuthRestClient implements AuthRestClient {
   }
 
   @override
-  Future<void> postSignUp(SignUpRequest signUpForm) async {
+  Future<void> postSignUp(SignUpRequest signup) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(signUpForm.toJson());
+    _data.addAll(signup.toJson());
     await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'POST',
       headers: _headers,

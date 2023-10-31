@@ -1,119 +1,102 @@
-import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:retrofit/retrofit.dart';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart';
+import 'package:cookie_app/datasource/api/account.dart';
+import 'package:cookie_app/types/account/profile.dart';
 
-import 'package:cookie_app/types/api/auth/exists.dart';
-import 'package:cookie_app/types/api/auth/signin.dart';
-import 'package:cookie_app/types/api/auth/signup.dart';
-import 'package:cookie_app/types/api/error.dart';
+part 'auth.g.dart';
 
-class AuthAPI {
-  static Future<ExistsResponse> getExistance(
-    String? userid,
-    String? phone,
-  ) async {
-    final uri = Uri(
-      scheme: dotenv.env['API_SCHEME'],
-      host: dotenv.env['API_HOST'],
-      port: int.parse(dotenv.env['API_PORT']!),
-      path: '/account/exists',
-      queryParameters: {
-        'userid': userid,
-        'phone': phone,
-      },
-    );
+@RestApi(baseUrl: "http://localhost:3000/auth")
+abstract class AuthRestClient {
+  factory AuthRestClient(Dio dio, {String baseUrl}) = _AuthRestClient;
 
-    Response res = await get(
-      uri,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
+  @GET("/exists")
+  Future<ExistsResponse> getExistance({
+    @Query("userid") String? userid,
+    @Query("phone") String? phone,
+  });
 
-    if (res.statusCode != 200) {
-      throw ErrorResponse.fromJson(json.decode(res.body));
-    }
+  @POST("/signin")
+  Future<HttpResponse<SignInResponse>> postSignIn({
+    @Field() required String userid,
+    @Field() required String password,
+  });
 
-    return ExistsResponse.fromJson(json.decode(res.body));
-  }
+  @GET("/signin")
+  Future<HttpResponse<SignInResponse>> getSignIn(
+    @Header("Authorization") String token,
+  );
 
-  static Future<SignInResponse> getSignIn(String token) async {
-    final uri = Uri(
-      scheme: dotenv.env['API_SCHEME'],
-      host: dotenv.env['API_HOST'],
-      port: int.parse(dotenv.env['API_PORT']!),
-      path: '/auth/signin',
-    );
-    Response res = await get(
-      uri,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
-      },
-    );
+  @POST("/signup")
+  Future<void> postSignUp(
+    @Body() SignUpRequest signup,
+  );
+}
 
-    if (res.statusCode != 200) {
-      throw ErrorResponse.fromJson(json.decode(res.body));
-    }
-    return SignInResponse.fromJson(json.decode(res.body));
-  }
+@JsonSerializable()
+class ErrorResponse {
+  String? name;
+  String? message;
 
-  static Future<SignInResponse> postSignIn(SignInRequest signin) async {
-    final uri = Uri(
-      scheme: dotenv.env['API_SCHEME'],
-      host: dotenv.env['API_HOST'],
-      port: int.parse(dotenv.env['API_PORT']!),
-      path: '/auth/signin',
-    );
+  ErrorResponse({this.name, this.message});
 
-    Response res = await post(
-      uri,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: const JsonEncoder()
-          .convert({"userid": signin.id, "password": signin.pw}),
-    );
+  factory ErrorResponse.fromJson(Map<String, dynamic> json) =>
+      _$ErrorResponseFromJson(json);
 
-    if (res.statusCode != 200) {
-      throw ErrorResponse.fromJson(json.decode(res.body));
-    }
-    return SignInResponse.fromJson(json.decode(res.body));
-  }
+  Map<String, dynamic> toJson() => _$ErrorResponseToJson(this);
+}
 
-  static Future<void> postSignUp(SignUpRequest signUpForm) async {
-    final uri = Uri(
-      scheme: dotenv.env['API_SCHEME'],
-      host: dotenv.env['API_HOST'],
-      port: int.parse(dotenv.env['API_PORT']!),
-      path: '/auth/signup',
-    );
+@JsonSerializable()
+class ExistsResponse {
+  bool result;
+  String message;
 
-    MultipartRequest request = MultipartRequest('POST', uri);
+  ExistsResponse({
+    required this.result,
+    required this.message,
+  });
 
-    request.fields['userid'] = signUpForm.id;
-    request.fields['password'] = signUpForm.pw;
-    request.fields['username'] = signUpForm.name;
-    request.fields['birthday'] = signUpForm.birthday;
-    request.fields['phone'] = signUpForm.phoneNumber;
+  factory ExistsResponse.fromJson(Map<String, dynamic> json) =>
+      _$ExistsResponseFromJson(json);
 
-    // request.fields = signUpForm.toJson();
+  Map<String, dynamic> toJson() => _$ExistsResponseToJson(this);
+}
 
-    if (signUpForm.profile.image != null) {
-      request.files.add(
-        await MultipartFile.fromPath(
-          'profile_image',
-          signUpForm.profile.image!,
-        ),
-      );
-    }
+@JsonSerializable()
+class SignInResponse {
+  InfoResponse account;
 
-    StreamedResponse res = await request.send();
-    final body = await res.stream.bytesToString();
+  SignInResponse({
+    required this.account,
+  });
 
-    if (res.statusCode != 201) {
-      throw ErrorResponse.fromJson(json.decode(body));
-    }
-  }
+  factory SignInResponse.fromJson(Map<String, dynamic> json) =>
+      _$SignInResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SignInResponseToJson(this);
+}
+
+@JsonSerializable()
+class SignUpRequest {
+  final String userid;
+  final String password;
+  final String username;
+  final String birthday;
+  final String phone;
+  final Profile profile;
+
+  SignUpRequest({
+    required this.userid,
+    required this.password,
+    required this.username,
+    required this.birthday,
+    required this.phone,
+    required this.profile,
+  });
+
+  factory SignUpRequest.fromJson(Map<String, dynamic> json) =>
+      _$SignUpRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SignUpRequestToJson(this);
 }

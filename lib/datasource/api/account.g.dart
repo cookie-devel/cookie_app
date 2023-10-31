@@ -8,14 +8,14 @@ part of 'account.dart';
 
 ErrorResponse _$ErrorResponseFromJson(Map<String, dynamic> json) =>
     ErrorResponse(
-      errName: json['errName'] as String?,
-      errMessage: json['errMessage'] as String?,
+      name: json['name'] as String?,
+      message: json['message'] as String?,
     );
 
 Map<String, dynamic> _$ErrorResponseToJson(ErrorResponse instance) =>
     <String, dynamic>{
-      'errName': instance.errName,
-      'errMessage': instance.errMessage,
+      'name': instance.name,
+      'message': instance.message,
     };
 
 InfoResponse _$InfoResponseFromJson(Map<String, dynamic> json) => InfoResponse(
@@ -31,14 +31,10 @@ InfoResponse _$InfoResponseFromJson(Map<String, dynamic> json) => InfoResponse(
       chatRooms: (json['chatRooms'] as List<dynamic>?)
           ?.map((e) => ChatRoomModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-    )
-      ..errName = json['errName'] as String?
-      ..errMessage = json['errMessage'] as String?;
+    );
 
 Map<String, dynamic> _$InfoResponseToJson(InfoResponse instance) =>
     <String, dynamic>{
-      'errName': instance.errName,
-      'errMessage': instance.errMessage,
       'id': instance.id,
       'name': instance.name,
       'phone': instance.phone,
