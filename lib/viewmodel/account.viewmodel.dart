@@ -13,14 +13,7 @@ class ProfileViewModel extends ChangeNotifier {
   ProfileViewModel({required Profile model}) : _model = model;
 
   ImageProvider get image => _model.image != null
-      ? NetworkImage(
-          Uri(
-            scheme: dotenv.env['API_SCHEME'],
-            host: dotenv.env['API_HOST'],
-            port: int.parse(dotenv.env['API_PORT']!),
-            path: _model.image!,
-          ).toString(),
-        )
+      ? NetworkImage('${dotenv.env['BASE_URI']}/${_model.image!}')
       : IconImageProvider(
           Icons.person,
           size: 800,

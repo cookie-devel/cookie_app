@@ -1,18 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cookie_app/repository/info.repo.dart';
+import 'package:provider/provider.dart';
+
+import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
-// import 'package:cookie_app/repository/info.repo.dart';
-
 class FriendsViewModel extends ChangeNotifier with DiagnosticableTreeMixin {
   ConnectionState _connectionState = ConnectionState.none;
   ConnectionState get connectionState => _connectionState;
-
-  final InfoRepository _repo = InfoRepositoryImpl();
 
   Map<String, PublicAccountViewModel> _friendMap = {};
   List<PublicAccountViewModel> get friendList => _friendMap.values.toList();
@@ -34,6 +32,7 @@ class FriendsViewModel extends ChangeNotifier with DiagnosticableTreeMixin {
       if (context.mounted) showSnackBar(context, '친구 목록을 업데이트했습니다.');
     } catch (e) {
       if (context.mounted) showErrorSnackBar(context, e.toString());
+      rethrow;
     }
   }
 
@@ -41,8 +40,8 @@ class FriendsViewModel extends ChangeNotifier with DiagnosticableTreeMixin {
     try {
       _connectionState = ConnectionState.waiting;
       _friendMap = Map.fromEntries(
-        (await _repo.getInfo())
-            .friendList
+        (await context.read<AccountService>().getInfo())
+            .friendList!
             .map((e) => PublicAccountViewModel(model: e))
             .toList()
             .map((e) => MapEntry(e.id, e)),
@@ -51,6 +50,7 @@ class FriendsViewModel extends ChangeNotifier with DiagnosticableTreeMixin {
       rethrow;
     } finally {
       _connectionState = ConnectionState.done;
+      notifyListeners();
     }
   }
 }
