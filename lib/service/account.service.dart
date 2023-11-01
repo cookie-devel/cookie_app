@@ -10,8 +10,14 @@ class AccountService {
 
   AccountService(String token) {
     _dio.options.baseUrl = dotenv.env['BASE_URI']!;
-    _dio.options.headers['Authorization'] = 'Bearer $token';
-    _dio.interceptors.add(
+    logger.t('token: $token');
+    _dio.interceptors.addAll([
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          options.headers['Authorization'] = 'Bearer $token';
+          return handler.next(options);
+        },
+      ),
       InterceptorsWrapper(
         onError: (e, handler) {
           logger.e('Error: $e');
@@ -19,7 +25,7 @@ class AccountService {
           return handler.next(e);
         },
       ),
-    );
+    ]);
     _api = RestClient(_dio);
   }
 
