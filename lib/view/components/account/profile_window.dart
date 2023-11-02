@@ -7,7 +7,7 @@ import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
 // 프로필 창 class
 class ProfileWindow extends StatelessWidget {
-  final PublicAccountViewModel user;
+  final AccountViewModel user;
   const ProfileWindow({
     super.key,
     required this.user,

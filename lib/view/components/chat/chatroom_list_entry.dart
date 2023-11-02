@@ -14,14 +14,14 @@ class ChatRoomListEntry extends StatelessWidget {
   final Widget navigate;
 
   const ChatRoomListEntry({
-    Key? key,
+    super.key,
     required this.name,
     required this.message,
     required this.image,
     required this.time,
     this.unread = 0,
     required this.navigate,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +77,9 @@ class ChatRoomName extends StatelessWidget {
   final String name;
 
   const ChatRoomName({
-    Key? key,
+    super.key,
     required this.name,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -101,9 +101,9 @@ class ChatRoomMessage extends StatelessWidget {
   final String message;
 
   const ChatRoomMessage({
-    Key? key,
+    super.key,
     required this.message,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -128,9 +128,9 @@ class ChatRoomImage extends StatelessWidget {
   final ImageProvider image;
 
   const ChatRoomImage({
-    Key? key,
+    super.key,
     required this.image,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -153,9 +153,9 @@ class ChatRoomTime extends StatelessWidget {
   final DateTime? time;
 
   const ChatRoomTime({
-    Key? key,
+    super.key,
     required this.time,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -174,9 +174,9 @@ class ChatRoomUnreadBadge extends StatelessWidget {
   final int unread;
 
   const ChatRoomUnreadBadge({
-    Key? key,
+    super.key,
     required this.unread,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ClubGrid extends StatefulWidget {
-  const ClubGrid({Key? key}) : super(key: key);
+  const ClubGrid({super.key});
 
   @override
   State<ClubGrid> createState() => _ClubGridState();

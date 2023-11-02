@@ -7,9 +7,9 @@ class MyBubble extends StatelessWidget {
   final String content;
 
   const MyBubble({
-    Key? key,
+    super.key,
     required this.content,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -63,14 +63,14 @@ class MyBubble extends StatelessWidget {
 }
 
 class OtherBubble extends StatelessWidget {
-  final PublicAccountViewModel user;
+  final AccountViewModel user;
   final String content;
 
   const OtherBubble({
-    Key? key,
+    super.key,
     required this.user,
     required this.content,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

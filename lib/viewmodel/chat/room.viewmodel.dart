@@ -4,10 +4,10 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/model/chat/room.dart';
+import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/chat/message.viewmodel.dart';
-import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 
 class ChatRoomViewModel extends ChangeNotifier {
   final ChatRoomModel _model;
@@ -24,9 +24,9 @@ class ChatRoomViewModel extends ChangeNotifier {
         users: _model.members
             // .map((e) => PublicAccountViewModel(model: e).chatUser)
             .map(
-              (id) => id != context.read<PrivateAccountViewModel>().id
-                  ? context.read<FriendsViewModel>().friendMap[id]!.chatUser
-                  : context.read<PrivateAccountViewModel>().chatUser,
+              (id) => id != context.read<AccountViewModel>().id
+                  ? context.read<AccountService>().getFriend(id).chatUser
+                  : context.read<AccountViewModel>().chatUser,
             )
             .toList(growable: false),
       );
@@ -37,18 +37,18 @@ class ChatRoomViewModel extends ChangeNotifier {
   ImageProvider get image => _model.image != null
       ? NetworkImage(_model.image!)
       : const AssetImage('assets/images/kz1.png') as ImageProvider;
-  List<PublicAccountViewModel> get members => _model.members
+  List<AccountViewModel> get members => _model.members
       .map(
-        (id) => id != context.read<PrivateAccountViewModel>().id
-            ? context.read<FriendsViewModel>().friendMap[id]!
-            : context.read<PrivateAccountViewModel>() as PublicAccountViewModel,
+        (id) => id != context.read<AccountViewModel>().id
+            ? context.read<AccountService>().getFriend(id)
+            : context.read<AccountViewModel>(),
       )
       .toList(growable: false);
   List<types.User> get chatUsers => _model.members
       .map(
-        (id) => id != context.read<PrivateAccountViewModel>().id
-            ? context.read<FriendsViewModel>().friendMap[id]!.chatUser
-            : context.read<PrivateAccountViewModel>().chatUser,
+        (id) => id != context.read<AccountViewModel>().id
+            ? context.read<AccountService>().getFriend(id).chatUser
+            : context.read<AccountViewModel>().chatUser,
       )
       .toList(growable: false);
   List<MessageViewModel> get messages => _model.messages

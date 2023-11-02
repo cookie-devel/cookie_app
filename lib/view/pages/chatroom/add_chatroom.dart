@@ -2,28 +2,28 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:cookie_app/service/account.service.dart';
+import 'package:cookie_app/service/chat.service.dart';
 import 'package:cookie_app/view/components/dialog.dart';
 import 'package:cookie_app/view/components/rounded_image.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
-import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 
 class FriendSelectionScreen extends StatefulWidget {
-  const FriendSelectionScreen({Key? key}) : super(key: key);
+  const FriendSelectionScreen({super.key});
 
   @override
   State<FriendSelectionScreen> createState() => _FriendSelectionScreenState();
 }
 
 class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
-  Set<PublicAccountViewModel> selectedFriends = {};
+  Set<AccountViewModel> selectedFriends = {};
   TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    List<PublicAccountViewModel> friendList =
-        context.watch<FriendsViewModel>().friendList;
+    List<AccountViewModel> friendList =
+        context.watch<AccountService>().friends.values.toList();
     return Scaffold(
       appBar: AppBar(
         title: const Text('채팅방 추가'),
@@ -84,7 +84,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: friendList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  PublicAccountViewModel friend = friendList[index];
+                  AccountViewModel friend = friendList[index];
                   return FriendTile(
                     friend: friend,
                     isSelected: selectedFriends.contains(friend),
@@ -113,16 +113,16 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
 }
 
 class FriendTile extends StatelessWidget {
-  final PublicAccountViewModel friend;
+  final AccountViewModel friend;
   final bool isSelected;
   final ValueChanged<bool?>? onCheckboxChanged;
 
   const FriendTile({
-    Key? key,
+    super.key,
     required this.friend,
     required this.isSelected,
     required this.onCheckboxChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -150,13 +150,13 @@ class FriendTile extends StatelessWidget {
 
 class CreateChatroomButton extends StatelessWidget {
   final String roomTitle;
-  final Set<PublicAccountViewModel> selectedFriendsList;
+  final Set<AccountViewModel> selectedFriendsList;
 
   const CreateChatroomButton({
-    Key? key,
+    super.key,
     this.roomTitle = "",
     required this.selectedFriendsList,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +184,7 @@ class CreateChatroomButton extends StatelessWidget {
             onConfirm: () {
               Navigator.pop(context); // Pop Alert Dialog
               Navigator.pop(context); // Pop FriendSelectionScreen
-              context.read<ChatViewModel>().createRoom(
+              context.read<ChatService>().createRoom(
                     roomTitle,
                     selectedFriendsList.map((e) => e.id).toList(),
                   );

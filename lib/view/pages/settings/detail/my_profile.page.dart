@@ -5,9 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
 class MyProfileWidget extends StatefulWidget {
-  const MyProfileWidget({
-    Key? key,
-  }) : super(key: key);
+  const MyProfileWidget({super.key});
 
   @override
   State<MyProfileWidget> createState() => _MyProfileWidgetState();
@@ -23,7 +21,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('프로필 관리')),
-      body: Consumer<PrivateAccountViewModel>(
+      body: Consumer<AccountViewModel>(
         builder: (context, value, child) => ListView(
           padding: const EdgeInsets.fromLTRB(5, 25, 5, 10),
           children: [
@@ -75,15 +73,16 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               ),
             ),
             const Divider(),
-            ListTile(
-              leading: const Icon(
-                Icons.phone_android_outlined,
-                size: 36,
+            if (value.phone != null)
+              ListTile(
+                leading: const Icon(
+                  Icons.phone_android_outlined,
+                  size: 36,
+                ),
+                title: const Text('전화번호'),
+                subtitle: Text(value.phone!),
               ),
-              title: const Text('전화번호'),
-              subtitle: Text(value.phone),
-            ),
-            const Divider(),
+            if (value.phone != null) const Divider(),
           ],
         ),
       ),

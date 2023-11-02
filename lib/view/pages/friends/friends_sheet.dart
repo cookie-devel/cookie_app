@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class FriendsAction extends StatelessWidget {
-  const FriendsAction({
-    Key? key,
-  }) : super(key: key);
+  const FriendsAction({super.key});
 
   Future<void> _sortFriendsList(context) {
     return showDialog<String>(

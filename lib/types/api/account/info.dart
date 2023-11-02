@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:cookie_app/model/account/account_info.dart';
+import 'package:cookie_app/model/account/account.dart';
 import 'package:cookie_app/model/chat/room.dart';
 import 'package:cookie_app/types/account/profile.dart';
 
@@ -11,7 +11,7 @@ class InfoResponse {
   String? id;
   String? name;
   String? phone;
-  List<PublicAccountModel>? friendList;
+  List<AccountModel>? friendList;
   Profile? profile;
   List<ChatRoomModel>? chatRooms;
 
@@ -29,8 +29,8 @@ class InfoResponse {
 
   Map<String, dynamic> toJson() => _$InfoResponseToJson(this);
 
-  PrivateAccountModel toPrivateAccount() {
-    return PrivateAccountModel(
+  AccountModel toPrivateAccount() {
+    return AccountModel(
       id: id!,
       name: name!,
       phone: phone!,

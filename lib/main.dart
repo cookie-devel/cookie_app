@@ -11,17 +11,15 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:cookie_app/datasource/api/account.dart';
 import 'package:cookie_app/datasource/storage/jwt.storage.dart';
 import 'package:cookie_app/firebase_options.dart';
-import 'package:cookie_app/model/account/account_info.dart';
+import 'package:cookie_app/model/account/account.dart';
 import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/service/auth.service.dart';
+import 'package:cookie_app/service/chat.service.dart';
 import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/mainwidget.dart';
 import 'package:cookie_app/view/pages/signin.dart';
-import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
-import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
-import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:cookie_app/viewmodel/theme.provider.dart';
 
@@ -74,7 +72,7 @@ class Cookie extends StatefulWidget {
 }
 
 class _CookieState extends State<Cookie> {
-  PrivateAccountModel? model;
+  AccountModel? model;
 
   @override
   void initState() {
@@ -86,7 +84,7 @@ class _CookieState extends State<Cookie> {
       }
     });
 
-    loadJWT().then((_) {}).onError((error, stackTrace) {
+    loadJWT().onError((error, stackTrace) {
       logger.w(error.toString());
     }).whenComplete(() => FlutterNativeSplash.remove());
   }
@@ -123,17 +121,11 @@ class _CookieState extends State<Cookie> {
           )
         : MultiProvider(
             providers: [
-              Provider<AccountService>(
+              ChangeNotifierProvider<AccountService>(
                 create: (_) => AccountService(token),
               ),
-              ChangeNotifierProvider<PrivateAccountViewModel>(
-                create: (_) => PrivateAccountViewModel(model: model),
-              ),
-              ChangeNotifierProvider<FriendsViewModel>(
-                create: (_) => FriendsViewModel(),
-              ),
-              ChangeNotifierProvider<ChatViewModel>(
-                create: (_) => ChatViewModel(),
+              ChangeNotifierProvider<ChatService>(
+                create: (_) => ChatService(token),
               ),
               ChangeNotifierProvider<MapViewModel>(
                 create: (_) => MapViewModel(),

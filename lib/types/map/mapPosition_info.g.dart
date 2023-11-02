@@ -33,7 +33,7 @@ Map<String, dynamic> _$MapInfoRequestToJson(MapInfoRequest instance) =>
     };
 
 MarkerInfo _$MarkerInfoFromJson(Map<String, dynamic> json) => MarkerInfo(
-      info: PublicAccountModel.fromJson(json['info'] as Map<String, dynamic>),
+      info: AccountModel.fromJson(json['info'] as Map<String, dynamic>),
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
     );
