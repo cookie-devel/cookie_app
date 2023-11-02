@@ -14,13 +14,12 @@ class MessageViewModel extends ChangeNotifier {
   types.Message get chatMessage {
     return types.TextMessage(
       id: _messageModel.id,
-      author: PublicAccountViewModel(model: _messageModel.sender).chatUser,
+      author: AccountViewModel(model: _messageModel.sender).chatUser,
       text: _messageModel.content,
     );
   }
 
-  PublicAccountViewModel get sender =>
-      PublicAccountViewModel(model: _messageModel.sender);
+  AccountViewModel get sender => AccountViewModel(model: _messageModel.sender);
   String get content => _messageModel.content;
   DateTime get time => _messageModel.time;
 }

@@ -5,12 +5,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
-import 'package:cookie_app/model/account/account_info.dart';
+import 'package:cookie_app/model/account/account.dart';
+import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/service/auth.service.dart';
 import 'package:cookie_app/types/map/mapPosition_info.dart';
 import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
-import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 
 class MapEvents {
   static const position = 'position';
@@ -89,9 +89,9 @@ class MapViewModel with ChangeNotifier {
 
     final MapInfoResponse info = MapInfoResponse.fromJson(data);
     String userid = info.userid;
-    PublicAccountModel? friendInfo =
-        Provider.of<FriendsViewModel>(context, listen: false).getFriend(userid)
-            as PublicAccountModel?;
+    AccountModel? friendInfo =
+        Provider.of<AccountService>(context, listen: false).getFriend(userid)
+            as AccountModel?;
 
     bool userExists = _mapLog.any((element) => element.info.id == userid);
 

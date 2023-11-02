@@ -7,10 +7,10 @@ class LongPressCopyableText extends StatelessWidget {
   final TextStyle? style;
 
   const LongPressCopyableText({
-    Key? key,
+    super.key,
     required this.text,
     this.style,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

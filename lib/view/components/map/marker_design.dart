@@ -10,9 +10,9 @@ import 'package:cookie_app/view/components/map/image_process.dart';
 class BottomSheetInside extends StatelessWidget {
   final MarkerInfo user;
   const BottomSheetInside({
-    Key? key,
+    super.key,
     required this.user,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

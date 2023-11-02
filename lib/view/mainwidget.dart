@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:provider/provider.dart';
 
+import 'package:cookie_app/service/account.service.dart';
+import 'package:cookie_app/service/chat.service.dart';
 import 'package:cookie_app/view/components/badge.dart';
 import 'package:cookie_app/view/pages/chatroom/chatrooms.tab.dart';
 import 'package:cookie_app/view/pages/friends/friends.tab.dart';
 import 'package:cookie_app/view/pages/friends/friends_sheet.dart';
 import 'package:cookie_app/view/pages/maps/maps.tab.dart';
 import 'package:cookie_app/view/pages/settings/settings.tab.dart';
-import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
-import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 
 class Page {
@@ -44,9 +44,14 @@ class _MainWidgetState extends State<MainWidget> {
   @override
   void initState() {
     super.initState();
-    context.read<ChatViewModel>().connect();
-    context.read<MapViewModel>().connect();
-    context.read<FriendsViewModel>().updateFriends();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ChatService>().connect();
+      context.read<MapViewModel>().connect();
+      context.read<AccountService>().updateFriends();
+    });
+    // context.read<ChatService>().connect();
+    // context.read<MapViewModel>().connect();
+    // context.read<AccountService>().updateFriends();
   }
 
   final List<Page> _pages = [

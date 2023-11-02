@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:cookie_app/service/chat.service.dart';
 import 'package:cookie_app/view/components/chat/chatroom_list_entry.dart';
 import 'package:cookie_app/view/pages/chatroom/add_chatroom.dart';
 import 'package:cookie_app/view/pages/chatroom/chatpage.dart';
-import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
 import 'package:cookie_app/viewmodel/chat/room.viewmodel.dart';
 
 class ChatTabWidget extends StatefulWidget {
@@ -17,12 +17,12 @@ class ChatTabWidget extends StatefulWidget {
 class _ChatTabWidgetState extends State<ChatTabWidget> {
   @override
   Widget build(BuildContext context) {
-    List<ChatRoomViewModel> chatRooms = context.watch<ChatViewModel>().rooms;
+    List<ChatRoomViewModel> chatRooms = context.watch<ChatService>().rooms;
     return ListView.separated(
       separatorBuilder: (context, index) => const Divider(
         height: 1,
       ),
-      itemCount: context.watch<ChatViewModel>().rooms.length,
+      itemCount: context.watch<ChatService>().rooms.length,
       itemBuilder: (BuildContext context, int index) {
         ChatRoomViewModel chatRoom = chatRooms[index];
 
@@ -46,8 +46,8 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
 
 class ChatroomAction extends StatelessWidget {
   const ChatroomAction({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

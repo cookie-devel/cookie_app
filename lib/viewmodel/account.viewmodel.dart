@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:cookie_app/model/account/account_info.dart';
+import 'package:cookie_app/model/account/account.dart';
+import 'package:cookie_app/model/chat/room.dart';
 import 'package:cookie_app/types/account/profile.dart';
 import 'package:cookie_app/view/components/icon_imageprovider.dart';
 
@@ -23,13 +24,21 @@ class ProfileViewModel extends ChangeNotifier {
   String? get message => _model.message;
 }
 
-abstract class AccountViewModel<T extends PublicAccountModel>
-    extends ChangeNotifier {
-  late T _model;
+class AccountViewModel extends ChangeNotifier {
+  final AccountModel _model;
+
+  AccountViewModel({required AccountModel model}) : _model = model;
 
   String get id => _model.id;
   String get name => _model.name;
   ProfileViewModel get profile => ProfileViewModel(model: _model.profile);
+
+  // Optional Fields
+  String? get phone => _model.phone;
+
+  // Optional Fields for Current User
+  List<AccountModel>? get friendList => _model.friendList;
+  List<ChatRoomModel>? get chatRooms => _model.chatRooms;
 
   // Type for flutter_chat_types
   types.User get chatUser => types.User(
@@ -37,20 +46,4 @@ abstract class AccountViewModel<T extends PublicAccountModel>
         firstName: _model.name,
         imageUrl: _model.profile.image,
       );
-}
-
-class PublicAccountViewModel extends AccountViewModel<PublicAccountModel> {
-  PublicAccountViewModel({required model}) {
-    _model = model;
-  }
-}
-
-class PrivateAccountViewModel extends AccountViewModel<PrivateAccountModel> {
-  String get phone => _model.phone;
-
-  PrivateAccountViewModel({required model}) {
-    _model = model;
-  }
-
-  set model(PrivateAccountModel model) => _model = model;
 }

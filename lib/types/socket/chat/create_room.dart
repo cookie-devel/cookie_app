@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:cookie_app/model/account/account_info.dart';
+import 'package:cookie_app/model/account/account.dart';
 
 part 'create_room.g.dart';
 
@@ -24,7 +24,7 @@ class CreateRoomResponse {
   String id;
   DateTime createdAt;
   String name;
-  List<PublicAccountModel> members;
+  List<AccountModel> members;
 
   CreateRoomResponse({
     required this.id,

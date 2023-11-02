@@ -1,32 +1,30 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'info.dart';
+part of 'account.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-InfoResponse _$InfoResponseFromJson(Map<String, dynamic> json) => InfoResponse(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
+AccountModel _$AccountModelFromJson(Map<String, dynamic> json) => AccountModel(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      profile: Profile.fromJson(json['profile'] as Map<String, dynamic>),
       phone: json['phone'] as String?,
       friendList: (json['friendList'] as List<dynamic>?)
           ?.map((e) => AccountModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      profile: json['profile'] == null
-          ? null
-          : Profile.fromJson(json['profile'] as Map<String, dynamic>),
       chatRooms: (json['chatRooms'] as List<dynamic>?)
           ?.map((e) => ChatRoomModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$InfoResponseToJson(InfoResponse instance) =>
+Map<String, dynamic> _$AccountModelToJson(AccountModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'profile': instance.profile,
       'phone': instance.phone,
       'friendList': instance.friendList,
-      'profile': instance.profile,
       'chatRooms': instance.chatRooms,
     };

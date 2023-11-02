@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
+import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/view/components/account/friend_profile.dart';
 import 'package:cookie_app/view/components/loading.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:cookie_app/viewmodel/friends.viewmodel.dart';
 
 class FriendsTab extends StatefulWidget {
   const FriendsTab({
@@ -20,19 +20,17 @@ class FriendsTab extends StatefulWidget {
 class _FriendsTabState extends State<FriendsTab> {
   @override
   Widget build(BuildContext context) {
-    FriendsViewModel viewModel = context.read<FriendsViewModel>();
+    AccountService viewModel = context.read<AccountService>();
     ConnectionState connectionState =
-        context.watch<FriendsViewModel>().connectionState;
+        context.watch<AccountService>().connectionState;
 
-    if (connectionState == ConnectionState.none)
-      viewModel.updateFriends();
-    else if (connectionState == ConnectionState.waiting)
+    if (connectionState == ConnectionState.waiting)
       return const LoadingScreen();
     else if (connectionState == ConnectionState.done)
       return RefreshIndicator(
         onRefresh: viewModel.updateFriends,
         child: FriendsGrid(
-          friendsListViewModel: context.watch<FriendsViewModel>(),
+          friendsListViewModel: context.watch<AccountService>(),
           handleRefresh: viewModel.updateFriends,
         ),
       );
@@ -44,7 +42,7 @@ class _FriendsTabState extends State<FriendsTab> {
 }
 
 class FriendsGrid extends StatelessWidget {
-  final FriendsViewModel friendsListViewModel;
+  final AccountService friendsListViewModel;
   final void Function() handleRefresh;
   const FriendsGrid({
     super.key,
@@ -54,17 +52,19 @@ class FriendsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return friendsListViewModel.friendList.isNotEmpty
+    List<AccountViewModel> friends =
+        friendsListViewModel.friends.values.toList();
+
+    return friends.isNotEmpty
         ? GridView.builder(
             cacheExtent: 300,
-            itemCount: friendsListViewModel.friendList.length,
+            itemCount: friends.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               childAspectRatio: 0.8,
             ),
             itemBuilder: (BuildContext context, int index) {
-              final PublicAccountViewModel friend =
-                  friendsListViewModel.friendList[index];
+              final AccountViewModel friend = friends[index];
 
               return Padding(
                 padding: const EdgeInsets.all(18.0),

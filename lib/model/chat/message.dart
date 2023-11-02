@@ -1,13 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:cookie_app/model/account/account_info.dart';
+import 'package:cookie_app/model/account/account.dart';
 
 part 'message.g.dart';
 
 @JsonSerializable()
 class MessageModel {
   final String id;
-  final PublicAccountModel sender;
+  final AccountModel sender;
   final String content;
   final DateTime time;
 

@@ -5,18 +5,18 @@ import 'package:cookie_app/view/components/rounded_image.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
 class FriendProfileWidget extends StatefulWidget {
-  final PublicAccountViewModel account;
+  final AccountViewModel account;
   final bool displayName;
   final bool enableOnTap;
   final bool enableOnLongPress;
 
   const FriendProfileWidget({
-    Key? key,
+    super.key,
     required this.account,
     this.displayName = true,
     this.enableOnTap = true,
     this.enableOnLongPress = true,
-  }) : super(key: key);
+  });
 
   @override
   State<FriendProfileWidget> createState() => _FriendProfileWidgetState();

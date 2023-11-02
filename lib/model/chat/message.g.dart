@@ -8,8 +8,7 @@ part of 'message.dart';
 
 MessageModel _$MessageModelFromJson(Map<String, dynamic> json) => MessageModel(
       id: json['id'] as String,
-      sender:
-          PublicAccountModel.fromJson(json['sender'] as Map<String, dynamic>),
+      sender: AccountModel.fromJson(json['sender'] as Map<String, dynamic>),
       content: json['content'] as String,
       time: DateTime.parse(json['time'] as String),
     );

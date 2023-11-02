@@ -25,7 +25,7 @@ CreateRoomResponse _$CreateRoomResponseFromJson(Map<String, dynamic> json) =>
       createdAt: DateTime.parse(json['createdAt'] as String),
       name: json['name'] as String,
       members: (json['members'] as List<dynamic>)
-          .map((e) => PublicAccountModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => AccountModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

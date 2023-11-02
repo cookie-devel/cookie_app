@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/service/auth.service.dart';
+import 'package:cookie_app/service/chat.service.dart';
 import 'package:cookie_app/view/components/dialog.dart';
-import 'package:cookie_app/viewmodel/chat.viewmodel.dart';
 import 'package:cookie_app/viewmodel/theme.provider.dart';
 
 class SettingsWidget extends StatelessWidget {
@@ -36,7 +36,7 @@ class SettingsWidget extends StatelessWidget {
                 title: "로그아웃",
                 content: "로그아웃 하시겠습니까?",
                 onConfirm: () {
-                  context.read<ChatViewModel>().disconnect();
+                  context.read<ChatService>().disconnect();
                   context.read<AuthService>().signOut();
                   Navigator.of(context).pop();
                 },
