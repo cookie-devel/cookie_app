@@ -30,16 +30,6 @@ Map<String, dynamic> _$ExistsResponseToJson(ExistsResponse instance) =>
       'message': instance.message,
     };
 
-SignInResponse _$SignInResponseFromJson(Map<String, dynamic> json) =>
-    SignInResponse(
-      account: InfoResponse.fromJson(json['account'] as Map<String, dynamic>),
-    );
-
-Map<String, dynamic> _$SignInResponseToJson(SignInResponse instance) =>
-    <String, dynamic>{
-      'account': instance.account,
-    };
-
 SignUpRequest _$SignUpRequestFromJson(Map<String, dynamic> json) =>
     SignUpRequest(
       userid: json['userid'] as String,
@@ -113,7 +103,7 @@ class _AuthRestClient implements AuthRestClient {
   }
 
   @override
-  Future<HttpResponse<SignInResponse>> postSignIn({
+  Future<HttpResponse<void>> postSignIn({
     required String userid,
     required String password,
   }) async {
@@ -124,8 +114,8 @@ class _AuthRestClient implements AuthRestClient {
       'userid': userid,
       'password': password,
     };
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<SignInResponse>>(Options(
+    final _result =
+        await _dio.fetch<void>(_setStreamType<HttpResponse<void>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -141,20 +131,19 @@ class _AuthRestClient implements AuthRestClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = SignInResponse.fromJson(_result.data!);
-    final httpResponse = HttpResponse(value, _result);
+    final httpResponse = HttpResponse(null, _result);
     return httpResponse;
   }
 
   @override
-  Future<HttpResponse<SignInResponse>> getSignIn(String token) async {
+  Future<HttpResponse<void>> getSignIn(String token) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Authorization': token};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<SignInResponse>>(Options(
+    final _result =
+        await _dio.fetch<void>(_setStreamType<HttpResponse<void>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -170,8 +159,7 @@ class _AuthRestClient implements AuthRestClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = SignInResponse.fromJson(_result.data!);
-    final httpResponse = HttpResponse(value, _result);
+    final httpResponse = HttpResponse(null, _result);
     return httpResponse;
   }
 

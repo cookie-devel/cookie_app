@@ -4,62 +4,124 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:retrofit/retrofit.dart';
 
-import 'package:cookie_app/datasource/api/account.dart';
 import 'package:cookie_app/datasource/api/auth.dart';
-import 'package:cookie_app/datasource/storage/jwt.storage.dart';
+import 'package:cookie_app/datasource/storage/token.storage.dart';
+import 'package:cookie_app/service/error.dart';
 import 'package:cookie_app/utils/logger.dart';
 
 class AuthService extends ChangeNotifier {
+  // ignore: non_constant_identifier_names
+  final ACCESS_TOKEN_HEADER = 'Authorization';
+  // ignore: non_constant_identifier_names
+  final REFRESH_TOKEN_HEADER = 'RefreshToken';
+
   final Dio _dio = Dio();
+  get dio => _dio;
+
+  TokenStorage tokenStorage = TokenStorage();
+
   late AuthRestClient _api;
-  String? _token;
+  String? _accessToken;
+  String? get accessToken => _accessToken;
+  String? _refreshToken;
+  String? get refreshToken => _refreshToken;
+
   ConnectionState _connectionState = ConnectionState.none;
   ConnectionState get connectionState => _connectionState;
 
-  AuthService({String? token}) {
-    this._token = token;
-    _dio.interceptors.add(
-      InterceptorsWrapper(
-        onError: (e, handler) {
-          logger.e('Error: $e');
-          logger.t('Body: ${e.response?.data}');
-          return handler.next(e);
-        },
-      ),
-    );
+  bool get isLoggedIn => _accessToken != null;
+
+  AuthService() {
+    tokenStorage.accessToken.then((token) {
+      if (token != null) this._accessToken = token;
+      notifyListeners();
+    });
+    tokenStorage.refreshToken.then((token) {
+      if (token != null) this._refreshToken = token;
+      notifyListeners();
+    });
+
+    _dio.interceptors.addAll([
+      ErrorInterceptor(),
+      accessTokenInterceptor,
+      refreshTokenInterceptor,
+      updateAccessTokenInterceptor,
+      updateRefreshTokenInterceptor,
+    ]);
     _dio.options.baseUrl = dotenv.env['BASE_URI']!;
     _api = AuthRestClient(_dio);
   }
 
-  String? get token => _token;
-  set token(String? token) {
-    JWTStorage.write(token);
-    this._token = token;
-    _dio.options.headers['Authorization'] = 'Bearer $token';
-    _api = AuthRestClient(_dio);
+  InterceptorsWrapper get accessTokenInterceptor {
+    return InterceptorsWrapper(
+      onRequest: (options, handler) {
+        if (this._accessToken != null) {
+          options.headers[ACCESS_TOKEN_HEADER] = this._accessToken;
+          logger.i(
+            'Interceptor injects "AccessToken" header: ${this._accessToken}',
+          );
+        }
+        return handler.next(options);
+      },
+    );
+  }
+
+  InterceptorsWrapper get refreshTokenInterceptor {
+    return InterceptorsWrapper(
+      onRequest: (options, handler) {
+        if (this._refreshToken != null) {
+          options.headers[REFRESH_TOKEN_HEADER] = this._refreshToken;
+          logger.i(
+            'Interceptor injects "RefreshToken" header: ${this._refreshToken}',
+          );
+        }
+        return handler.next(options);
+      },
+    );
+  }
+
+  InterceptorsWrapper get updateAccessTokenInterceptor {
+    return InterceptorsWrapper(
+      onResponse: (response, handler) async {
+        if (response.headers[ACCESS_TOKEN_HEADER] != null) {
+          String prevToken = this._accessToken.toString();
+          setAccessToken(response.headers[ACCESS_TOKEN_HEADER]![0]);
+          logger.i(
+            'Interceptor updates "AccessToken" from $prevToken to ${this._accessToken}',
+          );
+        }
+
+        return handler.next(response);
+      },
+    );
+  }
+
+  InterceptorsWrapper get updateRefreshTokenInterceptor {
+    return InterceptorsWrapper(
+      onResponse: (response, handler) async {
+        if (response.headers[REFRESH_TOKEN_HEADER] != null) {
+          String prevToken = this._refreshToken.toString();
+          setRefreshToken(response.headers[REFRESH_TOKEN_HEADER]![0]);
+          logger.i(
+            'Interceptor updates "RefreshToken" from $prevToken to ${this._refreshToken}',
+          );
+        }
+
+        return handler.next(response);
+      },
+    );
+  }
+
+  void setAccessToken(String token) async {
+    this._accessToken = token;
+    await tokenStorage.setAccessToken(token);
     notifyListeners();
   }
 
-  Future<InfoResponse> jwtSignIn({
-    required String token,
-  }) async {
-    try {
-      _connectionState = ConnectionState.waiting;
-      notifyListeners();
-      logger.t('JWT Signin with token: $token');
-      HttpResponse<SignInResponse> res = await _api.getSignIn(token);
-      String? newToken =
-          res.response.headers.value('Authorization')?.split(' ').elementAt(1);
-
-      this.token = newToken ?? token;
-
-      return res.data.account;
-    } catch (e) {
-      rethrow;
-    } finally {
-      _connectionState = ConnectionState.done;
-      notifyListeners();
-    }
+  void setRefreshToken(String token) async {
+    this._refreshToken = token;
+    await tokenStorage.setRefreshToken(token);
+    notifyListeners();
   }
 
   Future<void> signIn({
@@ -70,13 +132,10 @@ class AuthService extends ChangeNotifier {
     notifyListeners();
     // Handle Signin
     try {
-      HttpResponse<SignInResponse> res =
-          await _api.postSignIn(userid: id, password: pw);
+      HttpResponse<void> res = await _api.postSignIn(userid: id, password: pw);
       logger.t('Signin res: ${res.response.headers}');
-      String? newToken =
-          res.response.headers.value('Authorization')?.split(' ').elementAt(0);
-      this.token = newToken!;
     } catch (e) {
+      logger.e('Error signing in: $e');
       rethrow;
     } finally {
       _connectionState = ConnectionState.done;
@@ -91,6 +150,7 @@ class AuthService extends ChangeNotifier {
     try {
       await _api.postSignUp(signUpForm);
     } catch (e) {
+      logger.e('Error signing up: $e');
       rethrow;
     } finally {
       _connectionState = ConnectionState.done;
@@ -100,8 +160,10 @@ class AuthService extends ChangeNotifier {
 
   void signOut() async {
     try {
-      JWTStorage.delete();
-      this.token = null;
+      tokenStorage.deleteAccessToken();
+      tokenStorage.deleteRefreshToken();
+      this._accessToken = null;
+      this._refreshToken = null;
     } catch (e) {
       logger.w('Error signing out: $e');
       rethrow;

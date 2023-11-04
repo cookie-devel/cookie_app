@@ -7,7 +7,6 @@ import 'package:socket_io_client/socket_io_client.dart';
 
 import 'package:cookie_app/model/account/account.dart';
 import 'package:cookie_app/service/account.service.dart';
-import 'package:cookie_app/service/auth.service.dart';
 import 'package:cookie_app/types/map/mapPosition_info.dart';
 import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
@@ -48,9 +47,8 @@ class MapViewModel with ChangeNotifier {
   bool _loading = true;
   bool get loading => _loading;
 
-  MapViewModel() {
-    // socket.auth = {'token': JWTRepository.token!};
-    socket.auth = {'token': context.read<AuthService>().token};
+  MapViewModel(String token) {
+    socket.auth = {'token': token};
 
     socket.onConnect(_onConnectionChange);
     socket.onDisconnect(_onConnectionChange);
@@ -90,8 +88,8 @@ class MapViewModel with ChangeNotifier {
     final MapInfoResponse info = MapInfoResponse.fromJson(data);
     String userid = info.userid;
     AccountModel? friendInfo =
-        Provider.of<AccountService>(context, listen: false).getFriend(userid)
-            as AccountModel?;
+        Provider.of<AccountService>(context, listen: false)
+            .getFriendById(userid) as AccountModel?;
 
     bool userExists = _mapLog.any((element) => element.info.id == userid);
 

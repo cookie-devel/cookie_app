@@ -40,7 +40,6 @@ class ChatService extends ChangeNotifier with DiagnosticableTreeMixin {
   ChatService(String token) {
     // Registering event handlers
     // Try Hot-Restart if event handlers are registered multiple times
-    // socket.auth = {'token': context.read<AuthService>().token};
     socket.auth = {'token': token};
 
     socket.onConnect(_onConnectionChange);
