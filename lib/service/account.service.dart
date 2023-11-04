@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:cookie_app/datasource/api/account.dart';
 import 'package:cookie_app/service/auth.service.dart';
-import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
 class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
@@ -32,8 +31,6 @@ class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
     try {
       _connectionState = ConnectionState.waiting;
       notifyListeners();
-
-      logger.i('token: ${authService.accessToken}');
 
       _friends = Map.fromEntries(
         (await _api.getInfo())
