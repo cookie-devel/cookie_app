@@ -21,11 +21,7 @@ class MapViewModel with ChangeNotifier {
   // socket
   final Socket socket = io(
     '${dotenv.env['BASE_URI']}/location',
-    OptionBuilder()
-        .setTransports(['websocket'])
-        .disableAutoConnect()
-        .enableReconnection()
-        .build(),
+    OptionBuilder().setTransports(['websocket']).enableReconnection().build(),
   );
 
   // socket connection
