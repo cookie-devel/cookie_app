@@ -25,7 +25,7 @@ class ChatRoomViewModel extends ChangeNotifier {
             // .map((e) => PublicAccountViewModel(model: e).chatUser)
             .map(
               (id) => id != context.read<AccountViewModel>().id
-                  ? context.read<AccountService>().getFriend(id).chatUser
+                  ? context.read<AccountService>().getFriendById(id).chatUser
                   : context.read<AccountViewModel>().chatUser,
             )
             .toList(growable: false),
@@ -40,14 +40,14 @@ class ChatRoomViewModel extends ChangeNotifier {
   List<AccountViewModel> get members => _model.members
       .map(
         (id) => id != context.read<AccountViewModel>().id
-            ? context.read<AccountService>().getFriend(id)
+            ? context.read<AccountService>().getFriendById(id)
             : context.read<AccountViewModel>(),
       )
       .toList(growable: false);
   List<types.User> get chatUsers => _model.members
       .map(
         (id) => id != context.read<AccountViewModel>().id
-            ? context.read<AccountService>().getFriend(id).chatUser
+            ? context.read<AccountService>().getFriendById(id).chatUser
             : context.read<AccountViewModel>().chatUser,
       )
       .toList(growable: false);

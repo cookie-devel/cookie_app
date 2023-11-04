@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
 
-import 'package:cookie_app/datasource/api/account.dart';
 import 'package:cookie_app/types/account/profile.dart';
 
 part 'auth.g.dart';
@@ -18,13 +17,13 @@ abstract class AuthRestClient {
   });
 
   @POST("/signin")
-  Future<HttpResponse<SignInResponse>> postSignIn({
+  Future<HttpResponse<void>> postSignIn({
     @Field() required String userid,
     @Field() required String password,
   });
 
   @GET("/signin")
-  Future<HttpResponse<SignInResponse>> getSignIn(
+  Future<HttpResponse<void>> getSignIn(
     @Header("Authorization") String token,
   );
 
@@ -61,20 +60,6 @@ class ExistsResponse {
       _$ExistsResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$ExistsResponseToJson(this);
-}
-
-@JsonSerializable()
-class SignInResponse {
-  InfoResponse account;
-
-  SignInResponse({
-    required this.account,
-  });
-
-  factory SignInResponse.fromJson(Map<String, dynamic> json) =>
-      _$SignInResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$SignInResponseToJson(this);
 }
 
 @JsonSerializable()

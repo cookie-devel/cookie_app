@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cookie_app/datasource/api/auth.dart';
 import 'package:cookie_app/service/auth.service.dart';
 
-class AuthViewModel extends ChangeNotifier {
+class AuthViewModel {
   late AuthService _authService;
   AuthViewModel(AuthService authService) {
     this._authService = authService;

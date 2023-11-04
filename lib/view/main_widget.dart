@@ -49,9 +49,6 @@ class _MainWidgetState extends State<MainWidget> {
       context.read<MapViewModel>().connect();
       context.read<AccountService>().updateFriends();
     });
-    // context.read<ChatService>().connect();
-    // context.read<MapViewModel>().connect();
-    // context.read<AccountService>().updateFriends();
   }
 
   final List<Page> _pages = [
