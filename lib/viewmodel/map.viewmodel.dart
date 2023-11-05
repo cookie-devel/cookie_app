@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-
+import 'package:latlong2/latlong.dart' as l2;
 import 'package:cookie_app/model/account/account.dart';
 import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/types/map/mapPosition_info.dart';
 import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
+import 'package:cookie_app/view/components/map/marker_design.dart';
 
 class MapEvents {
   static const position = 'position';
@@ -17,6 +17,7 @@ class MapEvents {
 
 class MapViewModel with ChangeNotifier {
   BuildContext context = NavigationService.navigatorKey.currentContext!;
+  final l2.Distance distance = const l2.Distance();
 
   // socket
   final Socket socket = io(
@@ -34,6 +35,10 @@ class MapViewModel with ChangeNotifier {
   // map log
   List<MarkerInfo> _mapLog = [];
   List<MarkerInfo> get mapLog => _mapLog;
+
+  // marker
+  final Set<Marker> _markers = {};
+  Set<Marker> get markers => _markers;
 
   // current location
   LatLng _currentLocation = const LatLng(37.282053, 127.043546);
@@ -109,6 +114,35 @@ class MapViewModel with ChangeNotifier {
         ),
       );
     }
+    _updateMarkers();
     notifyListeners();
+  }
+
+  Future<void> _updateMarkers() async {
+    _markers.clear();
+    for (var element in _mapLog) {
+      _markers.add(
+        addMarker(
+          context,
+          element,
+        ) as Marker,
+      );
+    }
+  }
+
+  // 두 좌표 간 거리계산
+  String calDistance(LatLng friendLocation) {
+    final latLong1 =
+        l2.LatLng(_currentLocation.latitude, _currentLocation.longitude);
+    final latLong2 =
+        l2.LatLng(friendLocation.latitude, friendLocation.longitude);
+    final dist = distance(latLong1, latLong2);
+
+    final double distanceInMeters = dist < 1000 ? dist : dist / 1000;
+    final String distanceString =
+        distanceInMeters.toStringAsFixed(distanceInMeters < 10 ? 1 : 0);
+    final String unit = dist < 1000 ? 'm' : 'km';
+
+    return '$distanceString $unit';
   }
 }
