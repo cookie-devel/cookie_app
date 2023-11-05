@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:cookie_app/service/account.service.dart';
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -7,9 +9,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cookie_app/types/map/mapPosition_info.dart';
 import 'package:cookie_app/view/components/map/image_process.dart';
 import 'package:custom_marker/marker_icon.dart';
+import 'package:provider/provider.dart';
 
 class BottomSheetInside extends StatelessWidget {
-  final MarkerInfo user;
+  final AccountViewModel user;
   const BottomSheetInside({
     super.key,
     required this.user,
@@ -28,10 +31,11 @@ class BottomSheetInside extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(width: 2.0, color: Colors.deepOrangeAccent),
+                  border:
+                      Border.all(width: 2.0, color: Colors.deepOrangeAccent),
                   image: DecorationImage(
-                    image: NetworkImage(user.info.profile.image as String),
-                    fit: BoxFit.cover,
+                    image: NetworkImage('https://picsum.photos/250?image=9'),
+                    // image: NetworkImage(user.profile.image as String),                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -68,7 +72,7 @@ class BottomSheetInside extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Text(
-                            user.info.name.toString(),
+                            user.name.toString(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 22,
@@ -97,7 +101,7 @@ class BottomSheetInside extends StatelessWidget {
                     const SizedBox(height: 8),
                     Flexible(
                       child: Text(
-                        '${user.info.profile.message!}\n',
+                        '${user.profile.message??'none'}\n',
                         style: const TextStyle(
                           fontSize: 14,
                           color: Colors.white,
@@ -154,7 +158,7 @@ class BottomSheetInside extends StatelessWidget {
 
 Future<void> markerBottomSheet(
   BuildContext context,
-  MarkerInfo user,
+  AccountViewModel user,
 ) {
   return showModalBottomSheet(
     context: context,
@@ -199,10 +203,14 @@ Future<Marker> addMarker(
   Color color = Colors.deepOrangeAccent,
   double width = 4,
 }) async {
+  AccountViewModel friendInfo =
+      Provider.of<AccountService>(context, listen: false)
+          .getFriendById(user.userid);
   return Marker(
-    markerId: MarkerId(user.info.name.toString()),
+    markerId: MarkerId(user.userid.toString()),
     icon: await MarkerIcon.downloadResizePictureCircle(
-      user.info.profile.image.toString(),
+      'https://picsum.photos/250?image=9',
+      // friendInfo.profile.image.toString(),
       size: size,
       addBorder: true,
       borderColor: color,
@@ -213,7 +221,7 @@ Future<Marker> addMarker(
       user.longitude,
     ),
     onTap: () {
-      markerBottomSheet(context, user);
+      markerBottomSheet(context, friendInfo);
     },
   );
 }

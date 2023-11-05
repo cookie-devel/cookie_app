@@ -38,12 +38,12 @@ class MapInfoRequest {
 
 @JsonSerializable()
 class MarkerInfo {
-  AccountModel info;
+  String userid;
   double latitude;
   double longitude;
 
   MarkerInfo({
-    required this.info,
+    required this.userid,
     required this.latitude,
     required this.longitude,
   });

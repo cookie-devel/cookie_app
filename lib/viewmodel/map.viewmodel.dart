@@ -1,3 +1,4 @@
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -16,6 +17,13 @@ class MapEvents {
 }
 
 class MapViewModel with ChangeNotifier {
+  MapViewModel(String token) {
+    socket.auth = {'token': token};
+    socket.onConnect(_onConnectionChange);
+    socket.onDisconnect(_onConnectionChange);
+    socket.on(MapEvents.position, _onPosition);
+  }
+
   BuildContext context = NavigationService.navigatorKey.currentContext!;
   final l2.Distance distance = const l2.Distance();
 
@@ -48,12 +56,13 @@ class MapViewModel with ChangeNotifier {
   bool _loading = true;
   bool get loading => _loading;
 
-  MapViewModel(String token) {
-    socket.auth = {'token': token};
+  // background location running
+  bool _isLocationUpdateRunning = false;
+  bool get isLocationUpdateRunning => _isLocationUpdateRunning;
 
-    socket.onConnect(_onConnectionChange);
-    socket.onDisconnect(_onConnectionChange);
-    socket.on(MapEvents.position, _onPosition);
+  void setLocationUpdateRunning(bool value) {
+    _isLocationUpdateRunning = value;
+    notifyListeners();
   }
 
   // set current location
@@ -87,18 +96,16 @@ class MapViewModel with ChangeNotifier {
     logger.t("position: $data");
 
     final MapInfoResponse info = MapInfoResponse.fromJson(data);
-    String userid = info.userid;
-    AccountModel? friendInfo =
-        Provider.of<AccountService>(context, listen: false)
-            .getFriendById(userid) as AccountModel?;
+    // String userid = info.userid;
+    String userid = 'testid2';
 
-    bool userExists = _mapLog.any((element) => element.info.id == userid);
+    bool userExists = _mapLog.any((element) => element.userid == userid);
 
     if (userExists) {
       _mapLog = _mapLog.map((element) {
-        if (element.info.id == userid) {
+        if (element.userid == userid) {
           return MarkerInfo(
-            info: friendInfo!,
+            userid: userid,
             latitude: info.latitude,
             longitude: info.longitude,
           );
@@ -108,27 +115,30 @@ class MapViewModel with ChangeNotifier {
     } else {
       _mapLog.add(
         MarkerInfo(
-          info: friendInfo!,
+          userid: userid,
           latitude: info.latitude,
           longitude: info.longitude,
         ),
       );
     }
+    logger.t("position updated");
     _updateMarkers();
     notifyListeners();
   }
 
   Future<void> _updateMarkers() async {
     _markers.clear();
-    for (var element in _mapLog) {
-      _markers.add(
-        addMarker(
-          context,
-          element,
-        ) as Marker,
-      );
+    final List<Future<Marker>> markerFutures =
+        _mapLog.map((element) => addMarker(context, element)).toList();
+    final List<Marker> markers = await Future.wait(markerFutures);
+    _markers.addAll(markers);
+    logger.t("markers updated");
+
+    if (markers.isNotEmpty) {
+      notifyListeners();
     }
   }
+
 
   // 두 좌표 간 거리계산
   String calDistance(LatLng friendLocation) {

@@ -1,21 +1,26 @@
+import 'package:cookie_app/utils/navigation_service.dart';
+import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:provider/provider.dart';
 
 class SpeedDialPage extends StatelessWidget {
+  BuildContext context = NavigationService.navigatorKey.currentContext!;
   final VoidCallback onTapCurrentLocation;
   final VoidCallback onTapStart;
   final VoidCallback onTapStop;
-  final bool isRunning;
+  // final bool isRunning;
 
   SpeedDialPage({
     required this.onTapCurrentLocation,
     required this.onTapStart,
     required this.onTapStop,
-    required this.isRunning,
+    // required this.isRunning,
   });
 
   @override
   Widget build(BuildContext context) {
+    // print("isRunning: $isRunning");
     return _floatingButtons();
   }
 
@@ -45,7 +50,7 @@ class SpeedDialPage extends StatelessWidget {
         Icons.location_searching_sharp,
         onTapCurrentLocation,
       ),
-      isRunning
+      context.read<MapViewModel>().isLocationUpdateRunning
           ? speedDialChild(
               "위치 끄기",
               Icons.wifi_off_rounded,
