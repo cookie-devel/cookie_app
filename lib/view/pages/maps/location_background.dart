@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'package:cookie_app/utils/logger.dart';
+import 'package:cookie_app/utils/navigation_service.dart';
+import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:background_locator_2/background_locator.dart';
 import 'package:background_locator_2/location_dto.dart';
@@ -7,6 +10,20 @@ import 'package:background_locator_2/settings/ios_settings.dart';
 import 'package:background_locator_2/settings/locator_settings.dart';
 import 'package:location_permissions/location_permissions.dart';
 import 'package:cookie_app/view/pages/maps/location_callback_handler.dart';
+import 'package:provider/provider.dart';
+
+BuildContext context = NavigationService.navigatorKey.currentContext!;
+
+Future<void> initPlatformState() async {
+  logger.t('Initializing...');
+  await BackgroundLocator.initialize();
+  logger.t('Initialization done');
+
+  await BackgroundLocator.isServiceRunning().then((value) {
+    logger.t('Service running: $value');
+    context.read<MapViewModel>().setLocationUpdateRunning(value);
+  });
+}
 
 Future<void> updateNotificationText(LocationDto data) async {
   final DateTime now = DateTime.now();
@@ -21,7 +38,9 @@ Future<void> updateNotificationText(LocationDto data) async {
 }
 
 Future<bool> checkLocationPermission() async {
+  logger.t('checkLocationPermission');
   final access = await LocationPermissions().checkPermissionStatus();
+  logger.t('access: $access');
   switch (access) {
     case PermissionStatus.unknown:
     case PermissionStatus.denied:
@@ -30,15 +49,19 @@ Future<bool> checkLocationPermission() async {
         permissionLevel: LocationPermissionLevel.locationAlways,
       );
       if (permission == PermissionStatus.granted) {
+        logger.t('true');
         return true;
       } else {
+        logger.t('false');
         return false;
       }
 
     case PermissionStatus.granted:
+      logger.t('true');
       return true;
 
     default:
+      logger.t('false');
       return false;
   }
 }

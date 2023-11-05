@@ -29,7 +29,7 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   int selectedSortOption = 1;
 
-  bool isRunning = false;
+  // bool isRunning = false;
   LocationDto? lastLocation;
   bool isInit = false;
 
@@ -52,10 +52,10 @@ class _MapsWidgetState extends State<MapsWidget> {
 
     port.listen(
       (dynamic data) async {
+        logger.t('data: $data');
         await update(data);
       },
     );
-    context.read<MapViewModel>().position();
     initPlatformState();
     isInit = true;
   }
@@ -67,7 +67,7 @@ class _MapsWidgetState extends State<MapsWidget> {
   }
 
   Future<void> update(dynamic data) async {
-    logger.t("update");
+    logger.t("Location updated");
     LocationDto? locationDto =
         (data != null) ? LocationDto.fromJson(data) : null;
     await updateNotificationText(locationDto!);
@@ -76,6 +76,7 @@ class _MapsWidgetState extends State<MapsWidget> {
       context
           .read<MapViewModel>()
           .setCurrentLocation(locationDto.latitude, locationDto.longitude);
+      context.read<MapViewModel>().position();
     }
 
     setState(() {
@@ -85,44 +86,25 @@ class _MapsWidgetState extends State<MapsWidget> {
     });
   }
 
-  Future<void> initPlatformState() async {
-    logger.t('Initializing...');
-    await BackgroundLocator.initialize();
-    logger.t('Initialization done');
-
-    await BackgroundLocator.isServiceRunning().then((value) {
-      setState(() {
-        isRunning = value;
+  void _onStart() async {
+    logger.t("start");
+    if (await checkLocationPermission()) {
+      await startLocator();
+      await BackgroundLocator.isServiceRunning().then((value) {
+        context.read<MapViewModel>().setLocationUpdateRunning(value);
+        setState(() {
+          lastLocation = null;
+        });
       });
-      logger.t('Running ${isRunning.toString()}');
-    });
+    }
   }
 
   void onStop() async {
     logger.t("stop");
     await BackgroundLocator.unRegisterLocationUpdate();
     await BackgroundLocator.isServiceRunning().then((value) {
-      setState(() {
-        isRunning = value;
-      });
-      logger.t('Running ${isRunning.toString()}');
+      context.read<MapViewModel>().setLocationUpdateRunning(value);
     });
-  }
-
-  void _onStart() async {
-    logger.t("start");
-    if (await checkLocationPermission()) {
-      await startLocator();
-      await BackgroundLocator.isServiceRunning().then((value) {
-        setState(() {
-          isRunning = value;
-          lastLocation = null;
-        });
-        logger.t('Running ${isRunning.toString()}');
-      });
-    } else {
-      // show error
-    }
   }
 
   @override
@@ -172,7 +154,7 @@ class _MapsWidgetState extends State<MapsWidget> {
                       onTapCurrentLocation: _moveToCurrentLocation,
                       onTapStart: _onStart,
                       onTapStop: onStop,
-                      isRunning: isRunning,
+                      // isRunning: context.read<MapViewModel>().isRunning,
                     ),
                   ),
                 ],
