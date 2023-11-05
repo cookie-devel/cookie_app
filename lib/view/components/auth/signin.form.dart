@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:cookie_app/service/auth.service.dart';
-import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/view/components/auth/submit_button.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/components/text_form_fields.dart';
+import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({super.key});
@@ -36,16 +35,12 @@ class _SignInFormState extends State<SignInForm> {
               onPressed: () {
                 if (!_formKey.currentState!.validate()) return;
                 _formKey.currentState!.save();
+
                 context
-                    .read<AuthService>()
-                    .signIn(
-                      id: id!,
-                      pw: pw!,
-                    )
-                    .catchError((e) {
-                  logger.w(e.toString());
-                  showErrorSnackBar(context, '로그인에 실패하였습니다. ${e.toString()}');
-                });
+                    .read<AuthViewModel>()
+                    .handleSignIn(id!, pw!)
+                    .then((_) => onSignInSuccess(context))
+                    .catchError((e) => onSignInFailure(context, e));
               },
               text: '로그인',
             ),
@@ -54,6 +49,16 @@ class _SignInFormState extends State<SignInForm> {
       ),
     );
   }
+}
+
+onSignInSuccess(context) {
+  showSnackBar(context, '로그인이 완료되었습니다.');
+  Navigator.pop(context);
+}
+
+onSignInFailure(context, e) {
+  showErrorSnackBar(context, '로그인에 실패하였습니다. ${e.toString()}');
+  throw e;
 }
 
 Container wrapped(child) {

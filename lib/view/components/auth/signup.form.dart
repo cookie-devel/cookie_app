@@ -67,8 +67,8 @@ class _SignUpFormState extends State<SignUpForm> {
                     message: null,
                   ),
                 );
-                if (_formKey.currentState!.validate())
-                  _formKey.currentState!.save();
+                if (!_formKey.currentState!.validate()) return;
+                _formKey.currentState!.save();
 
                 context
                     .read<AuthViewModel>()
@@ -92,6 +92,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   onSignUpFailure(context, e) {
     showErrorSnackBar(context, '회원가입에 실패하였습니다. ${e.toString()}');
+    throw e;
   }
 }
 
