@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:cookie_app/types/map/mapPosition_info.dart';
 import 'package:cookie_app/view/components/map/image_process.dart';
+import 'package:custom_marker/marker_icon.dart';
 
 class BottomSheetInside extends StatelessWidget {
   final MarkerInfo user;
@@ -27,9 +28,9 @@ class BottomSheetInside extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(width: 2.0, color: Colors.white),
+                  border: Border.all(width: 2.0, color: Colors.deepOrangeAccent),
                   image: DecorationImage(
-                    image: user.info.profile.image as ImageProvider<Object>,
+                    image: NetworkImage(user.info.profile.image as String),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -70,7 +71,7 @@ class BottomSheetInside extends StatelessWidget {
                             user.info.name.toString(),
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 24,
+                              fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
                             maxLines: 1,
@@ -158,12 +159,38 @@ Future<void> markerBottomSheet(
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
-    backgroundColor: Colors.deepOrange.withOpacity(0.9),
+    backgroundColor: Colors.white60.withOpacity(0.9),
     builder: (BuildContext context) {
       return BottomSheetInside(user: user);
     },
   );
 }
+
+// Future<Marker> addMarker(
+//   BuildContext context,
+//   MarkerInfo user, {
+//   int size = 100,
+//   Color color = Colors.deepOrangeAccent,
+//   double width = 4,
+// }) async {
+//   Uint8List markIcons = await getRoundedImage(
+//     user.info.profile.image as ImageProvider<Object>,
+//     width: size,
+//     borderColor: color,
+//     borderWidth: width,
+//   );
+//   return Marker(
+//     markerId: MarkerId(user.info.name.toString()),
+//     icon: BitmapDescriptor.fromBytes(markIcons),
+//     position: LatLng(
+//       user.latitude,
+//       user.longitude,
+//     ),
+//     onTap: () {
+//       markerBottomSheet(context, user);
+//     },
+//   );
+// }
 
 Future<Marker> addMarker(
   BuildContext context,
@@ -172,15 +199,15 @@ Future<Marker> addMarker(
   Color color = Colors.deepOrangeAccent,
   double width = 4,
 }) async {
-  Uint8List markIcons = await getRoundedImage(
-    user.info.profile.image as ImageProvider<Object>,
-    width: size,
-    borderColor: color,
-    borderWidth: width,
-  );
   return Marker(
     markerId: MarkerId(user.info.name.toString()),
-    icon: BitmapDescriptor.fromBytes(markIcons),
+    icon: await MarkerIcon.downloadResizePictureCircle(
+      user.info.profile.image.toString(),
+      size: size,
+      addBorder: true,
+      borderColor: color,
+      borderSize: width,
+    ),
     position: LatLng(
       user.latitude,
       user.longitude,
