@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/service/chat.service.dart';
 import 'package:cookie_app/view/components/badge.dart';
+import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/pages/chatroom/chatrooms.tab.dart';
 import 'package:cookie_app/view/pages/friends/friends.tab.dart';
 import 'package:cookie_app/view/pages/friends/friends_sheet.dart';
@@ -44,8 +45,11 @@ class _MainWidgetState extends State<MainWidget> {
   @override
   void initState() {
     super.initState();
+    // Initial Data Loading After Login At Here
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AccountService>().updateFriends();
+      context.read<AccountService>().updateFriends().catchError((error) {
+        showErrorSnackBar(context, error.message);
+      });
       context.read<ChatService>().connect();
       context.read<MapViewModel>().connect();
     });

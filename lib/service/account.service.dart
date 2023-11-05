@@ -1,8 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:dio/dio.dart';
+
 import 'package:cookie_app/datasource/api/account.dart';
 import 'package:cookie_app/service/auth.service.dart';
+import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
 class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
@@ -39,7 +42,13 @@ class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
             .toList()
             .map((e) => MapEntry(e.id, e)),
       );
+    } on DioException catch (e) {
+      logger.e(e);
+      e.response == null
+          ? throw Exception('친구 목록 업데이트 중 에러: 서버와 연결할 수 없습니다.')
+          : throw Exception('친구 목록 업데이트 중 에러: ${e.response!.statusMessage!}');
     } catch (e) {
+      logger.e(e);
       rethrow;
     } finally {
       _connectionState = ConnectionState.done;
