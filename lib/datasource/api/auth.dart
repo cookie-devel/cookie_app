@@ -6,28 +6,28 @@ import 'package:cookie_app/types/account/profile.dart';
 
 part 'auth.g.dart';
 
-@RestApi(baseUrl: "http://localhost:3000/auth")
+@RestApi(baseUrl: "http://localhost:3000")
 abstract class AuthRestClient {
   factory AuthRestClient(Dio dio, {String baseUrl}) = _AuthRestClient;
 
-  @GET("/exists")
+  @GET("/auth/exists")
   Future<ExistsResponse> getExistance({
     @Query("userid") String? userid,
     @Query("phone") String? phone,
   });
 
-  @POST("/signin")
+  @POST("/auth/signin")
   Future<HttpResponse<void>> postSignIn({
     @Field() required String userid,
     @Field() required String password,
   });
 
-  @GET("/signin")
+  @GET("/auth/signin")
   Future<HttpResponse<void>> getSignIn(
     @Header("Authorization") String token,
   );
 
-  @POST("/signup")
+  @POST("/auth/signup")
   Future<void> postSignUp(
     @Body() SignUpRequest signup,
   );
