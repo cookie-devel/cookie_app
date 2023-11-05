@@ -26,10 +26,7 @@ class ChatEvents {
 class ChatService extends ChangeNotifier with DiagnosticableTreeMixin {
   BuildContext context = NavigationService.navigatorKey.currentContext!;
 
-  final Socket socket = io(
-    '${dotenv.env['BASE_URI']}/chat',
-    OptionBuilder().setTransports(['websocket']).enableReconnection().build(),
-  );
+  late final Socket socket;
 
   bool _connected = false;
   bool get connected => _connected;
@@ -40,7 +37,14 @@ class ChatService extends ChangeNotifier with DiagnosticableTreeMixin {
   ChatService(String token) {
     // Registering event handlers
     // Try Hot-Restart if event handlers are registered multiple times
-    socket.auth = {'token': token};
+    this.socket = io(
+      '${dotenv.env['BASE_URI']}/chat',
+      OptionBuilder()
+          .setTransports(['websocket'])
+          .enableReconnection()
+          .setAuth({'token': token})
+          .build(),
+    );
 
     socket.onConnect(_onConnectionChange);
     socket.onDisconnect(_onConnectionChange);
@@ -55,8 +59,8 @@ class ChatService extends ChangeNotifier with DiagnosticableTreeMixin {
   void _onConnectionChange(_) {
     _connected = socket.connected;
     socket.connected
-        ? logger.t('socket connected')
-        : logger.w('socket not connected');
+        ? logger.t('chatting socket connected')
+        : logger.w('chatting socket disconnected');
     notifyListeners();
   }
 
