@@ -6,6 +6,7 @@ import 'package:vibration/vibration.dart';
 import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/view/components/account/friend_profile.dart';
 import 'package:cookie_app/view/components/loading.dart';
+import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
 class FriendsTab extends StatefulWidget {
@@ -18,9 +19,13 @@ class FriendsTab extends StatefulWidget {
 }
 
 class _FriendsTabState extends State<FriendsTab> {
+  Future<void> updateFriends() =>
+      context.read<AccountService>().updateFriends().catchError((error) {
+        showErrorSnackBar(context, error.message);
+      });
+
   @override
   Widget build(BuildContext context) {
-    AccountService viewModel = context.read<AccountService>();
     ConnectionState connectionState =
         context.watch<AccountService>().connectionState;
 
@@ -28,15 +33,15 @@ class _FriendsTabState extends State<FriendsTab> {
       return const LoadingScreen();
     else if (connectionState == ConnectionState.done)
       return RefreshIndicator(
-        onRefresh: viewModel.updateFriends,
+        onRefresh: updateFriends,
         child: FriendsGrid(
           friendsListViewModel: context.watch<AccountService>(),
-          handleRefresh: viewModel.updateFriends,
+          handleRefresh: updateFriends,
         ),
       );
     return Message(
       msg: '친구 목록을 불러오세요',
-      handleRefresh: viewModel.updateFriends,
+      handleRefresh: updateFriends,
     );
   }
 }
