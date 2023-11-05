@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:cookie_app/datasource/api/account.dart';
+import 'package:cookie_app/model/account/account.dart';
 import 'package:cookie_app/service/auth.service.dart';
 import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
@@ -17,9 +18,20 @@ class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
 
   AccountService(this.authService) {
     _api = RestClient(this.authService.dio, baseUrl: dotenv.env['BASE_URI']!);
+    _api.getInfo().then((InfoResponse info) {
+      this._my = AccountViewModel(model: info.toAccount());
+      this._friends = Map.fromEntries(
+        info.friendList!
+            .map((e) => AccountViewModel(model: e))
+            .toList()
+            .map((e) => MapEntry(e.id, e)),
+      );
+    });
   }
 
-  // AccountViewModel my;
+  // My Account
+  late AccountViewModel _my;
+  get my => _my;
 
   // Friends
   Map<String, AccountViewModel> _friends = {};
@@ -31,14 +43,23 @@ class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
     return _friends[id]!;
   }
 
-  Future<void> updateFriends() async {
+  Future<void> update() async {
     try {
       _connectionState = ConnectionState.waiting;
       notifyListeners();
 
-      _friends = Map.fromEntries(
-        (await _api.getInfo())
-            .friendList!
+      InfoResponse info = await _api.getInfo();
+
+      this._my = AccountViewModel(
+        model: AccountModel(
+          id: info.id!,
+          name: info.name!,
+          phone: info.phone!,
+          profile: info.profile!,
+        ),
+      );
+      this._friends = Map.fromEntries(
+        info.friendList!
             .map((e) => AccountViewModel(model: e))
             .toList()
             .map((e) => MapEntry(e.id, e)),
@@ -46,8 +67,8 @@ class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
     } on DioException catch (e) {
       logger.e(e);
       e.response == null
-          ? throw Exception('친구 목록 업데이트 중 에러: 서버와 연결할 수 없습니다.')
-          : throw Exception('친구 목록 업데이트 중 에러: ${e.response!.statusMessage!}');
+          ? throw Exception('서버와 연결할 수 없습니다.')
+          : throw Exception(e.response!.statusMessage!);
     } catch (e) {
       logger.e(e);
       rethrow;

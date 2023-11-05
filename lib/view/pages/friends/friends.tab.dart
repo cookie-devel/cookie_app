@@ -20,7 +20,7 @@ class FriendsTab extends StatefulWidget {
 
 class _FriendsTabState extends State<FriendsTab> {
   Future<void> updateFriends() =>
-      context.read<AccountService>().updateFriends().catchError((error) {
+      context.read<AccountService>().update().catchError((error) {
         showErrorSnackBar(context, error.message);
       });
 
