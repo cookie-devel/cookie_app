@@ -47,7 +47,7 @@ class _MainWidgetState extends State<MainWidget> {
     super.initState();
     // Initial Data Loading After Login At Here
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AccountService>().updateFriends().catchError((error) {
+      context.read<AccountService>().update().catchError((error) {
         showErrorSnackBar(context, error.message);
       });
       context.read<ChatService>().connect();
