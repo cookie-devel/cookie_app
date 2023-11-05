@@ -13,7 +13,9 @@ abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
   @GET("/account/info")
-  Future<InfoResponse> getInfo();
+  Future<InfoResponse> getInfo({
+    @Query("fields") List<String>? fields,
+  });
 }
 
 @JsonSerializable()
@@ -34,16 +36,16 @@ class InfoResponse {
   String? id;
   String? name;
   String? phone;
-  List<AccountModel>? friendList;
   Profile? profile;
+  List<AccountModel>? friendList;
   List<ChatRoomModel>? chatRooms;
 
   InfoResponse({
     this.id,
     this.name,
     this.phone,
-    this.friendList,
     this.profile,
+    this.friendList,
     this.chatRooms,
   });
 
@@ -52,14 +54,12 @@ class InfoResponse {
 
   Map<String, dynamic> toJson() => _$InfoResponseToJson(this);
 
-  AccountModel toPrivateAccount() {
+  AccountModel toAccount() {
     return AccountModel(
       id: id!,
       name: name!,
       phone: phone!,
       profile: profile!,
-      friendList: friendList == null ? [] : friendList!,
-      chatRooms: chatRooms == null ? [] : chatRooms!,
     );
   }
 }

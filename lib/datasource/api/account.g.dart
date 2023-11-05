@@ -22,12 +22,12 @@ InfoResponse _$InfoResponseFromJson(Map<String, dynamic> json) => InfoResponse(
       id: json['id'] as String?,
       name: json['name'] as String?,
       phone: json['phone'] as String?,
-      friendList: (json['friendList'] as List<dynamic>?)
-          ?.map((e) => AccountModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
       profile: json['profile'] == null
           ? null
           : Profile.fromJson(json['profile'] as Map<String, dynamic>),
+      friendList: (json['friendList'] as List<dynamic>?)
+          ?.map((e) => AccountModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
       chatRooms: (json['chatRooms'] as List<dynamic>?)
           ?.map((e) => ChatRoomModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -38,8 +38,8 @@ Map<String, dynamic> _$InfoResponseToJson(InfoResponse instance) =>
       'id': instance.id,
       'name': instance.name,
       'phone': instance.phone,
-      'friendList': instance.friendList,
       'profile': instance.profile,
+      'friendList': instance.friendList,
       'chatRooms': instance.chatRooms,
     };
 
@@ -62,9 +62,10 @@ class _RestClient implements RestClient {
   String? baseUrl;
 
   @override
-  Future<InfoResponse> getInfo() async {
+  Future<InfoResponse> getInfo({List<String>? fields}) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'fields': fields};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
