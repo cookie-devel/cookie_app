@@ -43,14 +43,26 @@ class AuthService extends ChangeNotifier {
     });
 
     _dio.interceptors.addAll([
+      responseLogger,
       ErrorInterceptor(),
       accessTokenInterceptor,
       refreshTokenInterceptor,
       updateAccessTokenInterceptor,
       updateRefreshTokenInterceptor,
     ]);
-    _dio.options.baseUrl = dotenv.env['BASE_URI']!;
-    _api = AuthRestClient(_dio);
+
+    _api = AuthRestClient(_dio, baseUrl: dotenv.env['BASE_URI']!);
+  }
+
+  InterceptorsWrapper get responseLogger {
+    return InterceptorsWrapper(
+      onResponse: (response, handler) {
+        logger.i(
+          'Response from ${response.requestOptions.uri}\n${response.data}',
+        );
+        return handler.next(response);
+      },
+    );
   }
 
   InterceptorsWrapper get accessTokenInterceptor {
