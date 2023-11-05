@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:cookie_app/datasource/api/account.dart';
 import 'package:cookie_app/service/auth.service.dart';
@@ -15,7 +16,7 @@ class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
   ConnectionState get connectionState => _connectionState;
 
   AccountService(this.authService) {
-    _api = RestClient(this.authService.dio);
+    _api = RestClient(this.authService.dio, baseUrl: dotenv.env['BASE_URI']!);
   }
 
   // AccountViewModel my;

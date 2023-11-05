@@ -13,6 +13,8 @@ class ErrorInterceptor extends Interceptor {
           ErrorResponse.fromJson(err.response!.data).message;
       logger.e('status: ${err.response?.statusCode}');
       logger.e('message: ${err.response?.statusMessage}');
+    } else {
+      logger.e('error from: ${err.requestOptions.uri}');
     }
 
     return handler.next(err);
