@@ -61,7 +61,7 @@ class _AuthRestClient implements AuthRestClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://localhost:3000/auth';
+    baseUrl ??= 'http://localhost:3000';
   }
 
   final Dio _dio;
@@ -89,7 +89,7 @@ class _AuthRestClient implements AuthRestClient {
     )
             .compose(
               _dio.options,
-              '/exists',
+              '/auth/exists',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -122,7 +122,7 @@ class _AuthRestClient implements AuthRestClient {
     )
             .compose(
               _dio.options,
-              '/signin',
+              '/auth/signin',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -150,7 +150,7 @@ class _AuthRestClient implements AuthRestClient {
     )
             .compose(
               _dio.options,
-              '/signin',
+              '/auth/signin',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -177,7 +177,7 @@ class _AuthRestClient implements AuthRestClient {
     )
         .compose(
           _dio.options,
-          '/signup',
+          '/auth/signup',
           queryParameters: queryParameters,
           data: _data,
         )

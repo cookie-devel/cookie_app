@@ -16,7 +16,7 @@ class AuthService extends ChangeNotifier {
   final REFRESH_TOKEN_HEADER = 'RefreshToken';
 
   final Dio _dio = Dio();
-  get dio => _dio;
+  Dio get dio => _dio;
 
   TokenStorage tokenStorage = TokenStorage();
 
@@ -32,6 +32,7 @@ class AuthService extends ChangeNotifier {
   bool get isLoggedIn => _accessToken != null;
 
   AuthService() {
+    // this._dio.options.baseUrl = dotenv.env['BASE_URI']!;
     tokenStorage.accessToken.then((token) {
       if (token != null) this._accessToken = token;
       notifyListeners();
