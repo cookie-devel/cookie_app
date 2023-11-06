@@ -5,15 +5,24 @@ import 'package:provider/provider.dart';
 import 'package:cookie_app/service/auth.service.dart';
 import 'package:cookie_app/service/chat.service.dart';
 import 'package:cookie_app/view/components/dialog.dart';
+import 'package:cookie_app/view/pages/settings/detail/my_profile.page.dart';
 import 'package:cookie_app/viewmodel/theme.provider.dart';
 
 class SettingsWidget extends StatelessWidget {
   SettingsWidget({super.key});
 
   final List<ListTile Function(BuildContext)> itemBuilders = [
-    (context) => const ListTile(
-          title: Text('프로필 관리'),
-          leading: Icon(Icons.person),
+    (context) => ListTile(
+          title: const Text('프로필 관리'),
+          leading: const Icon(Icons.person),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MyProfileWidget(),
+              ),
+            );
+          },
         ),
     (context) => ListTile(
           title: const Text('다크 모드'),
