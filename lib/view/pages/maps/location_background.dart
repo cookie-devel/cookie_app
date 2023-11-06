@@ -23,9 +23,9 @@ Future<void> initPlatformState() async {
   logger.t('Initializing...');
   await BackgroundLocator.initialize();
   logger.t('Initialization done');
-  context.read<MapViewModel>().isInitPlatformState = true;
   await BackgroundLocator.isServiceRunning().then((value) {
     logger.t('Service running: $value');
+    context.read<MapViewModel>().isInitPlatformState = true;
     context.read<MapViewModel>().isLocationUpdateRunning = value;
   });
 }

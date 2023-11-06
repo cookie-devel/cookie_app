@@ -6,9 +6,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/repository/location_service.repo.dart';
-import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/view/components/loading.dart';
-import 'package:cookie_app/view/components/map/speedDial.dart';
+import 'package:cookie_app/view/components/map/speed_dial.dart';
 import 'package:cookie_app/view/pages/maps/location_background.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:cookie_app/viewmodel/theme.provider.dart';
@@ -45,7 +44,6 @@ class _MapsWidgetState extends State<MapsWidget> {
 
     port.listen(
       (dynamic data) async {
-        logger.t('data: $data');
         await update(data);
       },
     );
@@ -67,7 +65,7 @@ class _MapsWidgetState extends State<MapsWidget> {
         final marker = mapProvider.markers;
         final isInit = mapProvider.isInitPlatformState;
 
-        return isInit == true
+        return isInit
             ? Stack(
                 children: [
                   GoogleMap(
@@ -75,6 +73,9 @@ class _MapsWidgetState extends State<MapsWidget> {
                     mapToolbarEnabled: false, // 길찾기 버튼
                     zoomControlsEnabled: false, // 축소확대 버튼
                     myLocationButtonEnabled: false, // 내위치 버튼
+                    markers: marker,
+                    mapType: MapType.normal,
+
                     minMaxZoomPreference:
                         const MinMaxZoomPreference(14, 20), // 줌 제한
 
@@ -82,8 +83,7 @@ class _MapsWidgetState extends State<MapsWidget> {
                       mapController = controller;
                       mapController.setMapStyle(mapStyle);
                     },
-                    mapType: MapType.normal,
-                    markers: marker,
+
                     initialCameraPosition: CameraPosition(
                       target: currentLocation,
                       zoom: 18.0,
