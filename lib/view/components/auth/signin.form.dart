@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:cookie_app/service/auth.service.dart';
 import 'package:cookie_app/view/components/auth/submit_button.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/components/text_form_fields.dart';
-import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({super.key});
@@ -37,8 +37,8 @@ class _SignInFormState extends State<SignInForm> {
                 _formKey.currentState!.save();
 
                 context
-                    .read<AuthViewModel>()
-                    .handleSignIn(id!, pw!)
+                    .read<AuthService>()
+                    .signIn(id: id!, pw: pw!)
                     .then((_) => onSignInSuccess(context))
                     .catchError((e) => onSignInFailure(context, e));
               },

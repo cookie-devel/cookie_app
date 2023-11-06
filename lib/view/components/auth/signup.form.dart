@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/datasource/api/auth.dart';
+import 'package:cookie_app/service/auth.service.dart';
 import 'package:cookie_app/types/account/profile.dart';
 import 'package:cookie_app/view/components/auth/submit_button.dart';
 import 'package:cookie_app/view/components/profile_imgpicker.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/components/text_form_fields.dart';
-import 'package:cookie_app/viewmodel/auth.viewmodel.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
@@ -71,8 +71,8 @@ class _SignUpFormState extends State<SignUpForm> {
                 _formKey.currentState!.save();
 
                 context
-                    .read<AuthViewModel>()
-                    .handleSignUp(_formKey.currentState!, signUpForm)
+                    .read<AuthService>()
+                    .signUp(signUpForm)
                     .then((_) => onSignUpSuccess(context))
                     .catchError((e) => onSignUpFailure(context, e));
               },
