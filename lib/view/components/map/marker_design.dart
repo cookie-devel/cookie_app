@@ -1,15 +1,10 @@
-import 'dart:typed_data';
-
-import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:flutter/material.dart';
-
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:cookie_app/types/map/mapPosition_info.dart';
-import 'package:cookie_app/view/components/map/image_process.dart';
-import 'package:custom_marker/marker_icon.dart';
+import 'package:cookie_app/service/account.service.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:custom_marker/marker_icon.dart';
 
 class BottomSheetInside extends StatelessWidget {
   final AccountViewModel user;
@@ -34,8 +29,8 @@ class BottomSheetInside extends StatelessWidget {
                   border:
                       Border.all(width: 2.0, color: Colors.deepOrangeAccent),
                   image: DecorationImage(
-                    image: NetworkImage('https://picsum.photos/250?image=9'),
-                    // image: NetworkImage(user.profile.image as String),                    fit: BoxFit.cover,
+                    // image: NetworkImage('https://picsum.photos/250?image=9'),
+                    image: NetworkImage(user.profile.image as String),                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -170,31 +165,6 @@ Future<void> markerBottomSheet(
   );
 }
 
-// Future<Marker> addMarker(
-//   BuildContext context,
-//   MarkerInfo user, {
-//   int size = 100,
-//   Color color = Colors.deepOrangeAccent,
-//   double width = 4,
-// }) async {
-//   Uint8List markIcons = await getRoundedImage(
-//     user.info.profile.image as ImageProvider<Object>,
-//     width: size,
-//     borderColor: color,
-//     borderWidth: width,
-//   );
-//   return Marker(
-//     markerId: MarkerId(user.info.name.toString()),
-//     icon: BitmapDescriptor.fromBytes(markIcons),
-//     position: LatLng(
-//       user.latitude,
-//       user.longitude,
-//     ),
-//     onTap: () {
-//       markerBottomSheet(context, user);
-//     },
-//   );
-// }
 
 Future<Marker> addMarker(
   BuildContext context,
@@ -209,8 +179,8 @@ Future<Marker> addMarker(
   return Marker(
     markerId: MarkerId(user.userid.toString()),
     icon: await MarkerIcon.downloadResizePictureCircle(
-      'https://picsum.photos/250?image=9',
-      // friendInfo.profile.image.toString(),
+      // 'https://picsum.photos/250?image=9',
+      friendInfo.profile.image.toString(),
       size: size,
       addBorder: true,
       borderColor: color,

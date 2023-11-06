@@ -1,15 +1,11 @@
-import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 import 'package:latlong2/latlong.dart' as l2;
-import 'package:cookie_app/model/account/account.dart';
-import 'package:cookie_app/service/account.service.dart';
-import 'package:cookie_app/types/map/mapPosition_info.dart';
+import 'package:socket_io_client/socket_io_client.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
+import 'package:cookie_app/types/map/mapPosition_info.dart';
 import 'package:cookie_app/view/components/map/marker_design.dart';
 
 class MapEvents {
@@ -65,6 +61,15 @@ class MapViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  // background initPlatformState
+  bool _isInitPlatformState = false;
+  bool get isInitPlatformState => _isInitPlatformState;
+
+  void setInitPlatformState(bool value) {
+    _isInitPlatformState = value;
+    notifyListeners();
+  }
+
   // set current location
   void setCurrentLocation(double latitude, double longitude) {
     _currentLocation = LatLng(latitude, longitude);
@@ -96,8 +101,8 @@ class MapViewModel with ChangeNotifier {
     logger.t("position: $data");
 
     final MapInfoResponse info = MapInfoResponse.fromJson(data);
-    // String userid = info.userid;
-    String userid = 'testid2';
+    String userid = info.userid;
+    // String userid = 'testid2';
 
     bool userExists = _mapLog.any((element) => element.userid == userid);
 
