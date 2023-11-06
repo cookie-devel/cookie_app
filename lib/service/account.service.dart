@@ -31,7 +31,7 @@ class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
 
   // My Account
   late AccountViewModel _my;
-  get my => _my;
+  AccountViewModel get my => _my;
 
   // Friends
   Map<String, AccountViewModel> _friends = {};
