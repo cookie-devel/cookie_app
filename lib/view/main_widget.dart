@@ -1,3 +1,4 @@
+import 'package:cookie_app/service/map.service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
@@ -12,7 +13,6 @@ import 'package:cookie_app/view/pages/friends/friends.tab.dart';
 import 'package:cookie_app/view/pages/friends/friends_sheet.dart';
 import 'package:cookie_app/view/pages/maps/maps.tab.dart';
 import 'package:cookie_app/view/pages/settings/settings.tab.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 
 class Page {
   final String title;
@@ -51,7 +51,7 @@ class _MainWidgetState extends State<MainWidget> {
         showErrorSnackBar(context, error.message);
       });
       context.read<ChatService>().connect();
-      context.read<MapViewModel>().connect();
+      context.read<MapService>().connect();
     });
   }
 
