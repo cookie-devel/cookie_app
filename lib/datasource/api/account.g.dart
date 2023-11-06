@@ -6,18 +6,6 @@ part of 'account.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ErrorResponse _$ErrorResponseFromJson(Map<String, dynamic> json) =>
-    ErrorResponse(
-      name: json['name'] as String?,
-      message: json['message'] as String?,
-    );
-
-Map<String, dynamic> _$ErrorResponseToJson(ErrorResponse instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'message': instance.message,
-    };
-
 InfoResponse _$InfoResponseFromJson(Map<String, dynamic> json) => InfoResponse(
       id: json['id'] as String?,
       name: json['name'] as String?,

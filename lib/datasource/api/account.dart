@@ -19,19 +19,6 @@ abstract class RestClient {
 }
 
 @JsonSerializable()
-class ErrorResponse {
-  String? name;
-  String? message;
-
-  ErrorResponse({this.name, this.message});
-
-  factory ErrorResponse.fromJson(Map<String, dynamic> json) =>
-      _$ErrorResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ErrorResponseToJson(this);
-}
-
-@JsonSerializable()
 class InfoResponse {
   String? id;
   String? name;
