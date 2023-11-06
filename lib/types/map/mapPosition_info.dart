@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:cookie_app/model/account/account.dart';
 
 part 'mapPosition_info.g.dart';
 

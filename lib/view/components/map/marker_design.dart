@@ -29,8 +29,9 @@ class BottomSheetInside extends StatelessWidget {
                   border:
                       Border.all(width: 2.0, color: Colors.deepOrangeAccent),
                   image: DecorationImage(
-                    // image: NetworkImage('https://picsum.photos/250?image=9'),
-                    image: NetworkImage(user.profile.image as String),                    fit: BoxFit.cover,
+                    image: NetworkImage('https://picsum.photos/250?image=9'),
+                    // image: NetworkImage(user.profile.image as String),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -96,7 +97,7 @@ class BottomSheetInside extends StatelessWidget {
                     const SizedBox(height: 8),
                     Flexible(
                       child: Text(
-                        '${user.profile.message??'none'}\n',
+                        '${user.profile.message ?? 'none'}\n',
                         style: const TextStyle(
                           fontSize: 14,
                           color: Colors.white,
@@ -165,11 +166,10 @@ Future<void> markerBottomSheet(
   );
 }
 
-
 Future<Marker> addMarker(
   BuildContext context,
   MarkerInfo user, {
-  int size = 100,
+  int size = 150,
   Color color = Colors.deepOrangeAccent,
   double width = 4,
 }) async {
@@ -179,8 +179,8 @@ Future<Marker> addMarker(
   return Marker(
     markerId: MarkerId(user.userid.toString()),
     icon: await MarkerIcon.downloadResizePictureCircle(
-      // 'https://picsum.photos/250?image=9',
-      friendInfo.profile.image.toString(),
+      'https://picsum.photos/250?image=9',
+      // friendInfo.profile.image.toString(),
       size: size,
       addBorder: true,
       borderColor: color,
