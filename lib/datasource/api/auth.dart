@@ -22,28 +22,10 @@ abstract class AuthRestClient {
     @Field() required String password,
   });
 
-  @GET("/auth/signin")
-  Future<HttpResponse<void>> getSignIn(
-    @Header("Authorization") String token,
-  );
-
   @POST("/auth/signup")
   Future<void> postSignUp(
     @Body() SignUpRequest signup,
   );
-}
-
-@JsonSerializable()
-class ErrorResponse {
-  String? name;
-  String? message;
-
-  ErrorResponse({this.name, this.message});
-
-  factory ErrorResponse.fromJson(Map<String, dynamic> json) =>
-      _$ErrorResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ErrorResponseToJson(this);
 }
 
 @JsonSerializable()
