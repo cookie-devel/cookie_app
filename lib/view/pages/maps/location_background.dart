@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:cookie_app/service/map.service.dart';
 import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:cookie_app/view/pages/maps/location_callback_handler.dart';
 
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:location_permissions/location_permissions.dart';
 
@@ -21,10 +23,10 @@ Future<void> initPlatformState() async {
   logger.t('Initializing...');
   await BackgroundLocator.initialize();
   logger.t('Initialization done');
-  context.read<MapViewModel>().setInitPlatformState(true);
+  context.read<MapViewModel>().isInitPlatformState = true;
   await BackgroundLocator.isServiceRunning().then((value) {
     logger.t('Service running: $value');
-    context.read<MapViewModel>().setLocationUpdateRunning(value);
+    context.read<MapViewModel>().isLocationUpdateRunning = value;
   });
 }
 
@@ -33,7 +35,7 @@ void onStart() async {
   if (await checkLocationPermission()) {
     await startLocator();
     await BackgroundLocator.isServiceRunning().then((value) {
-      context.read<MapViewModel>().setLocationUpdateRunning(value);
+      context.read<MapViewModel>().isLocationUpdateRunning = value;
     });
   }
 }
@@ -42,7 +44,7 @@ void onStop() async {
   logger.t("stop");
   await BackgroundLocator.unRegisterLocationUpdate();
   await BackgroundLocator.isServiceRunning().then((value) {
-    context.read<MapViewModel>().setLocationUpdateRunning(value);
+    context.read<MapViewModel>().isLocationUpdateRunning = value;
   });
 }
 
@@ -53,9 +55,11 @@ Future<void> update(dynamic data) async {
 
   if (context.mounted) {
     context
-        .read<MapViewModel>()
+        .read<MapService>()
         .setCurrentLocation(locationDto.latitude, locationDto.longitude);
-    context.read<MapViewModel>().position();
+    context
+        .read<MapService>()
+        .position(LatLng(locationDto.latitude, locationDto.longitude));
   }
 }
 

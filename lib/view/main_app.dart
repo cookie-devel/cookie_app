@@ -1,3 +1,4 @@
+import 'package:cookie_app/service/map.service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -27,8 +28,11 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider<ChatService>(
           create: (_) => ChatService(authService.accessToken!),
         ),
+        ChangeNotifierProvider<MapService>(
+          create: (_) => MapService(authService.accessToken!),
+        ),
         ChangeNotifierProvider<MapViewModel>(
-          create: (_) => MapViewModel(authService.accessToken!),
+          create: (_) => MapViewModel(),
         ),
       ],
       child: MaterialApp(

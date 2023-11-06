@@ -54,7 +54,7 @@ class _MapsWidgetState extends State<MapsWidget> {
   @override
   void dispose() {
     mapController.dispose();
-    context.read<MapViewModel>().setInitPlatformState(false);
+    context.read<MapViewModel>().isInitPlatformState = false;
     super.dispose();
   }
 
