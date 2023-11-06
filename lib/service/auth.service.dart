@@ -147,6 +147,11 @@ class AuthService extends ChangeNotifier {
     try {
       HttpResponse<void> res = await _api.postSignIn(userid: id, password: pw);
       logger.t('Signin res: ${res.response.headers}');
+    } on DioException catch (e) {
+      if (e.response != null)
+        throw Exception('로그인에 실패하였습니다: ${e.response!.statusMessage!}');
+      else
+        throw Exception('로그인에 실패하였습니다: 서버와 연결할 수 없습니다.');
     } catch (e) {
       logger.e('Error signing in: $e');
       rethrow;
@@ -162,6 +167,11 @@ class AuthService extends ChangeNotifier {
     // Handle Signup
     try {
       await _api.postSignUp(signUpForm);
+    } on DioException catch (e) {
+      if (e.response != null)
+        throw Exception('회원가입에 실패하였습니다: ${e.response!.statusMessage!}');
+      else
+        throw Exception('회원가입에 실패하였습니다: 서버와 연결할 수 없습니다.');
     } catch (e) {
       logger.e('Error signing up: $e');
       rethrow;
