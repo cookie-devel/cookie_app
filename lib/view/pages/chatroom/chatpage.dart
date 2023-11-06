@@ -13,8 +13,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
+import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/service/chat.service.dart';
-import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
 class ChatPage extends StatefulWidget {
   final types.Room room;
@@ -35,7 +35,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
-    _user = context.read<AccountViewModel>().chatUser;
+    _user = context.read<AccountService>().my.chatUser;
     _loadMessages();
   }
 

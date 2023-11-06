@@ -24,9 +24,9 @@ class ChatRoomViewModel extends ChangeNotifier {
         users: _model.members
             // .map((e) => PublicAccountViewModel(model: e).chatUser)
             .map(
-              (id) => id != context.read<AccountViewModel>().id
+              (id) => id != context.read<AccountService>().my.id
                   ? context.read<AccountService>().getFriendById(id).chatUser
-                  : context.read<AccountViewModel>().chatUser,
+                  : context.read<AccountService>().my.chatUser,
             )
             .toList(growable: false),
       );
@@ -39,16 +39,16 @@ class ChatRoomViewModel extends ChangeNotifier {
       : const AssetImage('assets/images/kz1.png') as ImageProvider;
   List<AccountViewModel> get members => _model.members
       .map(
-        (id) => id != context.read<AccountViewModel>().id
+        (id) => id != context.read<AccountService>().my.id
             ? context.read<AccountService>().getFriendById(id)
-            : context.read<AccountViewModel>(),
+            : context.read<AccountService>().my,
       )
       .toList(growable: false);
   List<types.User> get chatUsers => _model.members
       .map(
-        (id) => id != context.read<AccountViewModel>().id
+        (id) => id != context.read<AccountService>().my.id
             ? context.read<AccountService>().getFriendById(id).chatUser
-            : context.read<AccountViewModel>().chatUser,
+            : context.read<AccountService>().my.chatUser,
       )
       .toList(growable: false);
   List<MessageViewModel> get messages => _model.messages
