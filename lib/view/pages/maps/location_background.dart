@@ -1,16 +1,19 @@
 import 'dart:async';
+
 import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
-import 'package:flutter/material.dart';
-import 'package:background_locator_2/background_locator.dart';
-import 'package:background_locator_2/location_dto.dart';
-import 'package:background_locator_2/settings/android_settings.dart';
-import 'package:background_locator_2/settings/ios_settings.dart';
-import 'package:background_locator_2/settings/locator_settings.dart';
-import 'package:location_permissions/location_permissions.dart';
 import 'package:cookie_app/view/pages/maps/location_callback_handler.dart';
+
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:location_permissions/location_permissions.dart';
+
+import 'package:background_locator_2/location_dto.dart';
+import 'package:background_locator_2/background_locator.dart';
+import 'package:background_locator_2/settings/ios_settings.dart';
+import 'package:background_locator_2/settings/android_settings.dart';
+import 'package:background_locator_2/settings/locator_settings.dart';
 
 BuildContext context = NavigationService.navigatorKey.currentContext!;
 
@@ -18,11 +21,42 @@ Future<void> initPlatformState() async {
   logger.t('Initializing...');
   await BackgroundLocator.initialize();
   logger.t('Initialization done');
-
+  context.read<MapViewModel>().setInitPlatformState(true);
   await BackgroundLocator.isServiceRunning().then((value) {
     logger.t('Service running: $value');
     context.read<MapViewModel>().setLocationUpdateRunning(value);
   });
+}
+
+void onStart() async {
+  logger.t("start");
+  if (await checkLocationPermission()) {
+    await startLocator();
+    await BackgroundLocator.isServiceRunning().then((value) {
+      context.read<MapViewModel>().setLocationUpdateRunning(value);
+    });
+  }
+}
+
+void onStop() async {
+  logger.t("stop");
+  await BackgroundLocator.unRegisterLocationUpdate();
+  await BackgroundLocator.isServiceRunning().then((value) {
+    context.read<MapViewModel>().setLocationUpdateRunning(value);
+  });
+}
+
+Future<void> update(dynamic data) async {
+  logger.t("Location updated");
+  LocationDto? locationDto = (data != null) ? LocationDto.fromJson(data) : null;
+  await updateNotificationText(locationDto!);
+
+  if (context.mounted) {
+    context
+        .read<MapViewModel>()
+        .setCurrentLocation(locationDto.latitude, locationDto.longitude);
+    context.read<MapViewModel>().position();
+  }
 }
 
 Future<void> updateNotificationText(LocationDto data) async {

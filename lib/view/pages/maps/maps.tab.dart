@@ -1,10 +1,7 @@
-import 'dart:async';
 import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:background_locator_2/background_locator.dart';
-import 'package:background_locator_2/location_dto.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -27,12 +24,6 @@ class _MapsWidgetState extends State<MapsWidget> {
   late GoogleMapController mapController;
   ReceivePort port = ReceivePort();
 
-  int selectedSortOption = 1;
-
-  // bool isRunning = false;
-  LocationDto? lastLocation;
-  bool isInit = false;
-
   @override
   void initState() {
     super.initState();
@@ -50,61 +41,21 @@ class _MapsWidgetState extends State<MapsWidget> {
       LocationServiceRepository.isolateName,
     );
 
+    initPlatformState();
+
     port.listen(
       (dynamic data) async {
         logger.t('data: $data');
         await update(data);
       },
     );
-    initPlatformState();
-    isInit = true;
   }
 
   @override
   void dispose() {
     mapController.dispose();
+    context.read<MapViewModel>().setInitPlatformState(false);
     super.dispose();
-  }
-
-  Future<void> update(dynamic data) async {
-    logger.t("Location updated");
-    LocationDto? locationDto =
-        (data != null) ? LocationDto.fromJson(data) : null;
-    await updateNotificationText(locationDto!);
-
-    if (context.mounted) {
-      context
-          .read<MapViewModel>()
-          .setCurrentLocation(locationDto.latitude, locationDto.longitude);
-      context.read<MapViewModel>().position();
-    }
-
-    setState(() {
-      if (data != null) {
-        lastLocation = locationDto;
-      }
-    });
-  }
-
-  void _onStart() async {
-    logger.t("start");
-    if (await checkLocationPermission()) {
-      await startLocator();
-      await BackgroundLocator.isServiceRunning().then((value) {
-        context.read<MapViewModel>().setLocationUpdateRunning(value);
-        setState(() {
-          lastLocation = null;
-        });
-      });
-    }
-  }
-
-  void onStop() async {
-    logger.t("stop");
-    await BackgroundLocator.unRegisterLocationUpdate();
-    await BackgroundLocator.isServiceRunning().then((value) {
-      context.read<MapViewModel>().setLocationUpdateRunning(value);
-    });
   }
 
   @override
@@ -114,47 +65,37 @@ class _MapsWidgetState extends State<MapsWidget> {
         String mapStyle = themeProvider.mapStyle;
         final currentLocation = mapProvider.currentLocation;
         final marker = mapProvider.markers;
+        final isInit = mapProvider.isInitPlatformState;
 
         return isInit == true
             ? Stack(
                 children: [
                   GoogleMap(
-                    myLocationButtonEnabled: false, // 내위치 버튼
-                    compassEnabled: true, // 나침반 버튼
                     myLocationEnabled: true, // 본인 마커
+                    mapToolbarEnabled: false, // 길찾기 버튼
                     zoomControlsEnabled: false, // 축소확대 버튼
+                    myLocationButtonEnabled: false, // 내위치 버튼
                     minMaxZoomPreference:
                         const MinMaxZoomPreference(14, 20), // 줌 제한
-                    mapToolbarEnabled: false, // 길찾기 버튼
+
                     onMapCreated: (GoogleMapController controller) {
                       mapController = controller;
                       mapController.setMapStyle(mapStyle);
                     },
                     mapType: MapType.normal,
-                    // markers: Set.from(markers),
                     markers: marker,
-                    initialCameraPosition: lastLocation != null
-                        ? CameraPosition(
-                            target: LatLng(
-                              lastLocation!.latitude,
-                              lastLocation!.longitude,
-                            ),
-                            zoom: 18.0,
-                          )
-                        : CameraPosition(
-                            target: currentLocation,
-                            zoom: 18.0,
-                          ),
+                    initialCameraPosition: CameraPosition(
+                      target: currentLocation,
+                      zoom: 18.0,
+                    ),
                   ),
                   Positioned(
                     bottom: 16,
                     right: 16,
-                    // child: _floatingButtons(),
                     child: SpeedDialPage(
                       onTapCurrentLocation: _moveToCurrentLocation,
-                      onTapStart: _onStart,
+                      onTapStart: onStart,
                       onTapStop: onStop,
-                      // isRunning: context.read<MapViewModel>().isRunning,
                     ),
                   ),
                 ],
