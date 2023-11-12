@@ -1,6 +1,7 @@
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -64,6 +65,7 @@ class _MapsWidgetState extends State<MapsWidget> {
         final currentLocation = mapProvider.currentLocation;
         final marker = mapProvider.markers;
         final isInit = mapProvider.isInitPlatformState;
+        final isRunning = mapProvider.isLocationUpdateRunning;
 
         return isInit
             ? Stack(
@@ -86,16 +88,38 @@ class _MapsWidgetState extends State<MapsWidget> {
 
                     initialCameraPosition: CameraPosition(
                       target: currentLocation,
-                      zoom: 18.0,
+                      zoom: 17.0,
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 80,
+                    right: 16,
+                    child: SpeedDialPage(
+                      onTapStart: onStart,
+                      onTapStop: onStop,
                     ),
                   ),
                   Positioned(
                     bottom: 16,
                     right: 16,
-                    child: SpeedDialPage(
-                      onTapCurrentLocation: _moveToCurrentLocation,
-                      onTapStart: onStart,
-                      onTapStop: onStop,
+                    child: InkWell(
+                      onTap: () => _moveToCurrentLocation(),
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.blue,
+                        ),
+                        child: Center(
+                          child: Icon(
+                            isRunning
+                                ? Icons.location_searching_sharp
+                                : Icons.location_disabled_sharp,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -112,8 +136,20 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   // speedDial => 현위치
   void _moveToCurrentLocation() {
-    LatLng position = context.read<MapViewModel>().currentLocation;
-    mapController.animateCamera(CameraUpdate.newLatLng(position));
+    final isRunning = context.read<MapViewModel>().isLocationUpdateRunning;
+    if (isRunning) {
+      final currentLocation = context.read<MapViewModel>().currentLocation;
+      mapController.animateCamera(CameraUpdate.newLatLng(currentLocation));
+    } else {
+      showSnackBar(
+        context,
+        '먼저 위치공유를 시작해주세요.  (메뉴 > 위치 공유)',
+        icon: const Icon(
+          Icons.error,
+          color: Colors.red,
+        ),
+      );
+    }
   }
 }
 
