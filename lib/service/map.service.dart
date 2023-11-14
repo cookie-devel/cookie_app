@@ -72,31 +72,44 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
   }
 
   Future<void> _updateMarkers(MapInfoResponse info) async {
+    if (!context.read<MapViewModel>().isLocationUpdateRunning){
+      context.read<MapViewModel>().mapLog = [];
+      context.read<MapViewModel>().markers = {};
+      notifyListeners();
+      return;
+    }
+
     bool userExists = context
         .read<MapViewModel>()
         .mapLog
         .any((element) => element.userid == info.userid);
-
-    if (userExists) {
-      context.read<MapViewModel>().mapLog =
-          context.read<MapViewModel>().mapLog.map((element) {
-        if (element.userid == info.userid) {
-          return MarkerInfo(
-            userid: info.userid,
-            latitude: info.latitude,
-            longitude: info.longitude,
+    
+    if (info.latitude == 0 && info.longitude == 0) {
+      context.read<MapViewModel>().mapLog.removeWhere(
+            (element) => element.userid == info.userid,
           );
-        }
-        return element;
-      }).toList();
     } else {
-      context.read<MapViewModel>().mapLog.add(
-            MarkerInfo(
+      if (userExists) {
+        context.read<MapViewModel>().mapLog =
+            context.read<MapViewModel>().mapLog.map((element) {
+          if (element.userid == info.userid) {
+            return MarkerInfo(
               userid: info.userid,
               latitude: info.latitude,
               longitude: info.longitude,
-            ),
-          );
+            );
+          }
+          return element;
+        }).toList();
+      } else {
+        context.read<MapViewModel>().mapLog.add(
+              MarkerInfo(
+                userid: info.userid,
+                latitude: info.latitude,
+                longitude: info.longitude,
+              ),
+            );
+      }
     }
 
     final List<Future<Marker>> markerFutures = context
