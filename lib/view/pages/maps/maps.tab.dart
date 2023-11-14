@@ -1,7 +1,8 @@
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:cookie_app/view/components/snackbar.dart';
+import 'package:cookie_app/service/map.service.dart';
+import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,7 @@ class MapsWidget extends StatefulWidget {
 }
 
 class _MapsWidgetState extends State<MapsWidget> {
-  late GoogleMapController mapController;
+  BuildContext context = NavigationService.navigatorKey.currentContext!;
   ReceivePort port = ReceivePort();
 
   @override
@@ -52,7 +53,7 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   @override
   void dispose() {
-    mapController.dispose();
+    context.read<MapViewModel>().mapController.dispose();
     context.read<MapViewModel>().isInitPlatformState = false;
     super.dispose();
   }
@@ -82,8 +83,11 @@ class _MapsWidgetState extends State<MapsWidget> {
                         const MinMaxZoomPreference(14, 20), // 줌 제한
 
                     onMapCreated: (GoogleMapController controller) {
-                      mapController = controller;
-                      mapController.setMapStyle(mapStyle);
+                      context.read<MapViewModel>().mapController = controller;
+                      context
+                          .read<MapViewModel>()
+                          .mapController
+                          .setMapStyle(mapStyle);
                     },
 
                     initialCameraPosition: CameraPosition(
@@ -102,11 +106,9 @@ class _MapsWidgetState extends State<MapsWidget> {
                   Positioned(
                     bottom: 16,
                     right: 16,
-                    // child: CurrentLocationDial(
-                    //   onTapLocation: _moveToCurrentLocation,
-                    // ),
                     child: InkWell(
-                      onTap: () => _moveToCurrentLocation(),
+                      onTap: () =>
+                          context.read<MapService>().moveToCurrentLocation(),
                       child: Container(
                         width: 50,
                         height: 50,
@@ -130,29 +132,6 @@ class _MapsWidgetState extends State<MapsWidget> {
             : const LoadingScreen();
       },
     );
-  }
-
-  // // 해당 location으로 camera 이동
-  // void _moveToFriendLocation(LatLng location) {
-  //   mapController.animateCamera(CameraUpdate.newLatLngZoom(location, 16.0));
-  // }
-
-  // current Location
-  void _moveToCurrentLocation() {
-    final isRunning = context.read<MapViewModel>().isLocationUpdateRunning;
-    if (isRunning) {
-      final currentLocation = context.read<MapViewModel>().currentLocation;
-      mapController.animateCamera(CameraUpdate.newLatLng(currentLocation));
-    } else {
-      showSnackBar(
-        context,
-        '먼저 위치공유를 시작해주세요.  (메뉴 > 위치 공유)',
-        icon: const Icon(
-          Icons.error,
-          color: Colors.red,
-        ),
-      );
-    }
   }
 }
 
