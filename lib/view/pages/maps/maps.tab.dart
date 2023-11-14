@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:cookie_app/service/map.service.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
+import 'package:cookie_app/view/pages/maps/myGoogleMap.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -62,39 +63,13 @@ class _MapsWidgetState extends State<MapsWidget> {
   Widget build(BuildContext context) {
     return Consumer2<ThemeProvider, MapViewModel>(
       builder: (context, themeProvider, mapProvider, _) {
-        String mapStyle = themeProvider.mapStyle;
-        final currentLocation = mapProvider.currentLocation;
-        final marker = mapProvider.markers;
         final isInit = mapProvider.isInitPlatformState;
         final isRunning = mapProvider.isLocationUpdateRunning;
 
         return isInit
             ? Stack(
                 children: [
-                  GoogleMap(
-                    myLocationEnabled: true, // 본인 마커
-                    mapToolbarEnabled: false, // 길찾기 버튼
-                    zoomControlsEnabled: false, // 축소확대 버튼
-                    myLocationButtonEnabled: false, // 내위치 버튼
-                    markers: marker,
-                    mapType: MapType.normal,
-
-                    minMaxZoomPreference:
-                        const MinMaxZoomPreference(14, 20), // 줌 제한
-
-                    onMapCreated: (GoogleMapController controller) {
-                      context.read<MapViewModel>().mapController = controller;
-                      context
-                          .read<MapViewModel>()
-                          .mapController
-                          .setMapStyle(mapStyle);
-                    },
-
-                    initialCameraPosition: CameraPosition(
-                      target: currentLocation,
-                      zoom: 17.0,
-                    ),
-                  ),
+                  MyGoogleMap(),
                   Positioned(
                     bottom: 80,
                     right: 16,
