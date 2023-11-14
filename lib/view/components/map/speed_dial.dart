@@ -11,9 +11,9 @@ class SpeedDialPage extends StatelessWidget {
     required this.onTapStop,
   });
 
-  BuildContext context = NavigationService.navigatorKey.currentContext!;
   final VoidCallback onTapStart;
   final VoidCallback onTapStop;
+  BuildContext context = NavigationService.navigatorKey.currentContext!;
 
   Widget _floatingButtons() {
     SpeedDialChild speedDialChild(
@@ -71,124 +71,3 @@ class SpeedDialPage extends StatelessWidget {
     return _floatingButtons();
   }
 }
-
-// // speedDial => 친구찾기
-// Future<void> _friendLocationBottomSheet({required List mapLog}) async {
-//   BuildContext context = NavigationService.navigatorKey.currentContext!;
-//   return showModalBottomSheet<void>(
-//     context: context,
-//     useSafeArea: true,
-//     builder: (BuildContext context) {
-//       return SizedBox(
-//         height: MediaQuery.of(context).size.height * 0.45,
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             Container(
-//               alignment: Alignment.centerLeft,
-//               padding: const EdgeInsets.fromLTRB(20, 20, 10, 10),
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: [
-//                   Row(
-//                     children: [
-//                       Icon(
-//                         Icons.supervised_user_circle_outlined,
-//                         color: Colors.green.shade400,
-//                       ),
-//                       const SizedBox(width: 10),
-//                       const Text(
-//                         '현재 접속중인 친구',
-//                         style: TextStyle(
-//                           fontSize: 22,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                   // PopupMenuButton(
-//                   //   offset: const Offset(0, 40),
-//                   //   icon: const Icon(Icons.more_vert),
-//                   //   itemBuilder: (BuildContext context) {
-//                   //     return const [
-//                   //       PopupMenuItem(
-//                   //         value: 1,
-//                   //         child: Text('이름순 (ㄱ-ㅎ)'),
-//                   //       ),
-//                   //       PopupMenuItem(
-//                   //         value: 2,
-//                   //         child: Text('이름순 (ㅎ-ㄱ)'),
-//                   //       ),
-//                   //       PopupMenuItem(
-//                   //         value: 3,
-//                   //         child: Text('친밀도순'),
-//                   //       ),
-//                   //     ];
-//                   //   },
-//                     // onSelected: (value) {
-//                     //   setModalState(() {
-//                     //     selectedSortOption = value;
-//                     //     if (selectedSortOption == 1) {
-//                     //       mapLog.sort(
-//                     //         (a, b) =>
-//                     //             a["username"].compareTo(b["username"]),
-//                     //       );
-//                     //     } else if (selectedSortOption == 2) {
-//                     //       mapLog.sort(
-//                     //         (b, a) =>
-//                     //             a["username"].compareTo(b["username"]),
-//                     //       );
-//                     //     }
-//                     //   });
-//                     // },
-//                   // ),
-//                 ],
-//               ),
-//             ),
-//             const Divider(),
-//             // Expanded(
-//             //   child: ListView.builder(
-//             //     itemCount: mapLog.length,
-//             //     padding: const EdgeInsets.fromLTRB(5, 4, 10, 4),
-//             //     itemBuilder: (BuildContext context, int index) {
-//             //       final MapInfoResponse log = mapLog[index];
-//             //       return ListTile(
-//             //         leading: const CircleAvatar(
-//             //             // backgroundColor: Colors.transparent,
-//             //             // backgroundImage:
-//             //             //     AssetImage(log.userid),
-//             //             ),
-//             //         title: Row(
-//             //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             //           children: [
-//             //             // Text(log["username"]),
-//             //             Text(
-//             //               context.read<MapViewModel>().calDistance(
-//             //                     LatLng(
-//             //                       log.latitude,
-//             //                       log.longitude,
-//             //                     ),
-//             //                   ),
-//             //             ),
-//             //           ],
-//             //         ),
-//             //         onTap: () {
-//             //           _moveToFriendLocation(
-//             //             LatLng(
-//             //               log.latitude,
-//             //               log.longitude,
-//             //             ),
-//             //           );
-//             //           Navigator.pop(context);
-//             //           // markerBottomSheet(context, User.fromMap(log));
-//             //         },
-//             //       );
-//             //     },
-//             //   ),
-//             // ),
-//           ],
-//         ),
-//       );
-//     },
-//   );
-// }
