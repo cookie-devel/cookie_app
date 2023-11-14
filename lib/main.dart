@@ -11,9 +11,9 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:cookie_app/firebase_options.dart';
 import 'package:cookie_app/model/account/account.dart';
 import 'package:cookie_app/service/auth.service.dart';
+import 'package:cookie_app/theme/theme.provider.dart';
 import 'package:cookie_app/view/main_app.dart';
 import 'package:cookie_app/view/sign_app.dart';
-import 'package:cookie_app/viewmodel/theme.provider.dart';
 
 void main() async {
   // Preserve Splash Screen

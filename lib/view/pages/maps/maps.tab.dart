@@ -2,16 +2,17 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/repository/location_service.repo.dart';
+import 'package:cookie_app/theme/theme.provider.dart';
 import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/view/components/loading.dart';
 import 'package:cookie_app/view/components/map/speedDial.dart';
 import 'package:cookie_app/view/pages/maps/location_background.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
-import 'package:cookie_app/viewmodel/theme.provider.dart';
 
 class MapsWidget extends StatefulWidget {
   const MapsWidget({super.key});
