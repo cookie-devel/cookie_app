@@ -5,10 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/service/auth.service.dart';
 import 'package:cookie_app/service/chat.service.dart';
+import 'package:cookie_app/theme/theme.provider.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/main_widget.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
-import 'package:cookie_app/viewmodel/theme.provider.dart';
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});

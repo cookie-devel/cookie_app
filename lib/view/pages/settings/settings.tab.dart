@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 
 import 'package:cookie_app/service/auth.service.dart';
 import 'package:cookie_app/service/chat.service.dart';
+import 'package:cookie_app/theme/theme.provider.dart';
 import 'package:cookie_app/view/components/dialog.dart';
 import 'package:cookie_app/view/pages/settings/detail/my_profile.page.dart';
-import 'package:cookie_app/viewmodel/theme.provider.dart';
 
 class SettingsWidget extends StatelessWidget {
   SettingsWidget({super.key});
