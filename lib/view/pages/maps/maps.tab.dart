@@ -102,6 +102,9 @@ class _MapsWidgetState extends State<MapsWidget> {
                   Positioned(
                     bottom: 16,
                     right: 16,
+                    // child: CurrentLocationDial(
+                    //   onTapLocation: _moveToCurrentLocation,
+                    // ),
                     child: InkWell(
                       onTap: () => _moveToCurrentLocation(),
                       child: Container(
@@ -129,12 +132,12 @@ class _MapsWidgetState extends State<MapsWidget> {
     );
   }
 
-  // 해당 location으로 camera 이동
-  void _moveToFriendLocation(LatLng location) {
-    mapController.animateCamera(CameraUpdate.newLatLngZoom(location, 16.0));
-  }
+  // // 해당 location으로 camera 이동
+  // void _moveToFriendLocation(LatLng location) {
+  //   mapController.animateCamera(CameraUpdate.newLatLngZoom(location, 16.0));
+  // }
 
-  // speedDial => 현위치
+  // current Location
   void _moveToCurrentLocation() {
     final isRunning = context.read<MapViewModel>().isLocationUpdateRunning;
     if (isRunning) {

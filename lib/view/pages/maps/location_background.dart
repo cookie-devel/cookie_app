@@ -56,7 +56,9 @@ void onStop() async {
       icon: const Icon(Icons.cookie_outlined, color: Colors.red),
     );
     context.read<MapViewModel>().isLocationUpdateRunning = value;
+    logger.t('Location Update running: $value');
   });
+  context.read<MapService>().position(const LatLng(0, 0));
 }
 
 Future<void> update(dynamic data) async {

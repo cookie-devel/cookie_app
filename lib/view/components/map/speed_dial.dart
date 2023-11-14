@@ -1,16 +1,14 @@
 import 'package:cookie_app/utils/navigation_service.dart';
+import 'package:cookie_app/view/components/map/friend_location_sheet.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 
 class SpeedDialPage extends StatelessWidget {
-  // final bool isRunning;
-
   SpeedDialPage({
     required this.onTapStart,
     required this.onTapStop,
-    // required this.isRunning,
   });
 
   BuildContext context = NavigationService.navigatorKey.currentContext!;
@@ -49,11 +47,9 @@ class SpeedDialPage extends StatelessWidget {
               Icons.location_on_outlined,
               onTapStart,
             ),
-      speedDialChild(
-        "친구 찾기",
-        Icons.person_search_rounded,
-        () {},
-      ),
+      speedDialChild("친구 찾기", Icons.person_search_rounded, () {
+        friendLocationBottomSheet();
+      }),
     ];
 
     return SpeedDial(
@@ -72,7 +68,6 @@ class SpeedDialPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print("isRunning: $isRunning");
     return _floatingButtons();
   }
 }
