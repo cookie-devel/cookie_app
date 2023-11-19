@@ -1,5 +1,3 @@
-import 'package:cookie_app/service/map.service.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:flutter/material.dart';
 
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
@@ -7,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/service/chat.service.dart';
+import 'package:cookie_app/service/map.service.dart';
 import 'package:cookie_app/view/components/badge.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/pages/chatroom/chatrooms.tab.dart';
@@ -14,6 +13,7 @@ import 'package:cookie_app/view/pages/friends/friends.tab.dart';
 import 'package:cookie_app/view/pages/friends/friends_sheet.dart';
 import 'package:cookie_app/view/pages/maps/maps.tab.dart';
 import 'package:cookie_app/view/pages/settings/settings.tab.dart';
+import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 
 class Page {
   final String title;
@@ -79,7 +79,7 @@ class _MainWidgetState extends State<MainWidget> {
         title: 'C🍪🍪KIE',
         icon: Icons.cookie,
         iconOutline: Icons.cookie_outlined,
-        page: MapsWidget(),
+        page: const MapsWidget(),
         badge: context.watch<MapViewModel>().mapLog.length.toString(),
       ),
       Page(
