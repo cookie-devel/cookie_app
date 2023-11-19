@@ -1,6 +1,5 @@
+import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import 'package:cookie_app/model/chat/message.dart';
 
 part 'room.g.dart';
 
@@ -11,7 +10,7 @@ class ChatRoomModel {
   final String name;
   final String? image;
   final List<String> members;
-  final List<MessageModel> messages;
+  final List<Message> messages;
 
   ChatRoomModel({
     required this.id,
