@@ -1,4 +1,5 @@
 import 'package:cookie_app/service/map.service.dart';
+import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:flutter/material.dart';
 
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
@@ -74,11 +75,12 @@ class _MainWidgetState extends State<MainWidget> {
         page: ChatTabWidget(),
         actions: [ChatroomAction()],
       ),
-      const Page(
+      Page(
         title: 'C🍪🍪KIE',
         icon: Icons.cookie,
         iconOutline: Icons.cookie_outlined,
         page: MapsWidget(),
+        badge: context.watch<MapViewModel>().mapLog.length.toString(),
       ),
       Page(
         title: '설정',
@@ -108,7 +110,7 @@ class _MainWidgetState extends State<MainWidget> {
             ),
             icon: BadgedIcon(
               icon: e.iconOutline,
-              label: '',
+              label: e.badge ?? '',
             ),
             label: e.title,
           );
