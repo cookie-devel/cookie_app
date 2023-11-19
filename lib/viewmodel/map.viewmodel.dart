@@ -3,6 +3,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cookie_app/types/map/mapPosition_info.dart';
 
 class MapViewModel with ChangeNotifier {
+
+  // mapController
+  late GoogleMapController mapController;
+  
   // mapLog
   List<MarkerInfo> _mapLog = [];
   List<MarkerInfo> get mapLog => _mapLog;

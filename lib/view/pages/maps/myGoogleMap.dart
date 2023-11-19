@@ -1,24 +1,18 @@
-import 'package:flutter/material.dart';
+import 'package:cookie_app/theme/theme.provider.dart';
+import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-
-import 'package:cookie_app/utils/navigation_service.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
-import 'package:cookie_app/viewmodel/theme.provider.dart';
+import 'package:flutter/material.dart';
 
 class MyGoogleMap extends StatefulWidget {
-  @ove
   const MyGoogleMap({super.key});
-rride
-  _MyGoogleMapState @override
-  createState() => _MyGoogleMapState();
+
+  @override
+  State<MyGoogleMap> createState() => _MyGoogleMapState();
 }
 
 class _MyGoogleMapState extends State<MyGoogleMap> {
-  BuildContext @override
-  context = NavigationService.navigatorKey.currentContext!;
-
   @override
   void initState() {
     super.initState();
