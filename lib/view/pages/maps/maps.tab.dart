@@ -69,7 +69,7 @@ class _MapsWidgetState extends State<MapsWidget> {
                 children: [
                   const MyGoogleMap(),
                   Positioned(
-                    boconst ttom: 80,
+                    bottom: 80,
                     right: 16,
                     child: SpeedDialPage(
                       onTapStart: onStart,

@@ -1,22 +1,22 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+
+import 'package:background_locator_2/background_locator.dart';
+import 'package:background_locator_2/location_dto.dart';
+import 'package:background_locator_2/settings/android_settings.dart';
+import 'package:background_locator_2/settings/ios_settings.dart';
+import 'package:background_locator_2/settings/locator_settings.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location_permissions/location_permissions.dart';
+import 'package:provider/provider.dart';
+
 import 'package:cookie_app/service/map.service.dart';
 import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:cookie_app/view/pages/maps/location_callback_handler.dart';
-
-import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:location_permissions/location_permissions.dart';
-
-import 'package:background_locator_2/location_dto.dart';
-import 'package:background_locator_2/background_locator.dart';
-import 'package:background_locator_2/settings/ios_settings.dart';
-import 'package:background_locator_2/settings/android_settings.dart';
-import 'package:background_locator_2/settings/locator_settings.dart';
+import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 
 BuildContext context = NavigationService.navigatorKey.currentContext!;
 

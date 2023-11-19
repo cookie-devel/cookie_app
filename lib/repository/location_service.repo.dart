@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:background_locator_2/location_dto.dart';
+
 import 'package:cookie_app/utils/logger.dart';
 
 class LocationServiceRepository {
