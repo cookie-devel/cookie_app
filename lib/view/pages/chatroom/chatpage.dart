@@ -35,7 +35,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
-    _user = context.read<AccountService>().my.chatUser;
+    _user = context.read<AccountService>().my.toFlyer;
     _loadMessages();
   }
 
