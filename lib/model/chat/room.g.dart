@@ -17,7 +17,7 @@ ChatRoomModel _$ChatRoomModelFromJson(Map<String, dynamic> json) =>
               .toList() ??
           const [],
       messages: (json['messages'] as List<dynamic>?)
-              ?.map((e) => MessageModel.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => Message.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
     );

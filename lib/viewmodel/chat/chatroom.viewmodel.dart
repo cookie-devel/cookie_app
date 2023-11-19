@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/model/chat/room.dart';
@@ -10,24 +10,19 @@ import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/chat/message.viewmodel.dart';
 
 class ChatRoomViewModel extends ChangeNotifier {
+  BuildContext context = NavigationService.navigatorKey.currentContext!;
+
   final ChatRoomModel _model;
 
   ChatRoomViewModel({required ChatRoomModel model}) : _model = model;
 
-  BuildContext context = NavigationService.navigatorKey.currentContext!;
-
-  types.Room get chatRoom => types.Room(
-        type: types.RoomType.group,
+  Room get toFlyer => Room(
+        type: RoomType.group,
         id: _model.id,
         imageUrl: _model.image,
         name: _model.name,
         users: _model.members
-            // .map((e) => PublicAccountViewModel(model: e).chatUser)
-            .map(
-              (id) => id != context.read<AccountService>().my.id
-                  ? context.read<AccountService>().getFriendById(id).chatUser
-                  : context.read<AccountService>().my.chatUser,
-            )
+            .map((id) => context.read<AccountService>().getUserById(id).toFlyer)
             .toList(growable: false),
       );
 
@@ -38,20 +33,29 @@ class ChatRoomViewModel extends ChangeNotifier {
       ? NetworkImage(_model.image!)
       : const AssetImage('assets/images/kz1.png') as ImageProvider;
   List<AccountViewModel> get members => _model.members
-      .map(
-        (id) => id != context.read<AccountService>().my.id
-            ? context.read<AccountService>().getFriendById(id)
-            : context.read<AccountService>().my,
-      )
+      .map(context.read<AccountService>().getUserById)
       .toList(growable: false);
-  List<types.User> get chatUsers => _model.members
-      .map(
-        (id) => id != context.read<AccountService>().my.id
-            ? context.read<AccountService>().getFriendById(id).chatUser
-            : context.read<AccountService>().my.chatUser,
-      )
+  List<User> get chatUsers => _model.members
+      .map((id) => context.read<AccountService>().getUserById(id).toFlyer)
       .toList(growable: false);
   List<MessageViewModel> get messages => _model.messages
       .map((e) => MessageViewModel(model: e))
       .toList(growable: false);
+
+  String get lastMessage {
+    Message lastMessage = _model.messages.last;
+    return lastMessage is TextMessage
+        ? lastMessage.text
+        : lastMessage.type.toString();
+  }
+
+  DateTime get lastActive {
+    Message lastMessage = _model.messages.last;
+    return DateTime.fromMillisecondsSinceEpoch(lastMessage.createdAt ?? 0);
+  }
+
+  void addMessage(Message message) {
+    _model.messages.add(message);
+    notifyListeners();
+  }
 }

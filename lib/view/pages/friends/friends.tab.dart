@@ -57,8 +57,7 @@ class FriendsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<AccountViewModel> friends =
-        friendsListViewModel.friends.values.toList();
+    List<AccountViewModel> friends = friendsListViewModel.users.values.toList();
 
     return friends.isNotEmpty
         ? GridView.builder(
