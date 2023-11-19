@@ -1,3 +1,4 @@
+import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -72,31 +73,44 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
   }
 
   Future<void> _updateMarkers(MapInfoResponse info) async {
+    if (!context.read<MapViewModel>().isLocationUpdateRunning) {
+      context.read<MapViewModel>().mapLog = [];
+      context.read<MapViewModel>().markers = {};
+      notifyListeners();
+      return;
+    }
+
     bool userExists = context
         .read<MapViewModel>()
         .mapLog
         .any((element) => element.userid == info.userid);
 
-    if (userExists) {
-      context.read<MapViewModel>().mapLog =
-          context.read<MapViewModel>().mapLog.map((element) {
-        if (element.userid == info.userid) {
-          return MarkerInfo(
-            userid: info.userid,
-            latitude: info.latitude,
-            longitude: info.longitude,
+    if (info.latitude == 0 && info.longitude == 0) {
+      context.read<MapViewModel>().mapLog.removeWhere(
+            (element) => element.userid == info.userid,
           );
-        }
-        return element;
-      }).toList();
     } else {
-      context.read<MapViewModel>().mapLog.add(
-            MarkerInfo(
+      if (userExists) {
+        context.read<MapViewModel>().mapLog =
+            context.read<MapViewModel>().mapLog.map((element) {
+          if (element.userid == info.userid) {
+            return MarkerInfo(
               userid: info.userid,
               latitude: info.latitude,
               longitude: info.longitude,
-            ),
-          );
+            );
+          }
+          return element;
+        }).toList();
+      } else {
+        context.read<MapViewModel>().mapLog.add(
+              MarkerInfo(
+                userid: info.userid,
+                latitude: info.latitude,
+                longitude: info.longitude,
+              ),
+            );
+      }
     }
 
     final List<Future<Marker>> markerFutures = context
@@ -128,5 +142,34 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
     final String unit = dist < 1000 ? 'm' : 'km';
 
     return '$distanceString $unit';
+  }
+
+  // 해당 location으로 camera 이동
+  void moveCamera(LatLng location) {
+    context
+        .read<MapViewModel>()
+        .mapController
+        .animateCamera(CameraUpdate.newLatLngZoom(location, 16.0));
+  }
+
+  // current Location
+  void moveToCurrentLocation() {
+    final isRunning = context.read<MapViewModel>().isLocationUpdateRunning;
+    if (isRunning) {
+      final currentLocation = context.read<MapViewModel>().currentLocation;
+      context
+          .read<MapViewModel>()
+          .mapController
+          .animateCamera(CameraUpdate.newLatLng(currentLocation));
+    } else {
+      showSnackBar(
+        context,
+        '먼저 위치공유를 시작해주세요.  (메뉴 > 위치 공유)',
+        icon: const Icon(
+          Icons.error,
+          color: Colors.red,
+        ),
+      );
+    }
   }
 }

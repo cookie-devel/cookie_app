@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 Future<Uint8List> getRoundedImage(
   ImageProvider image, {
@@ -85,18 +87,16 @@ Future<Uint8List> _createRoundedImage(
   }
 }
 
-// 일반적인 marker 이미지 불러오기
-// Future<Uint8List> getImages(String path, int width) async {
-//   ByteData data = await rootBundle.load(path);
-//   ui.Codec codec = await ui.instantiateImageCodec(
-//     data.buffer.asUint8List(),
-//     targetHeight: width,
-//   );
-//   ui.FrameInfo fi = await codec.getNextFrame();
-//   Uint8List markIcons =
-//       (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-//           .buffer
-//           .asUint8List();
+Future<String> getNetworkImage(String url) async {
+  bool isValidUrl = Uri.tryParse(url)?.isAbsolute ?? false;
+  if (isValidUrl) {
+    return url;
+  } else {
+    return 'https://img.freepik.com/free-photo/abstract-surface-and-textures-of-white-concrete-stone-wall_74190-8189.jpg?w=740&t=st=1699954803~exp=1699955403~hmac=b06fdddf22160522cb93f9a159504e331c773055cf433fa5d5156348b4c49782';
+  }
+}
 
-//   return markIcons;
-// }
+Future<File> getCachedImage(String url) async {
+  File imageFile = await DefaultCacheManager().getSingleFile(url);
+  return imageFile;
+}
