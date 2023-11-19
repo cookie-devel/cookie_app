@@ -18,12 +18,6 @@ class FriendLocationListTile extends StatelessWidget {
     final AccountViewModel friend =
         context.read<AccountService>().getFriendById(log.userid);
     return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.transparent,
-        backgroundImage: NetworkImage(
-          friend.profile.image.toString(),
-        ),
-      ),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -37,6 +31,46 @@ class FriendLocationListTile extends StatelessWidget {
                 ),
           ),
         ],
+      ),
+      leading: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: Colors.blueAccent,
+            width: 1.3,
+          ),
+        ),
+        child: CircleAvatar(
+          backgroundColor: Colors.transparent,
+          backgroundImage: NetworkImage(
+            friend.profile.image.toString(),
+          ),
+        ),
+      ),
+      trailing: IconButton(
+        icon: Icon(
+          Icons.cookie_sharp,
+          color: Colors.orangeAccent,
+        ),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Friend Information'),
+                content: Text('Name: ${friend.name}\n'),
+                actions: [
+                  TextButton(
+                    child: Text('Close'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        },
       ),
       onTap: () => {
         context.read<MapService>().moveCamera(
