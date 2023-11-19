@@ -1,22 +1,24 @@
+import 'package:flutter/material.dart';
+
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+
 import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/service/map.service.dart';
 import 'package:cookie_app/types/map/mapPosition_info.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
-import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
 
 class FriendLocationListTile extends StatelessWidget {
   final MarkerInfo log;
 
-  const FriendLocationListTile({Key? key, required this.log}) : super(key: key);
+  const FriendLocationListTile({super.key, required this.log});
 
   @override
   Widget build(BuildContext context) {
     final AccountViewModel friend =
-        context.read<AccountService>().getFriendById(log.userid);
+        context.read<AccountService>().getUserById(log.userid);
     return ListTile(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -57,11 +59,11 @@ class FriendLocationListTile extends StatelessWidget {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text('Friend Information'),
+                title: const Text('Friend Information'),
                 content: Text('Name: ${friend.name}\n'),
                 actions: [
                   TextButton(
-                    child: Text('Close'),
+                    child: const Text('Close'),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },

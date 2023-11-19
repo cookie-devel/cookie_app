@@ -1,16 +1,18 @@
-import 'package:cookie_app/view/components/snackbar.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:latlong2/latlong.dart' as l2;
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'package:cookie_app/types/map/mapPosition_info.dart';
 import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/components/map/marker_design.dart';
-import 'package:cookie_app/types/map/mapPosition_info.dart';
+import 'package:cookie_app/view/components/snackbar.dart';
+import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 
 class MapEvents {
   static const position = 'position';
@@ -120,7 +122,8 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
         .toList();
     final List<Marker> tmpMarker = await Future.wait(markerFutures);
 
-    context.read<MapViewModel>().markers = tmpMarker.toSet();
+    if (context.mounted)
+      context.read<MapViewModel>().markers = tmpMarker.toSet();
     logger.t("markers updated");
 
     if (tmpMarker.isNotEmpty) {

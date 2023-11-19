@@ -1,19 +1,22 @@
-import 'package:cookie_app/utils/navigation_service.dart';
-import 'package:cookie_app/view/components/map/friend_location_bottom_sheet.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 
+import 'package:cookie_app/utils/navigation_service.dart';
+import 'package:cookie_app/view/components/map/friend_location_bottom_sheet.dart';
+import 'package:cookie_app/viewmodel/map.viewmodel.dart';
+
 class SpeedDialPage extends StatelessWidget {
   SpeedDialPage({
+    super.key,
     required this.onTapStart,
     required this.onTapStop,
   });
 
   final VoidCallback onTapStart;
   final VoidCallback onTapStop;
-  BuildContext context = NavigationService.navigatorKey.currentContext!;
+  final BuildContext context = NavigationService.navigatorKey.currentContext!;
 
   Widget _floatingButtons() {
     SpeedDialChild speedDialChild(
