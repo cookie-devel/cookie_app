@@ -1,10 +1,12 @@
-import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:cookie_app/types/map/mapPosition_info.dart';
-import 'package:cookie_app/service/account.service.dart';
+import 'package:flutter/material.dart';
+
+import 'package:custom_marker/marker_icon.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
-import 'package:custom_marker/marker_icon.dart';
+
+import 'package:cookie_app/service/account.service.dart';
+import 'package:cookie_app/types/map/mapPosition_info.dart';
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
 class BottomSheetInside extends StatelessWidget {
   final AccountViewModel user;
@@ -29,8 +31,8 @@ class BottomSheetInside extends StatelessWidget {
                   border:
                       Border.all(width: 2.0, color: Colors.deepOrangeAccent),
                   image: DecorationImage(
-                    image: NetworkImage('https://picsum.photos/250?image=9'),
-                    // image: NetworkImage(user.profile.image as String),
+                    // image: NetworkImage('https://picsum.photos/250?image=9'),
+                    image: NetworkImage(user.profile.image as String),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -175,7 +177,7 @@ Future<Marker> addMarker(
 }) async {
   AccountViewModel friendInfo =
       Provider.of<AccountService>(context, listen: false)
-          .getFriendById(user.userid);
+          .getUserById(user.userid);
   return Marker(
     markerId: MarkerId(user.userid.toString()),
     icon: await MarkerIcon.downloadResizePictureCircle(
