@@ -81,8 +81,10 @@ Future<void> updateNotificationText(LocationDto data) async {
   final String hour = now.hour.toString().padLeft(2, '0');
   final String minute = now.minute.toString().padLeft(2, '0');
   final String second = now.second.toString().padLeft(2, '0');
+  final int friendCount = context.read<MapViewModel>().mapLog.length;
   await BackgroundLocator.updateNotificationText(
-    title: "위치 정보를 친구와 공유하고 있어요",
+    title: "${friendCount}명의 친구와 위치를 공유하고 있어요",
+    // title: "위치 정보를 친구와 공유하고 있어요",
     msg: "$hour:$minute:$second",
     bigMsg: "${data.latitude}, ${data.longitude}",
   );

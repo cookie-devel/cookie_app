@@ -1,5 +1,5 @@
 import 'package:cookie_app/utils/navigation_service.dart';
-import 'package:cookie_app/view/components/map/friend_location_sheet.dart';
+import 'package:cookie_app/view/components/map/friend_location_bottom_sheet.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
