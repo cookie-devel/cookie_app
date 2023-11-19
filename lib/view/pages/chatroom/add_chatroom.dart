@@ -23,7 +23,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     List<AccountViewModel> friendList =
-        context.watch<AccountService>().friends.values.toList();
+        context.watch<AccountService>().users.values.toList();
     return Scaffold(
       appBar: AppBar(
         title: const Text('채팅방 추가'),
