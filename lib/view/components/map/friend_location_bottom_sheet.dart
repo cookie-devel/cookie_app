@@ -48,7 +48,7 @@ class FriendLocationListTile extends StatelessWidget {
         ),
       ),
       trailing: IconButton(
-        icon: Icon(
+        icon: const Icon(
           Icons.cookie_sharp,
           color: Colors.orangeAccent,
         ),
@@ -112,7 +112,7 @@ Future friendLocationBottomSheet() async {
                       ),
                       const SizedBox(width: 10),
                       const Text(
-                        '현재 접속중인 친구',
+                        '현재 접속 중인 친구',
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -124,15 +124,27 @@ Future friendLocationBottomSheet() async {
               ),
             ),
             const Divider(),
-            Expanded(
-              child: ListView.builder(
-                itemCount: mapInfo.length,
-                padding: const EdgeInsets.fromLTRB(5, 4, 10, 4),
-                itemBuilder: (BuildContext context, int index) {
-                  return FriendLocationListTile(log: mapInfo[index]);
-                },
-              ),
-            ),
+            mapInfo.isEmpty
+                ? const Expanded(
+                    child: Center(
+                      child: Text(
+                        '현재 접속 중인 친구가 없습니다.',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  )
+                : Expanded(
+                    child: ListView.builder(
+                      itemCount: mapInfo.length,
+                      padding: const EdgeInsets.fromLTRB(5, 4, 10, 4),
+                      itemBuilder: (BuildContext context, int index) {
+                        return FriendLocationListTile(log: mapInfo[index]);
+                      },
+                    ),
+                  ),
           ],
         ),
       );
