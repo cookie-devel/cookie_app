@@ -1,3 +1,5 @@
+import 'package:cookie_app/service/map.service.dart';
+import 'package:cookie_app/view/pages/maps/location_background.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -72,5 +74,37 @@ class SpeedDialPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _floatingButtons();
+  }
+}
+
+class CurrentPositionDial extends StatelessWidget {
+  CurrentPositionDial({super.key});
+
+  final isRunning = context.watch<MapViewModel>().isLocationUpdateRunning;
+  Widget _currentPositionButton() {
+    return InkWell(
+      onTap: () => context.read<MapService>().moveToCurrentLocation(),
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.blue,
+        ),
+        child: Center(
+          child: Icon(
+            isRunning
+                ? Icons.location_searching_sharp
+                : Icons.location_disabled_sharp,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _currentPositionButton();
   }
 }
