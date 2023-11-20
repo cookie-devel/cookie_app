@@ -11,7 +11,7 @@ import 'package:cookie_app/theme/theme.provider.dart';
 import 'package:cookie_app/view/components/loading.dart';
 import 'package:cookie_app/view/components/map/speed_dial.dart';
 import 'package:cookie_app/view/pages/maps/location_background.dart';
-import 'package:cookie_app/view/pages/maps/myGoogleMap.dart';
+import 'package:cookie_app/view/pages/maps/my_google_map.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 
 class MapsWidget extends StatefulWidget {
@@ -54,6 +54,8 @@ class _MapsWidgetState extends State<MapsWidget> {
   void dispose() {
     context.read<MapViewModel>().mapController.dispose();
     context.read<MapViewModel>().isInitPlatformState = false;
+    context.read<MapViewModel>().mapLog.clear();
+    context.read<MapViewModel>().markers.clear();
     super.dispose();
   }
 

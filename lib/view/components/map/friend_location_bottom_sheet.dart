@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/service/map.service.dart';
-import 'package:cookie_app/types/map/mapPosition_info.dart';
+import 'package:cookie_app/types/map/map_position_info.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
