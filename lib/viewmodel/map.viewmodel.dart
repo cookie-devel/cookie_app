@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:cookie_app/types/map/mapPosition_info.dart';
+import 'package:cookie_app/types/map/map_position_info.dart';
 
 class MapViewModel with ChangeNotifier {
   // mapController

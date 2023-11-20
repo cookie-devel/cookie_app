@@ -7,7 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/service/account.service.dart';
-import 'package:cookie_app/types/map/mapPosition_info.dart';
+import 'package:cookie_app/types/map/map_position_info.dart';
 import 'package:cookie_app/view/components/map/image_process.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 

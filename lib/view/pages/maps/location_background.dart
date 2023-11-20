@@ -84,7 +84,6 @@ Future<void> updateNotificationText(LocationDto data) async {
   final int friendCount = context.read<MapViewModel>().mapLog.length;
   await BackgroundLocator.updateNotificationText(
     title: "$friendCount명의 친구와 위치를 공유하고 있어요",
-    // title: "위치 정보를 친구와 공유하고 있어요",
     msg: "$hour:$minute:$second",
     bigMsg: "${data.latitude}, ${data.longitude}",
   );
@@ -102,19 +101,15 @@ Future<bool> checkLocationPermission() async {
         permissionLevel: LocationPermissionLevel.locationAlways,
       );
       if (permission == PermissionStatus.granted) {
-        logger.t('true');
         return true;
       } else {
-        logger.t('false');
         return false;
       }
 
     case PermissionStatus.granted:
-      logger.t('true');
       return true;
 
     default:
-      logger.t('false');
       return false;
   }
 }
