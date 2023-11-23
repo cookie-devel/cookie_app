@@ -12,14 +12,11 @@ ChatRoomModel _$ChatRoomModelFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String? ?? "Unknown Room",
       createdAt: DateTime.parse(json['createdAt'] as String),
       image: json['image'] as String?,
-      members: (json['members'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
+      members:
+          (json['members'] as List<dynamic>?)?.map((e) => e as String).toList(),
       messages: (json['messages'] as List<dynamic>?)
-              ?.map((e) => MessageModel.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [],
+          ?.map((e) => Message.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$ChatRoomModelToJson(ChatRoomModel instance) =>

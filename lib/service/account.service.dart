@@ -18,27 +18,19 @@ class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
 
   AccountService(this.authService) {
     _api = RestClient(this.authService.dio, baseUrl: dotenv.env['BASE_URI']!);
-    _api.getInfo().then((InfoResponse info) {
-      this._my = AccountViewModel(model: info.toAccount());
-      this._friends = Map.fromEntries(
-        info.friendList!
-            .map((e) => AccountViewModel(model: e))
-            .toList()
-            .map((e) => MapEntry(e.id, e)),
-      );
-    });
+    this.update();
   }
 
-  // My Account
   late AccountViewModel _my;
   AccountViewModel get my => _my;
 
-  // Friends
   Map<String, AccountViewModel> _friends = {};
-  Map<String, AccountViewModel> get friends => _friends;
-  AccountViewModel getFriendById(String id) {
+  Map<String, AccountViewModel> get users => _friends;
+  AccountViewModel getUserById(String id) {
+    if (id == this._my.id) return _my;
+
     if (!_friends.containsKey(id)) {
-      throw Exception('Friend not found');
+      throw Exception('User not found');
     }
     return _friends[id]!;
   }

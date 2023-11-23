@@ -1,6 +1,5 @@
+import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import 'package:cookie_app/model/chat/message.dart';
 
 part 'room.g.dart';
 
@@ -8,19 +7,20 @@ part 'room.g.dart';
 class ChatRoomModel {
   final String id;
   final DateTime createdAt;
-  final String name;
-  final String? image;
-  final List<String> members;
-  final List<MessageModel> messages;
+  String name;
+  String? image;
+  List<String> members;
+  List<Message> messages;
 
   ChatRoomModel({
     required this.id,
     this.name = "Unknown Room",
     required this.createdAt,
     this.image,
-    this.members = const [],
-    this.messages = const [],
-  });
+    List<String>? members,
+    List<Message>? messages,
+  })  : this.members = members ?? <String>[],
+        this.messages = messages ?? <Message>[];
 
   factory ChatRoomModel.fromJson(Map<String, dynamic> json) =>
       _$ChatRoomModelFromJson(json);

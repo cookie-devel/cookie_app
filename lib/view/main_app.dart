@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/service/auth.service.dart';
 import 'package:cookie_app/service/chat.service.dart';
+import 'package:cookie_app/service/map.service.dart';
 import 'package:cookie_app/theme/theme.provider.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/main_widget.dart';
@@ -27,8 +28,11 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider<ChatService>(
           create: (_) => ChatService(authService.accessToken!),
         ),
+        ChangeNotifierProvider<MapService>(
+          create: (_) => MapService(authService.accessToken!),
+        ),
         ChangeNotifierProvider<MapViewModel>(
-          create: (_) => MapViewModel(authService.accessToken!),
+          create: (_) => MapViewModel(),
         ),
       ],
       child: MaterialApp(

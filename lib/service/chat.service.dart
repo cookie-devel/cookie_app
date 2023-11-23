@@ -2,141 +2,118 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import 'package:cookie_app/model/chat/room.dart';
+import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/types/socket/chat/chat.dart';
 import 'package:cookie_app/types/socket/chat/create_room.dart';
 import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
-import 'package:cookie_app/view/pages/chatroom/chatpage.dart';
-import 'package:cookie_app/viewmodel/chat/room.viewmodel.dart';
+import 'package:cookie_app/viewmodel/chat/chatroom.viewmodel.dart';
 
-class ChatEvents {
-  static const createRoom = 'create_room';
-  static const joinRoom = 'join_room';
-  static const inviteRoom = 'invite_room';
-  static const leaveRoom = 'leave_room';
-  static const chat = 'chat';
-}
+part 'chat.service.part.dart';
 
-class ChatService extends ChangeNotifier with DiagnosticableTreeMixin {
+class ChatService extends ChatServiceEventHandler with DiagnosticableTreeMixin {
   BuildContext context = NavigationService.navigatorKey.currentContext!;
 
-  late final Socket socket;
-
-  bool _connected = false;
-  bool get connected => _connected;
-
-  Function get connect => socket.connect;
-  Function get disconnect => socket.disconnect;
-
-  ChatService(String token) {
-    // Registering event handlers
-    // Try Hot-Restart if event handlers are registered multiple times
-    this.socket = io(
-      '${dotenv.env['BASE_URI']}/chat',
-      OptionBuilder()
-          .setTransports(['websocket'])
-          .enableReconnection()
-          .setAuth({'token': token})
-          .build(),
-    );
-
-    socket.onConnect(_onConnectionChange);
-    socket.onDisconnect(_onConnectionChange);
-    socket.on(ChatEvents.createRoom, _onCreateRoom);
-    socket.on(ChatEvents.joinRoom, _onJoinRoom);
-    socket.on(ChatEvents.inviteRoom, _onInviteRoom);
-    socket.on(ChatEvents.leaveRoom, _onLeaveRoom);
-    socket.on(ChatEvents.chat, _onChat);
+  // Rooms
+  final Map<String, ChatRoomViewModel> _roomMap = {};
+  List<ChatRoomViewModel> get rooms {
+    var rooms = _roomMap.values.toList();
+    if (rooms.isEmpty) return rooms;
+    rooms.sort((a, b) => b.lastActive.compareTo(a.lastActive));
+    return rooms;
   }
 
+  ChatService(super.token);
+
   // Socket Incoming Event Handlers
-  void _onConnectionChange(_) {
-    _connected = socket.connected;
-    socket.connected
-        ? logger.t('chatting socket connected')
-        : logger.w('chatting socket disconnected');
+  @override
+  void _onCreateRoom(data) {
+    super._onCreateRoom(data);
+    ChatRoomModel model = ChatRoomModel.fromJson(data);
+    this._roomMap[model.id] = ChatRoomViewModel(model: model);
+    notifyListeners();
+
+    // TODO: goto chatroom
+    // Navigator.push(context, MaterialPageRoute(builder: (context) {
+    //   return ChatPage(room: this._rooms[model.id]);
+    // });
+  }
+
+  @override
+  void _onJoinRoom(data) {
+    super._onJoinRoom(data);
+    ChatRoomModel model = ChatRoomModel.fromJson(data);
+    this._roomMap[model.id] = ChatRoomViewModel(model: model);
     notifyListeners();
   }
 
-  void _onCreateRoom(data) {
-    ChatRoomModel model = ChatRoomModel.fromJson(data);
-    logger.t("create_room: $model");
-    var roomvm = _addRoom(model);
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ChatPage(room: roomvm.chatRoom)),
-    );
+  @override
+  void _onInviteRoom(data) {
+    super._onInviteRoom(data);
+    _socket.emit(ChatEvents.joinRoom, data);
   }
 
-  void _onJoinRoom(data) {
-    ChatRoomModel model = ChatRoomModel.fromJson(data);
-    logger.t("join_room: $model");
-    _addRoom(model);
-  }
 
-  void _onInviteRoom(id) {
-    logger.t("invite_room: $id");
-    socket.emit(ChatEvents.joinRoom, id);
-  }
+  int _notiCount = 0;
 
-  void _onLeaveRoom(_) {}
+  @override
+  void _onChat(data) {
+    super._onChat(data);
+    ChatResponse chat = ChatResponse.fromJson(data);
 
-  int count = 0;
-  void _onChat(res) {
-    logger.t(res);
+    Message message;
 
-    ChatResponse data = ChatResponse.fromJson(res);
-
-    String roomId = data.roomId;
-
-    switch (data.payload.type) {
+    switch (chat.payload.type) {
       case MessageType.audio:
-        AudioMessage message = data.payload as AudioMessage;
+        message = chat.payload as AudioMessage;
         break;
       case MessageType.custom:
-        CustomMessage message = data.payload as CustomMessage;
+        message = chat.payload as CustomMessage;
         break;
       case MessageType.file:
-        FileMessage message = data.payload as FileMessage;
+        message = chat.payload as FileMessage;
         break;
       case MessageType.image:
-        ImageMessage message = data.payload as ImageMessage;
+        message = chat.payload as ImageMessage;
         break;
       case MessageType.system:
-        SystemMessage message = data.payload as SystemMessage;
+        message = chat.payload as SystemMessage;
         break;
       case MessageType.text:
-        TextMessage message = data.payload as TextMessage;
-        AwesomeNotifications().createNotification(
-          content: NotificationContent(
-            id: count++,
-            channelKey: 'chat_channel',
-            title: message.author.id,
-            body: message.text,
-            groupKey: roomId,
-            summary: 'New Message',
-          ),
-        );
+        message = chat.payload as TextMessage;
+        if (chat.sender != context.read<AccountService>().my.id)
+          AwesomeNotifications().createNotification(
+            content: NotificationContent(
+              id: _notiCount++,
+              channelKey: 'chat_channel',
+              title: message.author.id,
+              body: (message as TextMessage).text,
+              groupKey: chat.roomId,
+              summary: 'New Message',
+            ),
+          );
         break;
       case MessageType.unsupported:
-        UnsupportedMessage message = data.payload as UnsupportedMessage;
+        message = chat.payload as UnsupportedMessage;
         break;
       case MessageType.video:
-        VideoMessage message = data.payload as VideoMessage;
+        message = chat.payload as VideoMessage;
         break;
     }
+
+    this._roomMap[chat.roomId]!.addChat(message);
+    notifyListeners();
   }
 
   // Socket Outgoing Event Handlers
   void createRoom(String name, List<String> members) {
-    socket.emit(
+    _socket.emit(
       ChatEvents.createRoom,
       CreateRoomRequest(
         name: name,
@@ -145,33 +122,17 @@ class ChatService extends ChangeNotifier with DiagnosticableTreeMixin {
     );
   }
 
-  void sendTextChat(Room room, TextMessage message) {
-    Map<String, dynamic> data = {
-      "roomId": room.id,
-      "payload": {
-        "author": {
-          "id": message.author.id,
-          "role": "user",
-        },
-        "id": message.id,
-        "text": message.text,
-        "type": "text",
-      },
-    };
-
-    socket.emit(ChatEvents.chat, data);
+  void leaveRoom(String roomId) {
+    _socket.emit(ChatEvents.leaveRoom, roomId);
   }
 
-  final List<ChatRoomViewModel> _rooms = [];
-  List<ChatRoomViewModel> get rooms => _rooms;
-  List<types.Room> get chatRooms =>
-      _rooms.map((room) => room.chatRoom).toList();
-
-  ChatRoomViewModel _addRoom(ChatRoomModel model) {
-    ChatRoomViewModel roomViewModel = ChatRoomViewModel(model: model);
-    _rooms.add(roomViewModel);
-    notifyListeners();
-
-    return roomViewModel;
+  void sendChat(String roomId, Message message) {
+    _socket.emit(
+      ChatEvents.chat,
+      ChatRequest(
+        roomId: roomId,
+        payload: message,
+      ).toJson(),
+    );
   }
 }
