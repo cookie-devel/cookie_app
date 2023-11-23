@@ -20,10 +20,10 @@ class IconImageProvider extends ImageProvider<IconImageProvider> {
   Future<IconImageProvider> obtainKey(ImageConfiguration configuration) =>
       SynchronousFuture<IconImageProvider>(this);
 
-  @override
-  // ignore: deprecated_member_use
-  ImageStreamCompleter load(IconImageProvider key, DecoderCallback decode) =>
-      OneFrameImageStreamCompleter(_loadAsync(key));
+  // FIXME: This is not working
+  // @override
+  // ImageStreamCompleter load(IconImageProvider key, DecoderCallback decode) =>
+  //     OneFrameImageStreamCompleter(_loadAsync(key));
 
   Future<ImageInfo> _loadAsync(IconImageProvider key) async {
     assert(key == this);
