@@ -5,11 +5,11 @@ part 'chat.g.dart';
 
 @JsonSerializable()
 class ChatRequest {
-  final String id;
+  final String roomId;
   final Message payload;
 
   ChatRequest({
-    required this.id,
+    required this.roomId,
     required this.payload,
   });
 

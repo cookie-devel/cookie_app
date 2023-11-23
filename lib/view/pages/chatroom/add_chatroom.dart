@@ -23,7 +23,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     List<AccountViewModel> friendList =
-        context.watch<AccountService>().friends.values.toList();
+        context.watch<AccountService>().users.values.toList();
     return Scaffold(
       appBar: AppBar(
         title: const Text('채팅방 추가'),
@@ -79,7 +79,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
             child: SingleChildScrollView(
               child: ListView.separated(
                 separatorBuilder: (context, index) =>
-                    const Divider(color: Colors.grey),
+                    const Divider(height: 1, thickness: 0.1),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: friendList.length,
