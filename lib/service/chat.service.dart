@@ -2,12 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import 'package:cookie_app/model/chat/room.dart';
+import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/types/socket/chat/chat.dart';
 import 'package:cookie_app/types/socket/chat/create_room.dart';
 import 'package:cookie_app/utils/logger.dart';
@@ -20,9 +21,13 @@ class ChatService extends ChatServiceEventHandler with DiagnosticableTreeMixin {
   BuildContext context = NavigationService.navigatorKey.currentContext!;
 
   // Rooms
-  List<types.Room> models = [];
   final Map<String, ChatRoomViewModel> _roomMap = {};
-  List<ChatRoomViewModel> get rooms => _roomMap.values.toList();
+  List<ChatRoomViewModel> get rooms {
+    var rooms = _roomMap.values.toList();
+    if (rooms.isEmpty) return rooms;
+    rooms.sort((a, b) => b.lastActive.compareTo(a.lastActive));
+    return rooms;
+  }
 
   ChatService(super.token);
 
@@ -54,58 +59,56 @@ class ChatService extends ChatServiceEventHandler with DiagnosticableTreeMixin {
     _socket.emit(ChatEvents.joinRoom, data);
   }
 
-  @override
-  void _onLeaveRoom(_) {
-    super._onLeaveRoom(_);
-  }
 
   int _notiCount = 0;
 
   @override
-  void _onChat(res) {
-    super._onChat(res);
-    ChatResponse data = ChatResponse.fromJson(res);
+  void _onChat(data) {
+    super._onChat(data);
+    ChatResponse chat = ChatResponse.fromJson(data);
 
     Message message;
 
-    switch (data.payload.type) {
+    switch (chat.payload.type) {
       case MessageType.audio:
-        message = data.payload as AudioMessage;
+        message = chat.payload as AudioMessage;
         break;
       case MessageType.custom:
-        message = data.payload as CustomMessage;
+        message = chat.payload as CustomMessage;
         break;
       case MessageType.file:
-        message = data.payload as FileMessage;
+        message = chat.payload as FileMessage;
         break;
       case MessageType.image:
-        message = data.payload as ImageMessage;
+        message = chat.payload as ImageMessage;
         break;
       case MessageType.system:
-        message = data.payload as SystemMessage;
+        message = chat.payload as SystemMessage;
         break;
       case MessageType.text:
-        message = data.payload as TextMessage;
-        AwesomeNotifications().createNotification(
-          content: NotificationContent(
-            id: _notiCount++,
-            channelKey: 'chat_channel',
-            title: message.author.id,
-            body: (message as TextMessage).text,
-            groupKey: data.roomId,
-            summary: 'New Message',
-          ),
-        );
+        message = chat.payload as TextMessage;
+        if (chat.sender != context.read<AccountService>().my.id)
+          AwesomeNotifications().createNotification(
+            content: NotificationContent(
+              id: _notiCount++,
+              channelKey: 'chat_channel',
+              title: message.author.id,
+              body: (message as TextMessage).text,
+              groupKey: chat.roomId,
+              summary: 'New Message',
+            ),
+          );
         break;
       case MessageType.unsupported:
-        message = data.payload as UnsupportedMessage;
+        message = chat.payload as UnsupportedMessage;
         break;
       case MessageType.video:
-        message = data.payload as VideoMessage;
+        message = chat.payload as VideoMessage;
         break;
     }
 
-    this._roomMap[data.roomId]!.addMessage(message);
+    this._roomMap[chat.roomId]!.addChat(message);
+    notifyListeners();
   }
 
   // Socket Outgoing Event Handlers
@@ -119,20 +122,17 @@ class ChatService extends ChatServiceEventHandler with DiagnosticableTreeMixin {
     );
   }
 
-  void sendTextChat(Room room, TextMessage message) {
-    Map<String, dynamic> data = {
-      "roomId": room.id,
-      "payload": {
-        "author": {
-          "id": message.author.id,
-          "role": "user",
-        },
-        "id": message.id,
-        "text": message.text,
-        "type": "text",
-      },
-    };
+  void leaveRoom(String roomId) {
+    _socket.emit(ChatEvents.leaveRoom, roomId);
+  }
 
-    _socket.emit(ChatEvents.chat, data);
+  void sendChat(String roomId, Message message) {
+    _socket.emit(
+      ChatEvents.chat,
+      ChatRequest(
+        roomId: roomId,
+        payload: message,
+      ).toJson(),
+    );
   }
 }

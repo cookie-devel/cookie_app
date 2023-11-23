@@ -14,10 +14,10 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:cookie_app/service/account.service.dart';
-import 'package:cookie_app/service/chat.service.dart';
+import 'package:cookie_app/viewmodel/chat/chatroom.viewmodel.dart';
 
 class ChatPage extends StatefulWidget {
-  final types.Room room;
+  final ChatRoomViewModel room;
 
   const ChatPage({
     super.key,
@@ -29,20 +29,23 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  final List<types.Message> _messages = [];
   late final types.User _user;
+  late ChatRoomViewModel _room;
+  late List<types.Message> _messages;
 
   @override
   void initState() {
     super.initState();
     _user = context.read<AccountService>().my.toFlyer;
-    _loadMessages();
-  }
+    this._room = widget.room;
+    this._messages = widget.room.messages;
 
-  void _addMessage(types.Message message) {
-    setState(() {
-      _messages.insert(0, message);
-    });
+    // Just notice that this way also works.
+    // widget.room.addListener(() {
+    //   setState(() {
+    //     _messages = widget.room.messages;
+    //   });
+    // });
   }
 
   void _handleAttachmentPressed() {
@@ -81,6 +84,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _handleFileSelection() async {
+    Navigator.pop(context);
     final result = await FilePicker.platform.pickFiles(
       type: FileType.any,
     );
@@ -96,11 +100,12 @@ class _ChatPageState extends State<ChatPage> {
         uri: result.files.single.path!,
       );
 
-      _addMessage(message);
+      sendChat(message);
     }
   }
 
   void _handleImageSelection() async {
+    Navigator.pop(context);
     final result = await ImagePicker().pickImage(
       imageQuality: 70,
       maxWidth: 1440,
@@ -122,7 +127,7 @@ class _ChatPageState extends State<ChatPage> {
         width: image.width.toDouble(),
       );
 
-      _addMessage(message);
+      sendChat(message);
     }
   }
 
@@ -139,9 +144,7 @@ class _ChatPageState extends State<ChatPage> {
             isLoading: true,
           );
 
-          setState(() {
-            _messages[index] = updatedMessage;
-          });
+          this._room.updateChat(index, updatedMessage);
 
           final client = http.Client();
           final request = await client.get(Uri.parse(message.uri));
@@ -161,9 +164,7 @@ class _ChatPageState extends State<ChatPage> {
             isLoading: null,
           );
 
-          setState(() {
-            _messages[index] = updatedMessage;
-          });
+          this._room.updateChat(index, updatedMessage);
         }
       }
 
@@ -179,10 +180,7 @@ class _ChatPageState extends State<ChatPage> {
     final updatedMessage = (_messages[index] as types.TextMessage).copyWith(
       previewData: previewData,
     );
-
-    setState(() {
-      _messages[index] = updatedMessage;
-    });
+    this._room.updateChat(index, updatedMessage);
   }
 
   void _handleSendPressed(types.PartialText message) {
@@ -193,44 +191,47 @@ class _ChatPageState extends State<ChatPage> {
       text: message.text,
     );
 
-    _addMessage(textMessage);
-    context.read<ChatService>().sendTextChat(widget.room, textMessage);
+    sendChat(textMessage);
   }
 
-  void _loadMessages() {}
+  void sendChat(types.Message message) {
+    this._room.sendChat(message);
+  }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text('채팅'),
-          // actions: [connectionInfo()],
-        ),
-        body: Chat(
-          theme: DefaultChatTheme(
-            // inputPadding: EdgeInsets.all(24),
-            inputBackgroundColor: Colors.orangeAccent,
-            inputTextStyle: const TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-            ),
-            inputTextDecoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.orangeAccent,
-                ),
-                borderRadius: BorderRadius.circular(1),
-              ),
-            ),
-            inputTextColor: Colors.black,
+  Widget build(BuildContext context) => ChangeNotifierProvider.value(
+        value: this._room,
+        builder: (context, chiid) => Scaffold(
+          appBar: AppBar(
+            title: Text(this._room.name),
           ),
-          messages: _messages,
-          onAttachmentPressed: _handleAttachmentPressed,
-          onMessageTap: _handleMessageTap,
-          onPreviewDataFetched: _handlePreviewDataFetched,
-          onSendPressed: _handleSendPressed,
-          showUserAvatars: true,
-          showUserNames: true,
-          user: _user,
+          body: Chat(
+            theme: DefaultChatTheme(
+              // inputPadding: EdgeInsets.all(24),
+              inputBackgroundColor: Colors.orangeAccent,
+              inputTextStyle: const TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+              ),
+              inputTextDecoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.orangeAccent,
+                  ),
+                  borderRadius: BorderRadius.circular(1),
+                ),
+              ),
+              inputTextColor: Colors.black,
+            ),
+            messages: context.watch<ChatRoomViewModel>().messages,
+            onAttachmentPressed: _handleAttachmentPressed,
+            onMessageTap: _handleMessageTap,
+            onPreviewDataFetched: _handlePreviewDataFetched,
+            onSendPressed: _handleSendPressed,
+            showUserAvatars: false,
+            showUserNames: true,
+            user: _user,
+          ),
         ),
       );
 }

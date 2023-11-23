@@ -19,9 +19,8 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
   Widget build(BuildContext context) {
     List<ChatRoomViewModel> chatRooms = context.watch<ChatService>().rooms;
     return ListView.separated(
-      separatorBuilder: (context, index) => const Divider(
-        height: 1,
-      ),
+      separatorBuilder: (context, index) =>
+          const Divider(height: 1, thickness: 0.1),
       itemCount: context.watch<ChatService>().rooms.length,
       itemBuilder: (BuildContext context, int index) {
         ChatRoomViewModel chatRoom = chatRooms[index];
@@ -35,9 +34,7 @@ class _ChatTabWidgetState extends State<ChatTabWidget> {
           time: chatRoom.messages.isNotEmpty
               ? chatRoom.lastActive
               : chatRoom.createdAt,
-          navigate: ChatPage(
-            room: chatRoom.toFlyer,
-          ),
+          navigate: ChatPage(room: chatRoom),
         );
       },
     );

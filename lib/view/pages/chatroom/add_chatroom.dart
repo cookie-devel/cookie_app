@@ -79,7 +79,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
             child: SingleChildScrollView(
               child: ListView.separated(
                 separatorBuilder: (context, index) =>
-                    const Divider(color: Colors.grey),
+                    const Divider(height: 1, thickness: 0.1),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: friendList.length,

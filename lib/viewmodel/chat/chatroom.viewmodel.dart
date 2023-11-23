@@ -5,9 +5,9 @@ import 'package:provider/provider.dart';
 
 import 'package:cookie_app/model/chat/room.dart';
 import 'package:cookie_app/service/account.service.dart';
+import 'package:cookie_app/service/chat.service.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:cookie_app/viewmodel/chat/message.viewmodel.dart';
 
 class ChatRoomViewModel extends ChangeNotifier {
   BuildContext context = NavigationService.navigatorKey.currentContext!;
@@ -38,24 +38,36 @@ class ChatRoomViewModel extends ChangeNotifier {
   List<User> get chatUsers => _model.members
       .map((id) => context.read<AccountService>().getUserById(id).toFlyer)
       .toList(growable: false);
-  List<MessageViewModel> get messages => _model.messages
-      .map((e) => MessageViewModel(model: e))
-      .toList(growable: false);
+  List<Message> get messages => _model.messages;
 
   String get lastMessage {
-    Message lastMessage = _model.messages.last;
+    Message lastMessage = _model.messages.first;
     return lastMessage is TextMessage
         ? lastMessage.text
         : lastMessage.type.toString();
   }
 
   DateTime get lastActive {
-    Message lastMessage = _model.messages.last;
+    if (_model.messages.isEmpty) return _model.createdAt;
+    Message lastMessage = _model.messages.first;
     return DateTime.fromMillisecondsSinceEpoch(lastMessage.createdAt ?? 0);
   }
 
-  void addMessage(Message message) {
-    _model.messages.add(message);
+  void updateChat(int index, Message message) {
+    _model.messages[index] = message;
     notifyListeners();
+  }
+
+  void addChat(Message message) {
+    _model.messages.insert(0, message);
+    notifyListeners();
+  }
+
+  void sendChat(Message message) {
+    context.read<ChatService>().sendChat(this._model.id, message);
+  }
+
+  void leave() {
+    context.read<ChatService>().leaveRoom(this._model.id);
   }
 }
