@@ -7,13 +7,13 @@ part of 'chat.dart';
 // **************************************************************************
 
 ChatRequest _$ChatRequestFromJson(Map<String, dynamic> json) => ChatRequest(
-      id: json['id'] as String,
+      roomId: json['roomId'] as String,
       payload: Message.fromJson(json['payload'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ChatRequestToJson(ChatRequest instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'roomId': instance.roomId,
       'payload': instance.payload,
     };
 
