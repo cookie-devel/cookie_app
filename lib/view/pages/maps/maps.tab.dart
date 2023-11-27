@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/repository/location_service.repo.dart';
-import 'package:cookie_app/service/map.service.dart';
-import 'package:cookie_app/theme/theme.provider.dart';
 import 'package:cookie_app/view/components/loading.dart';
 import 'package:cookie_app/view/components/map/speed_dial.dart';
 import 'package:cookie_app/view/pages/maps/location_background.dart';
@@ -52,61 +50,40 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   @override
   void dispose() {
-    context.read<MapViewModel>().mapController.dispose();
-    context.read<MapViewModel>().isInitPlatformState = false;
-    context.read<MapViewModel>().mapLog.clear();
-    context.read<MapViewModel>().markers.clear();
+    context.watch<MapViewModel>().mapController.dispose();
+    context.watch<MapViewModel>().isInitPlatformState = false;
+    context.watch<MapViewModel>().mapLog.clear();
+    context.watch<MapViewModel>().markers.clear();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<ThemeProvider, MapViewModel>(
-      builder: (context, themeProvider, mapProvider, _) {
-        final isInit = mapProvider.isInitPlatformState;
-        final isRunning = mapProvider.isLocationUpdateRunning;
+    final isInit = context.watch<MapViewModel>().isInitPlatformState;
+    return isInit
+        ? Stack(
+            children: buildPositionedWidgets(),
+          )
+        : const LoadingScreen();
+  }
 
-        return isInit
-            ? Stack(
-                children: [
-                  const MyGoogleMap(),
-                  Positioned(
-                    bottom: 80,
-                    right: 16,
-                    child: SpeedDialPage(
-                      onTapStart: onStart,
-                      onTapStop: onStop,
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 16,
-                    right: 16,
-                    child: InkWell(
-                      onTap: () =>
-                          context.read<MapService>().moveToCurrentLocation(),
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.blue,
-                        ),
-                        child: Center(
-                          child: Icon(
-                            isRunning
-                                ? Icons.location_searching_sharp
-                                : Icons.location_disabled_sharp,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            : const LoadingScreen();
-      },
-    );
+  List<Widget> buildPositionedWidgets() {
+    return [
+      const MyGoogleMap(),
+      Positioned(
+        bottom: 80,
+        right: 16,
+        child: SpeedDialPage(
+          onTapStart: onStart,
+          onTapStop: onStop,
+        ),
+      ),
+      Positioned(
+        bottom: 16,
+        right: 16,
+        child: CurrentPositionDial(),
+      ),
+    ];
   }
 }
 

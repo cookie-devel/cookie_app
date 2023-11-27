@@ -26,33 +26,29 @@ class _MyGoogleMapState extends State<MyGoogleMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<ThemeProvider, MapViewModel>(
-      builder: (context, themeProvider, mapProvider, _) {
-        String mapStyle = themeProvider.mapStyle;
-        final currentLocation = mapProvider.currentLocation;
-        final marker = mapProvider.markers;
+    String mapStyle = context.read<ThemeProvider>().mapStyle;
+    // final currentLocation = context.read<MapViewModel>().currentLocation;
+    final marker = context.watch<MapViewModel>().markers;
 
-        return GoogleMap(
-          myLocationEnabled: true, // 본인 마커
-          mapToolbarEnabled: false, // 길찾기 버튼
-          zoomControlsEnabled: false, // 축소확대 버튼
-          myLocationButtonEnabled: false, // 내위치 버튼
-          markers: marker,
-          mapType: MapType.normal,
+    return GoogleMap(
+      myLocationEnabled: true, // 본인 마커
+      mapToolbarEnabled: false, // 길찾기 버튼
+      zoomControlsEnabled: false, // 축소확대 버튼
+      myLocationButtonEnabled: false, // 내위치 버튼
+      markers: marker,
+      mapType: MapType.normal,
 
-          minMaxZoomPreference: const MinMaxZoomPreference(14, 20), // 줌 제한
+      minMaxZoomPreference: const MinMaxZoomPreference(14, 20), // 줌 제한
 
-          onMapCreated: (GoogleMapController controller) {
-            context.read<MapViewModel>().mapController = controller;
-            context.read<MapViewModel>().mapController.setMapStyle(mapStyle);
-          },
-
-          initialCameraPosition: CameraPosition(
-            target: currentLocation,
-            zoom: 17.0,
-          ),
-        );
+      onMapCreated: (GoogleMapController controller) {
+        context.read<MapViewModel>().mapController = controller;
+        context.read<MapViewModel>().mapController.setMapStyle(mapStyle);
       },
+
+      initialCameraPosition: CameraPosition(
+        target: context.watch<MapViewModel>().currentLocation,
+        zoom: 17.0,
+      ),
     );
   }
 }
