@@ -1,4 +1,5 @@
 import 'package:cookie_app/service/map.service.dart';
+import 'package:cookie_app/theme/components/input.theme.dart';
 import 'package:cookie_app/view/pages/maps/location_background.dart';
 import 'package:flutter/material.dart';
 
@@ -27,15 +28,15 @@ class SpeedDialPage extends StatelessWidget {
       VoidCallback onTap,
     ) {
       return SpeedDialChild(
-        child: Icon(icon, color: Colors.white),
+        child: Icon(icon, color: InputTheme.color6),
         label: label,
-        labelBackgroundColor: Colors.white,
-        labelStyle: const TextStyle(
+        labelBackgroundColor: InputTheme.color6,
+        labelStyle: TextStyle(
           fontWeight: FontWeight.w600,
-          color: Colors.blue,
+          color: InputTheme.color3,
           fontSize: 14.0,
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: InputTheme.color3,
         onTap: onTap,
       );
     }
@@ -66,7 +67,7 @@ class SpeedDialPage extends StatelessWidget {
       spaceBetweenChildren: 10.0,
       overlayOpacity: 0.0,
       curve: Curves.bounceIn,
-      backgroundColor: Colors.blue,
+      backgroundColor: InputTheme.color3,
       children: speedDialChildren,
     );
   }
@@ -87,9 +88,9 @@ class CurrentPositionDial extends StatelessWidget {
       child: Container(
         width: 50,
         height: 50,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.blue,
+          color: InputTheme.color3,
         ),
         child: Center(
           child: Icon(

@@ -5,18 +5,19 @@ import 'package:cookie_app/theme/components/input.theme.dart';
 ThemeData defaultThemeData = ThemeData(
   useMaterial3: true,
   brightness: Brightness.light,
-  colorScheme: const ColorScheme.light(
-    primary: Colors.orangeAccent,
-    secondary: Colors.orange,
+  colorScheme: ColorScheme.light(
+    primary: InputTheme.color2,
+    secondary: InputTheme.color3,
   ),
-  appBarTheme: const AppBarTheme(
-    backgroundColor: Colors.orangeAccent,
-    iconTheme: IconThemeData(color: Colors.white),
+  appBarTheme: AppBarTheme(
+    backgroundColor: InputTheme.color3,
+    iconTheme: IconThemeData(color: InputTheme.color6),
     centerTitle: true,
     titleSpacing: 50.0,
   ),
+  iconTheme: IconThemeData(color: InputTheme.color6),
   dialogTheme: DialogTheme(
-    backgroundColor: Colors.white,
+    backgroundColor: InputTheme.color6,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(16.0),
     ),
@@ -37,25 +38,28 @@ ThemeData defaultThemeData = ThemeData(
       backgroundColor: Colors.deepOrangeAccent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
-        side: const BorderSide(width: 1, color: Colors.white),
+        side: BorderSide(width: 1, color: InputTheme.color6),
       ),
     ),
   ),
-  scaffoldBackgroundColor: Colors.grey[100],
-  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-    backgroundColor: Colors.white,
-    selectedItemColor: Color.fromARGB(255, 253, 86, 35),
-    selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+  scaffoldBackgroundColor: InputTheme.color6,
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    backgroundColor: InputTheme.color1,
+    selectedItemColor: const Color.fromARGB(255, 253, 86, 35),
+    selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
     unselectedItemColor: Colors.grey,
     showSelectedLabels: true,
     showUnselectedLabels: false,
     type: BottomNavigationBarType.fixed,
   ),
-  bottomSheetTheme: const BottomSheetThemeData(
-    shape: RoundedRectangleBorder(
+  navigationBarTheme: NavigationBarThemeData(
+    backgroundColor: InputTheme.color4,
+  ),
+  bottomSheetTheme: BottomSheetThemeData(
+    shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
-    backgroundColor: Colors.white,
+    backgroundColor: InputTheme.color6,
     modalBarrierColor: Colors.transparent,
   ),
   inputDecorationTheme: InputTheme.defaultInputDecorationTheme,
