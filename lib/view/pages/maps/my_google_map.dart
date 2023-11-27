@@ -27,7 +27,6 @@ class _MyGoogleMapState extends State<MyGoogleMap> {
   @override
   Widget build(BuildContext context) {
     String mapStyle = context.read<ThemeProvider>().mapStyle;
-    // final currentLocation = context.read<MapViewModel>().currentLocation;
     final marker = context.watch<MapViewModel>().markers;
 
     return GoogleMap(

@@ -1,4 +1,4 @@
-import 'package:cookie_app/theme/components/input.theme.dart';
+import 'package:cookie_app/theme/default.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:flutter/material.dart';
 
@@ -88,7 +88,7 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
                 context: context,
                 useSafeArea: false,
                 isScrollControlled: true,
-                backgroundColor: InputTheme.color4,
+                backgroundColor: DefaultColor.color4,
                 builder: (BuildContext context) {
                   return SizedBox(
                     height: MediaQuery.of(context).size.height * 0.6,
@@ -138,7 +138,7 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
                   height: 28,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: InputTheme.color3,
+                    color: DefaultColor.color3,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.3),

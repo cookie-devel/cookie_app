@@ -1,14 +1,13 @@
 import 'dart:io';
 
-import 'package:cookie_app/theme/components/input.theme.dart';
 import 'package:flutter/material.dart';
-
 import 'package:custom_marker/marker_icon.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'package:cookie_app/theme/default.dart';
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/types/map/map_position_info.dart';
 import 'package:cookie_app/view/components/map/image_process.dart';
-import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
 class BottomSheetInside extends StatelessWidget {
   final File image;
@@ -35,7 +34,7 @@ class BottomSheetInside extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border:
-                      Border.all(width: 2.0, color: InputTheme.color3),
+                      Border.all(width: 2.0, color: DefaultColor.color3),
                   image: DecorationImage(
                     image: FileImage(image),
                     fit: BoxFit.cover,
@@ -49,10 +48,10 @@ class BottomSheetInside extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(12, 14, 12, 0),
                 decoration: BoxDecoration(
-                  color: InputTheme.color2,
+                  color: DefaultColor.color2,
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                   border: Border.all(
-                    color: InputTheme.color6,
+                    color: DefaultColor.color6,
                     width: 2,
                   ),
                   boxShadow: const [
@@ -77,7 +76,7 @@ class BottomSheetInside extends StatelessWidget {
                           child: Text(
                             name,
                             style: TextStyle(
-                              color: InputTheme.color6,
+                              color: DefaultColor.color6,
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
@@ -93,7 +92,7 @@ class BottomSheetInside extends StatelessWidget {
                         '$message\n',
                         style: TextStyle(
                           fontSize: 14,
-                          color: InputTheme.color6,
+                          color: DefaultColor.color6,
                           fontWeight: FontWeight.bold,
                         ),
                         maxLines: 2,

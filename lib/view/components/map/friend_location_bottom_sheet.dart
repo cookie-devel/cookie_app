@@ -1,4 +1,4 @@
-import 'package:cookie_app/theme/components/input.theme.dart';
+import 'package:cookie_app/theme/default.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -35,7 +35,7 @@ class FriendLocationListTile extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: InputTheme.color2,
+            color: DefaultColor.color2,
             width: 1.3,
           ),
         ),
@@ -47,7 +47,7 @@ class FriendLocationListTile extends StatelessWidget {
       trailing: IconButton(
         icon:Icon(
           Icons.cookie_sharp,
-          color: InputTheme.color2,
+          color: DefaultColor.color2,
         ),
         onPressed: () {
           showDialog(
