@@ -1,4 +1,4 @@
-import 'package:cookie_app/theme/components/input.theme.dart';
+import 'package:cookie_app/theme/default.dart';
 import 'package:flutter/cupertino.dart';
 
 class LoadingScreen extends StatelessWidget {
@@ -13,14 +13,14 @@ class LoadingScreen extends StatelessWidget {
           const SizedBox(height: 24.0),
           CupertinoActivityIndicator(
             animating: true,
-            color: InputTheme.color5,
+            color: DefaultColor.color5,
             radius: 35,
           ),
           const SizedBox(height: 16.0),
           Text(
             "Loading",
             style: TextStyle(
-              color: InputTheme.color5,
+              color: DefaultColor.color5,
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
             ),

@@ -1,4 +1,4 @@
-import 'package:cookie_app/theme/components/input.theme.dart';
+import 'package:cookie_app/theme/default.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cookie_app/view/components/box_decoration.dart';
@@ -48,7 +48,7 @@ class ProfileWindow extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 30.0,
-                      color: InputTheme.color6,
+                      color: DefaultColor.color6,
                     ),
                   ),
                   Text(
@@ -58,7 +58,7 @@ class ProfileWindow extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 19.0,
-                      color: InputTheme.color6,
+                      color: DefaultColor.color6,
                     ),
                   ),
                 ],
@@ -76,7 +76,7 @@ class ProfileWindow extends StatelessWidget {
                     },
                     icon: Icon(
                       Icons.chat_bubble_outline,
-                      color: InputTheme.color6,
+                      color: DefaultColor.color6,
                       // size: pivotSize * 0.22,
                     ),
                   ),
@@ -84,14 +84,14 @@ class ProfileWindow extends StatelessWidget {
                     onPressed: () {},
                     icon: Icon(
                       Icons.favorite_border_outlined,
-                      color: InputTheme.color6,
+                      color: DefaultColor.color6,
                     ),
                   ),
                   IconButton(
                     onPressed: () {},
                     icon: Icon(
                       Icons.cookie_outlined,
-                      color: InputTheme.color6,
+                      color: DefaultColor.color6,
                     ),
                   ),
                 ],
@@ -124,7 +124,7 @@ class UserProfileTile extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18.0,
-            color: InputTheme.color6,
+            color: DefaultColor.color6,
           ),
         ),
         Text(
@@ -132,7 +132,7 @@ class UserProfileTile extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 26.0,
-            color: InputTheme.color6,
+            color: DefaultColor.color6,
           ),
         ),
       ],

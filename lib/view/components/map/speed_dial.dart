@@ -1,14 +1,14 @@
-import 'package:cookie_app/service/map.service.dart';
-import 'package:cookie_app/theme/components/input.theme.dart';
+import 'package:cookie_app/view/components/map/friend_location_bottom_sheet.dart';
 import 'package:cookie_app/view/pages/maps/location_background.dart';
-import 'package:flutter/material.dart';
+import 'package:cookie_app/utils/navigation_service.dart';
+import 'package:cookie_app/viewmodel/map.viewmodel.dart';
+import 'package:cookie_app/service/map.service.dart';
+import 'package:cookie_app/theme/default.dart';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 
-import 'package:cookie_app/utils/navigation_service.dart';
-import 'package:cookie_app/view/components/map/friend_location_bottom_sheet.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 
 class SpeedDialPage extends StatelessWidget {
   SpeedDialPage({
@@ -28,15 +28,15 @@ class SpeedDialPage extends StatelessWidget {
       VoidCallback onTap,
     ) {
       return SpeedDialChild(
-        child: Icon(icon, color: InputTheme.color6),
+        child: Icon(icon, color: DefaultColor.color6),
         label: label,
-        labelBackgroundColor: InputTheme.color6,
+        labelBackgroundColor: DefaultColor.color6,
         labelStyle: TextStyle(
           fontWeight: FontWeight.w600,
-          color: InputTheme.color3,
+          color: DefaultColor.color3,
           fontSize: 14.0,
         ),
-        backgroundColor: InputTheme.color3,
+        backgroundColor: DefaultColor.color3,
         onTap: onTap,
       );
     }
@@ -67,7 +67,7 @@ class SpeedDialPage extends StatelessWidget {
       spaceBetweenChildren: 10.0,
       overlayOpacity: 0.0,
       curve: Curves.bounceIn,
-      backgroundColor: InputTheme.color3,
+      backgroundColor: DefaultColor.color3,
       children: speedDialChildren,
     );
   }
@@ -90,7 +90,7 @@ class CurrentPositionDial extends StatelessWidget {
         height: 50,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: InputTheme.color3,
+          color: DefaultColor.color3,
         ),
         child: Center(
           child: Icon(

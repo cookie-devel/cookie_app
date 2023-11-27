@@ -1,4 +1,4 @@
-import 'package:cookie_app/theme/components/input.theme.dart';
+import 'package:cookie_app/theme/default.dart';
 import 'package:flutter/material.dart';
 
 class RoundedImage extends StatelessWidget {
@@ -24,7 +24,7 @@ class RoundedImage extends StatelessWidget {
         ),
         shape: BoxShape.circle,
         border: Border.all(
-          color: InputTheme.color3,
+          color: DefaultColor.color3,
           width: 3.0,
         ),
         boxShadow: shadow == true
