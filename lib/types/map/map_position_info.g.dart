@@ -31,16 +31,3 @@ Map<String, dynamic> _$MapInfoRequestToJson(MapInfoRequest instance) =>
       'latitude': instance.latitude,
       'longitude': instance.longitude,
     };
-
-MarkerInfo _$MarkerInfoFromJson(Map<String, dynamic> json) => MarkerInfo(
-      userid: json['userid'] as String,
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
-    );
-
-Map<String, dynamic> _$MarkerInfoToJson(MarkerInfo instance) =>
-    <String, dynamic>{
-      'userid': instance.userid,
-      'latitude': instance.latitude,
-      'longitude': instance.longitude,
-    };

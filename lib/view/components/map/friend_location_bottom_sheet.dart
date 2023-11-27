@@ -1,13 +1,12 @@
+import 'package:cookie_app/theme/components/input.theme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/service/map.service.dart';
 import 'package:cookie_app/types/map/map_position_info.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
-import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 
 class FriendLocationListTile extends StatelessWidget {
@@ -17,13 +16,11 @@ class FriendLocationListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AccountViewModel friend =
-        context.read<AccountService>().getUserById(log.userid);
     return ListTile(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(friend.name),
+          Text(log.account.name),
           Text(
             context.read<MapService>().calDistance(
                   LatLng(
@@ -38,21 +35,19 @@ class FriendLocationListTile extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.blueAccent,
+            color: InputTheme.color2,
             width: 1.3,
           ),
         ),
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
-          backgroundImage: NetworkImage(
-            friend.profile.image.toString(),
-          ),
+          backgroundImage: log.account.profile.image,
         ),
       ),
       trailing: IconButton(
-        icon: const Icon(
+        icon:Icon(
           Icons.cookie_sharp,
-          color: Colors.orangeAccent,
+          color: InputTheme.color2,
         ),
         onPressed: () {
           showDialog(
@@ -60,7 +55,7 @@ class FriendLocationListTile extends StatelessWidget {
             builder: (BuildContext context) {
               return AlertDialog(
                 title: const Text('Friend Information'),
-                content: Text('Name: ${friend.name}\n'),
+                content: Text('Name: ${log.account.name}\n'),
                 actions: [
                   TextButton(
                     child: const Text('Close'),
