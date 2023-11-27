@@ -1,5 +1,5 @@
 import 'package:cookie_app/service/account.service.dart';
-import 'package:cookie_app/theme/components/input.theme.dart';
+import 'package:cookie_app/theme/default.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -137,7 +137,7 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
     final List<Future<Marker>> markerFutures = context
         .read<MapViewModel>()
         .mapLog
-        .map((element) => addMarker(context, element, color: InputTheme.color2))
+        .map((element) => addMarker(context, element, color: DefaultColor.color2))
         .toList();
     final List<Marker> tmpMarker = await Future.wait(markerFutures);
 
