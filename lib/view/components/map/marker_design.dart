@@ -1,12 +1,11 @@
 import 'dart:io';
 
+import 'package:cookie_app/theme/components/input.theme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:custom_marker/marker_icon.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
 
-import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/types/map/map_position_info.dart';
 import 'package:cookie_app/view/components/map/image_process.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
@@ -36,7 +35,7 @@ class BottomSheetInside extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border:
-                      Border.all(width: 2.0, color: Colors.deepOrangeAccent),
+                      Border.all(width: 2.0, color: InputTheme.color3),
                   image: DecorationImage(
                     image: FileImage(image),
                     fit: BoxFit.cover,
@@ -50,10 +49,10 @@ class BottomSheetInside extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(12, 14, 12, 0),
                 decoration: BoxDecoration(
-                  color: Colors.orangeAccent,
+                  color: InputTheme.color2,
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                   border: Border.all(
-                    color: Colors.white,
+                    color: InputTheme.color6,
                     width: 2,
                   ),
                   boxShadow: const [
@@ -77,8 +76,8 @@ class BottomSheetInside extends StatelessWidget {
                         Flexible(
                           child: Text(
                             name,
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: InputTheme.color6,
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
@@ -92,9 +91,9 @@ class BottomSheetInside extends StatelessWidget {
                     Flexible(
                       child: Text(
                         '$message\n',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: Colors.white,
+                          color: InputTheme.color6,
                           fontWeight: FontWeight.bold,
                         ),
                         maxLines: 2,
@@ -116,21 +115,18 @@ class BottomSheetInside extends StatelessWidget {
                           },
                           icon: const Icon(
                             Icons.chat_bubble_outline,
-                            color: Colors.white,
                           ),
                         ),
                         IconButton(
                           onPressed: () {},
                           icon: const Icon(
                             Icons.favorite_border_outlined,
-                            color: Colors.white,
                           ),
                         ),
                         IconButton(
                           onPressed: () {},
                           icon: const Icon(
                             Icons.cookie_outlined,
-                            color: Colors.white,
                           ),
                         ),
                       ],
@@ -174,12 +170,9 @@ Future<Marker> addMarker(
   Color color = Colors.blueAccent,
   double width = 13,
 }) async {
-  AccountViewModel friendInfo =
-      Provider.of<AccountService>(context, listen: false)
-          .getUserById(user.userid);
-  String imageUrl = await getNetworkImage(friendInfo.profile.image.toString());
+  String imageUrl = await getNetworkImage(user.account.profile.image.toString());
   return Marker(
-    markerId: MarkerId(user.userid.toString()),
+    markerId: MarkerId(user.account.id.toString()),
     icon: await MarkerIcon.downloadResizePictureCircle(
       imageUrl,
       size: size,
@@ -192,7 +185,7 @@ Future<Marker> addMarker(
       user.longitude,
     ),
     onTap: () {
-      markerBottomSheet(context, friendInfo);
+      markerBottomSheet(context, user.account);
     },
   );
 }

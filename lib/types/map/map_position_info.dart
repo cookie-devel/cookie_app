@@ -1,3 +1,4 @@
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'map_position_info.g.dart';
@@ -34,19 +35,14 @@ class MapInfoRequest {
   Map<String, dynamic> toJson() => _$MapInfoRequestToJson(this);
 }
 
-@JsonSerializable()
 class MarkerInfo {
-  String userid;
+  AccountViewModel account;
   double latitude;
   double longitude;
 
   MarkerInfo({
-    required this.userid,
+    required this.account,
     required this.latitude,
     required this.longitude,
   });
-
-  factory MarkerInfo.fromJson(Map<String, dynamic> json) =>
-      _$MarkerInfoFromJson(json);
-  Map<String, dynamic> toJson() => _$MarkerInfoToJson(this);
 }
