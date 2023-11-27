@@ -112,7 +112,6 @@ Future friendLocationBottomSheet() async {
                         '현재 접속 중인 친구',
                         style: TextStyle(
                           fontSize: 22,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
@@ -127,8 +126,7 @@ Future friendLocationBottomSheet() async {
                       child: Text(
                         '현재 접속 중인 친구가 없습니다.',
                         style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
                         ),
                       ),
                     ),

@@ -26,8 +26,9 @@ class _MyGoogleMapState extends State<MyGoogleMap> {
 
   @override
   Widget build(BuildContext context) {
-    String mapStyle = context.read<ThemeProvider>().mapStyle;
-    final marker = context.watch<MapViewModel>().markers;
+    String mapStyle = context.watch<ThemeProvider>().mapStyle;
+    Set<Marker> marker = context.watch<MapViewModel>().markers;
+    LatLng currentLocation = context.read<MapViewModel>().currentLocation;
 
     return GoogleMap(
       myLocationEnabled: true, // 본인 마커
@@ -37,7 +38,7 @@ class _MyGoogleMapState extends State<MyGoogleMap> {
       markers: marker,
       mapType: MapType.normal,
 
-      minMaxZoomPreference: const MinMaxZoomPreference(14, 20), // 줌 제한
+      minMaxZoomPreference: const MinMaxZoomPreference(12, 20), // 줌 제한
 
       onMapCreated: (GoogleMapController controller) {
         context.read<MapViewModel>().mapController = controller;
@@ -45,8 +46,8 @@ class _MyGoogleMapState extends State<MyGoogleMap> {
       },
 
       initialCameraPosition: CameraPosition(
-        target: context.watch<MapViewModel>().currentLocation,
-        zoom: 17.0,
+        target: currentLocation,
+        zoom: 16.0,
       ),
     );
   }

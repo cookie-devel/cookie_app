@@ -2,7 +2,6 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/repository/location_service.repo.dart';
@@ -39,7 +38,8 @@ class _MapsWidgetState extends State<MapsWidget> {
       LocationServiceRepository.isolateName,
     );
 
-    initPlatformState();
+    if (context.read<MapViewModel>().isInitPlatformState == false)
+      initPlatformState();
 
     port.listen(
       (dynamic data) async {
@@ -61,30 +61,42 @@ class _MapsWidgetState extends State<MapsWidget> {
   Widget build(BuildContext context) {
     final isInit = context.watch<MapViewModel>().isInitPlatformState;
     return isInit
-        ? Stack(
-            children: buildPositionedWidgets(),
-          )
+        ? Stack(children: [
+            const MyGoogleMap(),
+            Positioned(
+              bottom: 80,
+              right: 16,
+              child: SpeedDialPage(
+                onTapStart: onStart,
+                onTapStop: onStop,
+              ),
+            ),
+            Positioned(
+              bottom: 16,
+              right: 16,
+              child: CurrentPositionDial(),
+            ),
+          ])
         : const LoadingScreen();
   }
 
-  List<Widget> buildPositionedWidgets() {
-    return [
-      const MyGoogleMap(),
-      Positioned(
-        bottom: 80,
-        right: 16,
-        child: SpeedDialPage(
-          onTapStart: onStart,
-          onTapStop: onStop,
-        ),
-      ),
-      Positioned(
-        bottom: 16,
-        right: 16,
-        child: CurrentPositionDial(),
-      ),
-    ];
-  }
+  // List<Widget> buildPositionedWidgets() {
+  //   return [
+  //     Positioned(
+  //       bottom: 80,
+  //       right: 16,
+  //       child: SpeedDialPage(
+  //         onTapStart: onStart,
+  //         onTapStop: onStop,
+  //       ),
+  //     ),
+  //     Positioned(
+  //       bottom: 16,
+  //       right: 16,
+  //       child: CurrentPositionDial(),
+  //     ),
+  //   ];
+  // }
 }
 
 // https://snazzymaps.com/explore?text=&sort=popular&tag=&color= [google map theme]

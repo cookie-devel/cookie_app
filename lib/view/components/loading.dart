@@ -13,14 +13,14 @@ class LoadingScreen extends StatelessWidget {
           const SizedBox(height: 24.0),
           CupertinoActivityIndicator(
             animating: true,
-            color: DefaultColor.color5,
+            color: DefaultColor.colorMainBrown,
             radius: 35,
           ),
           const SizedBox(height: 16.0),
           Text(
             "Loading",
             style: TextStyle(
-              color: DefaultColor.color5,
+              color: DefaultColor.colorMainBrown,
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
             ),

@@ -34,7 +34,7 @@ class BottomSheetInside extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border:
-                      Border.all(width: 2.0, color: DefaultColor.color3),
+                      Border.all(width: 2.0, color: DefaultColor.colorMainOrange),
                   image: DecorationImage(
                     image: FileImage(image),
                     fit: BoxFit.cover,
@@ -51,7 +51,7 @@ class BottomSheetInside extends StatelessWidget {
                   color: DefaultColor.color2,
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                   border: Border.all(
-                    color: DefaultColor.color6,
+                    color: DefaultColor.colorMainWhite,
                     width: 2,
                   ),
                   boxShadow: const [
@@ -76,7 +76,7 @@ class BottomSheetInside extends StatelessWidget {
                           child: Text(
                             name,
                             style: TextStyle(
-                              color: DefaultColor.color6,
+                              color: DefaultColor.colorMainWhite,
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
@@ -92,7 +92,7 @@ class BottomSheetInside extends StatelessWidget {
                         '$message\n',
                         style: TextStyle(
                           fontSize: 14,
-                          color: DefaultColor.color6,
+                          color: DefaultColor.colorMainWhite,
                           fontWeight: FontWeight.bold,
                         ),
                         maxLines: 2,

@@ -28,15 +28,15 @@ class SpeedDialPage extends StatelessWidget {
       VoidCallback onTap,
     ) {
       return SpeedDialChild(
-        child: Icon(icon, color: DefaultColor.color6),
+        child: Icon(icon, color: DefaultColor.colorMainWhite),
         label: label,
-        labelBackgroundColor: DefaultColor.color6,
+        labelBackgroundColor: DefaultColor.colorMainWhite,
         labelStyle: TextStyle(
           fontWeight: FontWeight.w600,
-          color: DefaultColor.color3,
+          color: DefaultColor.colorMainOrange,
           fontSize: 14.0,
         ),
-        backgroundColor: DefaultColor.color3,
+        backgroundColor: DefaultColor.colorMainOrange,
         onTap: onTap,
       );
     }
@@ -67,7 +67,7 @@ class SpeedDialPage extends StatelessWidget {
       spaceBetweenChildren: 10.0,
       overlayOpacity: 0.0,
       curve: Curves.bounceIn,
-      backgroundColor: DefaultColor.color3,
+      backgroundColor: DefaultColor.colorMainOrange,
       children: speedDialChildren,
     );
   }
@@ -90,7 +90,7 @@ class CurrentPositionDial extends StatelessWidget {
         height: 50,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: DefaultColor.color3,
+          color: DefaultColor.colorMainOrange,
         ),
         child: Center(
           child: Icon(
