@@ -1,3 +1,6 @@
+import 'package:cookie_app/service/account.service.dart';
+import 'package:cookie_app/theme/components/input.theme.dart';
+import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +10,7 @@ import 'package:latlong2/latlong.dart' as l2;
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
-import 'package:cookie_app/types/map/mapPosition_info.dart';
+import 'package:cookie_app/types/map/map_position_info.dart';
 import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/components/map/marker_design.dart';
@@ -82,22 +85,38 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
       return;
     }
 
+    AccountViewModel friendInfo =
+        Provider.of<AccountService>(context, listen: false)
+            .getUserById(info.userid);
+
     bool userExists = context
         .read<MapViewModel>()
         .mapLog
-        .any((element) => element.userid == info.userid);
+        .any((element) => element.account.id == info.userid);
 
+    // if user is not sharing location, remove marker
     if (info.latitude == 0 && info.longitude == 0) {
+      showSnackBar(
+        context,
+        '${friendInfo.name}님이 위치공유를 시작했습니다.',
+        icon: const Icon(
+          Icons.info,
+          color: Colors.blue,
+        ),
+      );
+    }
+    // if user is sharing location, notify user sharing
+    else if (info.latitude == -1 && info.longitude == -1) {
       context.read<MapViewModel>().mapLog.removeWhere(
-            (element) => element.userid == info.userid,
+            (element) => element.account.id == info.userid,
           );
     } else {
       if (userExists) {
         context.read<MapViewModel>().mapLog =
             context.read<MapViewModel>().mapLog.map((element) {
-          if (element.userid == info.userid) {
+          if (element.account.id == info.userid) {
             return MarkerInfo(
-              userid: info.userid,
+              account: friendInfo,
               latitude: info.latitude,
               longitude: info.longitude,
             );
@@ -107,7 +126,7 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
       } else {
         context.read<MapViewModel>().mapLog.add(
               MarkerInfo(
-                userid: info.userid,
+                account: friendInfo,
                 latitude: info.latitude,
                 longitude: info.longitude,
               ),
@@ -118,7 +137,7 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
     final List<Future<Marker>> markerFutures = context
         .read<MapViewModel>()
         .mapLog
-        .map((element) => addMarker(context, element))
+        .map((element) => addMarker(context, element, color: InputTheme.color2))
         .toList();
     final List<Marker> tmpMarker = await Future.wait(markerFutures);
 
@@ -131,7 +150,6 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
     }
   }
 
-  // 두 좌표 간 거리계산
   String calDistance(LatLng friendLocation) {
     final position = context.read<MapViewModel>().currentLocation;
     final latLong1 = l2.LatLng(position.latitude, position.longitude);
@@ -147,7 +165,6 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
     return '$distanceString $unit';
   }
 
-  // 해당 location으로 camera 이동
   void moveCamera(LatLng location) {
     context
         .read<MapViewModel>()
@@ -155,7 +172,6 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
         .animateCamera(CameraUpdate.newLatLngZoom(location, 16.0));
   }
 
-  // current Location
   void moveToCurrentLocation() {
     final isRunning = context.read<MapViewModel>().isLocationUpdateRunning;
     if (isRunning) {
