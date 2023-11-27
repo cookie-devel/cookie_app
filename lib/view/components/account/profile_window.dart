@@ -1,3 +1,4 @@
+import 'package:cookie_app/theme/components/input.theme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cookie_app/view/components/box_decoration.dart';
@@ -15,88 +16,91 @@ class ProfileWindow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Profile Image
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    FullScreenImage(image: user.profile.image),
-              ),
-            );
-          },
-          child: RoundedImage(
-            image: user.profile.image,
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 4),
+          // Profile Image
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      FullScreenImage(image: user.profile.image),
+                ),
+              );
+            },
+            child: RoundedImage(
+              image: user.profile.image,
+            ),
           ),
-        ),
-        CookieDecoratedContainer(
-          child: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  user.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30.0,
-                    color: Colors.white,
+          CookieDecoratedContainer(
+            child: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    user.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30.0,
+                      color: InputTheme.color6,
+                    ),
                   ),
-                ),
-                Text(
-                  user.profile.message ?? '',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 19.0,
-                    color: Colors.white,
+                  Text(
+                    user.profile.message ?? '',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 19.0,
+                      color: InputTheme.color6,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        CookieDecoratedContainer(
-          child: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    // TODO: ChatRoom room
-                  },
-                  icon: const Icon(
-                    Icons.chat_bubble_outline,
-                    color: Colors.white,
-                    // size: pivotSize * 0.22,
+                ],
+              ),
+            ],
+          ),
+          CookieDecoratedContainer(
+            child: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      // TODO: ChatRoom room
+                    },
+                    icon: Icon(
+                      Icons.chat_bubble_outline,
+                      color: InputTheme.color6,
+                      // size: pivotSize * 0.22,
+                    ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.favorite_border_outlined,
-                    color: Colors.white,
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.favorite_border_outlined,
+                      color: InputTheme.color6,
+                    ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.cookie_outlined,
-                    color: Colors.white,
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.cookie_outlined,
+                      color: InputTheme.color6,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        const UserProfileTile(title: 'title', content: 'content'),
-      ].map((e) => wrapped(e)).toList(),
+                ],
+              ),
+            ],
+          ),
+          const UserProfileTile(title: 'title', content: 'content'),
+        ].map((e) => wrapped(e)).toList(),
+      ),
     );
   }
 }
@@ -117,18 +121,18 @@ class UserProfileTile extends StatelessWidget {
       child: [
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18.0,
-            color: Colors.white,
+            color: InputTheme.color6,
           ),
         ),
         Text(
           content,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 26.0,
-            color: Colors.white,
+            color: InputTheme.color6,
           ),
         ),
       ],
