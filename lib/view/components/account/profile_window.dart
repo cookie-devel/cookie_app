@@ -20,7 +20,7 @@ class ProfileWindow extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(height: 4),
+          const SizedBox(height: 1),
           // Profile Image
           GestureDetector(
             onTap: () {
@@ -48,7 +48,7 @@ class ProfileWindow extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 30.0,
-                      color: DefaultColor.color6,
+                      color: DefaultColor.colorMainWhite,
                     ),
                   ),
                   Text(
@@ -58,7 +58,7 @@ class ProfileWindow extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 19.0,
-                      color: DefaultColor.color6,
+                      color: DefaultColor.colorMainWhite,
                     ),
                   ),
                 ],
@@ -76,7 +76,7 @@ class ProfileWindow extends StatelessWidget {
                     },
                     icon: Icon(
                       Icons.chat_bubble_outline,
-                      color: DefaultColor.color6,
+                      color: DefaultColor.colorMainWhite,
                       // size: pivotSize * 0.22,
                     ),
                   ),
@@ -84,14 +84,14 @@ class ProfileWindow extends StatelessWidget {
                     onPressed: () {},
                     icon: Icon(
                       Icons.favorite_border_outlined,
-                      color: DefaultColor.color6,
+                      color: DefaultColor.colorMainWhite,
                     ),
                   ),
                   IconButton(
                     onPressed: () {},
                     icon: Icon(
                       Icons.cookie_outlined,
-                      color: DefaultColor.color6,
+                      color: DefaultColor.colorMainWhite,
                     ),
                   ),
                 ],
@@ -124,7 +124,7 @@ class UserProfileTile extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18.0,
-            color: DefaultColor.color6,
+            color: DefaultColor.colorMainWhite,
           ),
         ),
         Text(
@@ -132,7 +132,7 @@ class UserProfileTile extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 26.0,
-            color: DefaultColor.color6,
+            color: DefaultColor.colorMainWhite,
           ),
         ),
       ],

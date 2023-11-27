@@ -88,10 +88,9 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
                 context: context,
                 useSafeArea: false,
                 isScrollControlled: true,
-                backgroundColor: DefaultColor.color4,
                 builder: (BuildContext context) {
                   return SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.6,
+                    height: MediaQuery.of(context).size.height * 0.45,
                     child: ProfileWindow(user: widget.account),
                   );
                 },
@@ -138,7 +137,7 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
                   height: 28,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: DefaultColor.color3,
+                    color: DefaultColor.colorMainOrange,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.3),

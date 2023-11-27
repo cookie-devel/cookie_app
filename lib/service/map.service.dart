@@ -86,8 +86,7 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
     }
 
     AccountViewModel friendInfo =
-        Provider.of<AccountService>(context, listen: false)
-            .getUserById(info.userid);
+        context.read<AccountService>().getUserById(info.userid);
 
     bool userExists = context
         .read<MapViewModel>()
@@ -137,7 +136,8 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
     final List<Future<Marker>> markerFutures = context
         .read<MapViewModel>()
         .mapLog
-        .map((element) => addMarker(context, element, color: DefaultColor.color2))
+        .map((element) =>
+            addMarker(context, element, color: DefaultColor.color2))
         .toList();
     final List<Marker> tmpMarker = await Future.wait(markerFutures);
 
