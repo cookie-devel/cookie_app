@@ -17,14 +17,15 @@ Map<String, dynamic> _$ChatRequestToJson(ChatRequest instance) =>
       'payload': instance.payload,
     };
 
-ChatResponse _$ChatResponseFromJson(Map<String, dynamic> json) => ChatResponse(
+MessageWrapper _$MessageWrapperFromJson(Map<String, dynamic> json) =>
+    MessageWrapper(
       roomId: json['roomId'] as String,
       sender: json['sender'] as String,
       timestamp: DateTime.parse(json['timestamp'] as String),
       payload: Message.fromJson(json['payload'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$ChatResponseToJson(ChatResponse instance) =>
+Map<String, dynamic> _$MessageWrapperToJson(MessageWrapper instance) =>
     <String, dynamic>{
       'roomId': instance.roomId,
       'sender': instance.sender,

@@ -59,13 +59,12 @@ class ChatService extends ChatServiceEventHandler with DiagnosticableTreeMixin {
     _socket.emit(ChatEvents.joinRoom, data);
   }
 
-
   int _notiCount = 0;
 
   @override
   void _onChat(data) {
     super._onChat(data);
-    ChatResponse chat = ChatResponse.fromJson(data);
+    MessageWrapper chat = MessageWrapper.fromJson(data);
 
     Message message;
 
@@ -107,7 +106,7 @@ class ChatService extends ChatServiceEventHandler with DiagnosticableTreeMixin {
         break;
     }
 
-    this._roomMap[chat.roomId]!.addChat(message);
+    this._roomMap[chat.roomId]!.addChat(chat);
     notifyListeners();
   }
 
