@@ -20,21 +20,21 @@ class ChatRequest {
 }
 
 @JsonSerializable()
-class ChatResponse {
+class MessageWrapper {
   final String roomId;
   final String sender;
   final DateTime timestamp;
-  final Message payload;
+  Message payload;
 
-  ChatResponse({
+  MessageWrapper({
     required this.roomId,
     required this.sender,
     required this.timestamp,
     required this.payload,
   });
 
-  factory ChatResponse.fromJson(Map<String, dynamic> json) =>
-      _$ChatResponseFromJson(json);
+  factory MessageWrapper.fromJson(Map<String, dynamic> json) =>
+      _$MessageWrapperFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ChatResponseToJson(this);
+  Map<String, dynamic> toJson() => _$MessageWrapperToJson(this);
 }

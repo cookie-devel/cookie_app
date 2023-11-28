@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:cookie_app/model/chat/room.dart';
 import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/service/chat.service.dart';
+import 'package:cookie_app/types/socket/chat/chat.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
@@ -38,10 +39,10 @@ class ChatRoomViewModel extends ChangeNotifier {
   List<User> get chatUsers => _model.members
       .map((id) => context.read<AccountService>().getUserById(id).toFlyer)
       .toList(growable: false);
-  List<Message> get messages => _model.messages;
+  List<Message> get messages => _model.messages.map((e) => e.payload).toList();
 
   String get lastMessage {
-    Message lastMessage = _model.messages.first;
+    Message lastMessage = messages.first;
     return lastMessage is TextMessage
         ? lastMessage.text
         : lastMessage.type.toString();
@@ -49,16 +50,16 @@ class ChatRoomViewModel extends ChangeNotifier {
 
   DateTime get lastActive {
     if (_model.messages.isEmpty) return _model.createdAt;
-    Message lastMessage = _model.messages.first;
+    Message lastMessage = messages.first;
     return DateTime.fromMillisecondsSinceEpoch(lastMessage.createdAt ?? 0);
   }
 
   void updateChat(int index, Message message) {
-    _model.messages[index] = message;
+    _model.messages[index].payload = message;
     notifyListeners();
   }
 
-  void addChat(Message message) {
+  void addChat(MessageWrapper message) {
     _model.messages.insert(0, message);
     notifyListeners();
   }
