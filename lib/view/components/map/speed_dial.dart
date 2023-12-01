@@ -42,7 +42,7 @@ class SpeedDialPage extends StatelessWidget {
     }
 
     final List<SpeedDialChild> speedDialChildren = [
-      context.read<MapViewModel>().isLocationUpdateRunning
+      context.watch<MapViewModel>().isLocationUpdateRunning
           ? speedDialChild(
               "공유 해제",
               Icons.location_off_outlined,

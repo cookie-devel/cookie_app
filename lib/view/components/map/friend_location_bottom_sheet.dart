@@ -45,29 +45,11 @@ class FriendLocationListTile extends StatelessWidget {
         ),
       ),
       trailing: IconButton(
-        icon:Icon(
+        icon: Icon(
           Icons.cookie_sharp,
           color: DefaultColor.colorsecondaryOrange,
         ),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Friend Information'),
-                content: Text('Name: ${log.account.name}\n'),
-                actions: [
-                  TextButton(
-                    child: const Text('Close'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        },
+        onPressed: () {},
       ),
       onTap: () => {
         context.read<MapService>().moveCamera(
@@ -84,13 +66,13 @@ class FriendLocationListTile extends StatelessWidget {
 // Seaching for friends
 Future friendLocationBottomSheet() async {
   BuildContext context = NavigationService.navigatorKey.currentContext!;
-  final mapInfo = context.read<MapViewModel>().mapLog;
 
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
     backgroundColor: DefaultColor.colorMainWhite,
     builder: (BuildContext context) {
+      final mapInfo = context.watch<MapViewModel>().mapLog;
       return SizedBox(
         height: MediaQuery.of(context).size.height * 0.45,
         child: Column(
@@ -120,7 +102,10 @@ Future friendLocationBottomSheet() async {
                 ],
               ),
             ),
-            const Divider(),
+            Divider(
+              thickness: 2,
+              color: DefaultColor.colorMainWhite,
+            ),
             mapInfo.isEmpty
                 ? const Expanded(
                     child: Center(
