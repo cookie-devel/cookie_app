@@ -1,5 +1,7 @@
 import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/theme/default.dart';
+import 'package:cookie_app/types/map/map_share_info.dart';
+import 'package:cookie_app/view/components/dialog.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,7 @@ import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 
 class MapEvents {
   static const position = 'position';
+  static const requestShare = 'requestShare';
 }
 
 class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
@@ -37,6 +40,7 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
     socket.onConnect(_onConnectionChange);
     socket.onDisconnect(_onConnectionChange);
     socket.on(MapEvents.position, _onPosition);
+    socket.on(MapEvents.requestShare, _onRequestShare);
   }
 
   // socket
@@ -68,6 +72,43 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
     final MapInfoResponse userInfo = MapInfoResponse.fromJson(data);
     _updateMarkers(userInfo);
     logger.t("position sended: $data");
+  }
+
+  void requestShare(String friendId) {
+    socket.emit(
+      MapEvents.requestShare,
+      MapShareInfo(
+        userid: friendId,
+      ).toJson(),
+    );
+  }
+
+  void _onRequestShare(data) {
+    logger.t("requestShare sended: $data");
+    final MapShareInfo user = MapShareInfo.fromJson(data);
+    final userId = user.userid;
+    final AccountViewModel friendInfo =
+        context.read<AccountService>().getUserById(userId);
+
+    showDialog(
+      context: context,
+      builder: (context) => Alert(
+        title: "위치 공유",
+        content: "${friendInfo.name}님에게 위치 공유 요청이 왔어요.",
+        onCancel: () {
+          Navigator.of(context).pop();
+        },
+        onConfirm: () {
+          Navigator.of(context).pop();
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => const MapsWidget(),
+          //   ),
+          // );
+        },
+      ),
+    );
   }
 
   Future<void> _updateMarkers(MapInfoResponse info) async {
@@ -130,7 +171,8 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
         .read<MapViewModel>()
         .mapLog
         .map(
-          (element) => addMarker(context, element, color: DefaultColor.colorsecondaryOrange),
+          (element) => addMarker(context, element,
+              color: DefaultColor.colorsecondaryOrange),
         )
         .toList();
     final List<Marker> tmpMarker = await Future.wait(markerFutures);
