@@ -11,13 +11,12 @@ import 'package:cookie_app/view/components/map/image_process.dart';
 
 class BottomSheetInside extends StatelessWidget {
   final File image;
-  final String name;
-  final String message;
+  final AccountViewModel user;
+
   const BottomSheetInside({
     super.key,
     required this.image,
-    required this.name,
-    this.message = '',
+    required this.user,
   });
 
   @override
@@ -76,7 +75,7 @@ class BottomSheetInside extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Text(
-                            name,
+                            user.name.toString(),
                             style: TextStyle(
                               color: DefaultColor.colorMainWhite,
                               fontSize: 22,
@@ -91,7 +90,7 @@ class BottomSheetInside extends StatelessWidget {
                     const SizedBox(height: 8),
                     Flexible(
                       child: Text(
-                        '$message\n',
+                        '${user.profile.message ?? 'null'}\n',
                         style: TextStyle(
                           fontSize: 14,
                           color: DefaultColor.colorMainWhite,
@@ -157,8 +156,9 @@ Future<void> markerBottomSheet(
     builder: (BuildContext context) {
       return BottomSheetInside(
         image: imageFile,
-        name: user.name.toString(),
-        message: user.profile.message.toString(),
+        user: user,
+        // name: user.name.toString(),
+        // message: user.profile.message.toString(),
       );
     },
   );

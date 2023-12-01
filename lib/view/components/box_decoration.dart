@@ -1,3 +1,4 @@
+import 'package:cookie_app/theme/default.dart';
 import 'package:flutter/material.dart';
 
 class CookieDecoratedContainer extends StatelessWidget {
@@ -11,10 +12,10 @@ class CookieDecoratedContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.orangeAccent,
+        color: DefaultColor.colorMainOrange,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.white,
+          color: DefaultColor.colorMainWhite,
           width: 2,
         ),
         boxShadow: const [
