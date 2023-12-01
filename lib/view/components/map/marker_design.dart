@@ -33,8 +33,10 @@ class BottomSheetInside extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border:
-                      Border.all(width: 2.0, color: DefaultColor.colorMainOrange),
+                  border: Border.all(
+                    width: 2.0,
+                    color: DefaultColor.colorMainOrange,
+                  ),
                   image: DecorationImage(
                     image: FileImage(image),
                     fit: BoxFit.cover,
@@ -48,7 +50,7 @@ class BottomSheetInside extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(12, 14, 12, 0),
                 decoration: BoxDecoration(
-                  color: DefaultColor.color2,
+                  color: DefaultColor.colorsecondaryOrange,
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                   border: Border.all(
                     color: DefaultColor.colorMainWhite,
@@ -145,13 +147,13 @@ Future<void> markerBottomSheet(
   BuildContext context,
   AccountViewModel user,
 ) async {
-  String imageUrl = await getNetworkImage(user.profile.image.toString());
+  String imageUrl = await getNetworkImage(user.profile.imageURL.toString());
   File imageFile = await getCachedImage(imageUrl);
   if (!context.mounted) return;
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
-    backgroundColor: Colors.white60.withOpacity(0.9),
+    backgroundColor: DefaultColor.colorMainWhite,
     builder: (BuildContext context) {
       return BottomSheetInside(
         image: imageFile,
@@ -165,11 +167,12 @@ Future<void> markerBottomSheet(
 Future<Marker> addMarker(
   BuildContext context,
   MarkerInfo user, {
-  int size = 150,
+  int size = 135,
   Color color = Colors.blueAccent,
   double width = 13,
 }) async {
-  String imageUrl = await getNetworkImage(user.account.profile.image.toString());
+  String imageUrl =
+      await getNetworkImage(user.account.profile.imageURL.toString());
   return Marker(
     markerId: MarkerId(user.account.id.toString()),
     icon: await MarkerIcon.downloadResizePictureCircle(
