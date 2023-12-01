@@ -1,10 +1,14 @@
+import 'package:cookie_app/service/map.service.dart';
 import 'package:cookie_app/theme/default.dart';
+import 'package:cookie_app/view/components/dialog.dart';
+import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cookie_app/view/components/box_decoration.dart';
 import 'package:cookie_app/view/components/fullscreen_image.dart';
 import 'package:cookie_app/view/components/rounded_image.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
+import 'package:provider/provider.dart';
 
 // 프로필 창 class
 class ProfileWindow extends StatelessWidget {
@@ -88,7 +92,32 @@ class ProfileWindow extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => Alert(
+                          title: "위치 공유",
+                          content: "${user.name}님에게 위치 공유를 요청할래요?",
+                          onCancel: () {
+                            Navigator.of(context).pop();
+                          },
+                          onConfirm: () {
+                            context.read<MapService>().requestShare(
+                                  user.id,
+                                );
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                            showSnackBar(
+                              context,
+                              "${user.name}님에게 위치 공유를 요청했어요!",
+                              icon: const Icon(
+                                Icons.cookie_outlined,
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
                     icon: Icon(
                       Icons.cookie_outlined,
                       color: DefaultColor.colorMainWhite,
