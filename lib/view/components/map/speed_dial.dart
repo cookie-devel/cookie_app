@@ -1,4 +1,5 @@
 import 'package:cookie_app/view/components/map/friend_location_bottom_sheet.dart';
+import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/pages/maps/location_background.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/viewmodel/map.viewmodel.dart';
@@ -8,7 +9,6 @@ import 'package:cookie_app/theme/default.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
-
 
 class SpeedDialPage extends StatelessWidget {
   SpeedDialPage({
@@ -53,9 +53,13 @@ class SpeedDialPage extends StatelessWidget {
               Icons.location_on_outlined,
               onTapStart,
             ),
-      speedDialChild("친구 찾기", Icons.person_search_rounded, () {
-        friendLocationBottomSheet();
-      }),
+      context.read<MapViewModel>().isLocationUpdateRunning
+          ? speedDialChild("친구 찾기", Icons.person_search_rounded, () {
+              friendLocationBottomSheet();
+            })
+          : speedDialChild("친구 찾기", Icons.person_search_rounded, () {
+              showErrorSnackBar(context, '위치 공유를 활성화해주세요.');
+            }),
     ];
 
     return SpeedDial(
@@ -79,12 +83,12 @@ class SpeedDialPage extends StatelessWidget {
 }
 
 class CurrentPositionDial extends StatelessWidget {
-  CurrentPositionDial({super.key});
-
-  final isRunning = context.watch<MapViewModel>().isLocationUpdateRunning;
+  const CurrentPositionDial({super.key});
   Widget _currentPositionButton() {
     return InkWell(
-      onTap: () => context.read<MapService>().moveToCurrentLocation(),
+      onTap: () => {
+        context.read<MapService>().moveToCurrentLocation(),
+      },
       child: Container(
         width: 50,
         height: 50,
@@ -92,12 +96,9 @@ class CurrentPositionDial extends StatelessWidget {
           shape: BoxShape.circle,
           color: DefaultColor.colorMainOrange,
         ),
-        child: Center(
+        child: const Center(
           child: Icon(
-            isRunning
-                ? Icons.location_searching_sharp
-                : Icons.location_disabled_sharp,
-            color: Colors.white,
+            Icons.location_searching_sharp,
           ),
         ),
       ),

@@ -59,18 +59,18 @@ void onStop() async {
     context.read<MapViewModel>().isLocationUpdateRunning = value;
     logger.t('Location Update running: $value');
   });
-  if (context.mounted) context.read<MapService>().position(const LatLng(-1, -1));
+  if (context.mounted)
+    context.read<MapService>().position(const LatLng(-1, -1));
 }
 
 Future<void> update(dynamic data) async {
   logger.t("Location updated");
-  LocationDto? locationDto = (data != null) ? LocationDto.fromJson(data) : null;
+  LocationDto? locationDto = (data != null)
+      ? LocationDto.fromJson(data)
+      : context.read<MapViewModel>().getCurrentLocation() as LocationDto?;
   await updateNotificationText(locationDto!);
 
   if (context.mounted) {
-    context
-        .read<MapService>()
-        .setCurrentLocation(locationDto.latitude, locationDto.longitude);
     context
         .read<MapService>()
         .position(LatLng(locationDto.latitude, locationDto.longitude));

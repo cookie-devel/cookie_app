@@ -1,10 +1,14 @@
+import 'package:cookie_app/utils/logger.dart';
 import 'package:flutter/material.dart';
-
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:cookie_app/types/map/map_position_info.dart';
+import 'package:geolocator/geolocator.dart';
 
 class MapViewModel with ChangeNotifier {
+  MapViewModel() {
+    _getUserLocation();
+  }
+
   // mapController
   late GoogleMapController mapController;
 
@@ -26,8 +30,12 @@ class MapViewModel with ChangeNotifier {
   }
 
   // current location
-  LatLng _currentLocation = const LatLng(37.282053, 127.043546);
-  LatLng get currentLocation => _currentLocation;
+  LatLng _currentLocation = const LatLng(37.2820, 127.0435);
+  LatLng getCurrentLocation() {
+    _getUserLocation();
+    return _currentLocation;
+  }
+
   set currentLocation(LatLng value) {
     _currentLocation = value;
     notifyListeners();
@@ -55,5 +63,18 @@ class MapViewModel with ChangeNotifier {
   set isInitPlatformState(bool value) {
     _isInitPlatformState = value;
     notifyListeners();
+  }
+
+  Future<void> _getUserLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      LatLng currentLoc = LatLng(position.latitude, position.longitude);
+      currentLocation = currentLoc;
+      notifyListeners();
+    } catch (e) {
+      logger.t(e);
+    }
   }
 }

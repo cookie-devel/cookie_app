@@ -61,42 +61,28 @@ class _MapsWidgetState extends State<MapsWidget> {
   Widget build(BuildContext context) {
     final isInit = context.watch<MapViewModel>().isInitPlatformState;
     return isInit
-        ? Stack(children: [
-            const MyGoogleMap(),
-            Positioned(
-              bottom: 80,
-              right: 16,
-              child: SpeedDialPage(
-                onTapStart: onStart,
-                onTapStop: onStop,
+        ? Stack(
+            children: [
+              const MyGoogleMap(),
+              Positioned(
+                bottom: 80,
+                right: 16,
+                child: SpeedDialPage(
+                  onTapStart: onStart,
+                  onTapStop: onStop,
+                ),
               ),
-            ),
-            Positioned(
-              bottom: 16,
-              right: 16,
-              child: CurrentPositionDial(),
-            ),
-          ])
+              const Positioned(
+                bottom: 16,
+                right: 16,
+                child: CurrentPositionDial(),
+              ),
+            ],
+          )
         : const LoadingScreen();
   }
-
-  // List<Widget> buildPositionedWidgets() {
-  //   return [
-  //     Positioned(
-  //       bottom: 80,
-  //       right: 16,
-  //       child: SpeedDialPage(
-  //         onTapStart: onStart,
-  //         onTapStop: onStop,
-  //       ),
-  //     ),
-  //     Positioned(
-  //       bottom: 16,
-  //       right: 16,
-  //       child: CurrentPositionDial(),
-  //     ),
-  //   ];
-  // }
 }
 
-// https://snazzymaps.com/explore?text=&sort=popular&tag=&color= [google map theme]
+/* 
+https://snazzymaps.com/explore?text=&sort=popular&tag=&color= [google map theme]
+*/
