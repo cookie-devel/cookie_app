@@ -130,8 +130,8 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
         ),
         userExists == true
             ? Positioned(
-                left: 3,
-                top: 3,
+                left: 0,
+                top: 2,
                 child: Container(
                   width: 28,
                   height: 28,

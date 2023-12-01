@@ -35,7 +35,7 @@ class FriendLocationListTile extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: DefaultColor.color2,
+            color: DefaultColor.colorsecondaryOrange,
             width: 1.3,
           ),
         ),
@@ -47,7 +47,7 @@ class FriendLocationListTile extends StatelessWidget {
       trailing: IconButton(
         icon:Icon(
           Icons.cookie_sharp,
-          color: DefaultColor.color2,
+          color: DefaultColor.colorsecondaryOrange,
         ),
         onPressed: () {
           showDialog(
@@ -89,6 +89,7 @@ Future friendLocationBottomSheet() async {
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
+    backgroundColor: DefaultColor.colorMainWhite,
     builder: (BuildContext context) {
       return SizedBox(
         height: MediaQuery.of(context).size.height * 0.45,

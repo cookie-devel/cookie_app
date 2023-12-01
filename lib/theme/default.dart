@@ -4,7 +4,7 @@ import 'package:cookie_app/theme/components/input.theme.dart';
 
 class DefaultColor {
   static Color color1 = const Color.fromRGBO(242, 191, 94, 1);
-  static Color color2 = const Color.fromRGBO(242, 179, 102, 1);
+  static Color colorsecondaryOrange = const Color.fromRGBO(242, 179, 102, 1);
   static Color colorMainOrange = const Color.fromRGBO(252, 147, 49, 1);
   static Color colorMainWhite = const Color.fromRGBO(254, 243, 231, 1);
   static Color colorMainYellow = const Color.fromRGBO(248, 234, 179, 1);
@@ -14,14 +14,18 @@ class DefaultColor {
 ThemeData defaultThemeData = ThemeData(
   useMaterial3: true,
   brightness: Brightness.light,
+  fontFamily: 'Cafe24Ssurround',
   colorScheme: ColorScheme.light(
-    primary: DefaultColor.color2,
-    secondary: DefaultColor.colorMainOrange,
+    primary: DefaultColor.colorMainOrange,
+    onPrimary: DefaultColor.colorMainWhite,
+    secondary: DefaultColor.colorsecondaryOrange,
+    onSecondary: DefaultColor.colorMainWhite,
+    background: DefaultColor.colorMainWhite,
   ),
   appBarTheme: AppBarTheme(
     backgroundColor: DefaultColor.colorMainOrange,
     titleTextStyle: TextStyle(
-      fontWeight: FontWeight.w600,
+      fontFamily: 'Cafe24Ssurround',
       color: DefaultColor.colorMainWhite,
       fontSize: 22.0,
     ),
@@ -35,21 +39,12 @@ ThemeData defaultThemeData = ThemeData(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(16.0),
     ),
-    titleTextStyle: const TextStyle(
-      fontWeight: FontWeight.bold,
-      color: Colors.black87,
-      fontSize: 20,
-    ),
-    contentTextStyle: const TextStyle(
-      color: Colors.black,
-      fontSize: 16,
-    ),
     actionsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
     alignment: Alignment.center,
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.deepOrangeAccent,
+      backgroundColor: DefaultColor.colorMainOrange,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(width: 1, color: DefaultColor.colorMainWhite),
