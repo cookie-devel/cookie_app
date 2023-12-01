@@ -3,8 +3,10 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:cookie_app/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<Uint8List> getRoundedImage(
   ImageProvider image, {
@@ -87,16 +89,27 @@ Future<Uint8List> _createRoundedImage(
   }
 }
 
-Future<String> getNetworkImage(String url) async {
-  bool isValidUrl = Uri.tryParse(url)?.isAbsolute ?? false;
-  if (isValidUrl) {
-    return url;
-  } else {
+Future<String> getNetworkImage(String imageURL) async {
+  try {
+    bool isValidUrl =
+        Uri.tryParse('${dotenv.env['BASE_URI']}/$imageURL')?.isAbsolute ?? false;
+
+    if (isValidUrl) {
+      return '${dotenv.env['BASE_URI']}/$imageURL';
+    } else {
+      return 'https://img.freepik.com/free-photo/abstract-surface-and-textures-of-white-concrete-stone-wall_74190-8189.jpg?w=740&t=st=1699954803~exp=1699955403~hmac=b06fdddf22160522cb93f9a159504e331c773055cf433fa5d5156348b4c49782';
+    }
+  } catch (e) {
+    logger.t('getNetworkImage Error: $e');
     return 'https://img.freepik.com/free-photo/abstract-surface-and-textures-of-white-concrete-stone-wall_74190-8189.jpg?w=740&t=st=1699954803~exp=1699955403~hmac=b06fdddf22160522cb93f9a159504e331c773055cf433fa5d5156348b4c49782';
   }
 }
 
 Future<File> getCachedImage(String url) async {
-  File imageFile = await DefaultCacheManager().getSingleFile(url);
-  return imageFile;
+  if (url.startsWith('http') || url.startsWith('https')) {
+    File imageFile = await DefaultCacheManager().getSingleFile(url);
+    return imageFile;
+  } else {
+    throw const FormatException('Invalid URL scheme');
+  }
 }
