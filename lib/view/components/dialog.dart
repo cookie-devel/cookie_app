@@ -1,3 +1,4 @@
+import 'package:cookie_app/theme/default.dart';
 import 'package:flutter/material.dart';
 
 class Alert extends StatelessWidget {
@@ -53,7 +54,6 @@ class CancelButton extends StatelessWidget {
         '취소',
         style: TextStyle(
           color: Colors.grey,
-          fontWeight: FontWeight.bold,
         ),
       ),
     );
@@ -74,7 +74,12 @@ class ConfirmButton extends StatelessWidget {
           onPressed!();
         }
       },
-      child: const Text('확인'),
+      child: Text(
+        '확인',
+        style: TextStyle(
+          color: DefaultColor.colorMainWhite,
+        ),
+      ),
     );
   }
 }
