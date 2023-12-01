@@ -28,7 +28,6 @@ class _MyGoogleMapState extends State<MyGoogleMap> {
   Widget build(BuildContext context) {
     String mapStyle = context.watch<ThemeProvider>().mapStyle;
     Set<Marker> marker = context.watch<MapViewModel>().markers;
-    LatLng currentLocation = context.read<MapViewModel>().currentLocation;
 
     return GoogleMap(
       myLocationEnabled: true, // 본인 마커
@@ -46,7 +45,7 @@ class _MyGoogleMapState extends State<MyGoogleMap> {
       },
 
       initialCameraPosition: CameraPosition(
-        target: currentLocation,
+        target: context.read<MapViewModel>().getCurrentLocation(),
         zoom: 16.0,
       ),
     );

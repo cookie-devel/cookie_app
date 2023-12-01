@@ -54,13 +54,6 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  // set current location
-  void setCurrentLocation(double latitude, double longitude) {
-    context.read<MapViewModel>().currentLocation = LatLng(latitude, longitude);
-    context.read<MapViewModel>().loading = false;
-    notifyListeners();
-  }
-
   void position(LatLng position) {
     socket.emit(
       MapEvents.position,
@@ -136,8 +129,9 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
     final List<Future<Marker>> markerFutures = context
         .read<MapViewModel>()
         .mapLog
-        .map((element) =>
-            addMarker(context, element, color: DefaultColor.color2))
+        .map(
+          (element) => addMarker(context, element, color: DefaultColor.colorsecondaryOrange),
+        )
         .toList();
     final List<Marker> tmpMarker = await Future.wait(markerFutures);
 
@@ -151,7 +145,7 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
   }
 
   String calDistance(LatLng friendLocation) {
-    final position = context.read<MapViewModel>().currentLocation;
+    final position = context.read<MapViewModel>().getCurrentLocation();
     final latLong1 = l2.LatLng(position.latitude, position.longitude);
     final latLong2 =
         l2.LatLng(friendLocation.latitude, friendLocation.longitude);
@@ -173,22 +167,22 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
   }
 
   void moveToCurrentLocation() {
-    final isRunning = context.read<MapViewModel>().isLocationUpdateRunning;
-    if (isRunning) {
-      final currentLocation = context.read<MapViewModel>().currentLocation;
-      context
-          .read<MapViewModel>()
-          .mapController
-          .animateCamera(CameraUpdate.newLatLng(currentLocation));
-    } else {
-      showSnackBar(
-        context,
-        '먼저 위치공유를 시작해주세요.  (메뉴 > 위치 공유)',
-        icon: const Icon(
-          Icons.error,
-          color: Colors.red,
-        ),
-      );
-    }
+    // final isRunning = context.read<MapViewModel>().isLocationUpdateRunning;
+    // if (isRunning) {
+    final currentLocation = context.read<MapViewModel>().getCurrentLocation();
+    context
+        .read<MapViewModel>()
+        .mapController
+        .animateCamera(CameraUpdate.newLatLng(currentLocation));
+    // } else {
+    //   showSnackBar(
+    //     context,
+    //     '먼저 위치공유를 시작해주세요.  (메뉴 > 위치 공유)',
+    //     icon: const Icon(
+    //       Icons.error,
+    //       color: Colors.red,
+    //     ),
+    //   );
+    // }
   }
 }
