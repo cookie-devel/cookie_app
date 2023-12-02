@@ -1,18 +1,16 @@
-import 'package:cookie_app/theme/default.dart';
 import 'package:flutter/material.dart';
-
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
+import 'package:cookie_app/theme/default.dart';
 import 'package:cookie_app/service/map.service.dart';
-import 'package:cookie_app/types/map/map_position_info.dart';
+import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
+import 'package:cookie_app/viewmodel/map/marker.viewmodel.dart';
 
 class FriendLocationListTile extends StatelessWidget {
-  final MarkerInfo log;
+  final MarkerViewModel user;
 
-  const FriendLocationListTile({super.key, required this.log});
+  const FriendLocationListTile({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +18,10 @@ class FriendLocationListTile extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(log.account.name),
+          Text(user.account.name),
           Text(
             context.read<MapService>().calDistance(
-                  LatLng(
-                    log.latitude,
-                    log.longitude,
-                  ),
+                  user.position,
                 ),
           ),
         ],
@@ -41,7 +36,7 @@ class FriendLocationListTile extends StatelessWidget {
         ),
         child: CircleAvatar(
           backgroundColor: DefaultColor.colorMainWhite,
-          backgroundImage: log.account.profile.image,
+          backgroundImage: user.account.profile.image,
         ),
       ),
       trailing: IconButton(
@@ -52,12 +47,7 @@ class FriendLocationListTile extends StatelessWidget {
         onPressed: () {},
       ),
       onTap: () => {
-        context.read<MapService>().moveCamera(
-              LatLng(
-                log.latitude,
-                log.longitude,
-              ),
-            ),
+        context.read<MapService>().moveCamera(user.position),
       },
     );
   }
@@ -122,7 +112,7 @@ Future friendLocationBottomSheet() async {
                       itemCount: mapInfo.length,
                       padding: const EdgeInsets.fromLTRB(5, 4, 10, 4),
                       itemBuilder: (BuildContext context, int index) {
-                        return FriendLocationListTile(log: mapInfo[index]);
+                        return FriendLocationListTile(user: mapInfo[index]);
                       },
                     ),
                   ),

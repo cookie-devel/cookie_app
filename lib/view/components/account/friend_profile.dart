@@ -1,10 +1,10 @@
 import 'package:cookie_app/theme/default.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
-import 'package:flutter/material.dart';
-
-import 'package:cookie_app/view/components/account/profile_window.dart';
-import 'package:cookie_app/view/components/rounded_image.dart';
+import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
+import 'package:cookie_app/view/components/rounded_image.dart';
+import 'package:cookie_app/view/components/account/profile_window.dart';
+
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FriendProfileWidget extends StatefulWidget {

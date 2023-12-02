@@ -1,14 +1,14 @@
 import 'package:cookie_app/view/components/map/friend_location_bottom_sheet.dart';
-import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/pages/maps/location_background.dart';
+import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
+import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
 import 'package:cookie_app/service/map.service.dart';
 import 'package:cookie_app/theme/default.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class SpeedDialPage extends StatelessWidget {
   SpeedDialPage({
