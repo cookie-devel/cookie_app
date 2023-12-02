@@ -40,7 +40,7 @@ class FriendLocationListTile extends StatelessWidget {
           ),
         ),
         child: CircleAvatar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: DefaultColor.colorMainWhite,
           backgroundImage: log.account.profile.image,
         ),
       ),
