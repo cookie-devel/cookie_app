@@ -99,13 +99,8 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
           Navigator.of(context).pop();
         },
         onConfirm: () {
+          // TODO: additional function
           Navigator.of(context).pop();
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => const MapsWidget(),
-          //   ),
-          // );
         },
       ),
     );
@@ -171,8 +166,11 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
         .read<MapViewModel>()
         .mapLog
         .map(
-          (element) => addMarker(context, element,
-              color: DefaultColor.colorsecondaryOrange),
+          (element) => addMarker(
+            context,
+            element,
+            color: DefaultColor.colorsecondaryOrange,
+          ),
         )
         .toList();
     final List<Marker> tmpMarker = await Future.wait(markerFutures);
@@ -209,22 +207,10 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
   }
 
   void moveToCurrentLocation() {
-    // final isRunning = context.read<MapViewModel>().isLocationUpdateRunning;
-    // if (isRunning) {
     final currentLocation = context.read<MapViewModel>().getCurrentLocation();
     context
         .read<MapViewModel>()
         .mapController
         .animateCamera(CameraUpdate.newLatLng(currentLocation));
-    // } else {
-    //   showSnackBar(
-    //     context,
-    //     '먼저 위치공유를 시작해주세요.  (메뉴 > 위치 공유)',
-    //     icon: const Icon(
-    //       Icons.error,
-    //       color: Colors.red,
-    //     ),
-    //   );
-    // }
   }
 }
