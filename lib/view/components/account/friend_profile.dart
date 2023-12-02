@@ -87,6 +87,7 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
               showModalBottomSheet(
                 context: context,
                 useSafeArea: false,
+                backgroundColor: DefaultColor.colorMainWhite,
                 isScrollControlled: true,
                 builder: (BuildContext context) {
                   return SizedBox(

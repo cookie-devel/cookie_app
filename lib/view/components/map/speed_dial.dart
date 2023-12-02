@@ -95,6 +95,14 @@ class CurrentPositionDial extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: DefaultColor.colorMainOrange,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.7),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
         child: const Center(
           child: Icon(
