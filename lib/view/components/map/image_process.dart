@@ -7,11 +7,12 @@ import 'package:cookie_app/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
 Future<Uint8List> getRoundedImage(
   ImageProvider image, {
   int width = 100,
-  Color borderColor = Colors.deepOrangeAccent,
+  Color borderColor = const Color.fromRGBO(252, 147, 49, 1),
   double borderWidth = 4,
 }) async {
   final imageStream = image.resolve(ImageConfiguration.empty);
@@ -89,11 +90,18 @@ Future<Uint8List> _createRoundedImage(
   }
 }
 
+Future<bool> isUrlAccessible(String url) async {
+  try {
+    final response = await http.head(Uri.parse(url));
+    return response.statusCode == 200;
+  } catch (e) {
+    return false;
+  }
+}
+
 Future<String> getNetworkImage(String imageURL) async {
   try {
-    bool isValidUrl =
-        Uri.tryParse('${dotenv.env['BASE_URI']}/$imageURL')?.isAbsolute ?? false;
-
+    bool isValidUrl = await isUrlAccessible('${dotenv.env['BASE_URI']}/$imageURL');
     if (isValidUrl) {
       return '${dotenv.env['BASE_URI']}/$imageURL';
     } else {

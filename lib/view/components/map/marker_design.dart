@@ -157,8 +157,6 @@ Future<void> markerBottomSheet(
       return BottomSheetInside(
         image: imageFile,
         user: user,
-        // name: user.name.toString(),
-        // message: user.profile.message.toString(),
       );
     },
   );
@@ -168,7 +166,7 @@ Future<Marker> addMarker(
   BuildContext context,
   MarkerInfo user, {
   int size = 135,
-  Color color = Colors.blueAccent,
+  Color color = const Color.fromRGBO(252, 147, 49, 1),
   double width = 13,
 }) async {
   String imageUrl =
