@@ -3,6 +3,7 @@ import 'package:cookie_app/theme/default.dart';
 import 'package:cookie_app/types/map/map_share_info.dart';
 import 'package:cookie_app/view/components/dialog.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
+import 'package:cookie_app/viewmodel/map/marker.viewmodel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/components/map/marker_design.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
+import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
 
 class MapEvents {
   static const position = 'position';
@@ -114,19 +115,18 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
       return;
     }
 
-    AccountViewModel friendInfo =
-        context.read<AccountService>().getUserById(info.userid);
+    MarkerViewModel marker = MarkerViewModel(model: info);
 
     bool userExists = context
         .read<MapViewModel>()
         .mapLog
-        .any((element) => element.account.id == info.userid);
+        .any((element) => element.account.id == marker.id);
 
     // if user is not sharing location, remove marker
     if (info.latitude == 0 && info.longitude == 0) {
       showSnackBar(
         context,
-        '${friendInfo.name}님이 위치공유를 시작했습니다.',
+        '${marker.name}님이 위치공유를 시작했습니다.',
         icon: const Icon(
           Icons.info,
           color: Colors.blue,
@@ -136,29 +136,19 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
     // if user is sharing location, notify user sharing
     else if (info.latitude == -1 && info.longitude == -1) {
       context.read<MapViewModel>().mapLog.removeWhere(
-            (element) => element.account.id == info.userid,
+            (element) => element.id == marker.id,
           );
     } else {
       if (userExists) {
         context.read<MapViewModel>().mapLog =
             context.read<MapViewModel>().mapLog.map((element) {
-          if (element.account.id == info.userid) {
-            return MarkerInfo(
-              account: friendInfo,
-              latitude: info.latitude,
-              longitude: info.longitude,
-            );
+          if (element.id == marker.id) {
+            return marker;
           }
           return element;
         }).toList();
       } else {
-        context.read<MapViewModel>().mapLog.add(
-              MarkerInfo(
-                account: friendInfo,
-                latitude: info.latitude,
-                longitude: info.longitude,
-              ),
-            );
+        context.read<MapViewModel>().mapLog.add(marker);
       }
     }
 

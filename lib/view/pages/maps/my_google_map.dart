@@ -4,7 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/theme/theme.provider.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
+import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
 
 class MyGoogleMap extends StatefulWidget {
   const MyGoogleMap({super.key});

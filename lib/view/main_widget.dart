@@ -13,7 +13,7 @@ import 'package:cookie_app/view/pages/friends/friends.tab.dart';
 import 'package:cookie_app/view/pages/friends/friends_sheet.dart';
 import 'package:cookie_app/view/pages/maps/maps.tab.dart';
 import 'package:cookie_app/view/pages/settings/settings.tab.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
+import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
 
 class Page {
   final String title;

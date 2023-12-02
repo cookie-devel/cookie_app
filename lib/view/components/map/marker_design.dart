@@ -1,22 +1,21 @@
 import 'dart:io';
 
+import 'package:cookie_app/view/components/map/image_process.dart';
 import 'package:flutter/material.dart';
 import 'package:custom_marker/marker_icon.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:cookie_app/theme/default.dart';
-import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:cookie_app/types/map/map_position_info.dart';
-import 'package:cookie_app/view/components/map/image_process.dart';
+import 'package:cookie_app/viewmodel/map/marker.viewmodel.dart';
 
 class BottomSheetInside extends StatelessWidget {
-  final File image;
-  final AccountViewModel user;
+  final MarkerViewModel user;
+  final File imageFile;
 
   const BottomSheetInside({
     super.key,
-    required this.image,
     required this.user,
+    required this.imageFile,
   });
 
   @override
@@ -37,7 +36,9 @@ class BottomSheetInside extends StatelessWidget {
                     color: DefaultColor.colorMainOrange,
                   ),
                   image: DecorationImage(
-                    image: FileImage(image),
+                    image: FileImage(
+                      imageFile,
+                    ),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -90,7 +91,7 @@ class BottomSheetInside extends StatelessWidget {
                     const SizedBox(height: 8),
                     Flexible(
                       child: Text(
-                        '${user.profile.message ?? 'null'}\n',
+                        '${user.account.profile.message ?? 'null'}\n',
                         style: TextStyle(
                           fontSize: 14,
                           color: DefaultColor.colorMainWhite,
@@ -144,10 +145,12 @@ class BottomSheetInside extends StatelessWidget {
 
 Future<void> markerBottomSheet(
   BuildContext context,
-  AccountViewModel user,
+  MarkerViewModel user,
 ) async {
-  String imageUrl = await getNetworkImage(user.profile.imageURL.toString());
+  String imageUrl =
+      await getNetworkImage(user.account.profile.imageURL.toString());
   File imageFile = await getCachedImage(imageUrl);
+
   if (!context.mounted) return;
   return showModalBottomSheet(
     context: context,
@@ -155,8 +158,8 @@ Future<void> markerBottomSheet(
     backgroundColor: DefaultColor.colorMainWhite,
     builder: (BuildContext context) {
       return BottomSheetInside(
-        image: imageFile,
         user: user,
+        imageFile: imageFile,
       );
     },
   );
@@ -164,7 +167,7 @@ Future<void> markerBottomSheet(
 
 Future<Marker> addMarker(
   BuildContext context,
-  MarkerInfo user, {
+  MarkerViewModel user, {
   int size = 135,
   Color color = const Color.fromRGBO(252, 147, 49, 1),
   double width = 13,
@@ -172,7 +175,8 @@ Future<Marker> addMarker(
   String imageUrl =
       await getNetworkImage(user.account.profile.imageURL.toString());
   return Marker(
-    markerId: MarkerId(user.account.id.toString()),
+    markerId: MarkerId(user.id),
+    position: user.position,
     icon: await MarkerIcon.downloadResizePictureCircle(
       imageUrl,
       size: size,
@@ -180,12 +184,8 @@ Future<Marker> addMarker(
       borderColor: color,
       borderSize: width,
     ),
-    position: LatLng(
-      user.latitude,
-      user.longitude,
-    ),
     onTap: () {
-      markerBottomSheet(context, user.account);
+      markerBottomSheet(context, user);
     },
   );
 }
