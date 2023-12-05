@@ -3,7 +3,6 @@ import 'package:cookie_app/view/pages/maps/location_background.dart';
 import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
-import 'package:cookie_app/service/map.service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -86,7 +85,7 @@ class CurrentPositionDial extends StatelessWidget {
   Widget _currentPositionButton() {
     return InkWell(
       onTap: () => {
-        context.read<MapService>().moveToCurrentLocation(),
+        context.read<MapViewModel>().moveToCurrentLocation(),
       },
       child: Container(
         width: 50,
@@ -106,6 +105,7 @@ class CurrentPositionDial extends StatelessWidget {
         child: const Center(
           child: Icon(
             Icons.location_searching_sharp,
+            color: Colors.white,
           ),
         ),
       ),
