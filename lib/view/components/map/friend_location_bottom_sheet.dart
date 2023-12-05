@@ -1,35 +1,27 @@
 import 'package:flutter/material.dart';
-
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'package:cookie_app/service/account.service.dart';
+import 'package:cookie_app/theme/default.dart';
 import 'package:cookie_app/service/map.service.dart';
-import 'package:cookie_app/types/map/mapPosition_info.dart';
+import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
-import 'package:cookie_app/viewmodel/account.viewmodel.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
+import 'package:cookie_app/viewmodel/map/marker.viewmodel.dart';
 
 class FriendLocationListTile extends StatelessWidget {
-  final MarkerInfo log;
+  final MarkerViewModel user;
 
-  const FriendLocationListTile({super.key, required this.log});
+  const FriendLocationListTile({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
-    final AccountViewModel friend =
-        context.read<AccountService>().getUserById(log.userid);
     return ListTile(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(friend.name),
+          Text(user.account.name),
           Text(
             context.read<MapService>().calDistance(
-                  LatLng(
-                    log.latitude,
-                    log.longitude,
-                  ),
+                  user.position,
                 ),
           ),
         ],
@@ -38,49 +30,24 @@ class FriendLocationListTile extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.blueAccent,
+            color: DefaultColor.colorsecondaryOrange,
             width: 1.3,
           ),
         ),
         child: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          backgroundImage: NetworkImage(
-            friend.profile.image.toString(),
-          ),
+          backgroundColor: DefaultColor.colorMainWhite,
+          backgroundImage: user.account.profile.image,
         ),
       ),
       trailing: IconButton(
-        icon: const Icon(
+        icon: Icon(
           Icons.cookie_sharp,
-          color: Colors.orangeAccent,
+          color: DefaultColor.colorsecondaryOrange,
         ),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Friend Information'),
-                content: Text('Name: ${friend.name}\n'),
-                actions: [
-                  TextButton(
-                    child: const Text('Close'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        },
+        onPressed: () {},
       ),
       onTap: () => {
-        context.read<MapService>().moveCamera(
-              LatLng(
-                log.latitude,
-                log.longitude,
-              ),
-            ),
+        context.read<MapService>().moveCamera(user.position),
       },
     );
   }
@@ -89,12 +56,13 @@ class FriendLocationListTile extends StatelessWidget {
 // Seaching for friends
 Future friendLocationBottomSheet() async {
   BuildContext context = NavigationService.navigatorKey.currentContext!;
-  final mapInfo = context.read<MapViewModel>().mapLog;
 
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
+    backgroundColor: DefaultColor.colorMainWhite,
     builder: (BuildContext context) {
+      final mapInfo = context.watch<MapViewModel>().mapLog;
       return SizedBox(
         height: MediaQuery.of(context).size.height * 0.45,
         child: Column(
@@ -117,7 +85,6 @@ Future friendLocationBottomSheet() async {
                         '현재 접속 중인 친구',
                         style: TextStyle(
                           fontSize: 22,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
@@ -125,15 +92,17 @@ Future friendLocationBottomSheet() async {
                 ],
               ),
             ),
-            const Divider(),
+            Divider(
+              thickness: 2,
+              color: DefaultColor.colorMainWhite,
+            ),
             mapInfo.isEmpty
                 ? const Expanded(
                     child: Center(
                       child: Text(
                         '현재 접속 중인 친구가 없습니다.',
                         style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
                         ),
                       ),
                     ),
@@ -143,7 +112,7 @@ Future friendLocationBottomSheet() async {
                       itemCount: mapInfo.length,
                       padding: const EdgeInsets.fromLTRB(5, 4, 10, 4),
                       itemBuilder: (BuildContext context, int index) {
-                        return FriendLocationListTile(log: mapInfo[index]);
+                        return FriendLocationListTile(user: mapInfo[index]);
                       },
                     ),
                   ),

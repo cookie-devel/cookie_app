@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'mapPosition_info.dart';
+part of 'map_position_info.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -28,19 +28,6 @@ MapInfoRequest _$MapInfoRequestFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$MapInfoRequestToJson(MapInfoRequest instance) =>
     <String, dynamic>{
-      'latitude': instance.latitude,
-      'longitude': instance.longitude,
-    };
-
-MarkerInfo _$MarkerInfoFromJson(Map<String, dynamic> json) => MarkerInfo(
-      userid: json['userid'] as String,
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
-    );
-
-Map<String, dynamic> _$MarkerInfoToJson(MarkerInfo instance) =>
-    <String, dynamic>{
-      'userid': instance.userid,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
     };

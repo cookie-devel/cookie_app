@@ -16,7 +16,7 @@ import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/pages/maps/location_callback_handler.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
+import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
 
 BuildContext context = NavigationService.navigatorKey.currentContext!;
 
@@ -44,6 +44,7 @@ void onStart() async {
       context.read<MapViewModel>().isLocationUpdateRunning = value;
     });
   }
+  if (context.mounted) context.read<MapService>().position(const LatLng(0, 0));
 }
 
 void onStop() async {
@@ -58,18 +59,18 @@ void onStop() async {
     context.read<MapViewModel>().isLocationUpdateRunning = value;
     logger.t('Location Update running: $value');
   });
-  if (context.mounted) context.read<MapService>().position(const LatLng(0, 0));
+  if (context.mounted)
+    context.read<MapService>().position(const LatLng(-1, -1));
 }
 
 Future<void> update(dynamic data) async {
   logger.t("Location updated");
-  LocationDto? locationDto = (data != null) ? LocationDto.fromJson(data) : null;
+  LocationDto? locationDto = (data != null)
+      ? LocationDto.fromJson(data)
+      : context.read<MapViewModel>().getCurrentLocation() as LocationDto?;
   await updateNotificationText(locationDto!);
 
   if (context.mounted) {
-    context
-        .read<MapService>()
-        .setCurrentLocation(locationDto.latitude, locationDto.longitude);
     context
         .read<MapService>()
         .position(LatLng(locationDto.latitude, locationDto.longitude));
@@ -84,7 +85,6 @@ Future<void> updateNotificationText(LocationDto data) async {
   final int friendCount = context.read<MapViewModel>().mapLog.length;
   await BackgroundLocator.updateNotificationText(
     title: "$friendCount명의 친구와 위치를 공유하고 있어요",
-    // title: "위치 정보를 친구와 공유하고 있어요",
     msg: "$hour:$minute:$second",
     bigMsg: "${data.latitude}, ${data.longitude}",
   );
@@ -102,19 +102,15 @@ Future<bool> checkLocationPermission() async {
         permissionLevel: LocationPermissionLevel.locationAlways,
       );
       if (permission == PermissionStatus.granted) {
-        logger.t('true');
         return true;
       } else {
-        logger.t('false');
         return false;
       }
 
     case PermissionStatus.granted:
-      logger.t('true');
       return true;
 
     default:
-      logger.t('false');
       return false;
   }
 }
