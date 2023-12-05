@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:custom_marker/marker_icon.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:cookie_app/theme/default.dart';
 import 'package:cookie_app/viewmodel/map/marker.viewmodel.dart';
 
 class BottomSheetInside extends StatelessWidget {
@@ -33,7 +32,7 @@ class BottomSheetInside extends StatelessWidget {
                   shape: BoxShape.circle,
                   border: Border.all(
                     width: 2.0,
-                    color: DefaultColor.colorMainOrange,
+                    color: Colors.white,
                   ),
                   image: DecorationImage(
                     image: FileImage(
@@ -50,10 +49,10 @@ class BottomSheetInside extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(12, 14, 12, 0),
                 decoration: BoxDecoration(
-                  color: DefaultColor.colorsecondaryOrange,
+                  color: Colors.orangeAccent,
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                   border: Border.all(
-                    color: DefaultColor.colorMainWhite,
+                    color: Colors.white,
                     width: 2,
                   ),
                   boxShadow: const [
@@ -77,8 +76,8 @@ class BottomSheetInside extends StatelessWidget {
                         Flexible(
                           child: Text(
                             user.name.toString(),
-                            style: TextStyle(
-                              color: DefaultColor.colorMainWhite,
+                            style: const TextStyle(
+                              color: Colors.white,
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
@@ -92,9 +91,9 @@ class BottomSheetInside extends StatelessWidget {
                     Flexible(
                       child: Text(
                         '${user.account.profile.message ?? 'null'}\n',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14,
-                          color: DefaultColor.colorMainWhite,
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
                         maxLines: 2,
@@ -155,7 +154,7 @@ Future<void> markerBottomSheet(
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
-    backgroundColor: DefaultColor.colorMainWhite,
+    backgroundColor: Colors.white,
     builder: (BuildContext context) {
       return BottomSheetInside(
         user: user,
@@ -169,7 +168,7 @@ Future<Marker> addMarker(
   BuildContext context,
   MarkerViewModel user, {
   int size = 135,
-  Color color = const Color.fromRGBO(252, 147, 49, 1),
+  Color color = Colors.deepOrangeAccent,
   double width = 13,
 }) async {
   String imageUrl =

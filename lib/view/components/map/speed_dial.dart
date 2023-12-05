@@ -4,7 +4,6 @@ import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/service/map.service.dart';
-import 'package:cookie_app/theme/default.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,15 +27,15 @@ class SpeedDialPage extends StatelessWidget {
       VoidCallback onTap,
     ) {
       return SpeedDialChild(
-        child: Icon(icon, color: DefaultColor.colorMainWhite),
+        child: Icon(icon, color: Colors.white),
         label: label,
-        labelBackgroundColor: DefaultColor.colorMainWhite,
+        labelBackgroundColor: Colors.white,
         labelStyle: TextStyle(
           fontWeight: FontWeight.w600,
-          color: DefaultColor.colorMainOrange,
+          color: Colors.deepOrangeAccent,
           fontSize: 14.0,
         ),
-        backgroundColor: DefaultColor.colorMainOrange,
+        backgroundColor: Colors.deepOrangeAccent,
         onTap: onTap,
       );
     }
@@ -71,7 +70,7 @@ class SpeedDialPage extends StatelessWidget {
       spaceBetweenChildren: 10.0,
       overlayOpacity: 0.0,
       curve: Curves.bounceIn,
-      backgroundColor: DefaultColor.colorMainOrange,
+      backgroundColor: Colors.deepOrangeAccent,
       children: speedDialChildren,
     );
   }
@@ -94,7 +93,7 @@ class CurrentPositionDial extends StatelessWidget {
         height: 50,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: DefaultColor.colorMainOrange,
+          color: Colors.deepOrangeAccent,
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.7),

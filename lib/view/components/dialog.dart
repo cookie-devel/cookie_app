@@ -1,4 +1,3 @@
-import 'package:cookie_app/theme/default.dart';
 import 'package:flutter/material.dart';
 
 class Alert extends StatelessWidget {
@@ -74,10 +73,10 @@ class ConfirmButton extends StatelessWidget {
           onPressed!();
         }
       },
-      child: Text(
+      child: const Text(
         '확인',
         style: TextStyle(
-          color: DefaultColor.colorMainWhite,
+          color: Colors.white,
         ),
       ),
     );

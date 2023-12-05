@@ -21,7 +21,7 @@ class InputTheme {
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(90.0),
-      borderSide: const BorderSide(color: Color.fromRGBO(242, 179, 102, 1)),
+      borderSide: const BorderSide(color: Colors.orangeAccent),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(90.0),
