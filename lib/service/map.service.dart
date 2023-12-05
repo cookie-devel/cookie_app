@@ -1,5 +1,4 @@
 import 'package:cookie_app/service/account.service.dart';
-import 'package:cookie_app/theme/default.dart';
 import 'package:cookie_app/types/map/map_share_info.dart';
 import 'package:cookie_app/view/components/dialog.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
@@ -159,7 +158,6 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
           (element) => addMarker(
             context,
             element,
-            color: DefaultColor.colorsecondaryOrange,
           ),
         )
         .toList();

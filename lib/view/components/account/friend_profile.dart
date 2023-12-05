@@ -1,4 +1,3 @@
-import 'package:cookie_app/theme/default.dart';
 import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/view/components/rounded_image.dart';
@@ -87,7 +86,7 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
               showModalBottomSheet(
                 context: context,
                 useSafeArea: false,
-                backgroundColor: DefaultColor.colorMainWhite,
+                backgroundColor: Colors.white,
                 isScrollControlled: true,
                 builder: (BuildContext context) {
                   return SizedBox(
@@ -138,7 +137,7 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
                   height: 28,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: DefaultColor.colorMainOrange,
+                    color: Colors.deepOrangeAccent,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.3),

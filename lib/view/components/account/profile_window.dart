@@ -1,5 +1,4 @@
 import 'package:cookie_app/service/map.service.dart';
-import 'package:cookie_app/theme/default.dart';
 import 'package:cookie_app/view/components/dialog.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -49,20 +48,20 @@ class ProfileWindow extends StatelessWidget {
                     user.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 30.0,
-                      color: DefaultColor.colorMainWhite,
+                      color: Colors.white,
                     ),
                   ),
                   Text(
                     user.profile.message ?? '',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 19.0,
-                      color: DefaultColor.colorMainWhite,
+                      color: Colors.white,
                     ),
                   ),
                 ],
@@ -78,17 +77,17 @@ class ProfileWindow extends StatelessWidget {
                     onPressed: () {
                       // TODO: ChatRoom room
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.chat_bubble_outline,
-                      color: DefaultColor.colorMainWhite,
+                      color: Colors.white,
                       // size: pivotSize * 0.22,
                     ),
                   ),
                   IconButton(
                     onPressed: () {},
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.favorite_border_outlined,
-                      color: DefaultColor.colorMainWhite,
+                      color: Colors.white,
                     ),
                   ),
                   IconButton(
@@ -118,9 +117,9 @@ class ProfileWindow extends StatelessWidget {
                         ),
                       );
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.cookie_outlined,
-                      color: DefaultColor.colorMainWhite,
+                      color: Colors.white,
                     ),
                   ),
                 ],
@@ -150,18 +149,18 @@ class UserProfileTile extends StatelessWidget {
       child: [
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18.0,
-            color: DefaultColor.colorMainWhite,
+            color: Colors.white,
           ),
         ),
         Text(
           content,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 26.0,
-            color: DefaultColor.colorMainWhite,
+            color: Colors.white,
           ),
         ),
       ],

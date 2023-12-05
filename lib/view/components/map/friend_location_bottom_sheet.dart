@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:cookie_app/theme/default.dart';
 import 'package:cookie_app/service/map.service.dart';
 import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
@@ -30,19 +29,19 @@ class FriendLocationListTile extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: DefaultColor.colorsecondaryOrange,
+            color: Colors.orangeAccent,
             width: 1.3,
           ),
         ),
         child: CircleAvatar(
-          backgroundColor: DefaultColor.colorMainWhite,
+          backgroundColor: Colors.white,
           backgroundImage: user.account.profile.image,
         ),
       ),
       trailing: IconButton(
-        icon: Icon(
+        icon: const Icon(
           Icons.cookie_sharp,
-          color: DefaultColor.colorsecondaryOrange,
+          color: Colors.orangeAccent,
         ),
         onPressed: () {},
       ),
@@ -60,7 +59,7 @@ Future friendLocationBottomSheet() async {
   return showModalBottomSheet(
     context: context,
     useSafeArea: true,
-    backgroundColor: DefaultColor.colorMainWhite,
+    backgroundColor: Colors.white,
     builder: (BuildContext context) {
       final mapInfo = context.watch<MapViewModel>().mapLog;
       return SizedBox(
@@ -92,9 +91,9 @@ Future friendLocationBottomSheet() async {
                 ],
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 2,
-              color: DefaultColor.colorMainWhite,
+              color: Colors.white,
             ),
             mapInfo.isEmpty
                 ? const Expanded(

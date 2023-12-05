@@ -1,4 +1,3 @@
-import 'package:cookie_app/theme/default.dart';
 import 'package:flutter/material.dart';
 
 class RoundedImage extends StatelessWidget {
@@ -24,7 +23,7 @@ class RoundedImage extends StatelessWidget {
         ),
         shape: BoxShape.circle,
         border: Border.all(
-          color: DefaultColor.colorMainOrange,
+          color: Colors.orangeAccent,
           width: 3.0,
         ),
         boxShadow: shadow == true
