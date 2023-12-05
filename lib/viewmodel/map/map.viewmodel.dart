@@ -3,12 +3,18 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:cookie_app/utils/logger.dart';
+import 'package:cookie_app/utils/navigation_service.dart';
+import 'package:cookie_app/view/components/snackbar.dart';
+import 'package:cookie_app/types/map/map_position_info.dart';
 import 'package:cookie_app/viewmodel/map/marker.viewmodel.dart';
+import 'package:cookie_app/view/components/map/marker_design.dart';
 
 class MapViewModel with ChangeNotifier {
   MapViewModel() {
     _getUserLocation();
   }
+
+  BuildContext context = NavigationService.navigatorKey.currentContext!;
 
   // mapController
   late GoogleMapController mapController;
@@ -77,5 +83,76 @@ class MapViewModel with ChangeNotifier {
     } catch (e) {
       logger.t(e);
     }
+  }
+
+  Future<void> updateMarkers(MapInfoResponse info) async {
+    if (!isLocationUpdateRunning) {
+      mapLog = [];
+      markers = {};
+      notifyListeners();
+      return;
+    }
+
+    MarkerViewModel marker = MarkerViewModel(model: info);
+
+    // if user is sharing location, notify user sharing
+    if (info.latitude == 0 && info.longitude == 0) {
+      showSnackBar(
+        context,
+        '${marker.name}님이 위치공유를 시작했습니다.',
+        icon: const Icon(
+          Icons.info,
+          color: Colors.blue,
+        ),
+      );
+      return;
+    }
+
+    // if user is not sharing location, remove marker
+    if (info.latitude == -1 && info.longitude == -1) {
+      mapLog.removeWhere(
+        (element) => element.id == marker.id,
+      );
+      notifyListeners();
+      return;
+    }
+
+    if (marker.exist) {
+      mapLog = mapLog.map((element) {
+        if (element.id == marker.id) {
+          return marker;
+        }
+        return element;
+      }).toList();
+      notifyListeners();
+    } else {
+      mapLog.add(marker);
+      notifyListeners();
+    }
+
+    final List<Future<Marker>> markerFutures = mapLog
+        .map(
+          (element) => addMarker(
+            context,
+            element,
+          ),
+        )
+        .toList();
+    final List<Marker> tmpMarker = await Future.wait(markerFutures);
+
+    if (context.mounted) markers = tmpMarker.toSet();
+
+    if (tmpMarker.isNotEmpty) {
+      notifyListeners();
+    }
+    logger.t("markers updated");
+  }
+
+  void moveCamera(LatLng location) {
+    mapController.animateCamera(CameraUpdate.newLatLng(location));
+  }
+
+  void moveToCurrentLocation() {
+    mapController.animateCamera(CameraUpdate.newLatLng(getCurrentLocation()));
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:cookie_app/service/map.service.dart';
 import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/viewmodel/map/marker.viewmodel.dart';
@@ -17,12 +16,8 @@ class FriendLocationListTile extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(user.account.name),
-          Text(
-            context.read<MapService>().calDistance(
-                  user.position,
-                ),
-          ),
+          Text(user.name),
+          Text(user.dist),
         ],
       ),
       leading: Container(
@@ -46,7 +41,7 @@ class FriendLocationListTile extends StatelessWidget {
         onPressed: () {},
       ),
       onTap: () => {
-        context.read<MapService>().moveCamera(user.position),
+        context.read<MapViewModel>().moveCamera(user.position),
       },
     );
   }
