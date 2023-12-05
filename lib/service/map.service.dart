@@ -117,10 +117,10 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
 
     MarkerViewModel marker = MarkerViewModel(model: info);
 
-    bool userExists = context
-        .read<MapViewModel>()
-        .mapLog
-        .any((element) => element.account.id == marker.id);
+    // bool userExists = context
+    //     .read<MapViewModel>()
+    //     .mapLog
+    //     .any((element) => element.account.id == marker.id);
 
     // if user is not sharing location, remove marker
     if (info.latitude == 0 && info.longitude == 0) {
@@ -139,7 +139,7 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
             (element) => element.id == marker.id,
           );
     } else {
-      if (userExists) {
+      if (marker.exist) {
         context.read<MapViewModel>().mapLog =
             context.read<MapViewModel>().mapLog.map((element) {
           if (element.id == marker.id) {
