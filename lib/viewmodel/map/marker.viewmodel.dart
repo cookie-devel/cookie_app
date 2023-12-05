@@ -7,6 +7,8 @@ import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 import 'package:cookie_app/types/map/map_position_info.dart';
 
+import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
+
 class MarkerViewModel with ChangeNotifier {
   BuildContext context = NavigationService.navigatorKey.currentContext!;
   final MapInfoResponse _model;
@@ -20,4 +22,6 @@ class MarkerViewModel with ChangeNotifier {
   AccountViewModel get account =>
       context.read<AccountService>().getUserById(id);
   String get name => account.name;
+  bool get exist =>
+      context.read<MapViewModel>().mapLog.any((element) => element.id == id);
 }
