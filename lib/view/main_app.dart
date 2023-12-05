@@ -9,7 +9,7 @@ import 'package:cookie_app/service/map.service.dart';
 import 'package:cookie_app/theme/theme.provider.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/main_widget.dart';
-import 'package:cookie_app/viewmodel/map.viewmodel.dart';
+import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});

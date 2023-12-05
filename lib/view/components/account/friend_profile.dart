@@ -1,8 +1,11 @@
-import 'package:flutter/material.dart';
-
-import 'package:cookie_app/view/components/account/profile_window.dart';
-import 'package:cookie_app/view/components/rounded_image.dart';
+import 'package:cookie_app/theme/default.dart';
+import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
+import 'package:cookie_app/view/components/rounded_image.dart';
+import 'package:cookie_app/view/components/account/profile_window.dart';
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FriendProfileWidget extends StatefulWidget {
   final AccountViewModel account;
@@ -69,55 +72,93 @@ class _FriendProfileWidgetState extends State<FriendProfileWidget>
 
     const fontSize = 14.0;
 
-    return InkWell(
-      overlayColor: MaterialStateProperty.all(Colors.transparent),
-      onTap: () {
-        if (widget.enableOnTap) {
-          _startAnimation();
-          showModalBottomSheet(
-            context: context,
-            useSafeArea: false,
-            isScrollControlled: true,
-            backgroundColor: Colors.deepOrange.withOpacity(0.9),
-            builder: (BuildContext context) {
-              return SizedBox(
-                height: MediaQuery.of(context).size.height * 0.6,
-                child: ProfileWindow(user: widget.account),
-              );
-            },
-          );
+    final bool userExists = context
+        .watch<MapViewModel>()
+        .mapLog
+        .any((element) => element.account.id == widget.account.id);
 
-          Future.delayed(const Duration(milliseconds: 300), () {
-            _reverseAnimation();
-          });
-        }
-      },
-      child: Column(
-        children: [
-          SlideTransition(
-            position: _animation,
-            child: RoundedImage(
-              imageSize: imageSize,
-              image: widget.account.profile.image,
-            ),
-          ),
-          if (widget.displayName) const SizedBox(height: 8),
-          if (widget.displayName)
-            Flexible(
-              child: Text(
-                widget.account.name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: fontSize,
-                  fontWeight: FontWeight.w400,
-                  color: Color.fromARGB(221, 60, 60, 60),
+    return Stack(
+      children: [
+        InkWell(
+          overlayColor: MaterialStateProperty.all(Colors.transparent),
+          onTap: () {
+            if (widget.enableOnTap) {
+              _startAnimation();
+              showModalBottomSheet(
+                context: context,
+                useSafeArea: false,
+                backgroundColor: DefaultColor.colorMainWhite,
+                isScrollControlled: true,
+                builder: (BuildContext context) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.45,
+                    child: ProfileWindow(user: widget.account),
+                  );
+                },
+              );
+
+              Future.delayed(const Duration(milliseconds: 300), () {
+                _reverseAnimation();
+              });
+            }
+          },
+          child: Column(
+            children: [
+              SlideTransition(
+                position: _animation,
+                child: RoundedImage(
+                  imageSize: imageSize,
+                  image: widget.account.profile.image,
                 ),
               ),
-            ),
-        ],
-      ),
+              if (widget.displayName) const SizedBox(height: 8),
+              if (widget.displayName)
+                Flexible(
+                  child: Text(
+                    widget.account.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: fontSize,
+                      fontWeight: FontWeight.w400,
+                      color: Color.fromARGB(221, 60, 60, 60),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        userExists == true
+            ? Positioned(
+                left: 0,
+                top: 2,
+                child: Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: DefaultColor.colorMainOrange,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.cookie,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                  ),
+                ),
+              )
+            : const SizedBox(),
+      ],
     );
   }
 }

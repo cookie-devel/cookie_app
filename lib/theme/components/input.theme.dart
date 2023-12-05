@@ -8,7 +8,7 @@ class InputTheme {
     ),
     contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
     filled: true,
-    fillColor: Colors.white,
+    fillColor: const Color.fromRGBO(242, 242, 242, 1),
     hintStyle: const TextStyle(color: Colors.grey),
     errorStyle: const TextStyle(color: Colors.red),
     errorBorder: OutlineInputBorder(
@@ -21,7 +21,7 @@ class InputTheme {
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(90.0),
-      borderSide: const BorderSide(color: Colors.orangeAccent),
+      borderSide: const BorderSide(color: Color.fromRGBO(242, 179, 102, 1)),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(90.0),
