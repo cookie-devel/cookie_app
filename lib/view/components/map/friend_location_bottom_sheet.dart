@@ -33,13 +33,6 @@ class FriendLocationListTile extends StatelessWidget {
           backgroundImage: user.account.profile.image,
         ),
       ),
-      trailing: IconButton(
-        icon: const Icon(
-          Icons.cookie_sharp,
-          color: Colors.orangeAccent,
-        ),
-        onPressed: () {},
-      ),
       onTap: () => {
         context.read<MapViewModel>().moveCamera(user.position),
       },

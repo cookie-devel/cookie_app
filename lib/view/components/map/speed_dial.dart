@@ -1,3 +1,4 @@
+import 'package:cookie_app/view/components/map/friend_invite_bottom_sheet.dart';
 import 'package:cookie_app/view/components/map/friend_location_bottom_sheet.dart';
 import 'package:cookie_app/view/pages/maps/location_background.dart';
 import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
@@ -29,7 +30,7 @@ class SpeedDialPage extends StatelessWidget {
         child: Icon(icon, color: Colors.white),
         label: label,
         labelBackgroundColor: Colors.white,
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           fontWeight: FontWeight.w600,
           color: Colors.deepOrangeAccent,
           fontSize: 14.0,
@@ -39,8 +40,9 @@ class SpeedDialPage extends StatelessWidget {
       );
     }
 
+    final isRunning = context.watch<MapViewModel>().isLocationUpdateRunning;
     final List<SpeedDialChild> speedDialChildren = [
-      context.watch<MapViewModel>().isLocationUpdateRunning
+      isRunning
           ? speedDialChild(
               "공유 해제",
               Icons.location_off_outlined,
@@ -51,13 +53,16 @@ class SpeedDialPage extends StatelessWidget {
               Icons.location_on_outlined,
               onTapStart,
             ),
-      context.read<MapViewModel>().isLocationUpdateRunning
+      isRunning
           ? speedDialChild("친구 찾기", Icons.person_search_rounded, () {
               friendLocationBottomSheet();
             })
           : speedDialChild("친구 찾기", Icons.person_search_rounded, () {
               showErrorSnackBar(context, '위치 공유를 활성화해주세요.');
             }),
+      speedDialChild("친구 초대", Icons.person_add_alt_1_rounded, () {
+        friendInviteBottomSheet();
+      }),
     ];
 
     return SpeedDial(
