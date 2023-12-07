@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:cookie_app/theme/theme.provider.dart';
 import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
@@ -51,3 +50,7 @@ class _MyGoogleMapState extends State<MyGoogleMap> {
     );
   }
 }
+
+/* 
+https://snazzymaps.com/explore?text=&sort=popular&tag=&color= [google map theme]
+*/
