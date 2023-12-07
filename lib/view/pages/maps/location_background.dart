@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:cookie_app/service/account.service.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
@@ -7,6 +10,7 @@ import 'package:background_locator_2/location_dto.dart';
 import 'package:background_locator_2/settings/android_settings.dart';
 import 'package:background_locator_2/settings/ios_settings.dart';
 import 'package:background_locator_2/settings/locator_settings.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location_permissions/location_permissions.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +31,7 @@ Future<void> initPlatformState() async {
   await BackgroundLocator.isServiceRunning().then((value) {
     logger.t('Service running: $value');
     context.read<MapViewModel>().isInitPlatformState = true;
-    context.read<MapViewModel>().isLocationUpdateRunning = value;
+    // context.read<MapViewModel>().isLocationUpdateRunning = value;
   });
 }
 
@@ -44,7 +48,9 @@ void onStart() async {
       context.read<MapViewModel>().isLocationUpdateRunning = value;
     });
   }
-  if (context.mounted) context.read<MapService>().position(const LatLng(0, 0));
+  if (context.mounted)
+    context.read<MapService>().position(
+        MapRequestType.startShare, context.read<AccountService>().friendIds);
 }
 
 void onStop() async {
@@ -60,7 +66,10 @@ void onStop() async {
     logger.t('Location Update running: $value');
   });
   if (context.mounted)
-    context.read<MapService>().position(const LatLng(-1, -1));
+    context.read<MapService>().position(
+          MapRequestType.endShare,
+          context.read<AccountService>().friendIds,
+        );
 }
 
 Future<void> update(dynamic data) async {
@@ -71,22 +80,33 @@ Future<void> update(dynamic data) async {
   await updateNotificationText(locationDto!);
 
   if (context.mounted) {
-    context
-        .read<MapService>()
-        .position(LatLng(locationDto.latitude, locationDto.longitude));
+    context.read<MapService>().position(
+          LatLng(locationDto.latitude, locationDto.longitude),
+          context.read<AccountService>().friendIds,
+        );
+  }
+}
+
+Future<String> getAddress(double lat, double lon) async {
+  final String url =
+      'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lon&language=ko&key=${dotenv.env['GOOGLE_MAPS_API_KEY']}';
+  final response = await http.get(Uri.parse(url));
+  final data = jsonDecode(response.body);
+  try {
+    final String address = data['results'][0]['formatted_address'];
+    return address;
+  } catch (e) {
+    return '주소를 찾을 수 없습니다.';
   }
 }
 
 Future<void> updateNotificationText(LocationDto data) async {
-  final DateTime now = DateTime.now();
-  final String hour = now.hour.toString().padLeft(2, '0');
-  final String minute = now.minute.toString().padLeft(2, '0');
-  final String second = now.second.toString().padLeft(2, '0');
   final int friendCount = context.read<MapViewModel>().mapLog.length;
+  String addr = await getAddress(data.latitude, data.longitude);
   await BackgroundLocator.updateNotificationText(
     title: "$friendCount명의 친구와 위치를 공유하고 있어요",
-    msg: "$hour:$minute:$second",
-    bigMsg: "${data.latitude}, ${data.longitude}",
+    msg: addr,
+    bigMsg: addr,
   );
 }
 
@@ -96,7 +116,10 @@ Future<bool> checkLocationPermission() async {
   logger.t('access: $access');
   switch (access) {
     case PermissionStatus.unknown:
+      return false;
     case PermissionStatus.denied:
+      if (context.mounted) showSnackBar(context, '위치권한이 거부되었습니다.\n애플리케이션 위치 권한을 설정해주세요.');
+      return false;
     case PermissionStatus.restricted:
       final permission = await LocationPermissions().requestPermissions(
         permissionLevel: LocationPermissionLevel.locationAlways,
@@ -130,7 +153,7 @@ Future<void> startLocator() async {
     autoStop: false,
     androidSettings: const AndroidSettings(
       accuracy: LocationAccuracy.NAVIGATION,
-      interval: 5,
+      interval: 10,
       distanceFilter: 0,
       client: LocationClient.google,
       androidNotificationSettings: AndroidNotificationSettings(

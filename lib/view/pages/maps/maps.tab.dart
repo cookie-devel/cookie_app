@@ -1,15 +1,15 @@
-import 'dart:isolate';
 import 'dart:ui';
+import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:cookie_app/repository/location_service.repo.dart';
 import 'package:cookie_app/view/components/loading.dart';
-import 'package:cookie_app/view/components/map/speed_dial.dart';
-import 'package:cookie_app/view/pages/maps/location_background.dart';
-import 'package:cookie_app/view/pages/maps/my_google_map.dart';
 import 'package:cookie_app/viewmodel/map/map.viewmodel.dart';
+import 'package:cookie_app/view/pages/maps/my_google_map.dart';
+import 'package:cookie_app/view/components/map/speed_dial.dart';
+import 'package:cookie_app/repository/location_service.repo.dart';
+import 'package:cookie_app/view/pages/maps/location_background.dart';
 
 class MapsWidget extends StatefulWidget {
   const MapsWidget({super.key});
@@ -24,6 +24,7 @@ class _MapsWidgetState extends State<MapsWidget> {
   @override
   void initState() {
     super.initState();
+    
     if (IsolateNameServer.lookupPortByName(
           LocationServiceRepository.isolateName,
         ) !=
@@ -50,10 +51,10 @@ class _MapsWidgetState extends State<MapsWidget> {
 
   @override
   void dispose() {
-    context.watch<MapViewModel>().mapController.dispose();
-    context.watch<MapViewModel>().isInitPlatformState = false;
-    context.watch<MapViewModel>().mapLog.clear();
-    context.watch<MapViewModel>().markers.clear();
+    context.read<MapViewModel>().mapController.dispose();
+    // context.watch<MapViewModel>().isInitPlatformState = false;
+    // context.watch<MapViewModel>().mapLog.clear();
+    // context.watch<MapViewModel>().markers.clear();
     super.dispose();
   }
 
@@ -82,7 +83,3 @@ class _MapsWidgetState extends State<MapsWidget> {
         : const LoadingScreen();
   }
 }
-
-/* 
-https://snazzymaps.com/explore?text=&sort=popular&tag=&color= [google map theme]
-*/
