@@ -27,13 +27,15 @@ class _MyGoogleMapState extends State<MyGoogleMap> {
   Widget build(BuildContext context) {
     String mapStyle = context.watch<ThemeProvider>().mapStyle;
     Set<Marker> marker = context.watch<MapViewModel>().markers;
+    bool isMarkerAvailable =
+        context.watch<MapViewModel>().isLocationUpdateRunning;
 
     return GoogleMap(
       myLocationEnabled: true, // 본인 마커
       mapToolbarEnabled: false, // 길찾기 버튼
       zoomControlsEnabled: false, // 축소확대 버튼
       myLocationButtonEnabled: false, // 내위치 버튼
-      markers: marker,
+      markers: isMarkerAvailable ? marker : {},
       mapType: MapType.normal,
 
       minMaxZoomPreference: const MinMaxZoomPreference(12, 20), // 줌 제한
