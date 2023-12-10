@@ -21,10 +21,12 @@ class MapInfoResponse {
 
 @JsonSerializable()
 class MapInfoRequest {
+  List<String> userid;
   double latitude;
   double longitude;
 
   MapInfoRequest({
+    required this.userid,
     required this.latitude,
     required this.longitude,
   });

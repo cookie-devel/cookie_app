@@ -35,6 +35,8 @@ class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
     return _friends[id]!;
   }
 
+  List<String> get friendIds => _friends.keys.toList();
+
   Future<void> update() async {
     try {
       _connectionState = ConnectionState.waiting;
