@@ -24,7 +24,7 @@ class _MapsWidgetState extends State<MapsWidget> {
   @override
   void initState() {
     super.initState();
-    
+
     if (IsolateNameServer.lookupPortByName(
           LocationServiceRepository.isolateName,
         ) !=
@@ -39,8 +39,7 @@ class _MapsWidgetState extends State<MapsWidget> {
       LocationServiceRepository.isolateName,
     );
 
-    if (context.read<MapViewModel>().isInitPlatformState == false)
-      initPlatformState();
+    if (!context.read<MapViewModel>().isInitPlatformState) initPlatformState();
 
     port.listen(
       (dynamic data) async {
@@ -52,9 +51,6 @@ class _MapsWidgetState extends State<MapsWidget> {
   @override
   void dispose() {
     context.read<MapViewModel>().mapController.dispose();
-    // context.watch<MapViewModel>().isInitPlatformState = false;
-    // context.watch<MapViewModel>().mapLog.clear();
-    // context.watch<MapViewModel>().markers.clear();
     super.dispose();
   }
 

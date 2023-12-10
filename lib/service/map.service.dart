@@ -62,13 +62,14 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
         longitude: position.longitude,
       ).toJson(),
     );
-    logger.t("position sended: $position => $friendId");
+    logger.t("[position sended]\n position: $position \n receiver: $friendId");
   }
 
   void _onPosition(data) {
     final MapInfoResponse userInfo = MapInfoResponse.fromJson(data);
     context.read<MapViewModel>().updateMarkers(userInfo);
-    logger.t("position sended: $data");
+    logger.t(
+        "[position received]\n _id: ${userInfo.userid}\n lat: ${userInfo.latitude}\n lon: ${userInfo.longitude}");
   }
 
   void requestShare(List<String> friendId) {
