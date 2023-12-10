@@ -1,4 +1,5 @@
 import 'package:cookie_app/service/account.service.dart';
+import 'package:cookie_app/service/map.service.dart';
 import 'package:cookie_app/view/components/dialog.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
@@ -73,9 +74,9 @@ class FriendInviteListTile extends StatelessWidget {
                     },
                     onConfirm: () {
                       // TODO: FCM
-                      // context
-                      //     .read<MapService>()
-                      //     .position(MapRequestType.posReq, [user.id]);
+                      context
+                          .read<MapService>()
+                          .position(MapRequestType.posReq, [user.id]);
                       showSnackBar(
                         context,
                         "${user.name}님에게 위치 공유를 요청했어요!",
