@@ -53,14 +53,16 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void position(LatLng position) {
+  void position(LatLng position, List<String> friendId) {
     socket.emit(
       MapEvents.position,
       MapInfoRequest(
+        userid: friendId,
         latitude: position.latitude,
         longitude: position.longitude,
       ).toJson(),
     );
+    logger.t("position sended: $position => $friendId");
   }
 
   void _onPosition(data) {
@@ -69,13 +71,16 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
     logger.t("position sended: $data");
   }
 
-  void requestShare(String friendId) {
-    socket.emit(
-      MapEvents.requestShare,
-      MapShareInfo(
-        userid: friendId,
-      ).toJson(),
-    );
+  void requestShare(List<String> friendId) {
+    for (String id in friendId) {
+      socket.emit(
+        MapEvents.requestShare,
+        MapShareInfo(
+          userid: id,
+        ).toJson(),
+      );
+      logger.t("requestShare sended: $id");
+    }
   }
 
   void _onRequestShare(data) {

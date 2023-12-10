@@ -1,3 +1,4 @@
+import 'package:cookie_app/view/components/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -8,6 +9,12 @@ import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/types/map/map_position_info.dart';
 import 'package:cookie_app/viewmodel/map/marker.viewmodel.dart';
 import 'package:cookie_app/view/components/map/marker_design.dart';
+
+class MapRequestType {
+  static const startShare = LatLng(0, 0);
+  static const endShare = LatLng(-1, -1);
+  static const posReq = LatLng(-2, -2);
+}
 
 class MapViewModel with ChangeNotifier {
   MapViewModel() {
@@ -38,6 +45,7 @@ class MapViewModel with ChangeNotifier {
 
   // current location
   LatLng _currentLocation = const LatLng(37.2820, 127.0435);
+  LatLng get currentLocation => getCurrentLocation();
   LatLng getCurrentLocation() {
     _getUserLocation();
     return _currentLocation;
@@ -45,14 +53,6 @@ class MapViewModel with ChangeNotifier {
 
   set currentLocation(LatLng value) {
     _currentLocation = value;
-    notifyListeners();
-  }
-
-  // map loading
-  bool _loading = true;
-  bool get loading => _loading;
-  set loading(bool value) {
-    _loading = value;
     notifyListeners();
   }
 
@@ -96,7 +96,7 @@ class MapViewModel with ChangeNotifier {
     MarkerViewModel marker = MarkerViewModel(model: info);
 
     // if user is sharing location, notify user sharing
-    if (info.latitude == 0 && info.longitude == 0) {
+    if (marker.position == MapRequestType.startShare) {
       showSnackBar(
         context,
         '${marker.name}님이 위치공유를 시작했습니다.',
@@ -109,43 +109,65 @@ class MapViewModel with ChangeNotifier {
     }
 
     // if user is not sharing location, remove marker
-    if (info.latitude == -1 && info.longitude == -1) {
+    if (marker.position == MapRequestType.endShare) {
       mapLog.removeWhere(
         (element) => element.id == marker.id,
+      );
+      markers.removeWhere(
+        (element) => element.markerId.value == marker.id,
       );
       notifyListeners();
       return;
     }
 
+    // if user sended location sharing request, notify user
+    if (marker.position == MapRequestType.posReq) {
+      showDialog(
+        context: context,
+        builder: (context) => Alert(
+          title: "위치 공유",
+          content: "${marker.name}님에게 위치 공유 요청이 왔어요.",
+          onCancel: () {
+            Navigator.of(context).pop();
+          },
+          onConfirm: () {
+            // TODO: additional function
+            Navigator.of(context).pop();
+          },
+        ),
+      );
+      return;
+    }
+
+    bool shouldNotify = false;
+
     if (marker.exist) {
-      mapLog = mapLog.map((element) {
-        if (element.id == marker.id) {
-          return marker;
+      for (int i = 0; i < mapLog.length; i++) {
+        if (mapLog[i].id == marker.id) {
+          mapLog[i] = marker;
+          shouldNotify = true;
+          break;
         }
-        return element;
-      }).toList();
-      notifyListeners();
+      }
     } else {
       mapLog.add(marker);
+      shouldNotify = true;
+    }
+
+    if (shouldNotify) {
       notifyListeners();
     }
 
-    final List<Future<Marker>> markerFutures = mapLog
-        .map(
-          (element) => addMarker(
-            context,
-            element,
-          ),
-        )
-        .toList();
-    final List<Marker> tmpMarker = await Future.wait(markerFutures);
+    final List<Marker> tmpMarker = [];
 
-    if (context.mounted) markers = tmpMarker.toSet();
+    for (final element in mapLog) {
+      tmpMarker.add(await addMarker(context, element));
+    }
 
-    if (tmpMarker.isNotEmpty) {
+    if (context.mounted && tmpMarker.isNotEmpty) {
+      markers = tmpMarker.toSet();
       notifyListeners();
     }
-    logger.t("markers updated");
   }
 
   void moveCamera(LatLng location) {
@@ -153,6 +175,6 @@ class MapViewModel with ChangeNotifier {
   }
 
   void moveToCurrentLocation() {
-    mapController.animateCamera(CameraUpdate.newLatLng(getCurrentLocation()));
+    mapController.animateCamera(CameraUpdate.newLatLng(currentLocation));
   }
 }
