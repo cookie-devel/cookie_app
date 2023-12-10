@@ -31,7 +31,6 @@ Future<void> initPlatformState() async {
   await BackgroundLocator.isServiceRunning().then((value) {
     logger.t('Service running: $value');
     context.read<MapViewModel>().isInitPlatformState = true;
-    // context.read<MapViewModel>().isLocationUpdateRunning = value;
   });
 }
 
@@ -45,7 +44,7 @@ void onStart() async {
         '위치 공유를 시작합니다.',
         icon: const Icon(Icons.cookie_outlined, color: Colors.orangeAccent),
       );
-      context.read<MapViewModel>().isLocationUpdateRunning = value;
+      context.read<MapViewModel>().isLocationUpdateRunning = true;
     });
   }
   if (context.mounted)
@@ -64,7 +63,7 @@ void onStop() async {
       '위치 공유를 종료합니다.',
       icon: const Icon(Icons.cookie_outlined, color: Colors.red),
     );
-    context.read<MapViewModel>().isLocationUpdateRunning = value;
+    context.read<MapViewModel>().isLocationUpdateRunning = false;
     logger.t('Location Update running: $value');
   });
   if (context.mounted) {
