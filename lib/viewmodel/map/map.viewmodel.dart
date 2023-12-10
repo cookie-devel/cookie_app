@@ -86,12 +86,12 @@ class MapViewModel with ChangeNotifier {
   }
 
   Future<void> updateMarkers(MapInfoResponse info) async {
-    if (!isLocationUpdateRunning) {
-      mapLog = [];
-      markers = {};
-      notifyListeners();
-      return;
-    }
+    // if (!isLocationUpdateRunning) {
+    //   mapLog = [];
+    //   markers = {};
+    //   notifyListeners();
+    //   return;
+    // }
 
     MarkerViewModel marker = MarkerViewModel(model: info);
 

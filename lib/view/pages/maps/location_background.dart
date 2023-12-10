@@ -50,7 +50,9 @@ void onStart() async {
   }
   if (context.mounted)
     context.read<MapService>().position(
-        MapRequestType.startShare, context.read<AccountService>().friendIds);
+          MapRequestType.startShare,
+          context.read<AccountService>().friendIds,
+        );
 }
 
 void onStop() async {
@@ -65,11 +67,14 @@ void onStop() async {
     context.read<MapViewModel>().isLocationUpdateRunning = value;
     logger.t('Location Update running: $value');
   });
-  if (context.mounted)
+  if (context.mounted) {
     context.read<MapService>().position(
           MapRequestType.endShare,
           context.read<AccountService>().friendIds,
         );
+    context.read<MapViewModel>().mapLog = [];
+    context.read<MapViewModel>().markers = {};
+  }
 }
 
 Future<void> update(dynamic data) async {
@@ -118,7 +123,8 @@ Future<bool> checkLocationPermission() async {
     case PermissionStatus.unknown:
       return false;
     case PermissionStatus.denied:
-      if (context.mounted) showSnackBar(context, '위치권한이 거부되었습니다.\n애플리케이션 위치 권한을 설정해주세요.');
+      if (context.mounted)
+        showSnackBar(context, '위치권한이 거부되었습니다.\n애플리케이션 위치 권한을 설정해주세요.');
       return false;
     case PermissionStatus.restricted:
       final permission = await LocationPermissions().requestPermissions(
