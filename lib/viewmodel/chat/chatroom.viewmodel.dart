@@ -39,7 +39,11 @@ class ChatRoomViewModel extends ChangeNotifier {
   List<User> get chatUsers => _model.members
       .map((id) => context.read<AccountService>().getUserById(id).toFlyer)
       .toList(growable: false);
-  List<Message> get messages => _model.messages.map((e) => e.payload).toList();
+  List<Message> get messages {
+    var list = _model.messages.map((e) => e.payload).toList();
+    list.sort((a, b) => (b.createdAt ?? 0).compareTo(a.createdAt ?? 0));
+    return list;
+  }
 
   String get lastMessage {
     Message lastMessage = messages.first;
