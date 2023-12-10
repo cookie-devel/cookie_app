@@ -35,52 +35,57 @@ Future<void> initPlatformState() async {
 }
 
 void onStart() async {
-  logger.t("start");
   if (await checkLocationPermission()) {
     await startLocator();
-    await BackgroundLocator.isServiceRunning().then((value) {
+    bool isServiceRunning = await BackgroundLocator.isServiceRunning();
+    if (isServiceRunning && context.mounted) {
+      context.read<MapViewModel>().isLocationUpdateRunning = true;
+      context.read<MapService>().position(
+            MapRequestType.startShare,
+            context.read<AccountService>().friendIds,
+          );
       showSnackBar(
         context,
         '위치 공유를 시작합니다.',
         icon: const Icon(Icons.cookie_outlined, color: Colors.orangeAccent),
       );
-      context.read<MapViewModel>().isLocationUpdateRunning = true;
-    });
+    }
+    logger.t("[Start]: Location Share => isServiceRunning: $isServiceRunning");
   }
-  if (context.mounted)
-    context.read<MapService>().position(
-          MapRequestType.startShare,
-          context.read<AccountService>().friendIds,
-        );
 }
 
 void onStop() async {
-  logger.t("stop");
   await BackgroundLocator.unRegisterLocationUpdate();
-  await BackgroundLocator.isServiceRunning().then((value) {
-    showSnackBar(
-      context,
-      '위치 공유를 종료합니다.',
-      icon: const Icon(Icons.cookie_outlined, color: Colors.red),
-    );
+  bool isServiceRunning = await BackgroundLocator.isServiceRunning();
+  if (!isServiceRunning && context.mounted) {
     context.read<MapViewModel>().isLocationUpdateRunning = false;
-    logger.t('Location Update running: $value');
-  });
-  if (context.mounted) {
     context.read<MapService>().position(
           MapRequestType.endShare,
           context.read<AccountService>().friendIds,
         );
     context.read<MapViewModel>().mapLog = [];
     context.read<MapViewModel>().markers = {};
+    showSnackBar(
+      context,
+      '위치 공유를 종료합니다.',
+      icon: const Icon(Icons.cookie_outlined, color: Colors.red),
+    );
+    logger.t("[End]: Location Share => isServiceRunning: $isServiceRunning");
   }
 }
 
 Future<void> update(dynamic data) async {
-  logger.t("Location updated");
-  LocationDto? locationDto = (data != null)
-      ? LocationDto.fromJson(data)
-      : context.read<MapViewModel>().getCurrentLocation() as LocationDto?;
+  bool isServiceRunning = await BackgroundLocator.isServiceRunning();
+  if (!isServiceRunning) return;
+
+  LocationDto? locationDto;
+  if ((data != null)) {
+    locationDto = LocationDto.fromJson(data);
+  } else {
+    if (context.mounted)
+      locationDto =
+          context.read<MapViewModel>().getCurrentLocation() as LocationDto?;
+  }
   await updateNotificationText(locationDto!);
 
   if (context.mounted) {
@@ -89,17 +94,20 @@ Future<void> update(dynamic data) async {
           context.read<AccountService>().friendIds,
         );
   }
+  logger.t("Location updated");
 }
 
 Future<String> getAddress(double lat, double lon) async {
+  const String getAddressUrl = 'https://maps.googleapis.com/maps/api/geocode/';
   final String url =
-      'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lon&language=ko&key=${dotenv.env['GOOGLE_MAPS_API_KEY']}';
+      '${getAddressUrl}json?latlng=$lat,$lon&language=ko&key=${dotenv.env['GOOGLE_MAPS_API_KEY']}';
   final response = await http.get(Uri.parse(url));
-  final data = jsonDecode(response.body);
-  try {
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
     final String address = data['results'][0]['formatted_address'];
     return address;
-  } catch (e) {
+  } else {
     return '주소를 찾을 수 없습니다.';
   }
 }
