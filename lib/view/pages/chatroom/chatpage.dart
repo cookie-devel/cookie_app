@@ -123,6 +123,7 @@ class _ChatPageState extends State<ChatPage> {
         id: const Uuid().v4(),
         name: result.name,
         size: bytes.length,
+        // Should be uploaded to server in real app
         uri: result.path,
         width: image.width.toDouble(),
       );
@@ -204,6 +205,15 @@ class _ChatPageState extends State<ChatPage> {
         builder: (context, chiid) => Scaffold(
           appBar: AppBar(
             title: Text(this._room.name),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.exit_to_app),
+                onPressed: () {
+                  _room.leave();
+                  Navigator.pop(context);
+                },
+              ),
+            ],
           ),
           body: Chat(
             theme: DefaultChatTheme(
@@ -228,7 +238,7 @@ class _ChatPageState extends State<ChatPage> {
             onMessageTap: _handleMessageTap,
             onPreviewDataFetched: _handlePreviewDataFetched,
             onSendPressed: _handleSendPressed,
-            showUserAvatars: false,
+            showUserAvatars: true,
             showUserNames: true,
             user: _user,
           ),

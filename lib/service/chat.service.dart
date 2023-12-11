@@ -123,6 +123,8 @@ class ChatService extends ChatServiceEventHandler with DiagnosticableTreeMixin {
 
   void leaveRoom(String roomId) {
     _socket.emit(ChatEvents.leaveRoom, roomId);
+    _roomMap.remove(roomId);
+    notifyListeners();
   }
 
   void sendChat(String roomId, Message message) {
