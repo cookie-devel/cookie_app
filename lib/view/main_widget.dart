@@ -106,11 +106,11 @@ class _MainWidgetState extends State<MainWidget> {
           return NavigationDestination(
             selectedIcon: BadgedIcon(
               icon: e.icon,
-              // label: '',
+              label: e.badge != null && e.badge != "0" ? e.badge : null,
             ),
             icon: BadgedIcon(
               icon: e.iconOutline,
-              label: e.badge ?? '',
+              label: e.badge != null && e.badge != "0" ? e.badge : null,
             ),
             label: e.title,
           );
