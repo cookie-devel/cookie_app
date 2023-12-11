@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.cookiedev.cookieApp</string>
+	<string>com.parkjb.cookie</string>
 	<key>PROJECT_ID</key>
 	<string>cookie-fire</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:992759219555:ios:759504250b785878ddff56</string>
+	<string>1:992759219555:ios:bd49187145c6b1ceddff56</string>
+	<key>DATABASE_URL</key>
+	<string>https://cookie-fire-default-rtdb.asia-southeast1.firebasedatabase.app</string>
 </dict>
 </plist>

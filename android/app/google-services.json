@@ -1,15 +1,16 @@
 {
   "project_info": {
     "project_number": "992759219555",
+    "firebase_url": "https://cookie-fire-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "cookie-fire",
     "storage_bucket": "cookie-fire.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:992759219555:android:71a115d029e8c9b5ddff56",
+        "mobilesdk_app_id": "1:992759219555:android:fb9ba6011fc68905ddff56",
         "android_client_info": {
-          "package_name": "com.cookiedev.cookie_app"
+          "package_name": "com.parkjb.cookie"
         }
       },
       "oauth_client": [
