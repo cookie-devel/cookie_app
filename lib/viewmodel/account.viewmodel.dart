@@ -13,13 +13,13 @@ class ProfileViewModel extends ChangeNotifier {
   ProfileViewModel({required Profile model}) : _model = model;
 
   ImageProvider get image => _model.image != null
-      ? NetworkImage('${dotenv.env['BASE_URI']}/${_model.image!}')
+      ? NetworkImage(imageURL!)
       : IconImageProvider(
           Icons.person,
           size: 800,
           color: Colors.grey,
         ) as ImageProvider;
-  String? get imageURL => _model.image;
+  String? get imageURL => '${dotenv.env['BASE_URI']}/${_model.image}';
   String? get message => _model.message;
 }
 
@@ -39,6 +39,6 @@ class AccountViewModel extends ChangeNotifier {
   User get toFlyer => User(
         id: _model.id,
         firstName: _model.name,
-        imageUrl: _model.profile.image,
+        imageUrl: profile.imageURL,
       );
 }
