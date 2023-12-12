@@ -1,11 +1,8 @@
 import 'dart:io';
-
-import 'package:cookie_app/view/components/map/image_process.dart';
 import 'package:flutter/material.dart';
-import 'package:custom_marker/marker_icon.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:cookie_app/viewmodel/map/marker.viewmodel.dart';
+import 'package:cookie_app/view/components/map/marker_image_process.dart';
 
 class BottomSheetInside extends StatelessWidget {
   final MarkerViewModel user;
@@ -146,10 +143,8 @@ Future<void> markerBottomSheet(
   BuildContext context,
   MarkerViewModel user,
 ) async {
-  String imageUrl =
-      await getNetworkImage(user.account.profile.imageURL.toString());
+  String imageUrl = await getNetworkImage(user.imageURL.toString());
   File imageFile = await getCachedImage(imageUrl);
-
   if (!context.mounted) return;
   return showModalBottomSheet(
     context: context,
@@ -160,31 +155,6 @@ Future<void> markerBottomSheet(
         user: user,
         imageFile: imageFile,
       );
-    },
-  );
-}
-
-Future<Marker> addMarker(
-  BuildContext context,
-  MarkerViewModel user, {
-  int size = 135,
-  Color color = Colors.deepOrangeAccent,
-  double width = 13,
-}) async {
-  String imageUrl =
-      await getNetworkImage(user.account.profile.imageURL.toString());
-  return Marker(
-    markerId: MarkerId(user.id),
-    position: user.position,
-    icon: await MarkerIcon.downloadResizePictureCircle(
-      imageUrl,
-      size: size,
-      addBorder: true,
-      borderColor: color,
-      borderSize: width,
-    ),
-    onTap: () {
-      markerBottomSheet(context, user);
     },
   );
 }
