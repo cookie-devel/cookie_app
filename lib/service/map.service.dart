@@ -69,7 +69,8 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
     final MapInfoResponse userInfo = MapInfoResponse.fromJson(data);
     context.read<MapViewModel>().updateMarkers(userInfo);
     logger.t(
-        "[position received]\n _id: ${userInfo.userid}\n lat: ${userInfo.latitude}\n lon: ${userInfo.longitude}");
+      "[position received]\n _id: ${userInfo.userid}\n lat: ${userInfo.latitude}\n lon: ${userInfo.longitude}",
+    );
   }
 
   void requestShare(List<String> friendId) {
@@ -99,7 +100,6 @@ class MapService extends ChangeNotifier with DiagnosticableTreeMixin {
           Navigator.of(context).pop();
         },
         onConfirm: () {
-          // TODO: additional function
           Navigator.of(context).pop();
         },
       ),
