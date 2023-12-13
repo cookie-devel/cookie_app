@@ -13,13 +13,6 @@ class FriendLocationListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(user.name),
-          Text(user.dist),
-        ],
-      ),
       leading: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -31,6 +24,34 @@ class FriendLocationListTile extends StatelessWidget {
         child: CircleAvatar(
           backgroundColor: Colors.white,
           backgroundImage: user.account.profile.image,
+        ),
+      ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            user.name,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+      trailing: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.orangeAccent,
+        ),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 5,
+        ),
+        child: Text(
+          user.dist,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       onTap: () => {
@@ -61,27 +82,39 @@ Future friendLocationBottomSheet() async {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.supervised_user_circle_outlined,
-                        color: Colors.green.shade400,
-                      ),
-                      const SizedBox(width: 10),
-                      const Text(
-                        '현재 접속 중인 친구',
-                        style: TextStyle(
-                          fontSize: 22,
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.orangeAccent,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.supervised_user_circle_outlined,
+                          color: Colors.white,
                         ),
-                      ),
-                    ],
+                        SizedBox(width: 10),
+                        Text(
+                          '접속중인 친구',
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-            const Divider(
+            Divider(
               thickness: 2,
-              color: Colors.white,
+              color: Colors.grey[300],
             ),
             mapInfo.isEmpty
                 ? const Expanded(
