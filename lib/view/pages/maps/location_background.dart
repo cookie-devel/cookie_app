@@ -94,7 +94,7 @@ Future<void> update(dynamic data) async {
           context.read<AccountService>().friendIds,
         );
   }
-  logger.t("Location updated");
+  // logger.t("Location updated");
 }
 
 Future<String> getAddress(double lat, double lon) async {
@@ -128,14 +128,10 @@ Future<bool> checkLocationPermission() async {
   logger.t('access: $access');
   switch (access) {
     case PermissionStatus.unknown:
-      return false;
     case PermissionStatus.denied:
-      if (context.mounted)
-        showSnackBar(context, '위치권한이 거부되었습니다.\n애플리케이션 위치 권한을 설정해주세요.');
-      return false;
     case PermissionStatus.restricted:
       final permission = await LocationPermissions().requestPermissions(
-        permissionLevel: LocationPermissionLevel.locationAlways,
+        permissionLevel: LocationPermissionLevel.locationWhenInUse,
       );
       if (permission == PermissionStatus.granted) {
         return true;

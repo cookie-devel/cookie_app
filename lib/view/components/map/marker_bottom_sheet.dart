@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:cookie_app/viewmodel/map/marker.viewmodel.dart';
-import 'package:cookie_app/view/components/map/marker_image_process.dart';
+import 'package:cookie_app/view/components/map/marker_image_handler.dart';
 
 class BottomSheetInside extends StatelessWidget {
   final MarkerViewModel user;
