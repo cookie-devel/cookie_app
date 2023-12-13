@@ -8,7 +8,6 @@ import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/types/map/map_position_info.dart';
 import 'package:cookie_app/viewmodel/map/marker.viewmodel.dart';
-import 'package:cookie_app/view/components/map/marker_design.dart';
 
 class MapRequestType {
   static const startShare = LatLng(0, 0);
@@ -86,13 +85,6 @@ class MapViewModel with ChangeNotifier {
   }
 
   Future<void> updateMarkers(MapInfoResponse info) async {
-    // if (!isLocationUpdateRunning) {
-    //   mapLog = [];
-    //   markers = {};
-    //   notifyListeners();
-    //   return;
-    // }
-
     MarkerViewModel marker = MarkerViewModel(model: info);
 
     // if user is sharing location, notify user sharing
@@ -170,11 +162,9 @@ class MapViewModel with ChangeNotifier {
     }
   }
 
-  void moveCamera(LatLng location) {
-    mapController.animateCamera(CameraUpdate.newLatLng(location));
-  }
+  void moveCamera(LatLng location) =>
+      mapController.animateCamera(CameraUpdate.newLatLng(location));
 
-  void moveToCurrentLocation() {
-    mapController.animateCamera(CameraUpdate.newLatLng(currentLocation));
-  }
+  void moveToCurrentLocation() =>
+      mapController.animateCamera(CameraUpdate.newLatLng(currentLocation));
 }
