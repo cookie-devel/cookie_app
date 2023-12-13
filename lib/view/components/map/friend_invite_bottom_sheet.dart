@@ -1,6 +1,6 @@
-import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/service/map.service.dart';
 import 'package:cookie_app/view/components/dialog.dart';
+import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
@@ -21,12 +21,6 @@ class FriendInviteListTile extends StatelessWidget {
         .mapLog
         .any((marker) => marker.id == user.id);
     return ListTile(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(user.name),
-        ],
-      ),
       leading: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -39,6 +33,17 @@ class FriendInviteListTile extends StatelessWidget {
           backgroundColor: Colors.white,
           backgroundImage: user.profile.image,
         ),
+      ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            user.name,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
       trailing: userInMap
           ? Container(
@@ -112,27 +117,39 @@ Future friendInviteBottomSheet() async {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.person_search_rounded,
-                        color: Colors.green.shade400,
-                      ),
-                      const SizedBox(width: 10),
-                      const Text(
-                        '친구 목록',
-                        style: TextStyle(
-                          fontSize: 22,
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.orangeAccent,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.person_search_rounded,
+                          color: Colors.white,
                         ),
-                      ),
-                    ],
-                  ),
+                        SizedBox(width: 10),
+                        Text(
+                          '친구 목록',
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
-            const Divider(
+            Divider(
               thickness: 2,
-              color: Colors.white,
+              color: Colors.grey[300],
             ),
             friends.isEmpty
                 ? const Expanded(
