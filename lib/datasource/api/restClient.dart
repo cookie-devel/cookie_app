@@ -6,7 +6,7 @@ import 'package:cookie_app/model/account/account.dart';
 import 'package:cookie_app/model/chat/room.dart';
 import 'package:cookie_app/types/account/profile.dart';
 
-part 'account.g.dart';
+part 'restClient.g.dart';
 
 @RestApi(baseUrl: "http://localhost:3000")
 abstract class RestClient {
@@ -16,6 +16,11 @@ abstract class RestClient {
   Future<InfoResponse> getInfo({
     @Query("fields") List<String>? fields,
   });
+
+  @POST("/account/devices")
+  Future<void> postDeviceToken(
+    @Field() String deviceToken,
+  );
 }
 
 @JsonSerializable()

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:double_back_to_close_app/double_back_to_close_app.dart';
+import 'package:double_back_to_climport 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/service/account.service.dart';
@@ -53,6 +53,34 @@ class _MainWidgetState extends State<MainWidget> {
       });
       context.read<ChatService>().connect();
       context.read<MapService>().connect();
+    });
+
+    FirebaseMessaging.instance.getToken().then((token) {
+      if (token != null) {
+        context.read<AccountService>().registerDeviceToken(token);
+        // showDialog(
+        //   context: context,
+        //   builder: (context) {
+        //     return AlertDialog(
+        //       title: const Text('디바이스 토큰'),
+        //       content: Text(token),
+        //       actions: [
+        //         TextButton(
+        //           onPressed: () {
+        //             Clipboard.setData(ClipboardData(text: token));
+        //             Navigator.of(context).pop();
+        //           },
+        //           child: const Text('복사'),
+        //         ),
+        //         TextButton(
+        //           onPressed: () => Navigator.of(context).pop(),
+        //           child: const Text('닫기'),
+        //         ),
+        //       ],
+        //     );
+        //   },
+        // );
+      }
     });
   }
 

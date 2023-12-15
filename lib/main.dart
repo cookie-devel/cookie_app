@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -22,22 +21,6 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   timeago.setLocaleMessages('ko', timeago.KoMessages());
-
-  AwesomeNotifications().initialize(
-    'resource://drawable/res_app_icon',
-    [
-      NotificationChannel(
-        channelKey: 'basic_channel',
-        channelName: 'Basic notifications',
-        channelDescription: 'Notification channel for basic tests',
-      ),
-      NotificationChannel(
-        channelKey: 'chat_channel',
-        channelName: '채팅',
-        channelDescription: '채팅 알림',
-      ),
-    ],
-  );
 
   // Load Data
   await dotenv.load();
@@ -67,13 +50,6 @@ class _CookieState extends State<Cookie> {
   @override
   void initState() {
     super.initState();
-
-    // Request Notification Permission
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-      if (!isAllowed)
-        AwesomeNotifications().requestPermissionToSendNotifications();
-    });
-
     FlutterNativeSplash.remove();
   }
 
