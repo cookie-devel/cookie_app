@@ -17,9 +17,10 @@ abstract class RestClient {
     @Query("fields") List<String>? fields,
   });
 
-  @POST("/account/devices")
-  Future<void> postDeviceToken(
-    @Field() String deviceToken,
+  @PATCH("/account/devices")
+  Future<void> patchDeviceToken(
+    @Field() String udid,
+    @Field() String token,
   );
 }
 
