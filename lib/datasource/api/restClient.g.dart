@@ -78,13 +78,19 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<void> postDeviceToken(String deviceToken) async {
+  Future<void> patchDeviceToken(
+    String udid,
+    String token,
+  ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = {'deviceToken': deviceToken};
+    final _data = {
+      'udid': udid,
+      'token': token,
+    };
     await _dio.fetch<void>(_setStreamType<void>(Options(
-      method: 'POST',
+      method: 'PATCH',
       headers: _headers,
       extra: _extra,
     )

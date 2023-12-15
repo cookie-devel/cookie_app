@@ -8,6 +8,7 @@ import 'package:cookie_app/datasource/api/restClient.dart';
 import 'package:cookie_app/model/account/account.dart';
 import 'package:cookie_app/service/auth.service.dart';
 import 'package:cookie_app/utils/logger.dart';
+import 'package:cookie_app/utils/udid.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
 class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
@@ -72,9 +73,10 @@ class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
     }
   }
 
-  Future<void> registerDeviceToken(String deviceToken) async {
+  Future<void> registerDeviceToken(String token) async {
     try {
-      await _api.postDeviceToken(deviceToken);
+      String? udid = await getUdid();
+      await _api.patchDeviceToken(udid!, token);
     } on DioException catch (e) {
       logger.e(e);
       e.response == null

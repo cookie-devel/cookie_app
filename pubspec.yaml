@@ -81,6 +81,8 @@ dependencies:
   custom_marker: ^1.0.0
   sqflite: ^2.3.0
   path: ^1.8.3
+  flutter_udid: ^2.0.1
+  device_info_plus: ^9.1.1
 
 dev_dependencies:
   flutter_test:
