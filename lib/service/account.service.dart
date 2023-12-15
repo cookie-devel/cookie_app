@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:cookie_app/datasource/api/account.dart';
+import 'package:cookie_app/datasource/api/restClient.dart';
 import 'package:cookie_app/model/account/account.dart';
 import 'package:cookie_app/service/auth.service.dart';
 import 'package:cookie_app/utils/logger.dart';
@@ -69,6 +69,20 @@ class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
     } finally {
       _connectionState = ConnectionState.done;
       notifyListeners();
+    }
+  }
+
+  Future<void> registerDeviceToken(String deviceToken) async {
+    try {
+      await _api.postDeviceToken(deviceToken);
+    } on DioException catch (e) {
+      logger.e(e);
+      e.response == null
+          ? throw Exception('서버와 연결할 수 없습니다.')
+          : throw Exception(e.response!.statusMessage!);
+    } catch (e) {
+      logger.e(e);
+      rethrow;
     }
   }
 }
