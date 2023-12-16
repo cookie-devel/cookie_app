@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/service/chat.service.dart';
 import 'package:cookie_app/service/map.service.dart';
-import 'package:cookie_app/utils/logger.dart';
+import 'package:cookie_app/service/notification.service.dart';
 import 'package:cookie_app/view/components/badge.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/view/pages/chatroom/chatrooms.tab.dart';
@@ -56,39 +55,8 @@ class _MainWidgetState extends State<MainWidget> {
       context.read<ChatService>().connect();
       context.read<MapService>().connect();
     });
-    initializeFirebaseMessaging();
-  }
-
-  void initializeFirebaseMessaging() async {
-    // Request Permission
-    await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-
-    await FirebaseMessaging.instance.getToken().then((token) {
-      if (token != null) {
-        context.read<AccountService>().registerDeviceToken(token);
-      }
-    });
-
-    FirebaseMessaging.instance.onTokenRefresh.listen((token) {
-      context.read<AccountService>().registerDeviceToken(token);
-    }).onError((error) {
-      logger.e(error.message);
-    });
-
-    await FirebaseMessaging.instance
-        .subscribeToTopic("cookie-server")
-        .then((value) => logger.d("subscribed to cookie-server"))
-        .onError(
-          (error, stackTrace) => logger.e("error subscribing to cookie-server"),
-        );
+    context.read<NotificationService>().requestPermission();
+    context.read<NotificationService>().registerDeviceToken();
   }
 
   int _selectedIndex = 0;

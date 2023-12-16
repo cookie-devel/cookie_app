@@ -1,14 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import 'package:cookie_app/model/chat/room.dart';
-import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/types/socket/chat/chat.dart';
 import 'package:cookie_app/types/socket/chat/create_room.dart';
 import 'package:cookie_app/utils/logger.dart';
@@ -59,52 +56,43 @@ class ChatService extends ChatServiceEventHandler with DiagnosticableTreeMixin {
     _socket.emit(ChatEvents.joinRoom, data);
   }
 
-  int _notiCount = 0;
+  final int _notiCount = 0;
 
   @override
   void _onChat(data) {
     super._onChat(data);
     MessageWrapper chat = MessageWrapper.fromJson(data);
 
-    Message message;
-
-    switch (chat.payload.type) {
-      case MessageType.audio:
-        message = chat.payload as AudioMessage;
-        break;
-      case MessageType.custom:
-        message = chat.payload as CustomMessage;
-        break;
-      case MessageType.file:
-        message = chat.payload as FileMessage;
-        break;
-      case MessageType.image:
-        message = chat.payload as ImageMessage;
-        break;
-      case MessageType.system:
-        message = chat.payload as SystemMessage;
-        break;
-      case MessageType.text:
-        message = chat.payload as TextMessage;
-        if (chat.sender != context.read<AccountService>().my.id)
-          AwesomeNotifications().createNotification(
-            content: NotificationContent(
-              id: _notiCount++,
-              channelKey: 'chat_channel',
-              title: message.author.id,
-              body: (message as TextMessage).text,
-              groupKey: chat.roomId,
-              summary: 'New Message',
-            ),
-          );
-        break;
-      case MessageType.unsupported:
-        message = chat.payload as UnsupportedMessage;
-        break;
-      case MessageType.video:
-        message = chat.payload as VideoMessage;
-        break;
-    }
+    // Message message;
+    //
+    // switch (chat.payload.type) {
+    //   case MessageType.audio:
+    //     message = chat.payload as AudioMessage;
+    //     break;
+    //   case MessageType.custom:
+    //     message = chat.payload as CustomMessage;
+    //     break;
+    //   case MessageType.file:
+    //     message = chat.payload as FileMessage;
+    //     break;
+    //   case MessageType.image:
+    //     message = chat.payload as ImageMessage;
+    //     break;
+    //   case MessageType.system:
+    //     message = chat.payload as SystemMessage;
+    //     break;
+    //   case MessageType.text:
+    //     message = chat.payload as TextMessage;
+    //     // if (chat.sender != context.read<AccountService>().my.id)
+    //     //   print('');
+    //     break;
+    //   case MessageType.unsupported:
+    //     message = chat.payload as UnsupportedMessage;
+    //     break;
+    //   case MessageType.video:
+    //     message = chat.payload as VideoMessage;
+    //     break;
+    // }
 
     this._roomMap[chat.roomId]!.addChat(chat);
     notifyListeners();
