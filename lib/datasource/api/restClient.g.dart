@@ -78,6 +78,34 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<InfoResponse> getUserInfo({String? userid}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'userid': userid};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<InfoResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/account/friends',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = InfoResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<void> patchDeviceToken(
     String udid,
     String token,
