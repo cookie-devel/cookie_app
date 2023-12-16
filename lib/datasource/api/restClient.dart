@@ -17,10 +17,20 @@ abstract class RestClient {
     @Query("fields") List<String>? fields,
   });
 
-  @POST("/account/friends")
-  Future<InfoResponse> getUserInfo({
-    @Query("userid") String? userid,
-  });
+  @GET("/account/friends/update")
+  Future<void> updateFriends(
+    @Query("friendId") String? friendId,
+  );
+
+  @DELETE("/account/friends/delete")
+  Future<void> deleteFriends(
+    @Query("friendId") String? friendId,
+  );
+
+  @POST("/account/friends/read")
+  Future<InfoResponse> readFriends(
+    @Query("friendId") String? friendId,
+  );
 
   @PATCH("/account/devices")
   Future<void> patchDeviceToken(
