@@ -78,9 +78,59 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<InfoResponse> getUserInfo({String? userid}) async {
+  Future<void> updateFriends(String? friendId) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'userid': userid};
+    final queryParameters = <String, dynamic>{r'friendId': friendId};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/account/friends/update',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<void> deleteFriends(String? friendId) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'friendId': friendId};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/account/friends/delete',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<InfoResponse> readFriends(String? friendId) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'friendId': friendId};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
@@ -92,7 +142,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/account/friends',
+              '/account/friends/read',
               queryParameters: queryParameters,
               data: _data,
             )

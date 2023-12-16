@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
+import 'package:cookie_app/view/components/dialog.dart';
 import 'package:cookie_app/service/account.service.dart';
-import 'package:cookie_app/view/components/account/friend_profile.dart';
 import 'package:cookie_app/view/components/loading.dart';
 import 'package:cookie_app/view/components/snackbar.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
+import 'package:cookie_app/view/components/account/friend_profile.dart';
 
 class FriendsTab extends StatefulWidget {
   const FriendsTab({
@@ -75,7 +75,37 @@ class FriendsGrid extends StatelessWidget {
                 child: InkWell(
                   onLongPress: () {
                     Vibration.vibrate(duration: 40);
-                    _showDeleteConfirmationSnackBar(context, index);
+                    showDialog(
+                      context: context,
+                      builder: (context) => Alert(
+                        title: "친구 삭제",
+                        content: "${friend.name}님을 목록에서 삭제할래요?",
+                        onCancel: () {
+                          Navigator.of(context).pop();
+                        },
+                        onConfirm: () {
+                          context
+                              .read<AccountService>()
+                              .deleteUserFriends(friend.id)
+                              .then((_) {
+                            showSnackBar(
+                              context,
+                              "${friend.name}님을 목록에서 삭제했어요!",
+                            );
+                            Navigator.of(context).pop();
+                          }).then((_) {
+                            context
+                                .read<AccountService>()
+                                .update()
+                                .catchError((error) {
+                              showErrorSnackBar(context, error.message);
+                            });
+                          }).catchError((error) {
+                            showErrorSnackBar(context, error.message);
+                          });
+                        },
+                      ),
+                    );
                   },
                   child: FriendProfileWidget(account: friend),
                 ),
@@ -86,22 +116,6 @@ class FriendsGrid extends StatelessWidget {
             msg: '친구를 추가해보세요!',
             handleRefresh: handleRefresh,
           );
-  }
-
-  void _showDeleteConfirmationSnackBar(BuildContext context, int index) {
-    final scaffold = ScaffoldMessenger.of(context);
-    scaffold.showSnackBar(
-      SnackBar(
-        content: const Text('정말로 삭제하겠습니까?'),
-        duration: const Duration(seconds: 2),
-        action: SnackBarAction(
-          label: '삭제',
-          onPressed: () {
-            scaffold.hideCurrentSnackBar();
-          },
-        ),
-      ),
-    );
   }
 }
 
