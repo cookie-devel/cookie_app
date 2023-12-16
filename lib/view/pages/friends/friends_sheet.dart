@@ -1,3 +1,4 @@
+import 'package:cookie_app/view/pages/friends/friends.search.page.dart';
 import 'package:flutter/material.dart';
 
 class FriendsAction extends StatelessWidget {
@@ -57,9 +58,16 @@ class FriendsAction extends StatelessWidget {
                 shrinkWrap: true,
                 children: [
                   ListTile(
-                    title: const Text('친구관리'),
+                    title: const Text('친구찾기'),
                     leading: const Icon(Icons.person),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FriendSearchScreen(),
+                        ),
+                      );
+                    },
                   ),
                   ListTile(
                     title: const Text('알림'),

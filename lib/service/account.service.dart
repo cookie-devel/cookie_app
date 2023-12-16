@@ -87,4 +87,26 @@ class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
       rethrow;
     }
   }
+
+  Future<AccountViewModel> getUserProfile(String id) async {
+    try {
+      InfoResponse info = await _api.getUserInfo();
+      AccountModel model = AccountModel(
+        id: info.id!,
+        name: info.name!,
+        phone: info.phone!,
+        profile: info.profile!,
+      );
+      AccountViewModel profile = AccountViewModel(model: model);
+      return profile;
+    } on DioException catch (e) {
+      logger.e(e);
+      e.response == null
+          ? throw Exception('서버와 연결할 수 없습니다.')
+          : throw Exception(e.response!.statusMessage!);
+    } catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
 }
