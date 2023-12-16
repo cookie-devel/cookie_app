@@ -8,17 +8,15 @@ import 'package:cookie_app/datasource/api/restClient.dart';
 import 'package:cookie_app/model/account/account.dart';
 import 'package:cookie_app/service/auth.service.dart';
 import 'package:cookie_app/utils/logger.dart';
-import 'package:cookie_app/utils/udid.dart';
 import 'package:cookie_app/viewmodel/account.viewmodel.dart';
 
 class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
-  AuthService authService;
   late RestClient _api;
   ConnectionState _connectionState = ConnectionState.none;
   ConnectionState get connectionState => _connectionState;
 
-  AccountService(this.authService) {
-    _api = RestClient(this.authService.dio, baseUrl: dotenv.env['BASE_URI']!);
+  AccountService(AuthService authService) {
+    _api = RestClient(authService.dio, baseUrl: dotenv.env['BASE_URI']!);
     this.update();
   }
 
@@ -70,21 +68,6 @@ class AccountService extends ChangeNotifier with DiagnosticableTreeMixin {
     } finally {
       _connectionState = ConnectionState.done;
       notifyListeners();
-    }
-  }
-
-  Future<void> registerDeviceToken(String token) async {
-    try {
-      String? udid = await getUdid();
-      await _api.patchDeviceToken(udid!, token);
-    } on DioException catch (e) {
-      logger.e(e);
-      e.response == null
-          ? throw Exception('서버와 연결할 수 없습니다.')
-          : throw Exception(e.response!.statusMessage!);
-    } catch (e) {
-      logger.e(e);
-      rethrow;
     }
   }
 }
