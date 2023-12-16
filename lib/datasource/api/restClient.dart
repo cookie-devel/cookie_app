@@ -17,6 +17,11 @@ abstract class RestClient {
     @Query("fields") List<String>? fields,
   });
 
+  @POST("/account/friends")
+  Future<InfoResponse> getUserInfo({
+    @Query("userid") String? userid,
+  });
+
   @PATCH("/account/devices")
   Future<void> patchDeviceToken(
     @Field() String udid,
