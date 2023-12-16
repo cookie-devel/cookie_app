@@ -6,6 +6,7 @@ import 'package:cookie_app/service/account.service.dart';
 import 'package:cookie_app/service/auth.service.dart';
 import 'package:cookie_app/service/chat.service.dart';
 import 'package:cookie_app/service/map.service.dart';
+import 'package:cookie_app/service/notification.service.dart';
 import 'package:cookie_app/theme/theme.provider.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/view/main_widget.dart';
@@ -22,6 +23,9 @@ class MainApp extends StatelessWidget {
 
     return MultiProvider(
       providers: [
+        Provider<NotificationService>(
+          create: (_) => NotificationService(authService),
+        ),
         ChangeNotifierProvider<AccountService>(
           create: (_) => AccountService(authService),
         ),
