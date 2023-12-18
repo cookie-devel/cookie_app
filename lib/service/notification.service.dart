@@ -41,8 +41,8 @@ class NotificationService {
     // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       Flushbar(
-        title: message.notification!.title!,
-        message: message.notification!.body!,
+        title: message.notification?.title,
+        message: message.notification?.body,
         flushbarPosition: FlushbarPosition.TOP,
         flushbarStyle: FlushbarStyle.GROUNDED,
         duration: const Duration(seconds: 2),
