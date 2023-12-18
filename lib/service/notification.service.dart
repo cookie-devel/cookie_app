@@ -5,9 +5,11 @@ import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 
 import 'package:cookie_app/datasource/api/restClient.dart';
 import 'package:cookie_app/service/auth.service.dart';
+import 'package:cookie_app/service/chat.service.dart';
 import 'package:cookie_app/utils/logger.dart';
 import 'package:cookie_app/utils/navigation_service.dart';
 import 'package:cookie_app/utils/udid.dart';
@@ -48,11 +50,15 @@ class NotificationService {
         duration: const Duration(seconds: 2),
         onTap: (flushbar) {
           if (message.data['type'] != 'chat') return;
-          var chatRoom = message.data['chatRoom'];
+          var chatRoom =
+              context.read<ChatService>().roomMap[message.data['chatRoom']];
+          if (chatRoom == null) return;
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ChatPage(room: chatRoom),
+              builder: (context) => ChatPage(
+                room: chatRoom,
+              ),
             ),
           );
         },

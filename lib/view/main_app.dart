@@ -23,9 +23,6 @@ class MainApp extends StatelessWidget {
 
     return MultiProvider(
       providers: [
-        Provider<NotificationService>(
-          create: (_) => NotificationService(authService),
-        ),
         ChangeNotifierProvider<AccountService>(
           create: (_) => AccountService(authService),
         ),
@@ -37,6 +34,9 @@ class MainApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<MapViewModel>(
           create: (_) => MapViewModel(),
+        ),
+        Provider<NotificationService>(
+          create: (_) => NotificationService(authService),
         ),
       ],
       child: MaterialApp(

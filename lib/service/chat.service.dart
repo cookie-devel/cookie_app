@@ -26,6 +26,8 @@ class ChatService extends ChatServiceEventHandler with DiagnosticableTreeMixin {
     return rooms;
   }
 
+  Map<String, ChatRoomViewModel> get roomMap => _roomMap;
+
   ChatService(super.token);
 
   // Socket Incoming Event Handlers
