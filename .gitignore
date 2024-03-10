@@ -45,5 +45,6 @@ app.*.map.json
 .vscode/
 
 .env
+.envrc
 
 /lib/test
